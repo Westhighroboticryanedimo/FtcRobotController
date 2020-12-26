@@ -35,7 +35,7 @@ public class UltimateGoalTeleop extends OpMode {
 
         // intake.debug();
         // shooter.debug();
-        // grabber.debug();
+        grabber.debug();
         // drive.debug();
         webcam.debug();
 
@@ -62,7 +62,7 @@ public class UltimateGoalTeleop extends OpMode {
 
         // Grabber
         grabber.grab(controller.XOnce());
-        grabber.rotate(controller.dpadLeft(), controller.dpadRight());
+        grabber.rotate(controller.AOnce());
         grabber.lift(controller.dpadUp(), controller.dpadDown());
         grabber.update();
 

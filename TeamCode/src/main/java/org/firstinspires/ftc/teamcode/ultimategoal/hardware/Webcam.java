@@ -14,12 +14,16 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 public class Webcam extends BaseHardware {
 
     private OpenCvCamera webcam;
     private RingDeterminationPipeline pipeline;
+
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
 
     public Webcam(OpMode opMode, HardwareMap hwMap) {
 
@@ -42,6 +46,9 @@ public class Webcam extends BaseHardware {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         pipeline = new RingDeterminationPipeline();
         webcam.setPipeline(pipeline);
+        webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+
+        webcam.openCameraDeviceAsync(() -> webcam.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPRIGHT));
 
     }
 
@@ -82,14 +89,14 @@ public class Webcam extends BaseHardware {
         private static final Scalar BLUE = new Scalar(0, 0, 255);
         private static final Scalar GREEN = new Scalar(0, 255, 0);
 
+        private static final int REGION_WIDTH = 100;
+        private static final int REGION_HEIGHT = 70;
+
         // The core values which define the location and size of the sample regions
-        private static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(181,98);
+        private static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(300 + REGION_WIDTH / 2,200 + REGION_HEIGHT / 2);
 
-        private static final int REGION_WIDTH = 35;
-        private static final int REGION_HEIGHT = 25;
-
-        private static final int FOUR_RING_THRESHOLD = 150;
-        private static final int ONE_RING_THRESHOLD = 135;
+        private static final int FOUR_RING_THRESHOLD = 140;
+        private static final int ONE_RING_THRESHOLD = 130;
 
         private Point region1_pointA = new Point(
                       REGION1_TOPLEFT_ANCHOR_POINT.x,
