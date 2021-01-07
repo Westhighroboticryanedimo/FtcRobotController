@@ -24,7 +24,7 @@ public class FortyFiveDriveBridgeGoRight extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        robot.moveSide(0.9, 3000);
+        robot.move(0.9, 25, 90);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

@@ -24,9 +24,9 @@ public class FortyFiveDriveInsideRight extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        robot.moveForward(0.9, 2500);
+        robot.move(0.9, 20, 0);
 
-        robot.moveSide(0.9, 3000);
+        robot.move(0.9, 25, 90);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

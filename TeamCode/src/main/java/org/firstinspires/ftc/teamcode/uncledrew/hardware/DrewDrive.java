@@ -31,6 +31,9 @@ public class DrewDrive extends HolonomicDrive {
         setPidSpeed(0.05, 0.001, 0);
         setPidTurn(0.03, 0.001, 0);
 
+        setWheelDiameter(4);
+        setTicksPerRev(1680);
+
     }
 
 }

@@ -63,11 +63,4 @@ public class Intake extends BaseHardware {
 
     }
 
-    @Override
-    public void update() {
-
-
-
-    }
-
 }

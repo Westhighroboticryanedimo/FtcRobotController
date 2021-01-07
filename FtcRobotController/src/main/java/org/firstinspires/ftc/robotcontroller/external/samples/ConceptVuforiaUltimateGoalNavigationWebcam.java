@@ -105,8 +105,7 @@ public class ConceptVuforiaUltimateGoalNavigationWebcam extends LinearOpMode {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY =
-            " --- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+    private static final String VUFORIA_KEY = "Ad5o3uP/////AAABmZiHw0ExfEhJiGOj+a+euvV6cr7YdCbHAhFHDHW1effZUyKZ6QqwBvhDfgeu+flW5W6/uLkd5H2LYVeFlDHPdhbSwRx5mzj/IcQPSFKkhS6JkBM8DwnKa7B/c/jNykBPOXPG7RGpMRtqnq/A6jq5dZqqGgHGIkuN6TvED2ofqSsQD1F+QcBA9y8GHfenkdNlMIwzc+KAEtHwhFqXzG7K6PY9Yad/c/MV5U+aVZ0fcd9zKexVbj19mTJ7UwHCmkWKZvR7u3UHzF07/eWUO9KfqyGYtoYuX6hgfDw3/XTg5rLFMqvLpSCZK6jbLADHTkYMReDqu8wi4oPG4XlG8tCfLduGNLVXIm1NpYN/59Pg5ptq";
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
@@ -136,7 +135,7 @@ public class ConceptVuforiaUltimateGoalNavigationWebcam extends LinearOpMode {
         /*
          * Retrieve the camera we are to use.
          */
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -197,7 +196,7 @@ public class ConceptVuforiaUltimateGoalNavigationWebcam extends LinearOpMode {
          *  coordinate system (the center of the field), facing up.
          */
 
-        //Set the position of the perimeter targets with relation to origin (center of field)
+        // Set the position of the perimeter targets with relation to origin (center of field)
         redAllianceTarget.setLocation(OpenGLMatrix
                 .translation(0, -halfField, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180)));
@@ -231,7 +230,7 @@ public class ConceptVuforiaUltimateGoalNavigationWebcam extends LinearOpMode {
         // pointing to the LEFT side of the Robot.
         // The two examples below assume that the camera is facing forward out the front of the robot.
 
-        // We need to rotate the camera around it's long axis to bring the correct camera forward.
+        // We need to rotate the camera around its long axis to bring the correct camera forward.
         if (CAMERA_CHOICE == BACK) {
             phoneYRotate = -90;
         } else {

@@ -84,23 +84,14 @@ public class DifferentialDrive extends BaseHardware {
         leftDrive.setPower(left);
         rightDrive.setPower(right);
 
+        print("Left: ", getEncoderValues()[0]);
+        print("Right: ", getEncoderValues()[1]);
+
     }
 
     public int[] getEncoderValues() {
 
         return new int[]{leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition()};
-
-    }
-
-    @Override
-    public void update() {
-
-        if (isDebugMode) {
-
-            opMode.telemetry.addData("Left: ", getEncoderValues()[0]);
-            opMode.telemetry.addData("Right: ", getEncoderValues()[1]);
-
-        }
 
     }
 

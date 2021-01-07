@@ -33,9 +33,11 @@ public class UltimateGoalTeleop extends OpMode {
 
         controller = new Controller(gamepad1);
 
+        // Uncomment for telemetry values
+
         // intake.debug();
-        // shooter.debug();
-        grabber.debug();
+        shooter.debug();
+        // grabber.debug();
         // drive.debug();
         webcam.debug();
 
@@ -50,19 +52,16 @@ public class UltimateGoalTeleop extends OpMode {
         // Drive
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         drive.togglePOV(controller.backOnce());
-        drive.update();
 
         // Shooter
-        shooter.shoot(controller.X());
-        shooter.update();
+        shooter.shoot(controller.Y(), webcam.getDisplacement());
 
         // Intake
         intake.intake(controller.leftBumper(), controller.rightBumper());
-        intake.update();
 
         // Grabber
         grabber.grab(controller.XOnce());
-        grabber.rotate(controller.AOnce());
+        grabber.rotate(controller.BOnce());
         grabber.lift(controller.dpadUp(), controller.dpadDown());
         grabber.update();
 

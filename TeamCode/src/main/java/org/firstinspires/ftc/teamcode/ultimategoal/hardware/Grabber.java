@@ -136,15 +136,10 @@ public class Grabber extends BaseHardware {
 
     }
 
-    @Override
     public void update() {
 
-        if (isDebugMode) {
-
-            opMode.telemetry.addData("Lift position: ", lift.getCurrentPosition());
-            opMode.telemetry.addData("isPressed: ", touch.isPressed());
-
-        }
+        print("Lift position: ", lift.getCurrentPosition());
+        print("isPressed: ", touch.isPressed());
 
         if (touch.isPressed()) {
 

@@ -35,7 +35,24 @@ public abstract class BaseHardware {
 
     }
 
-    // Loop here
-    public abstract void update();
+    protected void print(String caption, Object data) {
+
+        if (isDebugMode) {
+
+            if (opMode != null) {
+
+                // TeleOp
+                opMode.telemetry.addData(caption, data);
+
+            } else {
+
+                // Autonomous
+                linearOpMode.telemetry.addData(caption, data);
+
+            }
+
+        }
+
+    }
 
 }

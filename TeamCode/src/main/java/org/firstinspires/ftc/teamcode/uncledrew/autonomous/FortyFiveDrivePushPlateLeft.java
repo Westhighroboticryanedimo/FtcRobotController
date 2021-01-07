@@ -27,13 +27,13 @@ public class FortyFiveDrivePushPlateLeft extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        robot.moveSide(-0.6, -1550);
+        robot.move(0.6, 12, -90);
 
-        robot.moveForward(0.6, 3270);
+        robot.move(0.6, 25, 0);
 
         scoop.scoopSetPower(0.6, 2000);
 
-        robot.moveForward(-0.5, -4100);
+        robot.move(0.5, 30, 180);
 
         robot.turn(1, -30);
 
@@ -41,7 +41,7 @@ public class FortyFiveDrivePushPlateLeft extends LinearOpMode {
 
         robot.turn(1, 30);
 
-        robot.moveSide(0.9, 5250);
+        robot.move(0.9, 40, 90);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

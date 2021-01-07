@@ -31,7 +31,6 @@ public class TerrenceSource extends OpMode {
 
         drive.toggleArcade(controller1.backOnce());
         drive.drive(controller1.left_stick_y, controller1.right_stick_y, controller1.right_stick_x);
-        drive.update();
 
         telemetry.update();
 
