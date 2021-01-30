@@ -1,11 +1,9 @@
-package org.firstinspires.ftc.teamcode.ultimategoal.autonomous;
+package org.firstinspires.ftc.teamcode.marinara.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 
-import org.firstinspires.ftc.teamcode.ultimategoal.hardware.UltimateGoalDrive;
+import org.firstinspires.ftc.teamcode.marinara.hardware.UltimateGoalDrive;
 
 @Autonomous(name = "Ultimate Goal All Auto", group = "UltimateGoal")
 //@Disabled

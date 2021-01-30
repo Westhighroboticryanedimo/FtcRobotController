@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.ultimategoal.hardware;
+package org.firstinspires.ftc.teamcode.marinara.hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
@@ -11,13 +13,22 @@ public class Intake extends BaseHardware {
 
     // Motor and motor power
     private DcMotor intakeMotor;
-    private static final double INTAKE_POWER = 1.0;
+    private static final double MOTOR_INTAKE_POWER = 0.5;
+    private static final double SERVO_INTAKE_POWER = 1;
+
+    // Servo for hook
+    private Servo hook;
+    private static final double HOOKED_POS = 0.6;
+    private static final double HOOK_FREE_POS = 1;
+
+    // CR Servo to intake
+    private CRServo intakeServo;
 
     // Teleop constructor
     public Intake(OpMode opMode, HardwareMap hwMap) {
 
         super(opMode);
-        setupMotor(hwMap);
+        setup(hwMap);
 
     }
 
@@ -25,17 +36,23 @@ public class Intake extends BaseHardware {
     public Intake(LinearOpMode opMode, HardwareMap hwMap) {
 
         super(opMode);
-        setupMotor(hwMap);
+        setup(hwMap);
 
     }
 
-    private void setupMotor(HardwareMap hwMap) {
+    private void setup(HardwareMap hwMap) {
 
+        // Set up motors
         intakeMotor = hwMap.get(DcMotor.class, "intake");
         intakeMotor.setDirection(DcMotor.Direction.REVERSE);
         intakeMotor.setPower(0);
         intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // Set up servos
+        intakeServo = hwMap.get(CRServo.class, "pop_out");
+        intakeServo.setPower(0);
+        hook = hwMap.get(Servo.class, "hook");
 
     }
 
@@ -43,11 +60,13 @@ public class Intake extends BaseHardware {
 
         if (intake) {
 
-            intakeMotor.setPower(INTAKE_POWER);
+            intakeMotor.setPower(MOTOR_INTAKE_POWER);
+            intakeServo.setPower(SERVO_INTAKE_POWER);
 
         } else if (reverse) {
 
-            intakeMotor.setPower(-INTAKE_POWER);
+            intakeMotor.setPower(-MOTOR_INTAKE_POWER);
+            intakeServo.setPower(-SERVO_INTAKE_POWER);
 
         } else {
 
@@ -57,9 +76,22 @@ public class Intake extends BaseHardware {
 
     }
 
+    public void hook() {
+
+        hook.setPosition(HOOKED_POS);
+
+    }
+
+    public void unhook() {
+
+        hook.setPosition(HOOK_FREE_POS);
+
+    }
+
     public void stop() {
 
         intakeMotor.setPower(0);
+        intakeServo.setPower(0);
 
     }
 

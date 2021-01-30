@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.ultimategoal.hardware;
+package org.firstinspires.ftc.teamcode.marinara.hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.PIDController;
@@ -30,6 +32,11 @@ public class Shooter extends BaseHardware {
     // Motors
     private DcMotor shooterL = null;
     private DcMotor shooterR = null;
+
+    // Servo
+    private Servo stopper = null;
+    private static final double STOP_POS = 0.2;
+    private static final double OPEN_POS = 0;
 
     // Timer
     private ElapsedTime timer = new ElapsedTime();
@@ -65,11 +72,13 @@ public class Shooter extends BaseHardware {
 
     private void setupMotor(HardwareMap hwMap) {
 
+        // Set up motors
+
         shooterL = hwMap.get(DcMotor.class, "shooterL");
         shooterR = hwMap.get(DcMotor.class, "shooterR");
 
-        shooterL.setDirection(DcMotor.Direction.FORWARD);
-        shooterR.setDirection(DcMotor.Direction.REVERSE);
+        shooterL.setDirection(DcMotor.Direction.REVERSE);
+        shooterR.setDirection(DcMotor.Direction.FORWARD);
 
         shooterL.setPower(0);
         shooterR.setPower(0);
@@ -80,6 +89,10 @@ public class Shooter extends BaseHardware {
         shooterL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // Set up servos
+        stopper = hwMap.get(Servo.class, "stopper");
+        stopper.setPosition(OPEN_POS);
 
     }
 
@@ -97,10 +110,28 @@ public class Shooter extends BaseHardware {
 
     }
 
-    public void shoot(boolean button, float[] displacement) {
+    public void toggleStopper(boolean button) {
 
         if (button) {
 
+            if (stopper.getPosition() == STOP_POS) {
+
+                stopper.setPosition(OPEN_POS);
+
+            } else {
+
+                stopper.setPosition(STOP_POS);
+
+            }
+
+        }
+
+    }
+
+    public void shoot(boolean button, float[] displacement) {
+
+        if (button) {
+/*
             // Calculate displacement
             double xDisplacement = Math.sqrt(Math.pow(displacement[0], 2) + Math.pow(displacement[1], 2)) * METERS_PER_INCHES;
 
@@ -164,9 +195,11 @@ public class Shooter extends BaseHardware {
                 print("Left motor speed (m/s): ", speedLMPS);
                 print("Right motor speed (m/s): ", speedRMPS);
                 print("Goal speed (m/s): ", goalSpeedMPS);
-                print("Total Displacement: ", xDisplacement);
+                // print("Total Displacement: ", xDisplacement);
 
-            }
+            }*/
+            shooterL.setPower(1);
+            shooterR.setPower(1);
 
         } else {
 

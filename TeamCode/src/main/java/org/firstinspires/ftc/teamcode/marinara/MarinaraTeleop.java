@@ -1,17 +1,17 @@
-package org.firstinspires.ftc.teamcode.ultimategoal;
+package org.firstinspires.ftc.teamcode.marinara;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Controller;
-import org.firstinspires.ftc.teamcode.ultimategoal.hardware.Grabber;
-import org.firstinspires.ftc.teamcode.ultimategoal.hardware.Intake;
-import org.firstinspires.ftc.teamcode.ultimategoal.hardware.Shooter;
-import org.firstinspires.ftc.teamcode.ultimategoal.hardware.UltimateGoalDrive;
-import org.firstinspires.ftc.teamcode.ultimategoal.hardware.Webcam;
+import org.firstinspires.ftc.teamcode.marinara.hardware.Grabber;
+import org.firstinspires.ftc.teamcode.marinara.hardware.Intake;
+import org.firstinspires.ftc.teamcode.marinara.hardware.Shooter;
+import org.firstinspires.ftc.teamcode.marinara.hardware.UltimateGoalDrive;
+import org.firstinspires.ftc.teamcode.marinara.hardware.Webcam;
 
-@TeleOp(name = "Ultimate Goal: TeleOp", group = "UltimateGoal")
-public class UltimateGoalTeleop extends OpMode {
+@TeleOp(name = "Marinara: TeleOp", group = "UltimateGoal")
+public class MarinaraTeleop extends OpMode {
 
     // Objects
     private Intake intake;
@@ -33,13 +33,16 @@ public class UltimateGoalTeleop extends OpMode {
 
         controller = new Controller(gamepad1);
 
+        // Unhook pop-out intake system
+        intake.unhook();
+
         // Uncomment for telemetry values
 
         // intake.debug();
         shooter.debug();
         // grabber.debug();
         // drive.debug();
-        webcam.debug();
+        // webcam.debug();
 
     }
 
@@ -55,6 +58,7 @@ public class UltimateGoalTeleop extends OpMode {
 
         // Shooter
         shooter.shoot(controller.Y(), webcam.getDisplacement());
+        shooter.toggleStopper(controller.AOnce());
 
         // Intake
         intake.intake(controller.leftBumper(), controller.rightBumper());
