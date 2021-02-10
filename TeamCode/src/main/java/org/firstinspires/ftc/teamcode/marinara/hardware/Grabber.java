@@ -18,16 +18,14 @@ public class Grabber extends BaseHardware {
     private TouchSensor touch = null;
 
     // Final variables
-    private static final double GRABBER_POS_START = 0.1;
-    private static final double GRABBER_POS_END = 1;
-    private static final double GRABBER_SPEED = 0.01;
-    private static final double ROTATOR_POS_START = 1;
-    private static final double ROTATOR_POS_END = 0;
-    private static final double LIFT_MAX_POS = 1500;
-    private static final double LIFT_POWER = 0.4;
-
-    // Variable for grabber
-    private boolean isGrabberOpen = false;
+    private static final double GRABBER_POS_GRAB = 1;
+    private static final double GRABBER_POS_OPEN = 0.6;
+    private static final double ROTATOR_POS_EXT = 0.9;
+    private static final double ROTATOR_POS_RETRACT = 0.4;
+    private static final double ROTATOR_ABLE_LIFT_MIN_POS = 1500;
+    private static final double SERVO_THRESHOLD = 0.01;
+    private static final double LIFT_MAX_POS = 5800;
+    private static final double LIFT_POWER = 0.6;
 
     // Teleop constructor
     public Grabber(OpMode opMode, HardwareMap hwMap) {
@@ -50,25 +48,24 @@ public class Grabber extends BaseHardware {
         // Setup lift motor
         lift = hwMap.get(DcMotor.class, "lift");
         lift.setDirection(DcMotor.Direction.REVERSE);
-        lift.setPower(0);
+        stopLift();
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Setup rotator
         rotator = hwMap.get(Servo.class, "rotator");
-        rotator.setPosition(ROTATOR_POS_START);
+        retractRotator();
 
         // Setup grabber
         grabber = hwMap.get(Servo.class, "grabber");
-        grabber.setPosition(GRABBER_POS_START);
+        closeGrabber();
 
         // Setup sensor
         touch = hwMap.get(TouchSensor.class, "touch");
 
     }
 
-    private void resetLiftPos() {
+    public void resetLiftPos() {
 
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -77,27 +74,37 @@ public class Grabber extends BaseHardware {
 
     public void lift(boolean raise, boolean lower) {
 
+        print("Lift position: ", getLiftPosition());
+
         if (raise) {
 
             // Raise grabber as long as the encoder value doesn't exceed LIFT_MAX_POS
-            if (lift.getCurrentPosition() < LIFT_MAX_POS) {
+            if (getLiftPosition() < LIFT_MAX_POS) {
 
                 lift.setPower(LIFT_POWER);
+
+            } else {
+
+                stopLift();
 
             }
 
         } else if (lower) {
 
             // Lower grabber as long as the touch sensor doesn't detect the lift
-            if (!touch.isPressed()) {
+            if (!isLimitPressed()) {
 
                 lift.setPower(-LIFT_POWER);
+
+            } else {
+
+                stopLift();
 
             }
 
         } else {
 
-            lift.setPower(0);
+            stopLift();
 
         }
 
@@ -105,46 +112,61 @@ public class Grabber extends BaseHardware {
 
     public void grab(boolean toggle) {
 
+        print("Grab Position: ", grabber.getPosition());
+
         if (toggle) {
 
-            // Toggle isGrabberOpen
-            isGrabberOpen = !isGrabberOpen;
+            if (grabber.getPosition() > GRABBER_POS_GRAB - SERVO_THRESHOLD &&
+                grabber.getPosition() < GRABBER_POS_GRAB + SERVO_THRESHOLD) {
 
-        }
-
-        if (!isGrabberOpen) {
-
-            if (grabber.getPosition() > GRABBER_POS_START) {
-
-                // If grabber is open, then close it slowly
-                grabber.setPosition(grabber.getPosition() - GRABBER_SPEED);
+                // If grabber is closed and rotator is extended, open it
+                if (rotator.getPosition() > ROTATOR_POS_EXT - SERVO_THRESHOLD &&
+                    rotator.getPosition() < ROTATOR_POS_EXT + SERVO_THRESHOLD) openGrabber();
 
             } else {
 
-                grabber.setPosition(GRABBER_POS_START);
+                // Else, close it
+                closeGrabber();
 
             }
 
-        } else {
-
-            // If grabber is closed, open it
-            grabber.setPosition(GRABBER_POS_END);
-
         }
+
+    }
+
+    public void closeGrabber() {
+
+        grabber.setPosition(GRABBER_POS_GRAB);
+
+    }
+
+    public void openGrabber() {
+
+        grabber.setPosition(GRABBER_POS_OPEN);
 
     }
 
     public void rotate(boolean button) {
 
+        print("Rotator Position:", rotator.getPosition());
+
         if (button) {
 
-            if (rotator.getPosition() == ROTATOR_POS_START) {
+            if (rotator.getPosition() > ROTATOR_POS_EXT - SERVO_THRESHOLD &&
+                rotator.getPosition() < ROTATOR_POS_EXT + SERVO_THRESHOLD) {
 
-                rotator.setPosition(ROTATOR_POS_END);
+                if (getLiftPosition() > ROTATOR_ABLE_LIFT_MIN_POS) {
+
+                    // Retract rotator and close the grabber
+                    retractRotator();
+                    closeGrabber();
+
+                }
 
             } else {
 
-                rotator.setPosition(ROTATOR_POS_START);
+                // Extend the rotator
+                extendRotator();
 
             }
 
@@ -152,12 +174,41 @@ public class Grabber extends BaseHardware {
 
     }
 
+    public void extendRotator() {
+
+        rotator.setPosition(ROTATOR_POS_EXT);
+
+    }
+
+    public void retractRotator() {
+
+        rotator.setPosition(ROTATOR_POS_RETRACT);
+
+    }
+
+    public void stopLift() {
+
+        lift.setPower(0);
+
+    }
+
+    public boolean isLimitPressed() {
+
+        return touch.isPressed();
+
+    }
+
+    public double getLiftPosition() {
+
+        return lift.getCurrentPosition();
+
+    }
+
     public void update() {
 
-        print("Lift position: ", lift.getCurrentPosition());
-        print("isPressed: ", touch.isPressed());
+        print("isPressed: ", isLimitPressed());
 
-        if (touch.isPressed()) {
+        if (isLimitPressed()) {
 
             resetLiftPos();
 

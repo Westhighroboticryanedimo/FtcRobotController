@@ -7,17 +7,17 @@ import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.marinara.hardware.Grabber;
 import org.firstinspires.ftc.teamcode.marinara.hardware.Intake;
 import org.firstinspires.ftc.teamcode.marinara.hardware.Shooter;
-import org.firstinspires.ftc.teamcode.marinara.hardware.UltimateGoalDrive;
+import org.firstinspires.ftc.teamcode.marinara.hardware.MarinaraDrive;
 import org.firstinspires.ftc.teamcode.marinara.hardware.Webcam;
 
-@TeleOp(name = "Marinara: TeleOp", group = "UltimateGoal")
+@TeleOp(name = "Marinara: TeleOp", group = "Marinara")
 public class MarinaraTeleop extends OpMode {
 
     // Objects
     private Intake intake;
     private Shooter shooter;
     private Grabber grabber;
-    private UltimateGoalDrive drive;
+    private MarinaraDrive drive;
     private Webcam webcam;
 
     private Controller controller;
@@ -28,7 +28,7 @@ public class MarinaraTeleop extends OpMode {
         intake = new Intake(this, hardwareMap);
         shooter = new Shooter(this, hardwareMap);
         grabber = new Grabber(this, hardwareMap);
-        drive = new UltimateGoalDrive(this, hardwareMap);
+        drive = new MarinaraDrive(this, hardwareMap);
         webcam = new Webcam(this, hardwareMap);
 
         controller = new Controller(gamepad1);
@@ -39,9 +39,9 @@ public class MarinaraTeleop extends OpMode {
         // Uncomment for telemetry values
 
         // intake.debug();
-        shooter.debug();
-        // grabber.debug();
-        // drive.debug();
+        // shooter.debug();
+        grabber.debug();
+        drive.debug();
         // webcam.debug();
 
     }
@@ -58,10 +58,9 @@ public class MarinaraTeleop extends OpMode {
 
         // Shooter
         shooter.shoot(controller.Y(), webcam.getDisplacement());
-        shooter.toggleStopper(controller.AOnce());
 
         // Intake
-        intake.intake(controller.leftBumper(), controller.rightBumper());
+        intake.intake(controller.leftBumper() || controller.Y(), controller.rightBumper());
 
         // Grabber
         grabber.grab(controller.XOnce());

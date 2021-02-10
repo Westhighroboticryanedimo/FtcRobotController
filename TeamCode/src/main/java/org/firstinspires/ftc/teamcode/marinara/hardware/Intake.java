@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -13,7 +14,7 @@ public class Intake extends BaseHardware {
 
     // Motor and motor power
     private DcMotor intakeMotor;
-    private static final double MOTOR_INTAKE_POWER = 0.5;
+    private static final double MOTOR_INTAKE_POWER = 0.8;
     private static final double SERVO_INTAKE_POWER = 1;
 
     // Servo for hook
@@ -44,13 +45,14 @@ public class Intake extends BaseHardware {
 
         // Set up motors
         intakeMotor = hwMap.get(DcMotor.class, "intake");
-        intakeMotor.setDirection(DcMotor.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
         intakeMotor.setPower(0);
         intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Set up servos
         intakeServo = hwMap.get(CRServo.class, "pop_out");
+        intakeServo.setDirection(DcMotor.Direction.REVERSE);
         intakeServo.setPower(0);
         hook = hwMap.get(Servo.class, "hook");
 

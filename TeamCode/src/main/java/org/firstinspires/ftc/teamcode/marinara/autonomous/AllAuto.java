@@ -3,16 +3,18 @@ package org.firstinspires.ftc.teamcode.marinara.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.marinara.hardware.UltimateGoalDrive;
+import org.firstinspires.ftc.teamcode.marinara.hardware.MarinaraDrive;
 
-@Autonomous(name = "Ultimate Goal All Auto", group = "UltimateGoal")
+@Autonomous(name = "Marinara All Auto", group = "Marinara")
 //@Disabled
 public class AllAuto extends LinearOpMode {
+
+    private MarinaraDrive drive;
 
     @Override
     public void runOpMode() {
 
-        UltimateGoalDrive drive = new UltimateGoalDrive(this, hardwareMap);
+        drive = new MarinaraDrive(this, hardwareMap);
         drive.debug();
 
         // Send telemetry message to signify robot waiting;
@@ -22,8 +24,7 @@ public class AllAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        drive.move(1.0, 50, 120);
-        drive.move(1.0, 20, 60);
+        drive.move(1.0, 50, -45, -90);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

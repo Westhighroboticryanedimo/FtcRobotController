@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
-public class UltimateGoalDrive extends HolonomicDrive {
+public class MarinaraDrive extends HolonomicDrive {
 
     // For teleop
-    public UltimateGoalDrive(OpMode opMode, HardwareMap hwMap) {
+    public MarinaraDrive(OpMode opMode, HardwareMap hwMap) {
 
         super(opMode, hwMap);
         setup();
@@ -17,20 +17,23 @@ public class UltimateGoalDrive extends HolonomicDrive {
     }
 
     // For autonomous
-    public UltimateGoalDrive(LinearOpMode opMode, HardwareMap hwMap) {
+    public MarinaraDrive(LinearOpMode opMode, HardwareMap hwMap) {
 
         super(opMode, hwMap);
         setup();
 
     }
 
-    // PID setup
+    // Setup
     private void setup() {
 
+        // PID Values
         setPidDrive(0.05, 0, 0);
         setPidSpeed(0.05, 0.001, 0);
         setPidTurn(0.03, 0.001, 0);
 
+        // Robot characteristics
+        setTrackWidth(12);
         setWheelDiameter(4);
         setTicksPerRev(1120);
 

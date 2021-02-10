@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.terrence;
 import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.hardware.drive.DifferentialDrive;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 @TeleOp(name="Terrence: Teleop", group="Terrence")
-// @Disabled
+@Disabled
 public class TerrenceSource extends OpMode {
 
     private DifferentialDrive drive;

@@ -92,7 +92,7 @@ public class Shooter extends BaseHardware {
 
         // Set up servos
         stopper = hwMap.get(Servo.class, "stopper");
-        stopper.setPosition(OPEN_POS);
+        stopper.setPosition(STOP_POS);
 
     }
 
@@ -131,6 +131,9 @@ public class Shooter extends BaseHardware {
     public void shoot(boolean button, float[] displacement) {
 
         if (button) {
+
+            // Open the stopper when shooting
+            stopper.setPosition(OPEN_POS);
 /*
             // Calculate displacement
             double xDisplacement = Math.sqrt(Math.pow(displacement[0], 2) + Math.pow(displacement[1], 2)) * METERS_PER_INCHES;
@@ -202,6 +205,9 @@ public class Shooter extends BaseHardware {
             shooterR.setPower(1);
 
         } else {
+
+            // If not shooting, close the stopper
+            stopper.setPosition(STOP_POS);
 
             // If button is not pressed, stop shooting
             shooterL.setPower(0);

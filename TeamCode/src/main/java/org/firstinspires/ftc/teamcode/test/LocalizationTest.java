@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.AcmeHolonomicDrive;
 
 @Config
 @TeleOp(group = "Test")
-// @Disabled
+@Disabled
 public class LocalizationTest extends LinearOpMode {
 
     public static double VX_WEIGHT = 1;
