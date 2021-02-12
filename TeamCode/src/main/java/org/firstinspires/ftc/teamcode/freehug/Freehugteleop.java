@@ -3,11 +3,8 @@ package org.firstinspires.ftc.teamcode.freehug;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Controller;
-import org.firstinspires.ftc.teamcode.marinara.hardware.Intake;
 
 @TeleOp(name = "Free Hugs teleop")
 public class Freehugteleop extends OpMode {
@@ -31,6 +28,7 @@ public class Freehugteleop extends OpMode {
     @Override
     public void loop() {
         controller.update();
+
         drive.togglePOV(controller.backOnce());
         drive.drive(controller.left_stick_x, -controller.left_stick_y, controller.right_stick_x);
         intake.intake(controller.B(), controller.A());
