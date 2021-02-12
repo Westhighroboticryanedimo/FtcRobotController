@@ -271,7 +271,7 @@ public class Webcam extends BaseHardware {
 
     }
 
-    public RingDeterminationPipeline.RingPosition getRingPosition() {
+    private RingDeterminationPipeline.RingPosition getRingPosition() {
 
         return pipeline.getPosition();
 
@@ -377,10 +377,11 @@ public class Webcam extends BaseHardware {
         private static final Scalar GREEN = new Scalar(0, 255, 0);
 
         private static final int REGION_WIDTH = 100;
-        private static final int REGION_HEIGHT = 70;
+        private static final int REGION_HEIGHT = 80;
+        private static final int X_DIFF = 50;
 
         // The core values which define the location and size of the sample regions
-        private static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((int) (WIDTH / 2 + REGION_WIDTH / 2), (int) (HEIGHT / 2 + REGION_HEIGHT / 2));
+        private static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((int) (WIDTH / 2 + REGION_WIDTH / 2 + X_DIFF), (int) (HEIGHT / 2 + REGION_HEIGHT / 2));
 
         private static final int FOUR_RING_THRESHOLD = 140;
         private static final int ONE_RING_THRESHOLD = 130;

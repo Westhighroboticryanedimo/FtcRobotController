@@ -222,4 +222,11 @@ public class Shooter extends BaseHardware {
 
     }
 
+    public void stopShoot() {
+
+        shooterL.setPower(0);
+        shooterR.setPower(0);
+
+    }
+
 }

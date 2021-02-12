@@ -8,6 +8,7 @@ public class Controller {
 
     private int dpad_up, dpad_down, dpad_left, dpad_right;
     private int x, y, a, b;
+    private int left_stick_button, right_stick_button;
     private int left_bumper, right_bumper;
     private int start, back;
 
@@ -32,6 +33,8 @@ public class Controller {
         if (gamepad.right_bumper) { ++right_bumper; } else { right_bumper = 0; }
         if (gamepad.start) { ++start; } else { start = 0; }
         if (gamepad.back) { ++back; } else { back = 0; }
+        if (gamepad.left_stick_button) { ++left_stick_button; } else { left_stick_button = 0; }
+        if (gamepad.right_stick_button) { ++right_stick_button; } else { right_stick_button = 0; }
 
         left_stick_x = gamepad.left_stick_x;
         left_stick_y = gamepad.left_stick_y;
@@ -52,6 +55,8 @@ public class Controller {
     public boolean B() { return 0 < b; }
     public boolean leftBumper() { return 0 < left_bumper; }
     public boolean rightBumper() { return 0 < right_bumper; }
+    public boolean leftStickButton() { return 0 < left_stick_button; }
+    public boolean rightStickButton() { return 0 < right_stick_button; }
     public boolean start() { return 0 < start; }
     public boolean back() { return 0 < back; }
 
@@ -65,6 +70,8 @@ public class Controller {
     public boolean BOnce() { return 1 == b; }
     public boolean leftBumperOnce() { return 1 == left_bumper; }
     public boolean rightBumperOnce() { return 1 == right_bumper; }
+    public boolean leftStickButtonOnce() { return 1 == left_stick_button; }
+    public boolean rightStickButtonOnce() { return 1 == right_stick_button; }
     public boolean startOnce() { return 1 == start; }
     public boolean backOnce() { return 1 == back; }
 

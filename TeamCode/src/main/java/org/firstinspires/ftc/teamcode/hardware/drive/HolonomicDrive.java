@@ -267,13 +267,13 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     }
 
-    public void move(double speed, int distance, int angleMove) {
+    public void move(double speed, double distance, int angleMove) {
 
         move(speed, distance, angleMove, 0);
 
     }
 
-    public void move(double speed, int distance, int angleMove, int angleTurn) {
+    public void move(double speed, double distance, int angleMove, int angleTurn) {
 
         angleTurn *= -1;
 
@@ -326,6 +326,8 @@ public abstract class HolonomicDrive extends BaseHardware {
         do {
 
             correction = pidDrive.performPID(gyro.getAngleDegrees());
+
+            correction = 0;
 
             double avgFLBRPos = (frontLeft.getCurrentPosition() + backRight.getCurrentPosition()) / 2.0;
             double speedFLBR = pidFLBR.performPID(avgFLBRPos);
