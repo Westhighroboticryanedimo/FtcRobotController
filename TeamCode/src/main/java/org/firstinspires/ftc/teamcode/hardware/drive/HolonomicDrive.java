@@ -19,7 +19,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     private Gyro gyro;
 
-    private boolean isDrivePOV = true;
+    private boolean isDrivePOV = false;
 
     // For autonomous driving
     private double wheelDiameter = 4;   // Diameter of driving wheels
@@ -269,14 +269,6 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     public void move(double speed, double distance, int angleMove) {
 
-        move(speed, distance, angleMove, 0);
-
-    }
-
-    public void move(double speed, double distance, int angleMove, int angleTurn) {
-
-        angleTurn *= -1;
-
         gyro.reset();
         resetMotors();
 
@@ -285,12 +277,9 @@ public abstract class HolonomicDrive extends BaseHardware {
         // The number of ticks the motors have to move without considering direction of motors
         int goalTicks = (int) ((distance / (wheelDiameter * Math.PI)) * ticksPerRev);
 
-        // The number of ticks the motors have to move to turn the robot to the correct angle
-        int turnDist = (int) ((trackWidth * angleTurn * ticksPerRev * Math.sqrt(2)) / (360 * wheelDiameter));
-
         // Calculate distance of motors
-        int flbrDist = (int) (goalTicks * Math.sin((45 + angleTurn + angleMove) * Math.PI / 180)) + turnDist;
-        int frblDist = (int) (goalTicks * Math.cos((45 + angleTurn + angleMove) * Math.PI / 180)) + turnDist;
+        int flbrDist = (int) (goalTicks * Math.sin((45 + angleMove) * Math.PI / 180));
+        int frblDist = (int) (goalTicks * Math.cos((45 + angleMove) * Math.PI / 180));
 
         // Calculate speeds
         double max = Math.max(Math.abs(flbrDist), Math.abs(frblDist));
@@ -299,7 +288,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         // For correction turning
         pidDrive.reset();
-        pidDrive.setSetpoint(angleTurn);
+        pidDrive.setSetpoint(0);
         pidDrive.enable();
 
         // For frontleft and backright motors
@@ -326,8 +315,6 @@ public abstract class HolonomicDrive extends BaseHardware {
         do {
 
             correction = pidDrive.performPID(gyro.getAngleDegrees());
-
-            correction = 0;
 
             double avgFLBRPos = (frontLeft.getCurrentPosition() + backRight.getCurrentPosition()) / 2.0;
             double speedFLBR = pidFLBR.performPID(avgFLBRPos);

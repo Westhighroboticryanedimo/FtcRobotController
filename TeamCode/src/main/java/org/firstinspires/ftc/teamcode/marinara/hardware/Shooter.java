@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.marinara.hardware;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,13 +14,15 @@ import static org.firstinspires.ftc.teamcode.Constants.*;
 public class Shooter extends BaseHardware {
 
     // Unit conversions
-    private static final double TICKS_PER_REV = 103.6;
-    private static final double REV_PER_TICKS = 1 / TICKS_PER_REV;
+    private static final double R_TICKS_PER_REV = 103.6;
+    private static final double L_TICKS_PER_REV = 74.3; // Empirically saw that the tpr for left motor is 74.3
+    private static final double R_REV_PER_TICKS = 1 / R_TICKS_PER_REV;
+    private static final double L_REV_PER_TICKS = 1 / L_TICKS_PER_REV;
 
     // Final variables that won't change; used for calculations
     private static final double MAX_RPM = 1620;
     private static final double WHEEL_DIAMETER_IN = 4;
-    private static final double WHEEL_CIRCUMFERENCE = (WHEEL_DIAMETER_IN / METERS_PER_INCHES) * Math.PI;
+    private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_IN * METERS_PER_INCHES * Math.PI;
     private static final double MAX_MPS = (MAX_RPM / 60) * WHEEL_CIRCUMFERENCE;
 
     // Variables for SUVAT
@@ -45,7 +46,7 @@ public class Shooter extends BaseHardware {
     private double lastTime = 0;
     private long lastPosL = 0;
     private long lastPosR = 0;
-    private static final double CALC_TIME_INTERVAL = 0.020;
+    private static final double CALC_TIME_INTERVAL = 0.02;
 
     // Misc variables
     private static final double DEFAULT_SPEED = 5.0;
@@ -134,21 +135,24 @@ public class Shooter extends BaseHardware {
 
             // Open the stopper when shooting
             stopper.setPosition(OPEN_POS);
-/*
-            // Calculate displacement
-            double xDisplacement = Math.sqrt(Math.pow(displacement[0], 2) + Math.pow(displacement[1], 2)) * METERS_PER_INCHES;
 
-            // The goal speed in m/s
+            // Calculate displacement
+            double totalDisplacement = Math.sqrt(Math.pow(displacement[0], 2) + Math.pow(displacement[1], 2)) * METERS_PER_INCHES;
+
+            // The goal speed in m/s (currently inactive!)
             double goalSpeedMPS;
-            if (xDisplacement == 0) {
+            if (totalDisplacement == 0) {
 
                 goalSpeedMPS = DEFAULT_SPEED;
 
             } else {
 
-                goalSpeedMPS = calculateGoalSpeed(xDisplacement);
+                goalSpeedMPS = calculateGoalSpeed(totalDisplacement);
 
             }
+
+            // Forcefully set m/s
+            goalSpeedMPS = 8;
 
             // Difference in time since last time
             double timeDiff = timer.seconds() - lastTime;
@@ -167,20 +171,20 @@ public class Shooter extends BaseHardware {
 
                 // Calculate speed in m/s
                 double speedLTPS = posLDiff / timeDiff;
-                double speedLRPS = speedLTPS * REV_PER_TICKS;
+                double speedLRPS = speedLTPS * L_REV_PER_TICKS;
                 double speedLMPS = speedLRPS * WHEEL_CIRCUMFERENCE;
 
                 double speedRTPS = posRDiff / timeDiff;
-                double speedRRPS = speedRTPS * REV_PER_TICKS;
+                double speedRRPS = speedRTPS * R_REV_PER_TICKS;
                 double speedRMPS = speedRRPS * WHEEL_CIRCUMFERENCE;
 
                 // Setup PID
-                shooterLPID.setSetpoint(goalSpeedMPS);
-                shooterRPID.setSetpoint(goalSpeedMPS);
                 shooterLPID.setInputRange(0, MAX_MPS);
                 shooterRPID.setInputRange(0, MAX_MPS);
                 shooterLPID.setOutputRange(0, 1);
                 shooterRPID.setOutputRange(0, 1);
+                shooterLPID.setSetpoint(goalSpeedMPS);
+                shooterRPID.setSetpoint(goalSpeedMPS);
                 shooterLPID.enable();
                 shooterRPID.enable();
 
@@ -193,16 +197,19 @@ public class Shooter extends BaseHardware {
                 shooterR.setPower(powerR);
 
                 // Data to send to telemetry
+                print("Time difference", timeDiff);
+                print("Left motor position", shooterL.getCurrentPosition());
+                print("Right motor position", shooterR.getCurrentPosition());
+                print("Left position difference", posLDiff);
+                print("Right position difference", posRDiff);
                 print("Power L: ", powerL);
                 print("Power R: ", powerR);
                 print("Left motor speed (m/s): ", speedLMPS);
                 print("Right motor speed (m/s): ", speedRMPS);
                 print("Goal speed (m/s): ", goalSpeedMPS);
-                // print("Total Displacement: ", xDisplacement);
+                print("Total Displacement: ", totalDisplacement);
 
-            }*/
-            shooterL.setPower(1);
-            shooterR.setPower(1);
+            }
 
         } else {
 
@@ -212,6 +219,10 @@ public class Shooter extends BaseHardware {
             // If button is not pressed, stop shooting
             shooterL.setPower(0);
             shooterR.setPower(0);
+
+            // Disable PID
+            shooterLPID.disable();
+            shooterRPID.disable();
 
             // Set last time for next calculations
             lastTime = timer.seconds();

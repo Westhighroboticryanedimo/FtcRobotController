@@ -93,6 +93,7 @@ public class Webcam extends BaseHardware {
 
         webcamName = hwMap.get(WebcamName.class, "webcam");
 
+        //setupOpenCV(hwMap);
         setupVuforia(hwMap);
 
     }
@@ -229,8 +230,8 @@ public class Webcam extends BaseHardware {
          } else {
 
              // For OpenCV
-             print("Ring count: ", getRingStack());
-             print("Position: ", getRingPosition());
+             print("Threshold: ", getInternalRingNum());
+             print("Number of rings: ", getNumRings());
 
          }
 
@@ -265,15 +266,17 @@ public class Webcam extends BaseHardware {
 
     }
 
-    public int getRingStack() {
+    public int getInternalRingNum() {
 
         return pipeline.getAnalysis();
 
     }
 
-    private RingDeterminationPipeline.RingPosition getRingPosition() {
+    public int getNumRings() {
 
-        return pipeline.getPosition();
+        if (pipeline.getPosition() == RingDeterminationPipeline.RingPosition.NONE) return 0;
+        else if (pipeline.getPosition() == RingDeterminationPipeline.RingPosition.ONE) return 1;
+        else return 4;
 
     }
 
@@ -378,13 +381,14 @@ public class Webcam extends BaseHardware {
 
         private static final int REGION_WIDTH = 100;
         private static final int REGION_HEIGHT = 80;
-        private static final int X_DIFF = 50;
+        private static final int X_DIFF = 90;
+        private static final int Y_DIFF = -40;
 
         // The core values which define the location and size of the sample regions
-        private static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((int) (WIDTH / 2 + REGION_WIDTH / 2 + X_DIFF), (int) (HEIGHT / 2 + REGION_HEIGHT / 2));
+        private static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((int) (WIDTH / 2 + REGION_WIDTH / 2 + X_DIFF), (int) (HEIGHT / 2 + REGION_HEIGHT / 2 + Y_DIFF));
 
-        private static final int FOUR_RING_THRESHOLD = 140;
-        private static final int ONE_RING_THRESHOLD = 130;
+        private static final int FOUR_RING_THRESHOLD = 143;
+        private static final int ONE_RING_THRESHOLD = 132;
 
         private Point region1_pointA = new Point(
                       REGION1_TOPLEFT_ANCHOR_POINT.x,

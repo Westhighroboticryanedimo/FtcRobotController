@@ -37,35 +37,27 @@ public class AllAuto extends LinearOpMode {
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");
-
-        telemetry.addData("Rings: ", webcam.getRingStack());
-
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        drive.move(1, 80, 0);
-        /*
         // Get how many rings are stacked
-        int numRingStack = webcam.getRingStack();
-
-        // Grab the wobble goal
-        drive.move(1, 10, -90);
-        grabber.extendRotator();
-        grabber.openGrabber();
-        sleep(500);
-        drive.move(0.3, 5.5, 90);
-        grabber.closeGrabber();
-
-        // Lift the grabber just a bit
+        int numRingStack = 0;
         runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 1.0) {
+        while (opModeIsActive() && runtime.seconds() < 2) {
 
-            grabber.lift(true, false);
+            numRingStack = webcam.getNumRings();
+
+            telemetry.addData("Num rings", webcam.getNumRings());
+            telemetry.addData("Ring position", webcam.getInternalRingNum());
+            telemetry.update();
 
         }
-        grabber.stopLift();
+
+        drive.move(1, 70, 30);
+
+        /*
 
         // Move to shooting position
         drive.move(1, 70, 25);
@@ -79,7 +71,9 @@ public class AllAuto extends LinearOpMode {
 
         }
         shooter.stopShoot();
+        */
 
+        /*
         // Check number of ring that is stacked
         if (numRingStack == 0) {
 
@@ -121,13 +115,10 @@ public class AllAuto extends LinearOpMode {
             drive.move(1, 50, -180);
 
         }
+        */
 
-
-         */
         telemetry.addData("Path", "Complete");
         telemetry.update();
-
-        sleep(1000);
 
     }
 

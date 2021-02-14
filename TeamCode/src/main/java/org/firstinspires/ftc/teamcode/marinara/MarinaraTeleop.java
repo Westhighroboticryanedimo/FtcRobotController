@@ -39,9 +39,9 @@ public class MarinaraTeleop extends OpMode {
         // Uncomment for telemetry values
 
         // intake.debug();
-        // shooter.debug();
-        grabber.debug();
-        drive.debug();
+        shooter.debug();
+        // grabber.debug();
+        // drive.debug();
         // webcam.debug();
 
     }
