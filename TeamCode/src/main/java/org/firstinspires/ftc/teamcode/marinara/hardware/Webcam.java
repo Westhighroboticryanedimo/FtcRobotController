@@ -57,9 +57,9 @@ public class Webcam extends BaseHardware {
     private static final float QUAD_FIELD = (float) (36 * MILLIMETERS_PER_INCHES);
     private static final float MM_TARGET_HEIGHT = (float) (6 * MILLIMETERS_PER_INCHES);
 
-    // Camera position
-    private static final float CAMERA_FORWARD_DISPLACEMENT = (float) (4 * MILLIMETERS_PER_INCHES);
-    private static final float CAMERA_VERTICAL_DISPLACEMENT = (float) (8 * MILLIMETERS_PER_INCHES);
+    // Camera position (inches)
+    private static final float CAMERA_FORWARD_DISPLACEMENT = 3;
+    private static final float CAMERA_VERTICAL_DISPLACEMENT = 0;
     private static final float CAMERA_LEFT_DISPLACEMENT = 0;
 
     // Used for Vuforia tracking
@@ -345,7 +345,7 @@ public class Webcam extends BaseHardware {
             // Get location
             VectorF imageLocation = allTrackables.get(index).getLocation().getTranslation();
 
-            return new float[]{imageLocation.get(0) / (float) MILLIMETERS_PER_INCHES - getTranslation()[0], imageLocation.get(1) / (float) MILLIMETERS_PER_INCHES - getTranslation()[1], imageLocation.get(2) / (float) MILLIMETERS_PER_INCHES - getTranslation()[2]};
+            return new float[]{imageLocation.get(0) / (float) MILLIMETERS_PER_INCHES - getTranslation()[0] + CAMERA_FORWARD_DISPLACEMENT, imageLocation.get(1) / (float) MILLIMETERS_PER_INCHES - getTranslation()[1], imageLocation.get(2) / (float) MILLIMETERS_PER_INCHES - getTranslation()[2]};
 
         } else {
 

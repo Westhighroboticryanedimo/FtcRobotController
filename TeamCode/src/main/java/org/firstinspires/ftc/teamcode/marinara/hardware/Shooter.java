@@ -129,9 +129,24 @@ public class Shooter extends BaseHardware {
 
     }
 
-    public void shoot(boolean button, float[] displacement) {
+    public void shoot(boolean button, float[] displacement, MarinaraDrive drive) {
 
         if (button) {
+
+            // Move robot to correct position
+            final double GOAL_FORWARD_DIST = 61;
+            double distToGoal = displacement[0];
+            double sideShift = displacement[1];
+            double goalDistDiff = GOAL_FORWARD_DIST - distToGoal;
+            double speed = Math.sqrt(Math.pow(goalDistDiff, 2) + Math.pow(sideShift, 2)) * 0.05;
+            double angle;
+            if (sideShift > 0) angle = -(Math.PI / 2 + Math.atan2(goalDistDiff, sideShift));
+            else angle = Math.PI / 2 + Math.atan2(goalDistDiff, sideShift);
+            drive.setPower(speed * Math.sin(angle + Math.PI / 4), speed * Math.cos(angle + Math.PI / 4),
+                           speed * Math.cos(angle + Math.PI / 4), speed * Math.sin(angle + Math.PI / 4));
+
+            print("Power1: ", speed * Math.sin(angle + Math.PI / 4));
+            print("Power2: ", speed *Math.cos(angle + Math.PI / 4));
 
             // Open the stopper when shooting
             stopper.setPosition(OPEN_POS);
@@ -152,7 +167,7 @@ public class Shooter extends BaseHardware {
             }
 
             // Forcefully set m/s
-            goalSpeedMPS = 8;
+            goalSpeedMPS = 7;
 
             // Difference in time since last time
             double timeDiff = timer.seconds() - lastTime;

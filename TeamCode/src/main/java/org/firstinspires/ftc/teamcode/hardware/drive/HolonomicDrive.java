@@ -19,6 +19,8 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     private Gyro gyro;
 
+    private boolean isUserDriving = true;
+
     private boolean isDrivePOV = false;
 
     // For autonomous driving
@@ -177,6 +179,8 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     // TeleOp Drive
     public void drive(double joystickX, double joystickY, double joystickTurn) {
+
+        isUserDriving = joystickX > 0 || joystickY > 0 || joystickTurn > 0;
 
         // Reduce joystick turn
         joystickTurn /= 1.5;
@@ -394,6 +398,15 @@ public abstract class HolonomicDrive extends BaseHardware {
         frontRight.setPower(0);
         backLeft.setPower(0);
         backRight.setPower(0);
+
+    }
+
+    public void setPower(double fl, double fr, double bl, double br) {
+
+        frontLeft.setPower(fl);
+        frontRight.setPower(fr);
+        backLeft.setPower(bl);
+        backRight.setPower(br);
 
     }
 

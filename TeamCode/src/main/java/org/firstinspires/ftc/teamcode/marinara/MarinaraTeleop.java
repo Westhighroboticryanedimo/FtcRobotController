@@ -42,7 +42,7 @@ public class MarinaraTeleop extends OpMode {
         shooter.debug();
         // grabber.debug();
         // drive.debug();
-        // webcam.debug();
+        webcam.debug();
 
     }
 
@@ -52,20 +52,36 @@ public class MarinaraTeleop extends OpMode {
         // Controller
         controller.update();
 
-        // Drive
-        drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
-        drive.togglePOV(controller.backOnce());
+        // Button mapping
+        final boolean shootButton = controller.Y();
+        final boolean intakeButton = controller.leftBumper();
+        final boolean outtakeButton = controller.rightBumper();
+        final boolean grabButton = controller.XOnce();
+        final boolean rotateGrabberButton = controller.BOnce();
+        final boolean liftButton = controller.dpadUp();
+        final boolean lowerButton = controller.dpadDown();
+        final boolean toggleDriveButton = controller.backOnce();
+
+        // Drive only if not shooting
+        if (!shootButton) {
+
+            drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+
+        }
+
+        // Toggle drive POV
+        drive.togglePOV(toggleDriveButton);
 
         // Shooter
-        shooter.shoot(controller.Y(), webcam.getDisplacement());
+        shooter.shoot(shootButton, webcam.getDisplacement(), drive);
 
         // Intake
-        intake.intake(controller.leftBumper() || controller.Y(), controller.rightBumper());
+        intake.intake(intakeButton || shootButton, outtakeButton);
 
         // Grabber
-        grabber.grab(controller.XOnce());
-        grabber.rotate(controller.BOnce());
-        grabber.lift(controller.dpadUp(), controller.dpadDown());
+        grabber.grab(grabButton);
+        grabber.rotate(rotateGrabberButton);
+        grabber.lift(liftButton, lowerButton);
         grabber.update();
 
         // Webcam
