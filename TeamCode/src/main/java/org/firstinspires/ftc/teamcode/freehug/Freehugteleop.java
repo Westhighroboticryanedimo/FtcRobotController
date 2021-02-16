@@ -13,9 +13,11 @@ public class Freehugteleop extends OpMode {
     private Controller controller;
     private DcMotor shooterL;
     private DcMotor shooterR;
+    double adjustment = 1;
 
     @Override
     public void init() {
+        adjustment = 1;
         drive = new Freehugdrive(this, hardwareMap);
         intake = new IntakeFree(this, hardwareMap);
         controller = new Controller(gamepad1);
@@ -30,7 +32,7 @@ public class Freehugteleop extends OpMode {
         controller.update();
 
         drive.togglePOV(controller.backOnce());
-        drive.drive(controller.left_stick_x, -controller.left_stick_y, controller.right_stick_x);
+        drive.drive(controller.left_stick_x * adjustment, -controller.left_stick_y * adjustment, controller.right_stick_x);
         intake.intake(controller.B(), controller.A());
 
         if (controller.X()) {
@@ -43,6 +45,15 @@ public class Freehugteleop extends OpMode {
             shooterL.setPower(0);
             shooterR.setPower(0);
 
+        }
+
+        if (controller.leftStickButton()) {
+            if(adjustment == 1) {
+                adjustment = 0.5;
+            }
+            else{
+                adjustment = 1;
+            }
         }
 
     }
