@@ -58,7 +58,7 @@ public class Webcam extends BaseHardware {
     private static final float MM_TARGET_HEIGHT = (float) (6 * MILLIMETERS_PER_INCHES);
 
     // Camera position (inches)
-    private static final float CAMERA_FORWARD_DISPLACEMENT = 3;
+    private static final float CAMERA_FORWARD_DISPLACEMENT = 4;
     private static final float CAMERA_VERTICAL_DISPLACEMENT = 0;
     private static final float CAMERA_LEFT_DISPLACEMENT = 0;
 
@@ -302,7 +302,7 @@ public class Webcam extends BaseHardware {
             VectorF translation = lastLocation.getTranslation();
 
             // X,Y,Z
-            return new float[]{translation.get(0) / (float) MILLIMETERS_PER_INCHES, translation.get(1) / (float) MILLIMETERS_PER_INCHES, translation.get(2) / (float) MILLIMETERS_PER_INCHES};
+            return new float[]{translation.get(0) / (float) MILLIMETERS_PER_INCHES - CAMERA_FORWARD_DISPLACEMENT, translation.get(1) / (float) MILLIMETERS_PER_INCHES, translation.get(2) / (float) MILLIMETERS_PER_INCHES};
 
         } else {
 
@@ -345,7 +345,7 @@ public class Webcam extends BaseHardware {
             // Get location
             VectorF imageLocation = allTrackables.get(index).getLocation().getTranslation();
 
-            return new float[]{imageLocation.get(0) / (float) MILLIMETERS_PER_INCHES - getTranslation()[0] + CAMERA_FORWARD_DISPLACEMENT, imageLocation.get(1) / (float) MILLIMETERS_PER_INCHES - getTranslation()[1], imageLocation.get(2) / (float) MILLIMETERS_PER_INCHES - getTranslation()[2]};
+            return new float[]{imageLocation.get(0) / (float) MILLIMETERS_PER_INCHES - getTranslation()[0], imageLocation.get(1) / (float) MILLIMETERS_PER_INCHES - getTranslation()[1], imageLocation.get(2) / (float) MILLIMETERS_PER_INCHES - getTranslation()[2]};
 
         } else {
 

@@ -9,6 +9,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.PIDController;
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
+import org.opencv.core.Mat;
+
+import java.util.Arrays;
+
 import static org.firstinspires.ftc.teamcode.Constants.*;
 
 public class Shooter extends BaseHardware {
@@ -133,20 +137,23 @@ public class Shooter extends BaseHardware {
 
         if (button) {
 
-            // Move robot to correct position
-            final double GOAL_FORWARD_DIST = 61;
-            double distToGoal = displacement[0];
-            double sideShift = displacement[1];
-            double goalDistDiff = GOAL_FORWARD_DIST - distToGoal;
-            double speed = Math.sqrt(Math.pow(goalDistDiff, 2) + Math.pow(sideShift, 2)) * 0.05;
-            double angle;
-            if (sideShift > 0) angle = -(Math.PI / 2 + Math.atan2(goalDistDiff, sideShift));
-            else angle = Math.PI / 2 + Math.atan2(goalDistDiff, sideShift);
-            drive.setPower(speed * Math.sin(angle + Math.PI / 4), speed * Math.cos(angle + Math.PI / 4),
-                           speed * Math.cos(angle + Math.PI / 4), speed * Math.sin(angle + Math.PI / 4));
+            if (!Arrays.equals(displacement, new float[]{0, 0, 0})) {
 
-            print("Power1: ", speed * Math.sin(angle + Math.PI / 4));
-            print("Power2: ", speed *Math.cos(angle + Math.PI / 4));
+                // Move robot to correct position
+                final double GOAL_FORWARD_DIST = 62;
+                double distToGoal = displacement[0];
+                double sideShift = displacement[1];
+                double goalDistDiff = GOAL_FORWARD_DIST - distToGoal;
+                double speed = Math.pow(Math.sqrt(Math.pow(goalDistDiff, 2) + Math.pow(sideShift, 2)) * 0.1, 2);
+                double angle = Math.PI / 2 - Math.atan2(-goalDistDiff, -sideShift);
+                print("Angle: ", angle);
+                drive.setPower(speed * Math.sin(angle + Math.PI / 4), speed * Math.cos(angle + Math.PI / 4),
+                        speed * Math.cos(angle + Math.PI / 4), speed * Math.sin(angle + Math.PI / 4));
+
+                print("Power1: ", speed * Math.sin(angle + Math.PI / 4));
+                print("Power2: ", speed * Math.cos(angle + Math.PI / 4));
+
+            }
 
             // Open the stopper when shooting
             stopper.setPosition(OPEN_POS);
@@ -167,7 +174,7 @@ public class Shooter extends BaseHardware {
             }
 
             // Forcefully set m/s
-            goalSpeedMPS = 7;
+            goalSpeedMPS = 8;
 
             // Difference in time since last time
             double timeDiff = timer.seconds() - lastTime;
