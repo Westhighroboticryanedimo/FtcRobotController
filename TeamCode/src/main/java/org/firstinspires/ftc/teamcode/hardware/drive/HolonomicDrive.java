@@ -268,6 +268,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         print("FR: ", frontRight.getCurrentPosition());
         print("BL: ", backLeft.getCurrentPosition());
         print("BR: ", backRight.getCurrentPosition());
+        print("Gyro: ", gyro.getAngleDegrees());
 
     }
 
