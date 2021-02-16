@@ -25,6 +25,7 @@ public class Freehugteleop extends OpMode {
         shooterR = hardwareMap.get(DcMotor.class, "shooterR");
         shooterL.setDirection(DcMotor.Direction.REVERSE);
         shooterR.setDirection(DcMotor.Direction.REVERSE);
+        drive.debug();
     }
 
     @Override
