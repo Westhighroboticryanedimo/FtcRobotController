@@ -39,10 +39,10 @@ public class MarinaraTeleop extends OpMode {
         // Uncomment for telemetry values
 
         // intake.debug();
-        shooter.debug();
+        // shooter.debug();
         // grabber.debug();
         // drive.debug();
-        webcam.debug();
+        // webcam.debug();
 
     }
 
@@ -61,6 +61,7 @@ public class MarinaraTeleop extends OpMode {
         final boolean liftButton = controller.dpadUp();
         final boolean lowerButton = controller.dpadDown();
         final boolean toggleDriveButton = controller.backOnce();
+        final boolean toggleShooterAuto = controller.startOnce();
 
         // Drive only if not shooting
         if (!shootButton) {
@@ -74,6 +75,7 @@ public class MarinaraTeleop extends OpMode {
 
         // Shooter
         shooter.shoot(shootButton, webcam.getDisplacement(), drive);
+        shooter.toggleAuto(toggleShooterAuto);
 
         // Intake
         intake.intake(intakeButton || shootButton, outtakeButton);

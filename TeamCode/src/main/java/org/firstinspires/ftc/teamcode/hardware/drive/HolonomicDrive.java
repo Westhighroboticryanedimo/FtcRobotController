@@ -402,15 +402,6 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     }
 
-    public void setPower(double fl, double fr, double bl, double br) {
-
-        frontLeft.setPower(fl);
-        frontRight.setPower(fr);
-        backLeft.setPower(bl);
-        backRight.setPower(br);
-
-    }
-
     public void resetMotors() {
 
         stop();
