@@ -55,6 +55,9 @@ public class Shooter extends BaseHardware {
     // Misc variables
     private static final double DEFAULT_SPEED = 5.0;
 
+    // Shooter mode
+    private boolean isAuto = false;
+
     // PIDs
     private PIDController shooterLPID = new PIDController(0.00000001, 0.005, 0.1);
     private PIDController shooterRPID = new PIDController(0.00000001, 0.005, 0.1);
@@ -133,27 +136,15 @@ public class Shooter extends BaseHardware {
 
     }
 
+    public void toggleAuto(boolean button) {
+
+        if (button) isAuto = !isAuto;
+
+    }
+
     public void shoot(boolean button, float[] displacement, MarinaraDrive drive) {
 
         if (button) {
-
-            if (!Arrays.equals(displacement, new float[]{0, 0, 0})) {
-
-                // Move robot to correct position
-                final double GOAL_FORWARD_DIST = 62;
-                double distToGoal = displacement[0];
-                double sideShift = displacement[1];
-                double goalDistDiff = GOAL_FORWARD_DIST - distToGoal;
-                double speed = Math.pow(Math.sqrt(Math.pow(goalDistDiff, 2) + Math.pow(sideShift, 2)) * 0.1, 2);
-                double angle = Math.PI / 2 - Math.atan2(-goalDistDiff, -sideShift);
-                print("Angle: ", angle);
-                drive.setPower(speed * Math.sin(angle + Math.PI / 4), speed * Math.cos(angle + Math.PI / 4),
-                        speed * Math.cos(angle + Math.PI / 4), speed * Math.sin(angle + Math.PI / 4));
-
-                print("Power1: ", speed * Math.sin(angle + Math.PI / 4));
-                print("Power2: ", speed * Math.cos(angle + Math.PI / 4));
-
-            }
 
             // Open the stopper when shooting
             stopper.setPosition(OPEN_POS);

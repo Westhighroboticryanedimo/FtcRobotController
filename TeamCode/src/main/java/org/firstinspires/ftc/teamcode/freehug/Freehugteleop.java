@@ -33,7 +33,7 @@ public class Freehugteleop extends OpMode {
         controller.update();
 
         drive.togglePOV(controller.backOnce());
-        drive.drive(controller.left_stick_x * adjustment, -controller.left_stick_y * adjustment, controller.right_stick_x);
+        drive.drive(controller.left_stick_x * adjustment, -controller.left_stick_y * adjustment, controller.right_stick_x * adjustment);
         intake.intake(controller.B(), controller.A());
 
         if (controller.X()) {
@@ -48,7 +48,7 @@ public class Freehugteleop extends OpMode {
 
         }
 
-        if (controller.leftStickButton()) {
+        if (controller.leftStickButtonOnce()) {
             if(adjustment == 1) {
                 adjustment = 0.5;
             }
