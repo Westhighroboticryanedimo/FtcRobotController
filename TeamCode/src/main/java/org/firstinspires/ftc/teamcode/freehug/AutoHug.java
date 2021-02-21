@@ -10,7 +10,7 @@ public class AutoHug extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Freehugdrive drive = new Freehugdrive(this, hardwareMap);
-        drive.move(1, 19, 0);
+        drive.move(1, 20, 0);
         drive.turn(1, 9);
     }
 }
