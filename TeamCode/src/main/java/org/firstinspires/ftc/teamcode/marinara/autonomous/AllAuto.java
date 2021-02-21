@@ -42,6 +42,9 @@ public class AllAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
+        drive.move(1, 80, 0);
+        drive.turn(1, -45);
+
         // Get how many rings are stacked
         int numRingStack = 0;
         runtime.reset();
@@ -55,25 +58,9 @@ public class AllAuto extends LinearOpMode {
 
         }
 
-        drive.move(1, 70, 30);
-
-        /*
-
-        // Move to shooting position
+        // Move to initial position
         drive.move(1, 70, 25);
 
-        // Shoot the preloaded rings
-        runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 5.0) {
-
-            //shooter.shoot(true, webcam.getDisplacement());
-            shooter.shoot(true, new float[]{0, 0, 0});
-
-        }
-        shooter.stopShoot();
-        */
-
-        /*
         // Check number of ring that is stacked
         if (numRingStack == 0) {
 
@@ -115,7 +102,6 @@ public class AllAuto extends LinearOpMode {
             drive.move(1, 50, -180);
 
         }
-        */
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
