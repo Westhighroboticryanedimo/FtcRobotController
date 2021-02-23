@@ -58,7 +58,7 @@ public class GrabberFree extends BaseHardware {
     public void tiltHandUp() {
         grabberTilt.setPower(0.3);
     }
-    public void tildHandDown() {
+    public void tiltHandDown() {
         grabberTilt.setPower(-0.3);
     }
     public void restWrist() {

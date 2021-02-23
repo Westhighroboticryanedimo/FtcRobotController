@@ -61,25 +61,33 @@ public class Freehugteleop extends OpMode {
             }
         }
 
-        /*
-        if controller (button for lifting arm)
-            lift arm()
+        if(controller.right_trigger >= 0.2) {
+            grabber.handInTheAir();
+        }
+        else if(controller.left_trigger >= 0.2) {
+            grabber.lowerHand();
+        }
+        else {
+            grabber.restElbow();
+        }
 
-        if controller (button for lowering arm)
-            lower arm()
+        //wrist motions
+        if(controller.dpadUp()) {
+            grabber.tiltHandUp();
+        }
+        else if(controller.dpadDown()) {
+            grabber.tiltHandDown();
+        }
+        else {
+            grabber.restWrist();
+        }
 
-         if controller (button for closing wrist)
-            close wrist()
-
-         if controller (button for opening wrist)
-            open wrist()
-
-         if controller (button for opening hand)
-            open hand()
-
-         if controller (button for closing hand)
-            close hand()
-         */
-
+        //grabber hand open / close
+        if(controller.dpadRight()) {
+            grabber.openHand();
+        }
+        else if(controller.dpadLeft()) {
+            grabber.closeHand();
+        }
     }
 }
