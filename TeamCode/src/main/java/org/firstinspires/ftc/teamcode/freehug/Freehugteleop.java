@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Controller;
+import org.firstinspires.ftc.teamcode.marinara.hardware.Grabber;
 
 @TeleOp(name = "Free Hugs teleop")
 public class Freehugteleop extends OpMode {
@@ -13,6 +14,8 @@ public class Freehugteleop extends OpMode {
     private Controller controller;
     private DcMotor shooterL;
     private DcMotor shooterR;
+
+    private GrabberFree grabber;
     double adjustment = 1;
 
     @Override
@@ -25,6 +28,7 @@ public class Freehugteleop extends OpMode {
         shooterR = hardwareMap.get(DcMotor.class, "shooterR");
         shooterL.setDirection(DcMotor.Direction.REVERSE);
         shooterR.setDirection(DcMotor.Direction.REVERSE);
+        grabber = new GrabberFree(this, hardwareMap);
         drive.debug();
     }
 
@@ -56,6 +60,26 @@ public class Freehugteleop extends OpMode {
                 adjustment = 1;
             }
         }
+
+        /*
+        if controller (button for lifting arm)
+            lift arm()
+
+        if controller (button for lowering arm)
+            lower arm()
+
+         if controller (button for closing wrist)
+            close wrist()
+
+         if controller (button for opening wrist)
+            open wrist()
+
+         if controller (button for opening hand)
+            open hand()
+
+         if controller (button for closing hand)
+            close hand()
+         */
 
     }
 }

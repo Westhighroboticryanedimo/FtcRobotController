@@ -230,8 +230,7 @@ public class Shooter extends BaseHardware {
             stopper.setPosition(STOP_POS);
 
             // If button is not pressed, stop shooting
-            shooterL.setPower(0);
-            shooterR.setPower(0);
+            stopShoot();
 
             // Disable PID
             shooterLPID.disable();

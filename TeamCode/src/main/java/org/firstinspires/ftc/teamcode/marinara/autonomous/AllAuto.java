@@ -42,6 +42,10 @@ public class AllAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
+        drive.move(1, 80, 45);
+        drive.turn(1, 90);
+
+
         drive.move(1, 80, 0);
         drive.turn(1, -45);
 
