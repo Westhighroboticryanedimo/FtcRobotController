@@ -10,7 +10,30 @@ public class AutoHug extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Freehugdrive drive = new Freehugdrive(this, hardwareMap);
-        drive.move(1, 20, 0);
-        drive.turn(1, 9);
+        GrabberFree grabber = new GrabberFree(this, hardwareMap);
+        IntakeFree intake = new IntakeFree(this, hardwareMap);
+
+        /*drive.move(1, 20, 0);
+        drive.turn(1, 9);*/
+
+        drive.move(0.6,130,180);
+        sleep(1000);
+        drive.move(0.6, 30, -90);
+
+        /*if() {
+
+        }
+        else if() {
+            drive.move(.5, 98, 180);
+            sleep(2000);
+            drive.move(.5, 16, 0);
+        } else if() {
+            drive.move(0.6,83,180);
+            sleep(1000);
+            drive.move(0.6, 25, -90);
+
+        }*/
+
+
     }
 }
