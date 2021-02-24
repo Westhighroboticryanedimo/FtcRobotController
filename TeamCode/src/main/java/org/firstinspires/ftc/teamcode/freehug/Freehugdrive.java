@@ -28,12 +28,12 @@ public class Freehugdrive extends HolonomicDrive {
     // PID setup
     private void setup() {
 
-        setPidDrive(0.03, 0, 0);
+        setPidDrive(0.05, 0, 0);
         setPidSpeed(0.05, 0.001, 0);
         setPidTurn(0.03, 0.001, 0);
 
-        setWheelDiameter(4);
-        setTicksPerRev(1120);
+        setWheelDiameter(3.89);
+        setTicksPerRev(537.6);
 
     }
 

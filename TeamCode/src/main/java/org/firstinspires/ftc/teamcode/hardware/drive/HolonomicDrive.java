@@ -305,7 +305,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidFRBL.setInputRange(0, frblDist);
         pidFRBL.setOutputRange(0, goalFRBLSpeed);
         pidFRBL.setSetpoint(frblDist);
-        pidFRBL.setTolerance(1);
+        pidFRBL.setTolerance(0.5);
         pidFRBL.enable();
 
         boolean isFLBROnTarget = false;
@@ -362,7 +362,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidTurn.setInputRange(0, -angle);
         pidTurn.setOutputRange(0, speed);
         pidTurn.setSetpoint(-angle);
-        pidTurn.setTolerance(0.2);
+        pidTurn.setTolerance(0.5);
         pidTurn.enable();
 
         linearOpMode.sleep(100);
