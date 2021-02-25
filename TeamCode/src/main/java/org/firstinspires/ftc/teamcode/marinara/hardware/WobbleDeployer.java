@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 public class WobbleDeployer extends BaseHardware {
 
     private Servo grab;
-    private static final double GRAB_POS = 1;
-    private static final double RELEASE_POS = 0;
+    private static final double GRAB_POS = 0;
+    private static final double RELEASE_POS = 1;
 
     public WobbleDeployer(OpMode opMode, HardwareMap hwMap) {
 

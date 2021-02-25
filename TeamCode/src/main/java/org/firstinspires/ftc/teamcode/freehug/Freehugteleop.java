@@ -20,7 +20,7 @@ public class Freehugteleop extends OpMode {
 
     @Override
     public void init() {
-        adjustment = 1;
+        //adjustment = 1;//
         drive = new Freehugdrive(this, hardwareMap);
         intake = new IntakeFree(this, hardwareMap);
         controller = new Controller(gamepad1);
@@ -83,10 +83,10 @@ public class Freehugteleop extends OpMode {
         }
 
         //grabber hand open / close
-        if(controller.dpadRight()) {
+        if(controller.dpadRightOnce()) {
             grabber.openHand();
         }
-        else if(controller.dpadLeft()) {
+        else if(controller.dpadLeftOnce()) {
             grabber.closeHand();
         }
     }

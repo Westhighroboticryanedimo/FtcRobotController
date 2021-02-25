@@ -35,10 +35,10 @@ public class AutoHug extends LinearOpMode {
         /*drive.move(1, 20, 0);
         drive.turn(1, 9);*/
 
-        drive.move(0.6,130,180);
-        sleep(1000);
-        drive.move(0.6, 30, -90);
-
+       // drive.move(0.6,130,180);
+       // sleep(1000);
+        //drive.move(0.6, 25, -90);
+        //drive.move(0.6,45,0);
         if (numRingStack == 0) {
 
             // 0 ring
@@ -50,7 +50,10 @@ public class AutoHug extends LinearOpMode {
         } else {
 
             // 4 rings
-
+            drive.move(0.6,130,180);
+            sleep(1000);
+            drive.move(0.6, 25, -90);
+            drive.move(0.6,45,0);
         }
 
         /*if() {

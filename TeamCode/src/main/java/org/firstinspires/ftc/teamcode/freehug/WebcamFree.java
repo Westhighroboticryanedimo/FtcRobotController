@@ -380,8 +380,8 @@ public class WebcamFree extends BaseHardware {
 
         private static final int REGION_WIDTH = 100;
         private static final int REGION_HEIGHT = 80;
-        private static final int X_DIFF = 140;
-        private static final int Y_DIFF = -20;
+        private static final int X_DIFF = -355;
+        private static final int Y_DIFF = -90;
 
         // The core values which define the location and size of the sample regions
         private static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((int) (WIDTH / 2 + REGION_WIDTH / 2 + X_DIFF), (int) (HEIGHT / 2 + REGION_HEIGHT / 2 + Y_DIFF));
