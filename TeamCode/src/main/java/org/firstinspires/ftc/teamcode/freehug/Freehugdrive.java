@@ -34,7 +34,6 @@ public class Freehugdrive extends HolonomicDrive {
 
         setWheelDiameter(3.89);
         setTicksPerRev(537.6);
-
     }
 
 }
