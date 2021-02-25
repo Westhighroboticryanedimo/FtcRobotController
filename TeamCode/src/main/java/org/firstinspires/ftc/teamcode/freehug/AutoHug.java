@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.freehug;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.linearOpMode;
 @Autonomous(name="autohug")
 public class AutoHug extends LinearOpMode {
 
