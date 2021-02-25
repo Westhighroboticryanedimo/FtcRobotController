@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.marinara.hardware.Intake;
 import org.firstinspires.ftc.teamcode.marinara.hardware.MarinaraDrive;
 import org.firstinspires.ftc.teamcode.marinara.hardware.Shooter;
 import org.firstinspires.ftc.teamcode.marinara.hardware.Webcam;
+import org.firstinspires.ftc.teamcode.marinara.hardware.WobbleDeployer;
 
 @Autonomous(name = "Marinara All Auto", group = "Marinara")
 //@Disabled
@@ -23,7 +24,7 @@ public class AllAuto extends LinearOpMode {
         Intake intake = new Intake(this, hardwareMap);
         Shooter shooter = new Shooter(this, hardwareMap);
         Webcam webcam = new Webcam(this, hardwareMap);
-
+        WobbleDeployer deployer = new WobbleDeployer(this, hardwareMap);
 
         // Elapsed time for timed motion
         ElapsedTime runtime = new ElapsedTime();
@@ -42,13 +43,6 @@ public class AllAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        drive.move(1, 80, 45);
-        drive.turn(1, 90);
-
-
-        drive.move(1, 80, 0);
-        drive.turn(1, -45);
-
         // Get how many rings are stacked
         int numRingStack = 0;
         runtime.reset();
@@ -63,47 +57,89 @@ public class AllAuto extends LinearOpMode {
         }
 
         // Move to initial position
-        drive.move(1, 70, 25);
+        drive.move(1, 72, 0);
 
         // Check number of ring that is stacked
         if (numRingStack == 0) {
 
             // Move to target zone A and drop wobble goal
-            drive.move(1, 20, 45);
-            grabber.openGrabber();
+            drive.move(1, 28, 90);
+            drive.turn(0.5, 180);
+            deployer.release();
+            sleep(1000);
+            drive.turn(0.5, -180);
 
-            // Retract grabber
-            drive.move(0.5, 2, -90);
+            // Move to wobble goal
+            drive.move(1, 60, -160);
+            grabber.openGrabber();
+            grabber.extendRotator();
+
+            // Move right and grab wobble goal
+            drive.move(0.5, 20, 90);
+            sleep(500);
             grabber.closeGrabber();
-            grabber.retractRotator();
+
+            // Move to target
+            drive.move(1, 68, 0);
+
+            // Deploy wobble goal
+            grabber.openGrabber();
 
         } else if (numRingStack == 1) {
 
             // Move to target zone B and drop wobble goal
-            drive.move(1, 30, 0);
+            drive.move(1, 28, 20);
+            drive.turn(0.5, 180);
+            deployer.release();
+            sleep(1000);
+            drive.turn(0.5, -180);
+
+            // Move to wobble goal
+            drive.move(1, 80, 180);
+            grabber.openGrabber();
+            grabber.extendRotator();
+
+            // Move right and grab wobble goal
+            drive.move(0.5, 14, 90);
+            sleep(500);
+            grabber.closeGrabber();
+
+            // Move to target
+            drive.move(1, 73, -12);
+
+            // Deploy wobble goal
             grabber.openGrabber();
 
-            // Retract grabber
-            drive.move(0.5, 2, -90);
-            grabber.closeGrabber();
-            grabber.retractRotator();
-
-            // Move to starting line
-            drive.move(1, 20, -180);
+            // Park
+            drive.move(1, 18, 180);
 
         } else {
 
             // Move to target zone C and drop wobble goal
-            drive.move(1, 60, 25);
+            drive.move(1, 50, 30);
+            drive.turn(0.5, 180);
+            deployer.release();
+            sleep(1000);
+            drive.turn(0.5, -180);
+
+            // Move to wobble goal
+            drive.move(1, 108, -170);
+            grabber.openGrabber();
+            grabber.extendRotator();
+
+            // Move right and grab wobble goal
+            drive.move(0.5, 19, 90);
+            sleep(500);
+            grabber.closeGrabber();
+
+            // Move to target
+            drive.move(1, 130, 5);
+
+            // Deploy wobble goal
             grabber.openGrabber();
 
-            // Retract grabber
-            drive.move(0.5, 2, -90);
-            grabber.closeGrabber();
-            grabber.retractRotator();
-
-            // Move to starting line
-            drive.move(1, 50, -180);
+            // Park
+            drive.move(1, 50, 180);
 
         }
 

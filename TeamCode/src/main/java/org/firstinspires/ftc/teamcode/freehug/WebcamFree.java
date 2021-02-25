@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.marinara.hardware;
+package org.firstinspires.ftc.teamcode.freehug;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -35,7 +35,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.teamcode.Constants.MILLIMETERS_PER_INCHES;
 
-public class Webcam extends BaseHardware {
+public class WebcamFree extends BaseHardware {
 
     // For switching mode
     private boolean isVuforia = false;
@@ -86,7 +86,7 @@ public class Webcam extends BaseHardware {
     // Get webcam name
     WebcamName webcamName;
 
-    public Webcam(OpMode opMode, HardwareMap hwMap) {
+    public WebcamFree(OpMode opMode, HardwareMap hwMap) {
 
         super(opMode);
 
@@ -97,7 +97,7 @@ public class Webcam extends BaseHardware {
 
     }
 
-    public Webcam(LinearOpMode opMode, HardwareMap hwMap) {
+    public WebcamFree(LinearOpMode opMode, HardwareMap hwMap) {
 
         super(opMode);
 
@@ -380,8 +380,8 @@ public class Webcam extends BaseHardware {
 
         private static final int REGION_WIDTH = 100;
         private static final int REGION_HEIGHT = 80;
-        private static final int X_DIFF = 140;
-        private static final int Y_DIFF = -20;
+        private static final int X_DIFF = -355;
+        private static final int Y_DIFF = -90;
 
         // The core values which define the location and size of the sample regions
         private static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((int) (WIDTH / 2 + REGION_WIDTH / 2 + X_DIFF), (int) (HEIGHT / 2 + REGION_HEIGHT / 2 + Y_DIFF));

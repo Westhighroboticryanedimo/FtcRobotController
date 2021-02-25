@@ -16,8 +16,9 @@ public class GrabberFree extends BaseHardware {
     private CRServo grabberTilt;
 
     //servo variables
-    private static final double HAND_CLOSED = 0;
-    private static final double HAND_OPEN_L = -0.5;
+    private static final double HAND_CLOSED_L = 0.5;
+    private static final double HAND_CLOSED_R = 0.3;
+    private static final double HAND_OPEN_L = 0.3;
     private static final double HAND_OPEN_R = 0.5;
 
 
@@ -56,8 +57,8 @@ public class GrabberFree extends BaseHardware {
         rotator.setPower(0);
     }
 
-    public void tiltHandUp() { grabberTilt.setPower(0.9); }
-    public void tiltHandDown() { grabberTilt.setPower(-0.9); }
+    public void tiltHandUp() { grabberTilt.setPower(1); }
+    public void tiltHandDown() { grabberTilt.setPower(-1); }
     public void restWrist() {
         grabberTilt.setPower(0);
     }
@@ -68,8 +69,8 @@ public class GrabberFree extends BaseHardware {
     }
 
     public void closeHand() {
-        grabberRight.setPosition(HAND_CLOSED);
-        grabberLeft.setPosition(HAND_CLOSED);
+        grabberRight.setPosition(HAND_CLOSED_R);
+        grabberLeft.setPosition(HAND_CLOSED_L);
     }
 
 }

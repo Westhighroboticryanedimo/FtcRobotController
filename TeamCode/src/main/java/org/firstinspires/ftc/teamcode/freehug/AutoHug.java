@@ -2,28 +2,65 @@ package org.firstinspires.ftc.teamcode.freehug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.marinara.hardware.Webcam;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.linearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="autohug")
 public class AutoHug extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
         Freehugdrive drive = new Freehugdrive(this, hardwareMap);
+        Webcam webcam = new Webcam(this, hardwareMap);
         GrabberFree grabber = new GrabberFree(this, hardwareMap);
         IntakeFree intake = new IntakeFree(this, hardwareMap);
-        Webcam webcam = new Webcam(this, hardwareMap);
+
+        ElapsedTime runtime = new ElapsedTime();
+
+        waitForStart();
+
+        // Get how many rings are stacked
+        int numRingStack = 0;
+        runtime.reset();
+        while (opModeIsActive() && runtime.seconds() < 2) {
+
+            numRingStack = webcam.getNumRings();
+
+            telemetry.addData("Num rings", webcam.getNumRings());
+            telemetry.addData("Ring position", webcam.getInternalRingNum());
+            telemetry.update();
+
+        }
 
         /*drive.move(1, 20, 0);
         drive.turn(1, 9);*/
-
         int rings;
         rings = webcam.getNumRings();
 
         //drive.move(1,72,180);
+       // drive.move(0.6,130,180);
+       // sleep(1000);
+        //drive.move(0.6, 25, -90);
+        //drive.move(0.6,45,0);
+        if (numRingStack == 0) {
 
+            // 0 ring
+            drive.move(0.6,83,180);
+            sleep(1000);
+            drive.move(0.6, 25, -90);
+        } else if (numRingStack == 1) {
+
+            // 1 rings
+            drive.move(.5, 98, 180);
+            sleep(2000);
+            drive.move(.5, 16, 0);
+        } else {
+
+            // 4 rings
+            drive.move(0.6,130,180);
+            sleep(1000);
+            drive.move(0.6, 25, -90);
+            drive.move(0.6,45,0);
+        }
 
 
         /*

@@ -273,7 +273,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         gyro.reset();
         resetMotors();
 
-        linearOpMode.sleep(50);
+        linearOpMode.sleep(100);
 
         // The number of ticks the motors have to move without considering direction of motors
         int goalTicks = (int) ((distance / (wheelDiameter * Math.PI)) * ticksPerRev);
@@ -297,7 +297,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidFLBR.setInputRange(0, flbrDist);
         pidFLBR.setOutputRange(0, goalFLBRSpeed);
         pidFLBR.setSetpoint(flbrDist);
-        pidFLBR.setTolerance(1);
+        pidFLBR.setTolerance(0.8);
         pidFLBR.enable();
 
         // For frontright and backleft motors
@@ -365,7 +365,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidTurn.setTolerance(0.5);
         pidTurn.enable();
 
-        linearOpMode.sleep(50);
+        linearOpMode.sleep(100);
 
         do {
 
