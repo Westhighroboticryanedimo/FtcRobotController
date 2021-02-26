@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.freehug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.marinara.hardware.Webcam;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="autohug")
 public class AutoHug extends LinearOpMode {
@@ -46,7 +45,9 @@ public class AutoHug extends LinearOpMode {
 
         }
 
-        drive.move(0.6,72,180);
+        //easy ato
+    //drive.move(0.6,72,180);
+        //random stuff
         //sleep(500);
         //drive.turn(1,360);
         //sleep(500);
