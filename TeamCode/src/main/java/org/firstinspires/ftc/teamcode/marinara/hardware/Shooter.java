@@ -45,6 +45,7 @@ public class Shooter extends BaseHardware {
 
     // Timer
     private ElapsedTime timer = new ElapsedTime();
+    private ElapsedTime shootDelayer = new ElapsedTime();
 
     // Variables to use when calculating speed
     private double lastTime = 0;
@@ -146,8 +147,12 @@ public class Shooter extends BaseHardware {
 
         if (button) {
 
-            // Open the stopper when shooting
-            stopper.setPosition(OPEN_POS);
+            // Open the stopper after a second of shooting
+            if (shootDelayer.seconds() > 1) {
+
+                stopper.setPosition(OPEN_POS);
+
+            }
 
             // Calculate displacement
             double totalDisplacement = Math.sqrt(Math.pow(displacement[0], 2) + Math.pow(displacement[1], 2)) * METERS_PER_INCHES;
@@ -205,6 +210,9 @@ public class Shooter extends BaseHardware {
                 double powerL = shooterLPID.performPID(speedLMPS);
                 double powerR = shooterRPID.performPID(speedRMPS);
 
+                powerL = 1;
+                powerR = 1;
+
                 // Set power to the motors
                 shooterL.setPower(powerL);
                 shooterR.setPower(powerR);
@@ -240,6 +248,9 @@ public class Shooter extends BaseHardware {
             lastTime = timer.seconds();
             lastPosL = shooterL.getCurrentPosition();
             lastPosR = shooterR.getCurrentPosition();
+
+            // Reset time
+            shootDelayer.reset();
 
         }
 

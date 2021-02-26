@@ -57,30 +57,30 @@ public class AllAuto extends LinearOpMode {
         }
 
         // Move to initial position
-        drive.move(1, 72, 0);
+        drive.move(1, 82, 8);
 
         // Check number of ring that is stacked
         if (numRingStack == 0) {
 
             // Move to target zone A and drop wobble goal
-            drive.move(1, 28, 90);
+            drive.move(1, 30, 90);
             drive.turn(0.5, 180);
             deployer.release();
             sleep(1000);
             drive.turn(0.5, -180);
 
             // Move to wobble goal
-            drive.move(1, 60, -160);
+            drive.move(1, 58, -160);
             grabber.openGrabber();
             grabber.extendRotator();
 
             // Move right and grab wobble goal
-            drive.move(0.5, 20, 90);
+            drive.move(0.5, 13, 90);
             sleep(500);
             grabber.closeGrabber();
 
             // Move to target
-            drive.move(1, 68, 0);
+            drive.move(1, 77, 16);
 
             // Deploy wobble goal
             grabber.openGrabber();
@@ -95,23 +95,23 @@ public class AllAuto extends LinearOpMode {
             drive.turn(0.5, -180);
 
             // Move to wobble goal
-            drive.move(1, 80, 180);
+            drive.move(1, 85, 180);
             grabber.openGrabber();
             grabber.extendRotator();
 
             // Move right and grab wobble goal
-            drive.move(0.5, 14, 90);
+            drive.move(0.5, 12, 90);
             sleep(500);
             grabber.closeGrabber();
 
             // Move to target
-            drive.move(1, 73, -12);
+            drive.move(1, 90, 0);
 
             // Deploy wobble goal
             grabber.openGrabber();
 
             // Park
-            drive.move(1, 18, 180);
+            drive.move(1, 25, 180);
 
         } else {
 
@@ -123,23 +123,25 @@ public class AllAuto extends LinearOpMode {
             drive.turn(0.5, -180);
 
             // Move to wobble goal
-            drive.move(1, 108, -170);
+            drive.move(1, 104, -160);
             grabber.openGrabber();
             grabber.extendRotator();
 
             // Move right and grab wobble goal
-            drive.move(0.5, 19, 90);
+            drive.move(0.5, 41, 90);
             sleep(500);
             grabber.closeGrabber();
 
             // Move to target
-            drive.move(1, 130, 5);
+            drive.move(1, 34, -70);
+            drive.move(1, 108, 18);
 
             // Deploy wobble goal
             grabber.openGrabber();
 
             // Park
-            drive.move(1, 50, 180);
+            drive.move(1, 10, -90);
+            drive.move(1, 52, 180);
 
         }
 

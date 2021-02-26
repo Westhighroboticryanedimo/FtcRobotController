@@ -63,12 +63,8 @@ public class MarinaraTeleop extends OpMode {
         final boolean toggleDriveButton = controller.backOnce();
         final boolean toggleShooterAuto = controller.startOnce();
 
-        // Drive only if not shooting
-        if (!shootButton) {
-
-            drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
-
-        }
+        // Drive
+        drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
 
         // Toggle drive POV
         drive.togglePOV(toggleDriveButton);

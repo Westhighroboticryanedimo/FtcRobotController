@@ -53,12 +53,12 @@ public class AutoHug extends LinearOpMode {
         }
 
         drive.move(0.6,72,180);
-        sleep(500);
-        drive.turn(1,360);
-        sleep(500);
-        lowerArmAuto(1000);
-        sleep(1000);
-        raiseArmAuto(1000);
+        //sleep(500);
+        //drive.turn(1,360);
+        //sleep(500);
+        //lowerArmAuto(1000);
+        //sleep(1000);
+        //raiseArmAuto(1000);
 
         /*
         //WEIRD NUMBERS
