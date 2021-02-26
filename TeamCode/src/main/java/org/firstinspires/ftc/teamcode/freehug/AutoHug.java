@@ -19,12 +19,8 @@ public class AutoHug extends LinearOpMode {
         grabber.restElbow();
     }
 
-    public void openHandAuto() {
-        grabber.openHand();
-    }
-    public void closeHandAuto() {
-        grabber.closeHand();
-    }
+    public void openHandAuto() { grabber.openHand(); }
+    public void closeHandAuto() { grabber.closeHand(); }
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -52,15 +48,15 @@ public class AutoHug extends LinearOpMode {
 
         }
 
-        drive.move(0.6,72,180);
+        /*drive.move(0.6,72,180);
         sleep(500);
         drive.turn(1,360);
         sleep(500);
         lowerArmAuto(1000);
         sleep(1000);
-        raiseArmAuto(1000);
+        raiseArmAuto(1000);*/
 
-        /*
+
         //WEIRD NUMBERS
         if (rings == 0) {
 
@@ -71,9 +67,9 @@ public class AutoHug extends LinearOpMode {
         } else if (rings == 1) {
 
             // 1 rings
-            drive.move(.5, 98, 180);
+            drive.move(.6, 98, 180);
             sleep(2000);
-            drive.move(.5, 16, 0);
+            drive.move(.6, 16, 0);
         } else {
 
             // 4 rings
@@ -82,7 +78,7 @@ public class AutoHug extends LinearOpMode {
             drive.move(0.6, 25, -90);
             drive.move(0.6,45,0);
         }
-        */
+
 
         /*
         //ACTUAL MEASUREMENTS
@@ -94,7 +90,7 @@ public class AutoHug extends LinearOpMode {
         else if(rings == 1) {
             drive.move(.6, 92, 180);
             sleep(1000);
-            drive.move(.6, 12, -90);
+            drive.move(.6, 16, -90);
         } else {
             drive.move(0.6,112,180);
             sleep(1000);

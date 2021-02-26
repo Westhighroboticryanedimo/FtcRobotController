@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.marinara.hardware.Grabber;
 
+import static android.os.SystemClock.sleep;
+
+
 @TeleOp(name = "Free Hugs teleop")
 public class Freehugteleop extends OpMode {
     private Freehugdrive drive;
@@ -17,6 +20,10 @@ public class Freehugteleop extends OpMode {
 
     private GrabberFree grabber;
     double adjustment = 1;
+
+    //TO BE ADJUSTED MANUALLY
+    final static double CALIBRATION = 1;
+    final static double TIME_CALIBRATION = 200;
 
     @Override
     public void init() {
@@ -32,12 +39,38 @@ public class Freehugteleop extends OpMode {
         drive.debug();
     }
 
+    double xOffset;
+    double yOffset;
+
+    public void lockPosition() {
+        xOffset = 0;
+        yOffset = 0;
+    }
+    public void updateOffsets(double xChange, double yChange) {
+        xOffset += xChange;
+        yOffset += yChange;
+    }
+    public void returnToPosition() {
+
+        yOffset = Math.abs(yOffset) * CALIBRATION;
+        xOffset = Math.abs(xOffset) * CALIBRATION;
+
+        drive.drive(0,(yOffset * -1),0);
+        sleep((long) (yOffset * TIME_CALIBRATION));
+        drive.drive(0,0,0);
+
+        drive.drive(xOffset,0,0);
+        sleep((long) (xOffset * TIME_CALIBRATION));
+        drive.drive(0,0,0);
+    }
+
     @Override
     public void loop() {
         controller.update();
 
         drive.togglePOV(controller.backOnce());
         drive.drive(controller.left_stick_x * adjustment, -controller.left_stick_y * adjustment, controller.right_stick_x * adjustment);
+        updateOffsets(controller.left_stick_x * adjustment, -controller.left_stick_y * adjustment);
         intake.intake(controller.B(), controller.A());
 
         if (controller.X()) {
@@ -71,15 +104,12 @@ public class Freehugteleop extends OpMode {
             grabber.restElbow();
         }
 
-        //wrist motions
-        if(controller.dpadUp()) {
-            grabber.tiltHandUp();
+        //position lock and return commands
+        if(controller.dpadUpOnce()) {
+            lockPosition();
         }
         else if(controller.dpadDown()) {
-            grabber.tiltHandDown();
-        }
-        else {
-            grabber.restWrist();
+            returnToPosition();
         }
 
         //grabber hand open / close
@@ -89,5 +119,6 @@ public class Freehugteleop extends OpMode {
         else if(controller.dpadLeftOnce()) {
             grabber.closeHand();
         }
+
     }
 }
