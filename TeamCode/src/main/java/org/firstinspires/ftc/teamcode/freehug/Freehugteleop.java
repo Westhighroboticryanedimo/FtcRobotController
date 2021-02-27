@@ -80,8 +80,9 @@ public class Freehugteleop extends OpMode {
         drive.togglePOV(controller.backOnce());
         if(I_move_by_meself_now == false) {
             drive.drive(controller.left_stick_x * adjustment, -controller.left_stick_y * adjustment, controller.right_stick_x * adjustment);
+            updateOffsets(controller.left_stick_x * adjustment, -controller.left_stick_y * adjustment);
         }
-        updateOffsets(controller.left_stick_x * adjustment, -controller.left_stick_y * adjustment);
+
         intake.intake(controller.B(), controller.A());
 
         if (controller.X()) {
