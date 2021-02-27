@@ -3,10 +3,8 @@ package org.firstinspires.ftc.teamcode.freehug;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Controller;
-import org.firstinspires.ftc.teamcode.marinara.hardware.Grabber;
 
 import static android.os.SystemClock.sleep;
 
@@ -27,7 +25,7 @@ public class Freehugteleop extends OpMode {
 
     //TO BE ADJUSTED MANUALLY
     final static double CALIBRATION = 1;
-    final static double TIME_CALIBRATION = 200;
+    final static double TIME_CALIBRATION = 10;
 
     @Override
     public void init() {
