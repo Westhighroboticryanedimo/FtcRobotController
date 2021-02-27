@@ -97,7 +97,7 @@ public class Freehugteleop extends OpMode {
 
         if (controller.leftStickButtonOnce()) {
             if(adjustment == 1) {
-                adjustment = 0.5;
+                adjustment = 0.6;
             }
             else{
                 adjustment = 1;
