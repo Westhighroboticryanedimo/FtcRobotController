@@ -18,8 +18,8 @@ public class FreeReturn {
         int radians_ang = (int) (robotCurrentAngle * Math.PI/180);
 
         //update x and y offset, taking into account the direction it's facing
-        yOffset += Math.abs(yChange) * Math.sin(radians_ang);
-        xOffset += Math.abs(xChange) * Math.cos(radians_ang);
+        yOffset += yChange * Math.sin(radians_ang);
+        xOffset += xChange * Math.cos(radians_ang);
     }
 
     public void updateAngle(double angleChange) {

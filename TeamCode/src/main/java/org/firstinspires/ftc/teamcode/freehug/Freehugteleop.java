@@ -50,7 +50,7 @@ public class Freehugteleop extends OpMode {
 
         freeReturn.freely_hugging = true;
         //do things
-        drive.drive(0,yo,0);
+        drive.drive(0,-yo,0);
         sleep((int)(Math.abs(yo) * TIME_CALIBRATION));
         drive.drive(0,0,0);
 
