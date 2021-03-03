@@ -4,6 +4,7 @@ public class FreeReturn {
     public double xOffset;
     public double yOffset;
     public double robotCurrentAngle;
+    public boolean freely_hugging = false;
     //Freehugdrive drive;
 
     public void lockPosition() {
@@ -13,27 +14,12 @@ public class FreeReturn {
     }
 
     public void updateOffsets(double xChange, double yChange) {
-        double xChangeAdapted = xChange;
-        double yChangeAdapted = yChange;
         double ang = robotCurrentAngle;
+        int radians_ang = (int) (robotCurrentAngle * Math.PI/180);
 
-        //update x and y offset from original position, taking into account the direction it's facing
-        if(ang >= 0 && ang <= 90) {
-            //xOffset += xChange * cos(angle) ?? <-- something like this
-            //yOffset += yChange *
-        } else if(ang > 90 && ang <= 180) {
-            //xOffset += xChange (relation to sin or cos or something
-            //yOffset += yChange
-        } else if(ang > 180 && ang <= 270) {
-            //xOffset += xChange
-            //yOffset += yChange
-        } else if(ang > 270 && ang <= 360) {
-            //xOffset += xChange
-            //yOffset += yChange
-        }
-
-        xOffset += xChangeAdapted;
-        yOffset += yChangeAdapted;
+        //update x and y offset, taking into account the direction it's facing
+        yOffset += Math.abs(yChange) * Math.sin(radians_ang);
+        xOffset += Math.abs(xChange) * Math.cos(radians_ang);
     }
 
     public void updateAngle(double angleChange) {
@@ -41,12 +27,8 @@ public class FreeReturn {
 
         if(robotCurrentAngle > 360) {
             robotCurrentAngle = (robotCurrentAngle - 360);
+        } else if(robotCurrentAngle < 0) {
+            robotCurrentAngle = (robotCurrentAngle + 360);
         }
-    }
-
-    public void freelyReturn() {
-        //move back to locked position
-        //face forwards
-
     }
 }
