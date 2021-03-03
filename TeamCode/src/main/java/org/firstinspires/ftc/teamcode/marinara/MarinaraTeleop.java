@@ -52,34 +52,22 @@ public class MarinaraTeleop extends OpMode {
         // Controller
         controller.update();
 
-        // Button mapping
-        final boolean shootButton = controller.Y();
-        final boolean intakeButton = controller.leftBumper();
-        final boolean outtakeButton = controller.rightBumper();
-        final boolean grabButton = controller.XOnce();
-        final boolean rotateGrabberButton = controller.BOnce();
-        final boolean liftButton = controller.dpadUp();
-        final boolean lowerButton = controller.dpadDown();
-        final boolean toggleDriveButton = controller.backOnce();
-        final boolean toggleShooterAuto = controller.startOnce();
-
         // Drive
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
 
         // Toggle drive POV
-        drive.togglePOV(toggleDriveButton);
+        drive.togglePOV(controller.backOnce());
 
         // Shooter
-        shooter.shoot(shootButton, webcam.getDisplacement(), drive);
-        shooter.toggleAuto(toggleShooterAuto);
+        shooter.shoot(controller.Y(), webcam.getDisplacement());
 
         // Intake
-        intake.intake(intakeButton || shootButton, outtakeButton);
+        intake.intake(controller.leftBumper() || (controller.Y() && shooter.getIsFeed()), controller.rightBumper());
 
         // Grabber
-        grabber.grab(grabButton);
-        grabber.rotate(rotateGrabberButton);
-        grabber.lift(liftButton, lowerButton);
+        grabber.grab(controller.XOnce());
+        grabber.rotate(controller.BOnce());
+        grabber.lift(controller.dpadUp(), controller.dpadDown());
         grabber.update();
 
         // Webcam

@@ -25,9 +25,10 @@ public class Shooter extends BaseHardware {
 
     // Final variables that won't change; used for calculations
     private static final double MAX_RPM = 1620;
+    private static final double GEAR_RATIO = 3.0 + 1.0 / 3.0;
     private static final double WHEEL_DIAMETER_IN = 4;
     private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_IN * METERS_PER_INCHES * Math.PI;
-    private static final double MAX_MPS = (MAX_RPM / 60) * WHEEL_CIRCUMFERENCE;
+    private static final double MAX_MPS = (MAX_RPM / 60) * WHEEL_CIRCUMFERENCE * GEAR_RATIO;
 
     // Variables for SUVAT
     private static final double Y_ACCELERATION = -9.81;
@@ -56,8 +57,8 @@ public class Shooter extends BaseHardware {
     // Misc variables
     private static final double DEFAULT_SPEED = 5.0;
 
-    // Shooter mode
-    private boolean isAuto = false;
+    // True if over the speed
+    private boolean isFeed = false;
 
     // PIDs
     private PIDController shooterLPID = new PIDController(0.00000001, 0.005, 0.1);
@@ -137,22 +138,12 @@ public class Shooter extends BaseHardware {
 
     }
 
-    public void toggleAuto(boolean button) {
-
-        if (button) isAuto = !isAuto;
-
-    }
-
-    public void shoot(boolean button, float[] displacement, MarinaraDrive drive) {
+    public void shoot(boolean button, float[] displacement) {
 
         if (button) {
 
             // Open the stopper after a second of shooting
-            if (shootDelayer.seconds() > 1) {
-
-                stopper.setPosition(OPEN_POS);
-
-            }
+            stopper.setPosition(OPEN_POS);
 
             // Calculate displacement
             double totalDisplacement = Math.sqrt(Math.pow(displacement[0], 2) + Math.pow(displacement[1], 2)) * METERS_PER_INCHES;
@@ -170,7 +161,7 @@ public class Shooter extends BaseHardware {
             }
 
             // Forcefully set m/s
-            goalSpeedMPS = 8;
+            goalSpeedMPS = 15;
 
             // Difference in time since last time
             double timeDiff = timer.seconds() - lastTime;
@@ -188,11 +179,11 @@ public class Shooter extends BaseHardware {
                 lastPosR = shooterR.getCurrentPosition();
 
                 // Calculate speed in m/s
-                double speedLTPS = posLDiff / timeDiff;
+                double speedLTPS = (posLDiff / timeDiff) * GEAR_RATIO;
                 double speedLRPS = speedLTPS * L_REV_PER_TICKS;
                 double speedLMPS = speedLRPS * WHEEL_CIRCUMFERENCE;
 
-                double speedRTPS = posRDiff / timeDiff;
+                double speedRTPS = (posRDiff / timeDiff) * GEAR_RATIO;
                 double speedRRPS = speedRTPS * R_REV_PER_TICKS;
                 double speedRMPS = speedRRPS * WHEEL_CIRCUMFERENCE;
 
@@ -210,12 +201,13 @@ public class Shooter extends BaseHardware {
                 double powerL = shooterLPID.performPID(speedLMPS);
                 double powerR = shooterRPID.performPID(speedRMPS);
 
-                powerL = 1;
-                powerR = 1;
-
                 // Set power to the motors
                 shooterL.setPower(powerL);
                 shooterR.setPower(powerR);
+
+                // Feed intake if faster than goal speed
+                final double speedDiffThreshold = 2;
+                isFeed = (speedLMPS + speedRMPS) / 2 > goalSpeedMPS - speedDiffThreshold;
 
                 // Data to send to telemetry
                 print("Time difference", timeDiff);
@@ -249,10 +241,19 @@ public class Shooter extends BaseHardware {
             lastPosL = shooterL.getCurrentPosition();
             lastPosR = shooterR.getCurrentPosition();
 
+            // Don't feed if not shooting
+            isFeed = false;
+
             // Reset time
             shootDelayer.reset();
 
         }
+
+    }
+
+    public boolean getIsFeed() {
+
+        return isFeed;
 
     }
 

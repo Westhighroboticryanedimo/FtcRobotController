@@ -59,6 +59,8 @@ public class AllAuto extends LinearOpMode {
         // Move to initial position
         drive.move(1, 82, 8);
 
+        drive.moveUntil(1, 45, drive.new ColorCommand());
+
         // Check number of ring that is stacked
         if (numRingStack == 0) {
 

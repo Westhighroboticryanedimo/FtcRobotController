@@ -3,10 +3,8 @@ package org.firstinspires.ftc.teamcode.freehug;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Controller;
-import org.firstinspires.ftc.teamcode.marinara.hardware.Grabber;
 
 import static android.os.SystemClock.sleep;
 
@@ -22,6 +20,12 @@ public class Freehugteleop extends OpMode {
 
     private GrabberFree grabber;
     double adjustment = 1;
+    //for toggling between driver control and robot self driving
+    boolean I_move_by_meself_now = false;
+
+    //TO BE ADJUSTED MANUALLY
+    final static double CALIBRATION = 1;
+    final static double TIME_CALIBRATION = 10;
 
     @Override
     public void init() {
@@ -54,7 +58,7 @@ public class Freehugteleop extends OpMode {
             freeReturn.updateAngle(controller.right_stick_x * adjustment);
             freeReturn.updateOffsets(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment);
 
-        } else if(drive.isInPOVMode() == false) {
+        } else if(!drive.isInPOVMode()) {
 
             freeReturn.updateAngle(0);
             freeReturn.updateOffsets(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment);
@@ -77,7 +81,7 @@ public class Freehugteleop extends OpMode {
 
         if (controller.leftStickButtonOnce()) {
             if(adjustment == 1) {
-                adjustment = 0.5;
+                adjustment = 0.6;
             }
             else{
                 adjustment = 1;
@@ -96,11 +100,13 @@ public class Freehugteleop extends OpMode {
 
         /*//position lock and return commands
         if(controller.dpadUpOnce()) {
-            lockPosition();
+            freeReturn.lockPosition();
         }
         else if(controller.dpadDown()) {
-            returnToPosition();
+            freeReturn.freelyReturn();
         }*/
+
+
 
         //grabber hand open / close
         if(controller.dpadRightOnce()) {
