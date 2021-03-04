@@ -23,7 +23,7 @@ public class Freehugteleop extends OpMode {
 
     //TO BE ADJUSTED MANUALLY
     static double DISTANCE_CALIBRATION = 2;
-    static double TIME_CALIBRATION = 100;
+    static double TIME_CALIBRATION = 50;
 
     @Override
     public void init() {
@@ -50,14 +50,27 @@ public class Freehugteleop extends OpMode {
 
         freeReturn.freely_hugging = true;
         //do things
-        drive.drive(0,-yo,0);
+        if(drive.isInPOVMode() == true) {
+            drive.togglePOV(true);
+        }
+
+        if(yo > 0) {
+            drive.drive(0,-0.6,0);
+        } else if(yo < 0) {
+            drive.drive(0,0.6,0);
+        }
         sleep((int)(Math.abs(yo) * TIME_CALIBRATION));
         drive.drive(0,0,0);
 
-        drive.drive(-xo,0,0);
+        if(xo > 0) {
+            drive.drive(-0.6,0,0);
+        } else if(xo < 0) {
+            drive.drive(0.6,0,0);
+        }
         sleep((int)(Math.abs(xo)*TIME_CALIBRATION));
         drive.drive(0,0,0);
 
+        sleep(200);
         freeReturn.lockPosition();
         freeReturn.freely_hugging = false;
     }
@@ -137,10 +150,12 @@ public class Freehugteleop extends OpMode {
         }
 
         //dpad: UP to lock position , DOWN to return to position
-        if(controller.dpadUpOnce()) {
-            freeReturn.lockPosition();
-        } else if(controller.dpadDownOnce()) {
-            freelyReturn();
+        if(controller.dpadUp()) {
+            grabber.tiltHandUp();
+        } else if(controller.dpadDown()) {
+            grabber.tiltHandDown();
+        } else{
+            grabber.restWrist();
         }
 
     }

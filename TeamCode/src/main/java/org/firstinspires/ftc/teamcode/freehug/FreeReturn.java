@@ -23,7 +23,7 @@ public class FreeReturn {
     }
 
     public void updateAngle(double angleChange) {
-        robotCurrentAngle += angleChange;
+        robotCurrentAngle -= angleChange;
 
         if(robotCurrentAngle > 360) {
             robotCurrentAngle = (robotCurrentAngle - 360);
