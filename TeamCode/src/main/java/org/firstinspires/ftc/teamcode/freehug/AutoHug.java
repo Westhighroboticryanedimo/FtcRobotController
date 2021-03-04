@@ -37,6 +37,8 @@ public class AutoHug extends LinearOpMode {
         IntakeFree intake = new IntakeFree(this, hardwareMap);
         shooterL = hardwareMap.get(DcMotor.class, "shooterL");
         shooterR = hardwareMap.get(DcMotor.class, "shooterR");
+        shooterL.setDirection(DcMotor.Direction.REVERSE);
+        shooterR.setDirection(DcMotor.Direction.REVERSE);
         
         ElapsedTime runtime = new ElapsedTime();
 
@@ -80,14 +82,25 @@ public class AutoHug extends LinearOpMode {
         }*/
 
         //move up to shooting distance
-        //drive.move(0.7,83,180);
-        //drive.move(0.7,14,-90);
+        //the actual measurement is 68 inches
+        drive.move(0.5,64,0);
+        drive.move(0.5,8,90);
         //start flywheels spinning
         spinFlies();
-        sleep(1000);
+        sleep(800);
         //move intake
         intake.intake(false,true);
-        sleep(4000);
+        sleep(2000);
+        restFlies();
+
+        sleep(200);
+        drive.move(0.5,4,90);
+
+        spinFlies();
+        sleep(800);
+        //move intake
+        intake.intake(false,true);
+        sleep(2000);
         restFlies();
     }
 }
