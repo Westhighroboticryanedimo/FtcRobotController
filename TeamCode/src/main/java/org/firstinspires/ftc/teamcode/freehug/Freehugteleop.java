@@ -16,16 +16,14 @@ public class Freehugteleop extends OpMode {
     private Controller controller;
     private DcMotor shooterL;
     private DcMotor shooterR;
+    private FreeReturn freeReturn;
 
     private GrabberFree grabber;
     double adjustment = 1;
 
-    //for toggling between driver control and robot self driving
-    boolean I_move_by_meself_now = false;
-
     //TO BE ADJUSTED MANUALLY
-    final static double CALIBRATION = 1;
-    final static double TIME_CALIBRATION = 10;
+    static double DISTANCE_CALIBRATION = 2;
+    static double TIME_CALIBRATION = 50;
 
     @Override
     public void init() {
@@ -38,47 +36,66 @@ public class Freehugteleop extends OpMode {
         shooterL.setDirection(DcMotor.Direction.REVERSE);
         shooterR.setDirection(DcMotor.Direction.REVERSE);
         grabber = new GrabberFree(this, hardwareMap);
+        freeReturn = new FreeReturn();
         drive.debug();
+
+        freeReturn.xOffset = 0;
+        freeReturn.yOffset = 0;
+        freeReturn.robotCurrentAngle = 0;
     }
 
-    double xOffset;
-    double yOffset;
+    public void freelyReturn() {
+        double xo = freeReturn.xOffset * DISTANCE_CALIBRATION;
+        double yo = freeReturn.yOffset * DISTANCE_CALIBRATION;
 
-    public void lockPosition() {
-        xOffset = 0;
-        yOffset = 0;
-        I_move_by_meself_now = false;
-    }
-    public void updateOffsets(double xChange, double yChange) {
-        xOffset += xChange;
-        yOffset += yChange;
-    }
-    public void returnToPosition() {
-        I_move_by_meself_now = true;
+        freeReturn.freely_hugging = true;
+        //do things
+        if(drive.isInPOVMode() == true) {
+            drive.togglePOV(true);
+        }
 
-        yOffset = Math.abs(yOffset) * CALIBRATION;
-        xOffset = Math.abs(xOffset) * CALIBRATION;
-
-        drive.drive(0,(yOffset * -1),0);
-        sleep((long) (yOffset * TIME_CALIBRATION));
+        if(yo > 0) {
+            drive.drive(0,-0.6,0);
+        } else if(yo < 0) {
+            drive.drive(0,0.6,0);
+        }
+        sleep((int)(Math.abs(yo) * TIME_CALIBRATION));
         drive.drive(0,0,0);
 
-        drive.drive(xOffset,0,0);
-        sleep((long) (xOffset * TIME_CALIBRATION));
+        if(xo > 0) {
+            drive.drive(-0.6,0,0);
+        } else if(xo < 0) {
+            drive.drive(0.6,0,0);
+        }
+        sleep((int)(Math.abs(xo)*TIME_CALIBRATION));
         drive.drive(0,0,0);
 
-        I_move_by_meself_now = false;
+        sleep(200);
+        freeReturn.lockPosition();
+        freeReturn.freely_hugging = false;
     }
-    //if the robot fails to return it's likely because of the above returnToPosition();
 
     @Override
     public void loop() {
         controller.update();
 
         drive.togglePOV(controller.backOnce());
-        if(I_move_by_meself_now == false) {
-            drive.drive(controller.left_stick_x * adjustment, -controller.left_stick_y * adjustment, controller.right_stick_x * adjustment);
-            updateOffsets(controller.left_stick_x * adjustment, -controller.left_stick_y * adjustment);
+
+        if(freeReturn.freely_hugging == false) {
+            drive.drive(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment, controller.right_stick_x * adjustment);
+
+            if (drive.isInPOVMode()) {
+
+                freeReturn.updateAngle(controller.right_stick_x * adjustment);
+                freeReturn.updateOffsets(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment);
+
+            } else if (!drive.isInPOVMode()) {
+
+                //yes, updateAngle(0) MUST be here
+                freeReturn.updateAngle(0);
+                freeReturn.updateOffsets(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment);
+
+            }
         }
 
         intake.intake(controller.B(), controller.A());
@@ -114,13 +131,15 @@ public class Freehugteleop extends OpMode {
             grabber.restElbow();
         }
 
-        //position lock and return commands
+        /*//position lock and return commands
         if(controller.dpadUpOnce()) {
-            lockPosition();
+            freeReturn.lockPosition();
         }
         else if(controller.dpadDown()) {
-            returnToPosition();
-        }
+            freeReturn.freelyReturn();
+        }*/
+
+
 
         //grabber hand open / close
         if(controller.dpadRightOnce()) {
@@ -128,6 +147,15 @@ public class Freehugteleop extends OpMode {
         }
         else if(controller.dpadLeftOnce()) {
             grabber.closeHand();
+        }
+
+        //dpad: UP to lock position , DOWN to return to position
+        if(controller.dpadUp()) {
+            grabber.tiltHandUp();
+        } else if(controller.dpadDown()) {
+            grabber.tiltHandDown();
+        } else{
+            grabber.restWrist();
         }
 
     }

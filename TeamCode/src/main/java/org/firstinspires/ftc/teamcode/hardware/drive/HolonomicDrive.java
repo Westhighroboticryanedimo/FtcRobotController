@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware.drive;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.PIDController;
@@ -67,6 +68,23 @@ public abstract class HolonomicDrive extends BaseHardware {
     protected void setPIDFalse() {
 
         isPID = false;
+
+    }
+
+
+    protected void setMotorDir(boolean flDir, boolean frDir, boolean blDir, boolean brDir) {
+
+        if (flDir) frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        else frontLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        if (frDir) frontRight.setDirection(DcMotor.Direction.FORWARD);
+        else frontRight.setDirection(DcMotor.Direction.REVERSE);
+
+        if (blDir) backLeft.setDirection(DcMotor.Direction.FORWARD);
+        else backLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        if (brDir) backRight.setDirection(DcMotor.Direction.FORWARD);
+        else backRight.setDirection(DcMotor.Direction.REVERSE);
 
     }
 
@@ -161,6 +179,10 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     }
 
+    public boolean isInPOVMode() {
+        return isDrivePOV;
+    }
+
     // Toggle POV mode and field oriented mode
     public void togglePOV(boolean button) {
 
@@ -209,15 +231,20 @@ public abstract class HolonomicDrive extends BaseHardware {
         // The angle of the robot it is supposed to move towards
         double robotAngle = Math.atan2(-joystickY, joystickX) - Math.PI / 4 - angleCompensation;
 
+        print("Angle: ", robotAngle * 180 / Math.PI);
+
         // Takes the x and y components of the vector
         double cosinePow = r * Math.cos(robotAngle);
         double sinePow = r * Math.sin(robotAngle);
+
+        print("Sinepower: ", sinePow);
 
         // Takes the bigger number and multiplies it by a ratio to speed up the robot
         double maxPow = Math.max(Math.abs(cosinePow), Math.abs(sinePow));
         double ratio = 0;
         if (maxPow != 0) ratio = r / maxPow;
 
+        print("Ratio: ", ratio);
 
         // Motor powers without PID corrections
         double v1 = cosinePow * ratio + joystickTurn;
@@ -259,10 +286,14 @@ public abstract class HolonomicDrive extends BaseHardware {
         backRight.setPower(v4);
 
         // Telemetry values
-        print("FL: ", frontLeft.getCurrentPosition());
-        print("FR: ", frontRight.getCurrentPosition());
-        print("BL: ", backLeft.getCurrentPosition());
-        print("BR: ", backRight.getCurrentPosition());
+        print("FLPow: ", frontLeft.getPower());
+        print("FRPow: ", frontRight.getPower());
+        print("BLPow: ", backLeft.getPower());
+        print("BRPow: ", backRight.getPower());
+        //print("FL: ", frontLeft.getCurrentPosition());
+        //print("FR: ", frontRight.getCurrentPosition());
+        //print("BL: ", backLeft.getCurrentPosition());
+        //print("BR: ", backRight.getCurrentPosition());
         print("Gyro: ", gyro.getAngleDegrees());
 
     }
