@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 public class MarinaraDrive extends HolonomicDrive {
 
     private ColorSensor color;
+    private static final int BLUE_THRESHOLD = 100;
 
     // For teleop
     public MarinaraDrive(OpMode opMode, HardwareMap hwMap) {
@@ -43,13 +44,19 @@ public class MarinaraDrive extends HolonomicDrive {
 
     }
 
+    public int[] getColors() {
+
+        return new int[] { color.red(), color.green(), color.blue() };
+
+    }
+
     // Check color sensor status
     public class ColorCommand implements BoolCommand {
 
         @Override
         public boolean check() {
 
-            return color.blue() > color.red();
+            return color.blue() > BLUE_THRESHOLD;
 
         }
 
