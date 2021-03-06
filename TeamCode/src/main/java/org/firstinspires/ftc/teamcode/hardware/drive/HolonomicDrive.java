@@ -311,13 +311,13 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidDrive.enable();
 
         // Calculate speed
-        double flbrSpeed = speed * Math.sin((45.0 + angleMove) * Math.PI / 180);
+        double flbrSpeed = Math.sin((45.0 + angleMove) * Math.PI / 180);
         double frblSpeed = speed * Math.cos((45.0 + angleMove) * Math.PI / 180);
 
         // Maximize speed by calculating ratio
         double max = Math.max(Math.abs(flbrSpeed), Math.abs(frblSpeed));
-        flbrSpeed /= max;
-        frblSpeed /= max;
+        flbrSpeed = speed * (flbrSpeed / max);
+        frblSpeed = speed * (frblSpeed / max);
 
         do {
 

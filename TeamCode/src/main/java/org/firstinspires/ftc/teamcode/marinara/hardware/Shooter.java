@@ -25,7 +25,7 @@ public class Shooter extends BaseHardware {
 
     // Final variables that won't change; used for calculations
     private static final double MAX_RPM = 1620;
-    private static final double GEAR_RATIO = 3.0 + 1.0 / 3.0;
+    private static final double GEAR_RATIO = 80.0 / 32.0;
     private static final double WHEEL_DIAMETER_IN = 4;
     private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_IN * METERS_PER_INCHES * Math.PI;
     private static final double MAX_MPS = (MAX_RPM / 60) * WHEEL_CIRCUMFERENCE * GEAR_RATIO;
