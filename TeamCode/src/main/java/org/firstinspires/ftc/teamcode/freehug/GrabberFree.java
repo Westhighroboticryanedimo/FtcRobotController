@@ -16,7 +16,7 @@ public class GrabberFree extends BaseHardware {
 
     //servo variables
     private static final double HAND_CLOSED_R = 0.3;
-    private static final double HAND_OPEN_R = 0.8;
+    private static final double HAND_OPEN_R = 0.5;
 
 
     public GrabberFree(OpMode opMode, HardwareMap hwmap) {
