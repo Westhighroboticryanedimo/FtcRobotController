@@ -103,7 +103,7 @@ public class Freehugteleop extends OpMode {
         if (controller.X()) {
 
             shooterL.setPower(1);
-            shooterR.setPower(1);
+            shooterR.setPower(.95);
 
         } else {
 
