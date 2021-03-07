@@ -131,13 +131,13 @@ public class Freehugteleop extends OpMode {
             grabber.restElbow();
         }
 
-        /*//position lock and return commands
-        if(controller.dpadUpOnce()) {
+        //position lock and return commands
+        if(controller.leftBumperOnce()) {
             freeReturn.lockPosition();
         }
-        else if(controller.dpadDown()) {
-            freeReturn.freelyReturn();
-        }*/
+        else if(controller.rightBumperOnce()) {
+            freelyReturn();
+        }
 
 
 
