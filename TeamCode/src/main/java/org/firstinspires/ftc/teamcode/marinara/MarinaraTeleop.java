@@ -60,6 +60,7 @@ public class MarinaraTeleop extends OpMode {
 
         // Shooter
         shooter.shoot(controller.Y(), webcam.getDisplacement());
+        shooter.debug();
 
         // Intake
         intake.intake(controller.leftBumper() || (controller.Y() && shooter.getIsFeed()), controller.rightBumper());

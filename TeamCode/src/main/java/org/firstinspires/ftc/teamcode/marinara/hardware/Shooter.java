@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.marinara.hardware;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -41,7 +42,7 @@ public class Shooter extends BaseHardware {
 
     // Servo
     private Servo stopper = null;
-    private static final double STOP_POS = 0.2;
+    private static final double STOP_POS = 0.45;
     private static final double OPEN_POS = 0;
 
     // Timer
@@ -68,7 +69,7 @@ public class Shooter extends BaseHardware {
     public Shooter(OpMode opMode, HardwareMap hwMap) {
 
         super(opMode);
-        setupMotor(hwMap);
+        setup(hwMap);
 
     }
 
@@ -76,19 +77,19 @@ public class Shooter extends BaseHardware {
     public Shooter(LinearOpMode opMode, HardwareMap hwMap) {
 
         super(opMode);
-        setupMotor(hwMap);
+        setup(hwMap);
 
     }
 
-    private void setupMotor(HardwareMap hwMap) {
+    private void setup(HardwareMap hwMap) {
 
         // Set up motors
 
         shooterL = hwMap.get(DcMotor.class, "shooterL");
         shooterR = hwMap.get(DcMotor.class, "shooterR");
 
-        shooterL.setDirection(DcMotor.Direction.REVERSE);
-        shooterR.setDirection(DcMotor.Direction.FORWARD);
+        shooterL.setDirection(DcMotor.Direction.FORWARD);
+        shooterR.setDirection(DcMotor.Direction.REVERSE);
 
         shooterL.setPower(0);
         shooterR.setPower(0);
@@ -161,7 +162,7 @@ public class Shooter extends BaseHardware {
             }
 
             // Forcefully set m/s
-            goalSpeedMPS = 15;
+            goalSpeedMPS = 9;
 
             // Difference in time since last time
             double timeDiff = timer.seconds() - lastTime;
@@ -192,8 +193,8 @@ public class Shooter extends BaseHardware {
                 shooterRPID.setInputRange(0, MAX_MPS);
                 shooterLPID.setOutputRange(0, 1);
                 shooterRPID.setOutputRange(0, 1);
-                shooterLPID.setSetpoint(goalSpeedMPS);
-                shooterRPID.setSetpoint(goalSpeedMPS);
+                shooterLPID.setSetpoint(goalSpeedMPS + 1);
+                shooterRPID.setSetpoint(goalSpeedMPS - 1);
                 shooterLPID.enable();
                 shooterRPID.enable();
 
@@ -206,8 +207,11 @@ public class Shooter extends BaseHardware {
                 shooterR.setPower(powerR);
 
                 // Feed intake if faster than goal speed
-                final double speedDiffThreshold = 2;
-                isFeed = (speedLMPS + speedRMPS) / 2 > goalSpeedMPS - speedDiffThreshold;
+                if ((speedLMPS + speedRMPS) / 2 > goalSpeedMPS) {
+
+                    isFeed = true;
+
+                }
 
                 // Data to send to telemetry
                 print("Time difference", timeDiff);
