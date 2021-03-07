@@ -24,6 +24,7 @@ public class Freehugteleop extends OpMode {
     //TO BE ADJUSTED MANUALLY
     static double DISTANCE_CALIBRATION = 2;
     static double TIME_CALIBRATION = 50;
+    static double ANGLE_CALIBRATION = 20;
 
     @Override
     public void init() {
@@ -86,7 +87,7 @@ public class Freehugteleop extends OpMode {
 
             if (drive.isInPOVMode()) {
 
-                freeReturn.updateAngle(controller.right_stick_x * adjustment);
+                freeReturn.updateAngle(controller.right_stick_x * adjustment * ANGLE_CALIBRATION);
                 freeReturn.updateOffsets(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment);
 
             } else if (!drive.isInPOVMode()) {
