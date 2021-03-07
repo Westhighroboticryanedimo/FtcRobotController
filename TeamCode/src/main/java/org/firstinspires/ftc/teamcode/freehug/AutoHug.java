@@ -83,22 +83,21 @@ public class AutoHug extends LinearOpMode {
 
         //move up to shooting distance
         //the actual measurement is 68 inches
-        drive.move(0.45,58,0);
-        drive.move(0.45,4,90);
+        drive.move(0.40,35,0);
+        drive.move(0.40,10,90);
         //start flywheels spinning
         spinFlies();
-        sleep(1200);
-        //move intake
-        intake.intake(false,true);
-        sleep(800);
-
-        sleep(200);
-        drive.move(0.45,1,90);
-
         sleep(800);
         //move intake
         intake.intake(false,true);
-        sleep(2000);
+        sleep(400);
+
+        drive.move(0.40,5,90);
+
+        sleep(3000);
+        //move intake
+        intake.intake(false,true);
+        sleep(1500);
         restFlies();
     }
 }
