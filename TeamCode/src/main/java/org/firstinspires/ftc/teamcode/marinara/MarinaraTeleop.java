@@ -67,8 +67,10 @@ public class MarinaraTeleop extends OpMode {
 
         // Grabber
         grabber.grab(controller.XOnce());
+        grabber.liftToDown(controller.start() && controller.dpadDownOnce());
+        grabber.liftToUp(controller.start() && controller.dpadUpOnce());
         grabber.rotate(controller.BOnce());
-        grabber.lift(controller.dpadUp(), controller.dpadDown());
+        grabber.lift(controller.dpadUp() || grabber.getIsRaise(), controller.dpadDown() || grabber.getIsLower());
         grabber.update();
 
         // Webcam

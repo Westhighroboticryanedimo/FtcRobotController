@@ -386,7 +386,7 @@ public class WebcamFree extends BaseHardware {
         // The core values which define the location and size of the sample regions
         private static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((int) (WIDTH / 2 + REGION_WIDTH / 2 + X_DIFF), (int) (HEIGHT / 2 + REGION_HEIGHT / 2 + Y_DIFF));
 
-        private static final int FOUR_RING_THRESHOLD = 165;
+        private static final int FOUR_RING_THRESHOLD = 162;
         private static final int ONE_RING_THRESHOLD = 135;
 
         private Point region1_pointA = new Point(

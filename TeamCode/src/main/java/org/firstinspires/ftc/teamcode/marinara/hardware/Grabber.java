@@ -25,7 +25,12 @@ public class Grabber extends BaseHardware {
     private static final double ROTATOR_ABLE_LIFT_MIN_POS = 1500;
     private static final double SERVO_THRESHOLD = 0.01;
     private static final double LIFT_MAX_POS = 5800;
-    private static final double LIFT_POWER = 0.6;
+    private static final double LIFT_GRAB_POS = 1100;
+    private static final double LIFT_POWER = 0.8;
+
+    // Misc
+    private boolean isLower = false;
+    private boolean isRaise = false;
 
     // Teleop constructor
     public Grabber(OpMode opMode, HardwareMap hwMap) {
@@ -69,6 +74,43 @@ public class Grabber extends BaseHardware {
 
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+    }
+
+    public void liftToDown(boolean button) {
+
+        if (button) isLower = true;
+
+        if (isLower) {
+
+            extendRotator();
+            openGrabber();
+
+            if (getLiftPosition() < LIFT_GRAB_POS) {
+
+                isLower = false;
+
+            }
+
+        }
+
+    }
+
+    public void liftToUp(boolean button) {
+
+        if (button) isRaise = true;
+
+        if (isRaise) {
+
+            extendRotator();
+
+            if (getLiftPosition() > LIFT_MAX_POS) {
+
+                isRaise = false;
+
+            }
+
+        }
 
     }
 
@@ -174,6 +216,18 @@ public class Grabber extends BaseHardware {
 
     }
 
+    public boolean getIsRaise() {
+
+        return isRaise;
+
+    }
+
+    public boolean getIsLower() {
+
+        return isLower;
+
+    }
+
     public void extendRotator() {
 
         rotator.setPosition(ROTATOR_POS_EXT);
@@ -208,6 +262,15 @@ public class Grabber extends BaseHardware {
 
         print("isPressed: ", isLimitPressed());
 
+        // Can't lower and raise at the same time
+        if (isLower && isRaise) {
+
+            isLower = false;
+            isRaise = false;
+
+        }
+
+        // Reset position when touch sensor is pressed
         if (isLimitPressed()) {
 
             resetLiftPos();
