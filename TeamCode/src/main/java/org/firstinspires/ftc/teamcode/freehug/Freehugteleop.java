@@ -19,7 +19,7 @@ public class Freehugteleop extends OpMode {
     private FreeReturn freeReturn;
 
     private GrabberFree grabber;
-    double adjustment = 1;
+    double adjustment = 0.7;
 
     //TO BE ADJUSTED MANUALLY
     static double DISTANCE_CALIBRATION = 1.7;
@@ -114,11 +114,11 @@ public class Freehugteleop extends OpMode {
         }
 
         if (controller.leftStickButtonOnce()) {
-            if(adjustment == 1) {
-                adjustment = 0.6;
+            if(adjustment == 0.7) {
+                adjustment = 0.4;
             }
             else{
-                adjustment = 1;
+                adjustment = 0.7;
             }
         }
 
