@@ -22,7 +22,7 @@ public class Freehugteleop extends OpMode {
     double adjustment = 1;
 
     //TO BE ADJUSTED MANUALLY
-    static double DISTANCE_CALIBRATION = 2;
+    static double DISTANCE_CALIBRATION = 1.7;
     static double TIME_CALIBRATION = 50;
     static double ANGLE_CALIBRATION = 20;
 

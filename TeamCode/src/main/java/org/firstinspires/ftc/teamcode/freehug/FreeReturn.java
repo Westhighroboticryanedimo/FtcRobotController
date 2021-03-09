@@ -22,21 +22,16 @@ public class FreeReturn {
         int three_sixty_radians = one_eighty_radians * 2;
 
         //update x and y offset, taking into account the direction it's facing
-        //yOffset += yChange * Math.cos(radians_ang);
-        //xOffset += xChange * Math.sin(radians_ang);
-        if(ang > 0 && ang <= 90) {
-            yOffset += yChange * Math.sin(radians_ang);
-            xOffset += xChange * Math.cos(radians_ang);
-        } else if(ang > 90 && ang <= 180) {
-            yOffset += yChange * Math.cos(radians_ang - ninety_radians);
-            xOffset += xChange * Math.sin(radians_ang - ninety_radians);
-        } else if(ang > 180 && ang <= 270) {
-            yOffset += yChange * Math.sin(radians_ang - one_eighty_radians);
-            xOffset += xChange * Math.cos(radians_ang - one_eighty_radians);
-        } else if(ang > 270 && ang <= 360) {
-            yOffset += yChange * Math.cos(radians_ang - two_seventy_radians);
-            xOffset += xChange * Math.sin(radians_ang - two_seventy_radians);
-        }
+        //if angle is 0, x += yChange , y -= xChange
+        //if angle is 90 , y and x are unaffected
+        //if angle is 180,y += xChange, x -= yChange
+        //if angle is 270, x += -xChange , y += -yChange
+        /*if(ang == 90) {
+            xOffset += xChange;
+            yOffset += yChange;
+        }*/
+        xOffset += xChange;
+        yOffset += yChange;
     }
 
     public void updateAngle(double angleChange) {

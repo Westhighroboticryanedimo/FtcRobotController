@@ -15,8 +15,8 @@ public class GrabberFree extends BaseHardware {
     private CRServo grabberTilt;
 
     //servo variables
-    private static final double HAND_CLOSED_R = 0.3;
-    private static final double HAND_OPEN_R = 0.5;
+    private static final double HAND_CLOSED_R = 0;
+    private static final double HAND_OPEN_R = 0.4;
 
 
     public GrabberFree(OpMode opMode, HardwareMap hwmap) {
@@ -39,13 +39,14 @@ public class GrabberFree extends BaseHardware {
         grabberRight = HWMap.get(Servo.class, "grabberRight");
         grabberTilt = HWMap.get(CRServo.class, "grabberTilt");
         rotator = HWMap.get(CRServo.class, "rotator");
+        grabberRight.setPosition(HAND_CLOSED_R);
     }
 
     public void handInTheAir() {
-        rotator.setPower(0.9);
+        rotator.setPower(-0.9);
     }
     public void lowerHand() {
-        rotator.setPower(-0.9);
+        rotator.setPower(0.9);
     }
     public void restElbow() {
         rotator.setPower(0);

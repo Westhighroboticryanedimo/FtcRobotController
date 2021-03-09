@@ -23,10 +23,22 @@ public class AutoHug extends LinearOpMode {
         grabber.restElbow();
     }
 
+    public void openWristAuto(int ms) {
+        grabber.tiltHandUp();
+        sleep(ms);
+        grabber.restWrist();
+    }
+
+    public void closeWristAuto(int ms) {
+        grabber.tiltHandDown();
+        sleep(ms);
+        grabber.restWrist();
+    }
+
     public void openHandAuto() { grabber.openHand(); }
     public void closeHandAuto() { grabber.closeHand(); }
 
-    public void spinFlies() { shooterL.setPower(1); shooterR.setPower(1);}
+    public void spinFlies() { shooterL.setPower(0.95); shooterR.setPower(1);}
     public void restFlies() { shooterL.setPower(0); shooterR.setPower(0);}
 
     @Override
@@ -87,17 +99,40 @@ public class AutoHug extends LinearOpMode {
         drive.move(0.40,10,90);
         //start flywheels spinning
         spinFlies();
-        sleep(800);
+        sleep(900);
         //move intake
         intake.intake(false,true);
         sleep(400);
 
         drive.move(0.40,5,90);
 
-        sleep(3000);
+        sleep(3700);
         //move intake
         intake.intake(false,true);
-        sleep(1500);
+        sleep(1000);
         restFlies();
+        intake.intake(false,false);
+
+
+        if (rings == 0) {
+            drive.move(0.40,35,0);
+            drive.move(0.40,32,270);
+            lowerArmAuto(4500);
+            openHandAuto();
+            raiseArmAuto(4555);
+        } else if (rings == 1) {
+            drive.move(0.40,58,0);
+            lowerArmAuto(4500);
+            openHandAuto();
+            raiseArmAuto(4555);
+            drive.move(0.40,23,180);
+        } else {
+            drive.move(0.40,81,0);
+            drive.move(0.40,32,270);
+            lowerArmAuto(4500);
+            openHandAuto();
+            raiseArmAuto(4555);
+            drive.move(0.40,46,180);
+        }
     }
 }
