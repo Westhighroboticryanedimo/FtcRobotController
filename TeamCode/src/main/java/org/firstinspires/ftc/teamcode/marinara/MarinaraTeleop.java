@@ -59,11 +59,10 @@ public class MarinaraTeleop extends OpMode {
         drive.togglePOV(controller.backOnce());
 
         // Shooter
-        shooter.shoot(controller.Y(), webcam.getDisplacement());
-        shooter.debug();
+        shooter.shoot(controller.Y(), drive.getVoltage(hardwareMap));
 
         // Intake
-        intake.intake(controller.leftBumper() || (controller.Y() && shooter.getIsFeed()), controller.rightBumper());
+        intake.intake(controller.leftBumper(), controller.rightBumper());
 
         // Grabber
         grabber.grab(controller.XOnce());

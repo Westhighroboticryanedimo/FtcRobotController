@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.PIDController;
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
@@ -483,6 +484,18 @@ public abstract class HolonomicDrive extends BaseHardware {
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+    }
+
+    public double getVoltage(HardwareMap hwMap) {
+
+        double result = Double.POSITIVE_INFINITY;
+        for (VoltageSensor sensor : hwMap.voltageSensor) {
+
+            if (sensor.getVoltage() > 0) result = Math.min(result, sensor.getVoltage());
+
+        }
+        return result;
 
     }
 

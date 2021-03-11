@@ -60,12 +60,8 @@ public class DifferentialDrive extends BaseHardware {
         if (isArcade) {
 
             // Arcade drive
-
-            double drive = -leftStickY;
-            double turn = rightStickX;
-
-            left = drive + turn;
-            right = drive - turn;
+            left = -leftStickY + rightStickX;
+            right = -leftStickY - rightStickX;
 
             double max = Math.max(Math.abs(left), Math.abs(right));
             if (max > 1.0) {
