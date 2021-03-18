@@ -19,16 +19,18 @@ public class Freehugteleop extends OpMode {
     private FreeReturn freeReturn;
 
     private GrabberFree grabber;
-    double adjustment = 0.7;
+    double adjustment = 0.07;
 
     //TO BE ADJUSTED MANUALLY
     static double DISTANCE_CALIBRATION = 1.7;
     static double TIME_CALIBRATION = 50;
     static double ANGLE_CALIBRATION = 20;
+    //DONT CHANGE THIS ONE
+    static double SHOOTER_CALIBRATION = 0.05;
 
     @Override
     public void init() {
-        //adjustment = 1;//
+        adjustment = 1;
         drive = new Freehugdrive(this, hardwareMap);
         intake = new IntakeFree(this, hardwareMap);
         controller = new Controller(gamepad1);
@@ -76,8 +78,18 @@ public class Freehugteleop extends OpMode {
         freeReturn.freely_hugging = false;
     }
 
+    public double calculateshooterpowerbasedonbatterypower() {
+        double pow = 1;
+        pow -= SHOOTER_CALIBRATION * drive.getVoltage(hardwareMap);
+        //CHANGE THE NUMBER BELOW (currently 0.02) to change distance. more = farther distance
+        pow += 0.02;
+        return pow;
+    }
+
     @Override
     public void loop() {
+        intake.rightPower = calculateshooterpowerbasedonbatterypower();
+        intake.leftPower = -calculateshooterpowerbasedonbatterypower();
         controller.update();
 
         drive.togglePOV(controller.backOnce());
@@ -103,8 +115,8 @@ public class Freehugteleop extends OpMode {
 
         if (controller.X()) {
 
-            shooterL.setPower(1);
-            shooterR.setPower(.95);
+            shooterL.setPower(-intake.leftPower);
+            shooterR.setPower(.92 * intake.rightPower);
 
         } else {
 
