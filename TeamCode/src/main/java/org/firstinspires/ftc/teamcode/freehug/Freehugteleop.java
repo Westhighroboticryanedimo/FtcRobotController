@@ -26,7 +26,7 @@ public class Freehugteleop extends OpMode {
     static double TIME_CALIBRATION = 50;
     static double ANGLE_CALIBRATION = 20;
     //DONT CHANGE THIS ONE
-    static double SHOOTER_CALIBRATION = 0.05;
+    static double SHOOTER_CALIBRATION = 0.0625;
 
     @Override
     public void init() {
@@ -82,14 +82,14 @@ public class Freehugteleop extends OpMode {
         double pow = 1;
         pow -= SHOOTER_CALIBRATION * drive.getVoltage(hardwareMap);
         //CHANGE THE NUMBER BELOW (currently 0.02) to change distance. more = farther distance
-        pow += 0.02;
+        pow += 0.05;
         return pow;
     }
 
     @Override
     public void loop() {
         intake.rightPower = calculateshooterpowerbasedonbatterypower();
-        intake.leftPower = -calculateshooterpowerbasedonbatterypower();
+        intake.leftPower = calculateshooterpowerbasedonbatterypower();
         controller.update();
 
         drive.togglePOV(controller.backOnce());
@@ -115,7 +115,7 @@ public class Freehugteleop extends OpMode {
 
         if (controller.X()) {
 
-            shooterL.setPower(-intake.leftPower);
+            shooterL.setPower(intake.leftPower);
             shooterR.setPower(.92 * intake.rightPower);
 
         } else {
