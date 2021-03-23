@@ -25,7 +25,7 @@ public class Grabber extends BaseHardware {
     private static final double ROTATOR_ABLE_LIFT_MIN_POS = 1500;
     private static final double SERVO_THRESHOLD = 0.01;
     private static final double LIFT_MAX_POS = 5800;
-    private static final double LIFT_GRAB_POS = 1100;
+    private static final double LIFT_GRAB_POS = 1200;
     private static final double LIFT_POWER = 0.8;
 
     // Misc
