@@ -17,6 +17,7 @@ public class Freehugteleop extends OpMode {
     private DcMotor shooterL;
     private DcMotor shooterR;
     private FreeReturn freeReturn;
+    private boolean fullpower;
 
     private GrabberFree grabber;
     double adjustment = 0.07;
@@ -26,10 +27,11 @@ public class Freehugteleop extends OpMode {
     static double TIME_CALIBRATION = 50;
     static double ANGLE_CALIBRATION = 20;
     //DONT CHANGE THIS ONE
-    static double SHOOTER_CALIBRATION = 0.0625;
+    static double SHOOTER_CALIBRATION = 0.0617;
 
     @Override
     public void init() {
+        fullpower = false;
         adjustment = 1;
         drive = new Freehugdrive(this, hardwareMap);
         intake = new IntakeFree(this, hardwareMap);
@@ -88,8 +90,13 @@ public class Freehugteleop extends OpMode {
 
     @Override
     public void loop() {
-        intake.rightPower = calculateshooterpowerbasedonbatterypower();
-        intake.leftPower = calculateshooterpowerbasedonbatterypower();
+        if(!fullpower) {
+            intake.rightPower = calculateshooterpowerbasedonbatterypower();
+            intake.leftPower = calculateshooterpowerbasedonbatterypower();
+        } else if(fullpower) {
+            intake.rightPower = 1;
+            intake.leftPower = 1;
+        }
         controller.update();
 
         drive.togglePOV(controller.backOnce());
@@ -131,6 +138,14 @@ public class Freehugteleop extends OpMode {
             }
             else{
                 adjustment = 0.7;
+            }
+        }
+
+        if(controller.rightStickButtonOnce()) {
+            if(fullpower == false) {
+                fullpower = true;
+            } else{
+                fullpower = false;
             }
         }
 
