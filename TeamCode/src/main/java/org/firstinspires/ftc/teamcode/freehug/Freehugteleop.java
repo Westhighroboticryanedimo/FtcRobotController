@@ -18,6 +18,7 @@ public class Freehugteleop extends OpMode {
     private DcMotor shooterR;
     private FreeReturn freeReturn;
     private boolean fullpower;
+    private boolean shooting;
 
     private GrabberFree grabber;
     double adjustment = 0.07;
@@ -120,17 +121,14 @@ public class Freehugteleop extends OpMode {
 
         intake.intake(controller.B(), controller.A());
 
-        if (controller.X()) {
-
-            shooterL.setPower(intake.leftPower);
-            shooterR.setPower(.92 * intake.rightPower);
-
-        } else {
-
-            shooterL.setPower(0);
-            shooterR.setPower(0);
-
+        if (controller.XOnce()) {
+            if(shooting) {
+                shooting = false;
+            } else{
+                shooting = true;
+            }
         }
+        if(shooting) {shooterL.setPower(intake.leftPower);shooterR.setPower(intake.rightPower*0.92);} else{shooterL.setPower(0);shooterR.setPower(0);}
 
         if (controller.leftStickButtonOnce()) {
             if(adjustment == 0.7) {
