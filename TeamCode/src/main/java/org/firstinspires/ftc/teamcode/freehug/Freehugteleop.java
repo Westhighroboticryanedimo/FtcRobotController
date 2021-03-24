@@ -85,7 +85,8 @@ public class Freehugteleop extends OpMode {
         double pow = 1;
         pow -= SHOOTER_CALIBRATION * drive.getVoltage(hardwareMap);
         //CHANGE THE NUMBER BELOW (currently 0.02) to change distance. more = farther distance
-        pow += 0.05;
+        //old num pow += 0.05;
+        pow += 0.02;
         return pow;
     }
 
