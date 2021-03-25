@@ -17,18 +17,23 @@ public class Freehugteleop extends OpMode {
     private DcMotor shooterL;
     private DcMotor shooterR;
     private FreeReturn freeReturn;
+    private boolean fullpower;
+    private boolean shooting;
 
     private GrabberFree grabber;
-    double adjustment = 0.7;
+    double adjustment = 0.07;
 
     //TO BE ADJUSTED MANUALLY
     static double DISTANCE_CALIBRATION = 1.7;
     static double TIME_CALIBRATION = 50;
     static double ANGLE_CALIBRATION = 20;
+    //DONT CHANGE THIS ONE
+    static double SHOOTER_CALIBRATION = 0.0617;
 
     @Override
     public void init() {
-        //adjustment = 1;//
+        fullpower = false;
+        adjustment = 1;
         drive = new Freehugdrive(this, hardwareMap);
         intake = new IntakeFree(this, hardwareMap);
         controller = new Controller(gamepad1);
@@ -76,8 +81,24 @@ public class Freehugteleop extends OpMode {
         freeReturn.freely_hugging = false;
     }
 
+    public double calculateshooterpowerbasedonbatterypower() {
+        double pow = 1;
+        pow -= SHOOTER_CALIBRATION * drive.getVoltage(hardwareMap);
+        //CHANGE THE NUMBER BELOW (currently 0.02) to change distance. more = farther distance
+        //old num pow += 0.05;
+        pow += 0.02;
+        return pow;
+    }
+
     @Override
     public void loop() {
+        if(!fullpower) {
+            intake.rightPower = calculateshooterpowerbasedonbatterypower();
+            intake.leftPower = calculateshooterpowerbasedonbatterypower();
+        } else if(fullpower) {
+            intake.rightPower = 1;
+            intake.leftPower = 1;
+        }
         controller.update();
 
         drive.togglePOV(controller.backOnce());
@@ -101,17 +122,14 @@ public class Freehugteleop extends OpMode {
 
         intake.intake(controller.B(), controller.A());
 
-        if (controller.X()) {
-
-            shooterL.setPower(1);
-            shooterR.setPower(.95);
-
-        } else {
-
-            shooterL.setPower(0);
-            shooterR.setPower(0);
-
+        if (controller.XOnce()) {
+            if(shooting) {
+                shooting = false;
+            } else{
+                shooting = true;
+            }
         }
+        if(shooting) {shooterL.setPower(intake.leftPower);shooterR.setPower(intake.rightPower*0.92);} else{shooterL.setPower(0);shooterR.setPower(0);}
 
         if (controller.leftStickButtonOnce()) {
             if(adjustment == 0.7) {
@@ -119,6 +137,14 @@ public class Freehugteleop extends OpMode {
             }
             else{
                 adjustment = 0.7;
+            }
+        }
+
+        if(controller.rightStickButtonOnce()) {
+            if(fullpower == false) {
+                fullpower = true;
+            } else{
+                fullpower = false;
             }
         }
 

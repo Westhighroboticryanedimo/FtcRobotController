@@ -8,9 +8,19 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="autohug")
 public class AutoHug extends LinearOpMode {
+    Freehugdrive drive;
+    static double SHOOTER_CALIBRATION = 0.0617;
     GrabberFree grabber;
     private DcMotor shooterL;
     private DcMotor shooterR;
+
+    public double calculateshooterpowerbasedonbatterypower() {
+        double pow = 1;
+        pow -= SHOOTER_CALIBRATION * drive.getVoltage(hardwareMap);
+        //CHANGE THE NUMBER BELOW (currently 0.02) to change distance. more = farther distance
+        pow += 0.05;
+        return pow;
+    }
 
     public void lowerArmAuto(int ms) {
         grabber.lowerHand();
@@ -38,12 +48,12 @@ public class AutoHug extends LinearOpMode {
     public void openHandAuto() { grabber.openHand(); }
     public void closeHandAuto() { grabber.closeHand(); }
 
-    public void spinFlies() { shooterL.setPower(0.95); shooterR.setPower(1);}
+    public void spinFlies() { shooterL.setPower(calculateshooterpowerbasedonbatterypower()); shooterR.setPower(0.92*calculateshooterpowerbasedonbatterypower());}
     public void restFlies() { shooterL.setPower(0); shooterR.setPower(0);}
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Freehugdrive drive = new Freehugdrive(this, hardwareMap);
+        drive = new Freehugdrive(this, hardwareMap);
         WebcamFree webcam = new WebcamFree(this, hardwareMap);
         grabber = new GrabberFree(this, hardwareMap);
         IntakeFree intake = new IntakeFree(this, hardwareMap);
@@ -70,69 +80,45 @@ public class AutoHug extends LinearOpMode {
         }
 
 
-        //WEIRD NUMBERS
-        /*
-        if (rings == 0) {
-
-            // 0 ring
-            drive.move(0.6,83,180);
-            sleep(1000);
-            drive.move(0.6, 25, -90);
-        } else if (rings == 1) {
-
-            // 1 rings
-            drive.move(.6, 98, 180);
-            sleep(2000);
-            drive.move(.6, 16, 0);
-        } else {
-
-            // 4 rings
-            drive.move(0.6,130,180);
-            sleep(1000);
-            drive.move(0.6, 25, -90);
-            drive.move(0.6,45,0);
-        }*/
-
         //move up to shooting distance
         //the actual measurement is 68 inches
-        drive.move(0.40,35,0);
-        drive.move(0.40,10,90);
+        drive.move(0.43,35,0);
+        drive.move(0.43,10,90);
+
         //start flywheels spinning
         spinFlies();
-        sleep(900);
+        sleep(4000);
         //move intake
         intake.intake(false,true);
-        sleep(400);
+        //sleep(400);
+        sleep(800);
 
         drive.move(0.40,5,90);
 
-        sleep(3700);
+        sleep(8000);
         //move intake
         intake.intake(false,true);
-        sleep(1000);
+        sleep(800);
         restFlies();
         intake.intake(false,false);
-
 
         if (rings == 0) {
             drive.move(0.40,35,0);
             drive.move(0.40,32,270);
             lowerArmAuto(4500);
             openHandAuto();
-            raiseArmAuto(4555);
         } else if (rings == 1) {
             drive.move(0.40,58,0);
             lowerArmAuto(4500);
             openHandAuto();
-            raiseArmAuto(4555);
             drive.move(0.40,23,180);
         } else {
             drive.move(0.40,81,0);
             drive.move(0.40,32,270);
             lowerArmAuto(4500);
             openHandAuto();
-            raiseArmAuto(4555);
             drive.move(0.40,46,180);
+
         }
     }
 }

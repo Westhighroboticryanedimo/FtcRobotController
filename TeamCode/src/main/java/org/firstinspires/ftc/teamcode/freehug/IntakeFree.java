@@ -9,7 +9,8 @@ import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
 public class IntakeFree extends BaseHardware {
     private DcMotor intakemotor;
-
+    public double leftPower;
+    public double rightPower;
 
     public IntakeFree(OpMode opMode , HardwareMap hwmap) {
         super(opMode);
