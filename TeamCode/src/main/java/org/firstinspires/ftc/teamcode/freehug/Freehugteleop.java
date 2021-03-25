@@ -51,7 +51,7 @@ public class Freehugteleop extends OpMode {
 
         freeReturn.freely_hugging = true;
         //do things
-        if(drive.isInPOVMode() == true) {
+        if(drive.isPOVMode()) {
             drive.togglePOV(true);
         }
 
@@ -82,15 +82,15 @@ public class Freehugteleop extends OpMode {
 
         drive.togglePOV(controller.backOnce());
 
-        if(freeReturn.freely_hugging == false) {
+        if(!freeReturn.freely_hugging) {
             drive.drive(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment, controller.right_stick_x * adjustment);
 
-            if (drive.isInPOVMode()) {
+            if (drive.isPOVMode()) {
 
                 freeReturn.updateAngle(controller.right_stick_x * adjustment * ANGLE_CALIBRATION);
                 freeReturn.updateOffsets(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment);
 
-            } else if (!drive.isInPOVMode()) {
+            } else if (!drive.isPOVMode()) {
 
                 //yes, updateAngle(0) MUST be here
                 freeReturn.updateAngle(0);

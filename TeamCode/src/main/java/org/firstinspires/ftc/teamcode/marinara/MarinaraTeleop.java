@@ -39,7 +39,7 @@ public class MarinaraTeleop extends OpMode {
         // Uncomment for telemetry values
 
         // intake.debug();
-        // shooter.debug();
+        shooter.debug();
         // grabber.debug();
         // drive.debug();
         // webcam.debug();
@@ -54,9 +54,11 @@ public class MarinaraTeleop extends OpMode {
 
         // Drive
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
-
-        // Toggle drive POV
+        telemetry.addData("Voltage", drive.getVoltage(hardwareMap));
+        // Drive modes
         drive.togglePOV(controller.backOnce());
+        drive.toggleSlow((controller.leftStickButtonOnce() && controller.rightStickButton()) ||
+                                  (controller.leftStickButton() && controller.rightStickButtonOnce()));
 
         // Shooter
         shooter.shoot(controller.Y(), drive.getVoltage(hardwareMap));

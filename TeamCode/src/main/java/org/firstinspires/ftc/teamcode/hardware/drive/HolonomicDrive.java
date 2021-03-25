@@ -28,11 +28,13 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     private Gyro gyro;
 
+    // Modes
     private boolean isDrivePOV = false;
+    private boolean isSlow = false;
 
     // For autonomous driving
-    private double wheelDiameter = 4;   // Diameter of driving wheels
-    private double ticksPerRev = 1120;  // TPR of driving motors
+    private double wheelDiameter = 4;   // Diameter of driving wheels, default is 4
+    private double ticksPerRev = 1120;  // TPR of driving motors, defalut is 1120
 
     // For PID corrections
     private PIDController pidDrive = new PIDController(0, 0, 0);
@@ -42,6 +44,8 @@ public abstract class HolonomicDrive extends BaseHardware {
     private double prevAngle;
     private double correction;
     private boolean isPID = true;
+
+    private static final double SLOW_MULTIPLIER = 0.6;
 
     // Set pidDrive values
     protected void setPidDrive(double p, double i, double d) {
@@ -180,7 +184,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     }
 
-    public boolean isInPOVMode() {
+    public boolean isPOVMode() {
         return isDrivePOV;
     }
 
@@ -194,6 +198,13 @@ public abstract class HolonomicDrive extends BaseHardware {
             prevAngle = gyro.getAngleDegrees();
 
         }
+
+    }
+
+    // Toggle slow mode
+    public void toggleSlow(boolean button) {
+
+        if (button) isSlow = !isSlow;
 
     }
 
@@ -232,20 +243,14 @@ public abstract class HolonomicDrive extends BaseHardware {
         // The angle of the robot it is supposed to move towards
         double robotAngle = Math.atan2(-joystickY, joystickX) - Math.PI / 4 - angleCompensation;
 
-        print("Angle: ", robotAngle * 180 / Math.PI);
-
         // Takes the x and y components of the vector
         double cosinePow = r * Math.cos(robotAngle);
         double sinePow = r * Math.sin(robotAngle);
-
-        print("Sinepower: ", sinePow);
 
         // Takes the bigger number and multiplies it by a ratio to speed up the robot
         double maxPow = Math.max(Math.abs(cosinePow), Math.abs(sinePow));
         double ratio = 0;
         if (maxPow != 0) ratio = r / maxPow;
-
-        print("Ratio: ", ratio);
 
         // Motor powers without PID corrections
         double v1 = cosinePow * ratio + joystickTurn;
@@ -281,20 +286,20 @@ public abstract class HolonomicDrive extends BaseHardware {
         v4 += correction;
 
         // Set motor powers
-        frontLeft.setPower(v1);
-        frontRight.setPower(v2);
-        backLeft.setPower(v3);
-        backRight.setPower(v4);
+        double multiplier;
+        if (isSlow) multiplier = SLOW_MULTIPLIER;
+        else multiplier = 1;
+
+        frontLeft.setPower(v1 * multiplier);
+        frontRight.setPower(v2 * multiplier);
+        backLeft.setPower(v3 * multiplier);
+        backRight.setPower(v4 * multiplier);
 
         // Telemetry values
         print("FLPow: ", frontLeft.getPower());
         print("FRPow: ", frontRight.getPower());
         print("BLPow: ", backLeft.getPower());
         print("BRPow: ", backRight.getPower());
-        //print("FL: ", frontLeft.getCurrentPosition());
-        //print("FR: ", frontRight.getCurrentPosition());
-        //print("BL: ", backLeft.getCurrentPosition());
-        //print("BR: ", backRight.getCurrentPosition());
         print("Gyro: ", gyro.getAngleDegrees());
 
     }

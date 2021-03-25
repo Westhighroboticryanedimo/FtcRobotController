@@ -32,13 +32,13 @@ public class MarinaraDrive extends HolonomicDrive {
     private void setup(HardwareMap hwMap) {
 
         // PID Values
-        setPidDrive(0.05, 0, 0);
-        setPidSpeed(0.05, 0.001, 0);
-        setPidTurn(0.03, 0.001, 0);
+        setPidDrive(0.03, 0, 0);
+        setPidSpeed(0.03, 0.0008, 0);
+        setPidTurn(0.03, 0.0008, 0);
 
         // Robot characteristics
         setWheelDiameter(4);
-        setTicksPerRev(1120);
+        setTicksPerRev(560);
         // Color sensor on bot
         color = hwMap.get(ColorSensor.class, "color");
 
@@ -56,7 +56,7 @@ public class MarinaraDrive extends HolonomicDrive {
         @Override
         public boolean check() {
 
-            return color.blue() > BLUE_THRESHOLD;
+            return getColors()[2] > BLUE_THRESHOLD;
 
         }
 

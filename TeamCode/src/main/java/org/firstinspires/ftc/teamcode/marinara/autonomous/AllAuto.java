@@ -64,7 +64,7 @@ public class AllAuto extends LinearOpMode {
             drive.move(1, 45, 15);
 
             // Shoot
-            shooter.shoot(0.6, 0.35, drive.getVoltage(hardwareMap), intake);
+            shooter.shoot(0.75, drive.getVoltage(hardwareMap), intake);
 
             // Continue moving to target zone
             drive.move(1, 36, 15);
@@ -111,7 +111,7 @@ public class AllAuto extends LinearOpMode {
             drive.move(1, 35, 10);
 
             // Shoot
-            shooter.shoot(0.55, 0.32, drive.getVoltage(hardwareMap), intake);
+            shooter.shoot(0.75, drive.getVoltage(hardwareMap), intake);
 
             // Continue moving to target zone and deploy wobble goal
             drive.move(1, 45,  -10);
@@ -129,7 +129,7 @@ public class AllAuto extends LinearOpMode {
 
             // Shoot
             drive.move(1, 15, 90);
-            shooter.shoot(0.56, 0.28, drive.getVoltage(hardwareMap), intake);
+            shooter.shoot(0.75, drive.getVoltage(hardwareMap), intake);
 
             // Continue to move to target zone
             drive.move(1, 56, 14);

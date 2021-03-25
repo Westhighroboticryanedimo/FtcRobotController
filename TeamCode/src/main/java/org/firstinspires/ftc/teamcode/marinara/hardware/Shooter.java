@@ -25,7 +25,7 @@ public class Shooter extends BaseHardware {
     private static final double L_REV_PER_TICKS = 1 / L_TICKS_PER_REV;
 
     // Final variables that won't change; used for calculations
-    private static final double GEAR_RATIO = 80.0 / 32.0;
+    private static final double GEAR_RATIO = 40.0 / 64.0;
     private static final double WHEEL_DIAMETER_IN = 4;
     private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_IN * METERS_PER_INCHES * Math.PI;
 
@@ -52,8 +52,8 @@ public class Shooter extends BaseHardware {
 
     // Misc variables
     private static final double SHOOT_WAIT = 2;
-    private static final double SHOOT_POW_L = 1;
-    private static final double SHOOT_POW_R = 0;
+    private static final double SHOOT_POW_L = 0.7572;
+    private static final double SHOOT_POW_R = 0.5;
 
     // Teleop constructor
     public Shooter(OpMode opMode, HardwareMap hwMap) {
@@ -117,15 +117,12 @@ public class Shooter extends BaseHardware {
 
     private double calculateMotorSpeed(double power, double voltage) {
 
-        // Linear proportionality between voltage and power
-        final double POW_PER_VOLT = 0.1;
-        double voltDiff = 13 - voltage;
-        double powDiff = voltDiff * POW_PER_VOLT;
-        return power + powDiff;
+        // Quadratic relationship
+        return 0.0268 * Math.pow(voltage, 2) - 0.734 * voltage + 5.0128 + power;
 
     }
 
-    public void shoot(double powerL, double powerR, double voltage, Intake intake) {
+    public void shoot(double power, double voltage, Intake intake) {
 
         runtime.reset();
         lastTime = timer.seconds();
@@ -138,12 +135,11 @@ public class Shooter extends BaseHardware {
             double timeDiff = timer.seconds() - lastTime;
 
             // Calculate motor speeds
-            powerL = calculateMotorSpeed(powerL, voltage);
-            powerR = calculateMotorSpeed(powerR, voltage);
+            power = calculateMotorSpeed(power, voltage);
 
             // Set power to the motors
-            shooterL.setPower(powerL);
-            shooterR.setPower(powerR);
+            shooterL.setPower(power);
+            shooterR.setPower(SHOOT_POW_R);
 
             // Feed intake if close to shoot speed and waited a little
             if (runtime.seconds() > SHOOT_WAIT) {
@@ -178,8 +174,7 @@ public class Shooter extends BaseHardware {
                 print("Right motor position", shooterR.getCurrentPosition());
                 print("Left position difference", posLDiff);
                 print("Right position difference", posRDiff);
-                print("Power L: ", powerL);
-                print("Power R: ", powerR);
+                print("Power: ", power);
                 print("Left motor speed (m/s): ", speedLMPS);
                 print("Right motor speed (m/s): ", speedRMPS);
 
@@ -207,11 +202,14 @@ public class Shooter extends BaseHardware {
 
             // Calculate shooter power
             double powerL = calculateMotorSpeed(SHOOT_POW_L, voltage);
-            double powerR = calculateMotorSpeed(SHOOT_POW_R, voltage);
+            double powerR = SHOOT_POW_R;
 
             // Set power to the motors
             shooterL.setPower(powerL);
             shooterR.setPower(powerR);
+
+            shooterL.setPower(SHOOT_POW_L);
+            shooterR.setPower(SHOOT_POW_R);
 
             // Only calculate after CALC_TIME_INTERVAL seconds
             if (timeDiff > CALC_TIME_INTERVAL) {
@@ -240,8 +238,8 @@ public class Shooter extends BaseHardware {
                 print("Right motor position", shooterR.getCurrentPosition());
                 print("Left position difference", posLDiff);
                 print("Right position difference", posRDiff);
-                print("Power L: ", powerL);
-                print("Power R: ", powerR);
+                //print("Power L: ", powerL);
+                //print("Power R: ", powerR);
                 print("Left motor speed (m/s): ", speedLMPS);
                 print("Right motor speed (m/s): ", speedRMPS);
 
