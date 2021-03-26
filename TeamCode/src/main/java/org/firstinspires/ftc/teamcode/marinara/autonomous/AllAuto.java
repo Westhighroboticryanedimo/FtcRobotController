@@ -61,100 +61,100 @@ public class AllAuto extends LinearOpMode {
         if (numRingStack == 0) {
 
             // Move to target zone and turn
-            drive.move(1, 45, 15);
+            drive.move(0.8, 45, 15);
 
             // Shoot
-            shooter.shoot(0.75, drive.getVoltage(hardwareMap), intake);
+            shooter.shoot(0.8, drive.getVoltage(hardwareMap), intake);
 
             // Continue moving to target zone
-            drive.move(1, 36, 15);
+            drive.move(0.8, 23, 15);
 
             // Deploy wobble goal
-            drive.turn(0.6, 180);
+            drive.turn(0.3, 180);
             deployer.release();
-            drive.turn(0.6, -180);
+            drive.turn(0.3, -180);
 
             // Grab wobble goal
-            drive.move(1, 64, -163);
+            drive.move(0.8, 48, -163);
             grabber.openGrabber();
             grabber.extendRotator();
-            drive.move(0.5, 12, 90);
+            drive.move(0.3, 12, 90);
             sleep(400);
             grabber.closeGrabber();
 
             // Go to target zone and deploy wobble goal
-            drive.move(1, 60, 14);
+            drive.move(0.8, 52, 14);
             grabber.openGrabber();
 
             // Move away
-            drive.move(1, 10, -90);
+            drive.move(0.8, 10, -90);
 
         } else if (numRingStack == 1) {
 
             // Move to target zone
-            drive.move(1, 105, 0);
+            drive.move(0.8, 105, 0);
 
             // Deploy wobble goal
-            drive.turn(0.6, 180);
+            drive.turn(0.3, 180);
             deployer.release();
-            drive.turn(0.6, -180);
+            drive.turn(0.3, -180);
 
             // Grab wobble goal
-            drive.move(1, 90.5, 180);
+            drive.move(0.8, 90.5, 180);
             grabber.openGrabber();
             grabber.extendRotator();
-            drive.move(0.5, 17, 90);
+            drive.move(0.3, 17, 90);
             sleep(400);
             grabber.closeGrabber();
 
             // Move to target zone
-            drive.move(1, 35, 10);
+            drive.move(0.8, 35, 10);
 
             // Shoot
             shooter.shoot(0.75, drive.getVoltage(hardwareMap), intake);
 
             // Continue moving to target zone and deploy wobble goal
-            drive.move(1, 45,  -10);
-            drive.move(1, 13,  -45);
+            drive.move(0.8, 45,  -10);
+            drive.move(0.8, 13,  -45);
             grabber.openGrabber();
 
             // Park on start line
-            drive.move(1, 10, -90);
-            drive.moveUntil(0.7, 180, drive.new ColorCommand());
+            drive.move(0.8, 10, -90);
+            drive.moveUntil(0.3, 180, drive.new ColorCommand());
 
         } else {
 
             // Move to target zone
-            drive.move(1, 65, 0);
+            drive.move(0.8, 65, 0);
 
             // Shoot
-            drive.move(1, 15, 90);
+            drive.move(0.8, 15, 90);
             shooter.shoot(0.75, drive.getVoltage(hardwareMap), intake);
 
             // Continue to move to target zone
-            drive.move(1, 56, 14);
+            drive.move(0.8, 56, 14);
 
             // Deploy wobble goal
-            drive.turn(0.6, 180);
+            drive.turn(0.3, 180);
             deployer.release();
-            drive.turn(0.6, -180);
+            drive.turn(0.3, -180);
 
             // Grab wobble goal
-            drive.move(1, 70, -160);
-            drive.move(1, 35, -175);
+            drive.move(0.8, 70, -160);
+            drive.move(0.8, 35, -175);
             grabber.openGrabber();
             grabber.extendRotator();
-            drive.move(0.5, 23, 90);
+            drive.move(0.3, 23, 90);
             grabber.closeGrabber();
 
             // Move to target zone
-            drive.move(1, 22, 45);
-            drive.move(1, 100, 0);
+            drive.move(0.8, 22, 45);
+            drive.move(0.8, 100, 0);
             grabber.openGrabber();
 
             // Park on start line
-            drive.move(1, 10, -90);
-            drive.moveUntil(0.7, 180, drive.new ColorCommand());
+            drive.move(0.8, 10, -90);
+            drive.moveUntil(0.3, 180, drive.new ColorCommand());
 
         }
 
