@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="autohug")
 public class AutoHug extends LinearOpMode {
     Freehugdrive drive;
-    static double SHOOTER_CALIBRATION = 0.3745;
+    static double SHOOTER_CALIBRATION = 0.375;
     GrabberFree grabber;
     private DcMotor shooterL;
     private DcMotor shooterR;
@@ -60,7 +60,12 @@ public class AutoHug extends LinearOpMode {
         
         ElapsedTime runtime = new ElapsedTime();
 
+        telemetry.addData("Init", "ihfe");
+
         waitForStart();
+
+        telemetry.addData("Helkfhai;", "fkje");
+        telemetry.update();
 
         // Get how many rings are stacked
         int rings = 0;
@@ -75,26 +80,24 @@ public class AutoHug extends LinearOpMode {
 
         }
 
-/*
+        spinFlies();
         //move up to shooting distance
         //the actual measurement is 68 inches
         drive.move(0.43,35,0);
         drive.move(0.43,10,90);
-*/
-        //start flywheels spinning
-        spinFlies();
-        sleep(4500);
+
         //move intake
         intake.intake(false,true);
         //sleep(400);
-        sleep(4000);
-/*
+        sleep(900);
+        intake.intake(false,false);
+
         drive.move(0.40,5,90);
 
-        sleep(8000);
+        sleep(3200);
         //move intake
         intake.intake(false,true);
-        sleep(800);
+        sleep(1000);
         restFlies();
         intake.intake(false,false);
 
@@ -115,6 +118,6 @@ public class AutoHug extends LinearOpMode {
             openHandAuto();
             drive.move(0.40,46,180);
 
-        }*/
+        }
     }
 }
