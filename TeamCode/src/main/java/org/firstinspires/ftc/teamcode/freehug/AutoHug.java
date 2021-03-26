@@ -9,17 +9,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="autohug")
 public class AutoHug extends LinearOpMode {
     Freehugdrive drive;
-    static double SHOOTER_CALIBRATION = 0.0617;
+    static double SHOOTER_CALIBRATION = 0.3745;
     GrabberFree grabber;
     private DcMotor shooterL;
     private DcMotor shooterR;
 
     public double calculateshooterpowerbasedonbatterypower() {
-        double pow = 1;
-        pow -= SHOOTER_CALIBRATION * drive.getVoltage(hardwareMap);
-        //CHANGE THE NUMBER BELOW (currently 0.02) to change distance. more = farther distance
-        pow += 0.05;
-        return pow;
+        return (0.0268 * (drive.getVoltage(hardwareMap)*drive.getVoltage(hardwareMap))) - (0.734 * drive.getVoltage(hardwareMap)) + 5.0128 + SHOOTER_CALIBRATION;
     }
 
     public void lowerArmAuto(int ms) {
@@ -79,20 +75,20 @@ public class AutoHug extends LinearOpMode {
 
         }
 
-
+/*
         //move up to shooting distance
         //the actual measurement is 68 inches
         drive.move(0.43,35,0);
         drive.move(0.43,10,90);
-
+*/
         //start flywheels spinning
         spinFlies();
-        sleep(4000);
+        sleep(4500);
         //move intake
         intake.intake(false,true);
         //sleep(400);
-        sleep(800);
-
+        sleep(4000);
+/*
         drive.move(0.40,5,90);
 
         sleep(8000);
@@ -119,6 +115,6 @@ public class AutoHug extends LinearOpMode {
             openHandAuto();
             drive.move(0.40,46,180);
 
-        }
+        }*/
     }
 }
