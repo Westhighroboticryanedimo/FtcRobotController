@@ -135,10 +135,10 @@ public class Shooter extends BaseHardware {
             double timeDiff = timer.seconds() - lastTime;
 
             // Calculate motor speeds
-            power = calculateMotorSpeed(power, voltage);
+            double p = calculateMotorSpeed(power, voltage);
 
             // Set power to the motors
-            shooterL.setPower(power);
+            shooterL.setPower(p);
             shooterR.setPower(SHOOT_POW_R);
 
             // Feed intake if close to shoot speed and waited a little

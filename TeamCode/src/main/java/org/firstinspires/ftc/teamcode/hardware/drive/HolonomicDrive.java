@@ -212,14 +212,14 @@ public abstract class HolonomicDrive extends BaseHardware {
     public void drive(double joystickX, double joystickY, double joystickTurn) {
 
         // Reduce joystick turn
-        joystickTurn /= 1.5;
+        double turn = joystickTurn / 1.5;
 
         // PID calculation
         pidDrive.setSetpoint(prevAngle);
         correction = pidDrive.performPID(gyro.getAngleDegrees());
 
         // If turning or not moving then don't correct
-        if (Math.abs(joystickTurn) != 0 ||
+        if (Math.abs(turn) != 0 ||
            (joystickX == 0 && joystickY == 0)) {
 
             pidDrive.disable();
@@ -253,10 +253,10 @@ public abstract class HolonomicDrive extends BaseHardware {
         if (maxPow != 0) ratio = r / maxPow;
 
         // Motor powers without PID corrections
-        double v1 = cosinePow * ratio + joystickTurn;
-        double v2 = sinePow * ratio - joystickTurn;
-        double v3 = sinePow * ratio + joystickTurn;
-        double v4 = cosinePow * ratio - joystickTurn;
+        double v1 = cosinePow * ratio + turn;
+        double v2 = sinePow * ratio - turn;
+        double v3 = sinePow * ratio + turn;
+        double v4 = cosinePow * ratio - turn;
 
         // Divide by ratio to make turning easier
 
@@ -299,6 +299,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         print("FLPow: ", frontLeft.getPower());
         print("FRPow: ", frontRight.getPower());
         print("BLPow: ", backLeft.getPower());
+        print("Encoder fl ", frontLeft.getCurrentPosition());
         print("BRPow: ", backRight.getPower());
         print("Gyro: ", gyro.getAngleDegrees());
 
@@ -399,7 +400,7 @@ public abstract class HolonomicDrive extends BaseHardware {
             double speedFLBR = pidFLBR.performPID(avgFLBRPos);
 
             double avgFRBLPos = (frontRight.getCurrentPosition() + backLeft.getCurrentPosition()) / 2.0;
-            double speedFRBL = pidFRBL.performPID(avgFRBLPos);
+            double speedFRBL = pidFRBL.performPID(frontRight.getCurrentPosition());
 
             frontLeft.setPower(speedFLBR - correction);
             frontRight.setPower(speedFRBL + correction);
@@ -407,13 +408,14 @@ public abstract class HolonomicDrive extends BaseHardware {
             backRight.setPower(speedFLBR + correction);
 
             //print("Gyro: ", gyro.getAngleDegrees());
-            //print("FL: ", frontLeft.getCurrentPosition());
-            //print("FR: ", frontRight.getCurrentPosition());
-            //print("BL: ", backLeft.getCurrentPosition());
-            //print("BR: ", backRight.getCurrentPosition());
+            print("FL: ", frontLeft.getCurrentPosition());
+            print("FR: ", frontRight.getCurrentPosition());
+            print("BL: ", backLeft.getCurrentPosition());
+            print("BR: ", backRight.getCurrentPosition());
+            print("PPR: ", ticksPerRev);
             print("Correction: ", correction);
-            print("Average FLBR: ", avgFLBRPos);
-            print("Average FRBL: ", avgFRBLPos);
+            //print("Average FLBR: ", avgFLBRPos);
+            //print("Average FRBL: ", avgFRBLPos);
             print("FLBR Setpoint: ", pidFLBR.getSetpoint() + " " + Double.toString(flbrDist));
             print("FRBL Setpoint: ", pidFRBL.getSetpoint() + " " + Double.toString(frblDist));
             print("FLBR Speed: ", speedFLBR);

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.marinara.hardware.Webcam;
 
 @TeleOp(name = "Marinara: TeleOp", group = "Marinara")
 public class MarinaraTeleop extends OpMode {
-//made you look get pranked lmao
+
     // Objects
     private Intake intake;
     private Shooter shooter;
@@ -39,9 +39,9 @@ public class MarinaraTeleop extends OpMode {
         // Uncomment for telemetry values
 
         // intake.debug();
-        shooter.debug();
+        // shooter.debug();
         // grabber.debug();
-        // drive.debug();
+        drive.debug();
         // webcam.debug();
 
     }

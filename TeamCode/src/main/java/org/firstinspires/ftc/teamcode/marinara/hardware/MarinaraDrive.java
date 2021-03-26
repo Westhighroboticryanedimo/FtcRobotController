@@ -37,8 +37,8 @@ public class MarinaraDrive extends HolonomicDrive {
         setPidTurn(0.03, 0.0008, 0);
 
         // Robot characteristics
-        setWheelDiameter(4);
-        setTicksPerRev(560);
+        setWheelDiameter(3.9);
+        setTicksPerRev(537.6);
         // Color sensor on bot
         color = hwMap.get(ColorSensor.class, "color");
 
