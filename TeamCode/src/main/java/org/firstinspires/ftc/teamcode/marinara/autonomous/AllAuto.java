@@ -43,7 +43,17 @@ public class AllAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
+        while (opModeIsActive()) {
 
+            telemetry.addData("Distance right", drive.getDistanceRight());
+            telemetry.addData("Distance back", drive.getDistanceBack());
+            telemetry.addData("Back check", drive.new DistanceBackCommand(10).check());
+            telemetry.addData("Right check", drive.new DistanceRightCommand(10).check());
+            telemetry.update();
+
+        }
+
+/*
         // Get how many rings are stacked
         int numRingStack = 0;
         runtime.reset();
@@ -61,13 +71,13 @@ public class AllAuto extends LinearOpMode {
         if (numRingStack == 0) {
 
             // Move to target zone and turn
-            drive.move(0.8, 45, 15);
+            drive.move(0.7, 39, 15);
 
             // Shoot
-            shooter.shoot(0.8, drive.getVoltage(hardwareMap), intake);
+            shooter.shoot(0.72, drive.getVoltage(hardwareMap), intake);
 
             // Continue moving to target zone
-            drive.move(0.8, 23, 15);
+            drive.move(0.7, 28, 10);
 
             // Deploy wobble goal
             drive.turn(0.3, 180);
@@ -75,24 +85,24 @@ public class AllAuto extends LinearOpMode {
             drive.turn(0.3, -180);
 
             // Grab wobble goal
-            drive.move(0.8, 48, -163);
+            drive.move(0.7, 48, -160);
             grabber.openGrabber();
             grabber.extendRotator();
-            drive.move(0.3, 12, 90);
+            drive.move(0.3, 20, 90);
             sleep(400);
             grabber.closeGrabber();
 
             // Go to target zone and deploy wobble goal
-            drive.move(0.8, 52, 14);
+            drive.move(0.7, 54, 14);
             grabber.openGrabber();
 
             // Move away
-            drive.move(0.8, 10, -90);
+            drive.move(0.7, 10, -88);
 
         } else if (numRingStack == 1) {
 
             // Move to target zone
-            drive.move(0.8, 105, 0);
+            drive.move(0.7, 105, 0);
 
             // Deploy wobble goal
             drive.turn(0.3, 180);
@@ -100,39 +110,38 @@ public class AllAuto extends LinearOpMode {
             drive.turn(0.3, -180);
 
             // Grab wobble goal
-            drive.move(0.8, 90.5, 180);
+            drive.move(0.7, 86, 180);
             grabber.openGrabber();
             grabber.extendRotator();
-            drive.move(0.3, 17, 90);
+            drive.move(0.3, 16, 90);
             sleep(400);
             grabber.closeGrabber();
 
             // Move to target zone
-            drive.move(0.8, 35, 10);
+            drive.move(0.7, 35, 0);
 
             // Shoot
             shooter.shoot(0.75, drive.getVoltage(hardwareMap), intake);
 
             // Continue moving to target zone and deploy wobble goal
-            drive.move(0.8, 45,  -10);
-            drive.move(0.8, 13,  -45);
+            drive.move(0.7, 52,  -8);
             grabber.openGrabber();
 
             // Park on start line
-            drive.move(0.8, 10, -90);
-            drive.moveUntil(0.3, 180, drive.new ColorCommand());
+            drive.move(0.7, 10, -90);
+            drive.moveUntil(0.5, 160, drive.new ColorCommand());
 
         } else {
 
             // Move to target zone
-            drive.move(0.8, 65, 0);
+            drive.move(0.7, 65, 0);
 
             // Shoot
-            drive.move(0.8, 15, 90);
-            shooter.shoot(0.75, drive.getVoltage(hardwareMap), intake);
+            drive.move(0.7, 15, 90);
+            shooter.shoot(0.735, drive.getVoltage(hardwareMap), intake);
 
             // Continue to move to target zone
-            drive.move(0.8, 56, 14);
+            drive.move(0.7, 50, 10);
 
             // Deploy wobble goal
             drive.turn(0.3, 180);
@@ -140,26 +149,28 @@ public class AllAuto extends LinearOpMode {
             drive.turn(0.3, -180);
 
             // Grab wobble goal
-            drive.move(0.8, 70, -160);
-            drive.move(0.8, 35, -175);
+            drive.move(0.7, 40, -160);
+            drive.move(0.7, 48, -180);
             grabber.openGrabber();
             grabber.extendRotator();
-            drive.move(0.3, 23, 90);
+            drive.move(0.3, 21, 90);
             grabber.closeGrabber();
 
             // Move to target zone
-            drive.move(0.8, 22, 45);
-            drive.move(0.8, 100, 0);
+            drive.move(0.7, 23, 45);
+            drive.move(0.7, 93, 0);
             grabber.openGrabber();
 
             // Park on start line
-            drive.move(0.8, 10, -90);
-            drive.moveUntil(0.3, 180, drive.new ColorCommand());
+            drive.move(0.7, 10, -90);
+            drive.moveUntil(0.5, 160, drive.new ColorCommand());
 
         }
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
+
+ */
 
     }
 

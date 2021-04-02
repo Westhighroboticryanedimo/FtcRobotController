@@ -19,7 +19,7 @@ public class Grabber extends BaseHardware {
 
     // Final variables
     private static final double GRABBER_POS_GRAB = 1;
-    private static final double GRABBER_POS_OPEN = 0.6;
+    private static final double GRABBER_POS_OPEN = 0.4;
     private static final double ROTATOR_POS_EXT = 0.9;
     private static final double ROTATOR_POS_RETRACT = 0.4;
     private static final double ROTATOR_ABLE_LIFT_MIN_POS = 1400;

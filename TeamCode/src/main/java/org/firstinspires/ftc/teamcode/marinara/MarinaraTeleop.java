@@ -77,6 +77,9 @@ public class MarinaraTeleop extends OpMode {
         // Webcam
         webcam.update();
 
+        // Distance sensor values
+        telemetry.addData("Distance Back", drive.getDistanceBack());
+
         // Telemetry
         telemetry.update();
 
