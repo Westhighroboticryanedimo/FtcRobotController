@@ -80,7 +80,7 @@ public class Freehugteleop extends OpMode {
         freeReturn.lockPosition();
         freeReturn.freely_hugging = false;
     }
-
+    
     public double calculateshooterpowerbasedonbatterypower() {
         return (0.0268 * (drive.getVoltage(hardwareMap)*drive.getVoltage(hardwareMap))) - (0.734 * drive.getVoltage(hardwareMap)) + 5.0128 + SHOOTER_CALIBRATION;
     }
