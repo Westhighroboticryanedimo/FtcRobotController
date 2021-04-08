@@ -14,12 +14,12 @@ public class Intake extends BaseHardware {
 
     // Motor and motor power
     private DcMotor intakeMotor;
-    private static final double MOTOR_INTAKE_POWER = 0.9;
+    private static final double MOTOR_INTAKE_POWER = 1;
     private static final double SERVO_INTAKE_POWER = 1;
 
     // Servo for hook
     private Servo hook;
-    private static final double HOOKED_POS = 0.6;
+    private static final double HOOKED_POS = 0.5;
     private static final double HOOK_FREE_POS = 1;
 
     // CR Servo to intake

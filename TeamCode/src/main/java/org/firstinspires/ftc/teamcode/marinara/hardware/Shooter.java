@@ -36,7 +36,7 @@ public class Shooter extends BaseHardware {
 
     // Servo
     private Servo stopper = null;
-    private static final double STOP_POS = 0.45;
+    private static final double STOP_POS = 0.3;
     private static final double OPEN_POS = 0;
 
     // Timer
@@ -52,8 +52,8 @@ public class Shooter extends BaseHardware {
 
     // Misc variables
     private static final double SHOOT_WAIT = 2;
-    private static final double SHOOT_POW_L = 0.7572;
-    private static final double SHOOT_POW_R = 0.5;
+    private static final double SHOOT_POW_L = 0.75;
+    private static final double SHOOT_POW_R = 0.6;
 
     // Teleop constructor
     public Shooter(OpMode opMode, HardwareMap hwMap) {
