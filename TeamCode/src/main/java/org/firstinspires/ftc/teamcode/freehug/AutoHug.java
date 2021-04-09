@@ -64,8 +64,7 @@ public class AutoHug extends LinearOpMode {
         shooterR = hardwareMap.get(DcMotor.class, "shooterR");
         shooterL.setDirection(DcMotor.Direction.REVERSE);
         shooterR.setDirection(DcMotor.Direction.REVERSE);
-        //finish below statement --- put dead wheel names in those spots
-        //odometry.robot_position(hardwareMap.get(),hardwareMap.get(),hardwareMap.get(), 307.699557,80);
+        odometry.robot_position(hardwareMap.get(DcMotor.class,"odo_vert_L"),hardwareMap.get(DcMotor.class,"odo_vert_R"),hardwareMap.get(DcMotor.class,"odo_horiz"), 307.699557,50);
         odometry.recalibrate_position();
         odometry.running = true;
         odometry.run();

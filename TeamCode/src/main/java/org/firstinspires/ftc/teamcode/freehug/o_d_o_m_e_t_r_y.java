@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class o_d_o_m_e_t_r_y implements Runnable{
     //public double COUNTS_PER_INCH = 307.699557;
+    private double degrees_per_inch = 38.1971863421;
     private DcMotor vertical_1, vertical_2, horizontal;
     public boolean running = true;
     double vertical_1_position = 0, vertical_2_position = 0, horizontal_position = 0, change_in_angle = 0;
@@ -11,13 +12,15 @@ public class o_d_o_m_e_t_r_y implements Runnable{
     private double vertical_1_position_prev = 0, vertical_2_position_prev = 0, horizontal_position_prev = 0;
     private double encoder_wheel_distance, horizontal_tick_per_degree;
     private int sleep = 80;
-    private int vertical_1_adjust,vertical_2_adjust,horizontal_adjust = 1;
+    private int vertical_1_adjust = 1,vertical_2_adjust = 1,horizontal_adjust = 1;
 
-    public void robot_position(DcMotor vertical_1, DcMotor vertical_2, DcMotor horizontal, double per_inch, int sleep) {
+    public void robot_position(DcMotor vertical_1, DcMotor vertical_2, DcMotor horizontal, double ticks_per_inch, int sleep) {
         this.vertical_1 = vertical_1;
         this.vertical_2 = vertical_2;
         this.horizontal = horizontal;
         this.sleep = sleep;
+        encoder_wheel_distance = ticks_per_inch;
+        horizontal_tick_per_degree = ticks_per_inch/degrees_per_inch;
         //robotEncoderWheelDistance = Double.parseDouble(ReadWriteFile.readFile(wheelBaseSeparationFile).trim()) * COUNTS_PER_INCH;
         //        this.horizontalEncoderTickPerDegreeOffset = Double.parseDouble(ReadWriteFile.readFile(horizontalTickOffsetFile).trim());
         //whatever that is
