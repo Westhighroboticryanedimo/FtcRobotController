@@ -8,38 +8,44 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="autohug")
 public class AutoHug extends LinearOpMode {
+    o_d_o_m_e_t_r_y odometry;
     Freehugdrive drive;
     static double SHOOTER_CALIBRATION = 0.375;
     GrabberFree grabber;
     private DcMotor shooterL;
     private DcMotor shooterR;
+    private double current_x;
+    private double current_y;
+    private double close_enough = 1;
 
-    public double calculateshooterpowerbasedonbatterypower() {
-        return (0.0268 * (drive.getVoltage(hardwareMap)*drive.getVoltage(hardwareMap))) - (0.734 * drive.getVoltage(hardwareMap)) + 5.0128 + SHOOTER_CALIBRATION;
+    public void go_definite(double x, double y) {
+        go_relative(x-current_x,y-current_y);
+    }
+    public void go_relative(double x_add, double y_add) {
+        double x_start = odometry.robot_x;
+        double y_start = odometry.robot_y;
+        double x_moved = 0;
+        double y_moved = 0;
+        while(Math.abs(x_moved-x_add)<close_enough) {
+            drive.move(0.40,1,90);
+            x_moved = odometry.give_me_the_X()-x_start;
+        }
+        sleep(20);
+        while(Math.abs(y_moved-y_add)<close_enough) {
+            drive.move(0.40,1,0);
+            y_moved = odometry.give_me_the_Y()-y_start;
+        }
+        sleep(10);
     }
 
-    public void lowerArmAuto(int ms) {
-        grabber.lowerHand();
-        sleep(ms);
-        grabber.restElbow();
-    }
-    public void raiseArmAuto(int ms) {
-        grabber.handInTheAir();
-        sleep(ms);
-        grabber.restElbow();
-    }
+    public double calculateshooterpowerbasedonbatterypower() {return (0.0268 * (drive.getVoltage(hardwareMap)*drive.getVoltage(hardwareMap))) - (0.734 * drive.getVoltage(hardwareMap)) + 5.0128 + SHOOTER_CALIBRATION; }
 
-    public void openWristAuto(int ms) {
-        grabber.tiltHandUp();
-        sleep(ms);
-        grabber.restWrist();
-    }
+    public void lowerArmAuto(int ms) {grabber.lowerHand();sleep(ms);grabber.restElbow(); }
+    public void raiseArmAuto(int ms) { grabber.handInTheAir();sleep(ms);grabber.restElbow(); }
 
-    public void closeWristAuto(int ms) {
-        grabber.tiltHandDown();
-        sleep(ms);
-        grabber.restWrist();
-    }
+    public void openWristAuto(int ms) { grabber.tiltHandUp();sleep(ms);grabber.restWrist(); }
+
+    public void closeWristAuto(int ms) {grabber.tiltHandDown();sleep(ms);grabber.restWrist(); }
 
     public void openHandAuto() { grabber.openHand(); }
     public void closeHandAuto() { grabber.closeHand(); }
@@ -49,6 +55,7 @@ public class AutoHug extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        odometry = new o_d_o_m_e_t_r_y();
         drive = new Freehugdrive(this, hardwareMap);
         WebcamFree webcam = new WebcamFree(this, hardwareMap);
         grabber = new GrabberFree(this, hardwareMap);
@@ -57,6 +64,11 @@ public class AutoHug extends LinearOpMode {
         shooterR = hardwareMap.get(DcMotor.class, "shooterR");
         shooterL.setDirection(DcMotor.Direction.REVERSE);
         shooterR.setDirection(DcMotor.Direction.REVERSE);
+        //finish below statement --- put dead wheel names in those spots
+        //odometry.robot_position(hardwareMap.get(),hardwareMap.get(),hardwareMap.get(), 307.699557,80);
+        odometry.recalibrate_position();
+        odometry.running = true;
+        odometry.run();
         
         ElapsedTime runtime = new ElapsedTime();
 
@@ -83,8 +95,10 @@ public class AutoHug extends LinearOpMode {
         spinFlies();
         //move up to shooting distance
         //the actual measurement is 68 inches
-        drive.move(0.43,35,0);
-        drive.move(0.43,10,90);
+        //drive.move(0.43,35,0);
+        go_relative(0,35);
+        //drive.move(0.43,10,90);
+        go_relative(10,0);
 
         //move intake
         intake.intake(false,true);
