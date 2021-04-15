@@ -130,9 +130,9 @@ public class OdometryCalibration extends LinearOpMode {
         left_front = hardwareMap.get(DcMotor.class, "frontLeft");
         left_back = hardwareMap.get(DcMotor.class, "backLeft");
 
-        verticalLeft = hardwareMap.get(DcMotor.class, "vlEncoder");
-        verticalRight = hardwareMap.get(DcMotor.class, "vrEncoder");
-        horizontal = hardwareMap.get(DcMotor.class, "hEncoder");
+        verticalLeft = hardwareMap.get(DcMotor.class, "frontRight");
+        verticalRight = hardwareMap.get(DcMotor.class, "frontLeft");
+        horizontal = hardwareMap.get(DcMotor.class, "backLeft");
 
         right_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

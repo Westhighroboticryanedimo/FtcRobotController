@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.freehug;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
@@ -19,7 +20,7 @@ public class Freehugteleop extends OpMode {
     private FreeReturn freeReturn;
     private boolean fullpower;
     private boolean shooting;
-    private o_d_o_m_e_t_r_y odometry;
+    //private o_d_o_m_e_t_r_y odometry;
 
     private GrabberFree grabber;
     double adjustment = 0.07;
@@ -33,22 +34,28 @@ public class Freehugteleop extends OpMode {
 
     @Override
     public void init() {
+        
         fullpower = false;
         adjustment = 1;
         drive = new Freehugdrive(this, hardwareMap);
         intake = new IntakeFree(this, hardwareMap);
         controller = new Controller(gamepad1);
+
         shooterL = hardwareMap.get(DcMotor.class, "shooterL");
         shooterR = hardwareMap.get(DcMotor.class, "shooterR");
         shooterL.setDirection(DcMotor.Direction.REVERSE);
-        shooterR.setDirection(DcMotor.Direction.REVERSE);
+        shooterR.setDirection(DcMotor.Direction.FORWARD);
         grabber = new GrabberFree(this, hardwareMap);
+
         freeReturn = new FreeReturn();
-        odometry = new o_d_o_m_e_t_r_y();
-        odometry.robot_position(hardwareMap.get(DcMotor.class,"odo_vert_L"),hardwareMap.get(DcMotor.class,"odo_vert_R"),hardwareMap.get(DcMotor.class,"odo_horiz"), 307.699557,50);
+
+       /* odometry = new o_d_o_m_e_t_r_y();
+        odometry.robot_position(hardwareMap.get(DcMotor.class,"frontRight"),hardwareMap.get(DcMotor.class,"backLeft"),hardwareMap.get(DcMotor.class,"frontLeft"), 307.699557,50);
         odometry.recalibrate_position();
         odometry.running = true;
         odometry.run();
+         */
+
         drive.debug();
 
         freeReturn.xOffset = 0;
@@ -161,24 +168,24 @@ public class Freehugteleop extends OpMode {
 
         //position lock and return commands
         if(controller.leftBumperOnce()) {
-            odometry.recalibrate_position();
+            //odometry.recalibrate_position();
         }
         else if(controller.rightBumperOnce()) {
             freeReturn.freely_hugging = true;
 
-            double x_start = odometry.robot_x;
-            double y_start = odometry.robot_y;
+            //double x_start = odometry.robot_x;
+            //double y_start = odometry.robot_y;
             double x_moved = 0;
             double y_moved = 0;
             while(Math.abs(x_moved)<1) {
                 drive.drive(0.40,0,0);
-                x_moved = odometry.give_me_the_X()-x_start;
+                //x_moved = odometry.give_me_the_X()-x_start;
             }
             drive.drive(0,0,0);
             sleep(20);
             while(Math.abs(y_moved)<1) {
                 drive.drive(0,0.40,0);
-                y_moved = odometry.give_me_the_Y()-y_start;
+                //y_moved = odometry.give_me_the_Y()-y_start;
             }
             drive.drive(0,0,0);
             sleep(10);
