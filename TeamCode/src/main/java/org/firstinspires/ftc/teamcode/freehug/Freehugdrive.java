@@ -32,7 +32,7 @@ public class Freehugdrive extends HolonomicDrive {
         setPidSpeed(0.05, 0.001, 0);
         setPidTurn(0.028, 0.001, 0);
 
-        setMotorDir(false, true, false, true);
+        setMotorDir(true, true, false, false);
 
         setWheelDiameter(3.89);
         setTicksPerRev(537.6);

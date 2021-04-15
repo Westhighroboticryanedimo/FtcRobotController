@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.freehug;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
@@ -33,22 +34,33 @@ public class Freehugteleop extends OpMode {
 
     @Override
     public void init() {
+
         fullpower = false;
         adjustment = 1;
         drive = new Freehugdrive(this, hardwareMap);
         intake = new IntakeFree(this, hardwareMap);
         controller = new Controller(gamepad1);
+
         shooterL = hardwareMap.get(DcMotor.class, "shooterL");
         shooterR = hardwareMap.get(DcMotor.class, "shooterR");
         shooterL.setDirection(DcMotor.Direction.REVERSE);
-        shooterR.setDirection(DcMotor.Direction.REVERSE);
+        shooterR.setDirection(DcMotor.Direction.FORWARD);
         grabber = new GrabberFree(this, hardwareMap);
+
         freeReturn = new FreeReturn();
         odometry = new o_d_o_m_e_t_r_y();
-        odometry.robot_position(hardwareMap.get(DcMotor.class,"intake"),hardwareMap.get(DcMotor.class,""),hardwareMap.get(DcMotor.class,""), 307.699557,50);
+        odometry.robot_position(hardwareMap.get(DcMotor.class, "intake"), hardwareMap.get(DcMotor.class, ""), hardwareMap.get(DcMotor.class, ""), 307.699557, 50);
         odometry.recalibrate_position();
         odometry.running = true;
         //odometry.run();
+
+       /* odometry = new o_d_o_m_e_t_r_y();
+        odometry.robot_position(hardwareMap.get(DcMotor.class,"frontRight"),hardwareMap.get(DcMotor.class,"backLeft"),hardwareMap.get(DcMotor.class,"frontLeft"), 307.699557,50);
+        odometry.recalibrate_position();
+        odometry.running = true;
+        odometry.run();
+         */
+
         drive.debug();
 
         freeReturn.xOffset = 0;
@@ -57,16 +69,16 @@ public class Freehugteleop extends OpMode {
     }
 
     public double calculateshooterpowerbasedonbatterypower() {
-        return (0.0268 * (drive.getVoltage(hardwareMap)*drive.getVoltage(hardwareMap))) - (0.734 * drive.getVoltage(hardwareMap)) + 5.0128 + SHOOTER_CALIBRATION;
+        return (0.0268 * (drive.getVoltage(hardwareMap) * drive.getVoltage(hardwareMap))) - (0.734 * drive.getVoltage(hardwareMap)) + 5.0128 + SHOOTER_CALIBRATION;
     }
 
     @Override
     public void loop() {
         odometry.robot_position_update();
-        if(!fullpower) {
+        if (!fullpower) {
             intake.rightPower = calculateshooterpowerbasedonbatterypower();
             intake.leftPower = calculateshooterpowerbasedonbatterypower();
-        } else if(fullpower) {
+        } else if (fullpower) {
             intake.rightPower = 1;
             intake.leftPower = 1;
         }
@@ -74,7 +86,7 @@ public class Freehugteleop extends OpMode {
 
         drive.togglePOV(controller.backOnce());
 
-        if(!freeReturn.freely_hugging) {
+        if (!freeReturn.freely_hugging) {
             drive.drive(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment, controller.right_stick_x * adjustment);
 
             if (drive.isPOVMode()) {
@@ -94,88 +106,85 @@ public class Freehugteleop extends OpMode {
         intake.intake(controller.B(), controller.A());
 
         if (controller.XOnce()) {
-            if(shooting) {
+            if (shooting) {
                 shooting = false;
-            } else{
+            } else {
                 shooting = true;
             }
         }
-        if(shooting) {shooterL.setPower(intake.leftPower);shooterR.setPower(intake.rightPower*0.92);} else{shooterL.setPower(0);shooterR.setPower(0);}
+        if (shooting) {
+            shooterL.setPower(intake.leftPower);
+            shooterR.setPower(intake.rightPower * 0.92);
+        } else {
+            shooterL.setPower(0);
+            shooterR.setPower(0);
+        }
 
         if (controller.leftStickButtonOnce()) {
-            if(adjustment == 0.7) {
+            if (adjustment == 0.7) {
                 adjustment = 0.4;
-            }
-            else{
+            } else {
                 adjustment = 0.7;
             }
         }
 
-        if(controller.rightStickButtonOnce()) {
-            if(fullpower == false) {
+        if (controller.rightStickButtonOnce()) {
+            if (fullpower == false) {
                 fullpower = true;
-            } else{
+            } else {
                 fullpower = false;
             }
         }
 
-        if(controller.right_trigger >= 0.2) {
+        if (controller.right_trigger >= 0.2) {
             grabber.handInTheAir();
-        }
-        else if(controller.left_trigger >= 0.2) {
+        } else if (controller.left_trigger >= 0.2) {
             grabber.lowerHand();
-        }
-        else {
+        } else {
             grabber.restElbow();
         }
 
         //position lock and return commands
-        if(controller.leftBumperOnce()) {
+        if (controller.leftBumperOnce()) {
             odometry.recalibrate_position();
-        }
-        else if(controller.rightBumperOnce()) {
+        } else if (controller.rightBumperOnce()) {
             freeReturn.freely_hugging = true;
 
             double x_start = odometry.robot_x;
             double y_start = odometry.robot_y;
-            int x_m = 1, y_m = 1;
-            if(x_start > 0) {x_m = 1;} else{x_m=-1;}
-            if(y_start > 0) {y_m = 1;} else{y_m=-1;}
             double x_moved = 0;
             double y_moved = 0;
-            while(Math.abs(x_moved-x_start)<1) {
-                drive.drive(0.40*x_m,0,0);
+            while(Math.abs(x_moved)<1) {
+                drive.drive(0.40,0,0);
                 x_moved = odometry.give_me_the_X()-x_start;
             }
             drive.drive(0,0,0);
-            sleep(2);
-            while(Math.abs(y_moved-y_start)<1) {
-                drive.drive(0,0.40*y_m,0);
+            sleep(20);
+            while(Math.abs(y_moved)<1) {
+                drive.drive(0,0.40,0);
                 y_moved = odometry.give_me_the_Y()-y_start;
             }
             drive.drive(0,0,0);
-            sleep(1);
+            sleep(10);
             freeReturn.freely_hugging = false;
         }
 
 
+            //grabber hand open / close
+            if (controller.dpadRightOnce()) {
+                grabber.openHand();
+            } else if (controller.dpadLeftOnce()) {
+                grabber.closeHand();
+            }
 
-        //grabber hand open / close
-        if(controller.dpadRightOnce()) {
-            grabber.openHand();
-        }
-        else if(controller.dpadLeftOnce()) {
-            grabber.closeHand();
-        }
-
-        //dpad: UP to lock position , DOWN to return to position
-        if(controller.dpadUp()) {
-            grabber.tiltHandUp();
-        } else if(controller.dpadDown()) {
-            grabber.tiltHandDown();
-        } else{
-            grabber.restWrist();
-        }
+            //dpad: UP to lock position , DOWN to return to position
+            if (controller.dpadUp()) {
+                grabber.tiltHandUp();
+            } else if (controller.dpadDown()) {
+                grabber.tiltHandDown();
+            } else {
+                grabber.restWrist();
+            }
 
     }
 }
