@@ -28,12 +28,14 @@ public class AutoHug extends LinearOpMode {
         double y_moved = 0;
         while(Math.abs(x_moved-x_add)<close_enough) {
             drive.drive(0.40,0,0);
+            sleep(20);
             x_moved = odometry.give_me_the_X()-x_start;
         }
         drive.drive(0,0,0);
         sleep(20);
         while(Math.abs(y_moved-y_add)<close_enough) {
             drive.drive(0,0.40,0);
+            sleep(20);
             y_moved = odometry.give_me_the_Y()-y_start;
         }
         drive.drive(0,0,0);
@@ -118,7 +120,7 @@ public class AutoHug extends LinearOpMode {
         intake.intake(false,false);
 
         if (rings == 0) {
-            drive.move(0.40,35,0);
+            //drive.move(0.40,35,0);
             //go_relative(0,35);
             drive.move(0.40,32,270);
             //go_relative(-32,0);

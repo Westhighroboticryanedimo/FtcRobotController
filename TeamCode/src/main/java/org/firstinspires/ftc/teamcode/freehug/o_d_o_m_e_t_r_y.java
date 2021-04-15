@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class o_d_o_m_e_t_r_y implements Runnable{
     //public double COUNTS_PER_INCH = 307.699557;
-    private double degrees_per_inch = 38.1971863421;
+    private double degrees_per_inch = 38.1971863421*4;
     private DcMotor vertical_1, vertical_2, horizontal;
     public boolean running = true;
     double vertical_1_position = 0, vertical_2_position = 0, horizontal_position = 0, change_in_angle = 0;

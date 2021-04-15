@@ -45,47 +45,16 @@ public class Freehugteleop extends OpMode {
         grabber = new GrabberFree(this, hardwareMap);
         freeReturn = new FreeReturn();
         odometry = new o_d_o_m_e_t_r_y();
-        odometry.robot_position(hardwareMap.get(DcMotor.class,"odo_vert_L"),hardwareMap.get(DcMotor.class,"odo_vert_R"),hardwareMap.get(DcMotor.class,"odo_horiz"), 307.699557,50);
+        odometry.robot_position(hardwareMap.get(DcMotor.class,"intake"),hardwareMap.get(DcMotor.class,""),hardwareMap.get(DcMotor.class,""), 307.699557,50);
         odometry.recalibrate_position();
         odometry.running = true;
-        odometry.run();
+        //odometry.run();
         drive.debug();
 
         freeReturn.xOffset = 0;
         freeReturn.yOffset = 0;
         freeReturn.robotCurrentAngle = 0;
     }
-/*
-    public void freelyReturn() {
-        double xo = freeReturn.xOffset * DISTANCE_CALIBRATION;
-        double yo = freeReturn.yOffset * DISTANCE_CALIBRATION;
-
-        freeReturn.freely_hugging = true;
-        //do things
-        if(drive.isPOVMode()) {
-            drive.togglePOV(true);
-        }
-
-        if(yo > 0) {
-            drive.drive(0,-0.6,0);
-        } else if(yo < 0) {
-            drive.drive(0,0.6,0);
-        }
-        sleep((int)(Math.abs(yo) * TIME_CALIBRATION));
-        drive.drive(0,0,0);
-
-        if(xo > 0) {
-            drive.drive(-0.6,0,0);
-        } else if(xo < 0) {
-            drive.drive(0.6,0,0);
-        }
-        sleep((int)(Math.abs(xo)*TIME_CALIBRATION));
-        drive.drive(0,0,0);
-
-        sleep(200);
-        freeReturn.lockPosition();
-        freeReturn.freely_hugging = false;
-    }*/
 
     public double calculateshooterpowerbasedonbatterypower() {
         return (0.0268 * (drive.getVoltage(hardwareMap)*drive.getVoltage(hardwareMap))) - (0.734 * drive.getVoltage(hardwareMap)) + 5.0128 + SHOOTER_CALIBRATION;
@@ -93,6 +62,7 @@ public class Freehugteleop extends OpMode {
 
     @Override
     public void loop() {
+        odometry.robot_position_update();
         if(!fullpower) {
             intake.rightPower = calculateshooterpowerbasedonbatterypower();
             intake.leftPower = calculateshooterpowerbasedonbatterypower();
@@ -168,20 +138,23 @@ public class Freehugteleop extends OpMode {
 
             double x_start = odometry.robot_x;
             double y_start = odometry.robot_y;
+            int x_m = 1, y_m = 1;
+            if(x_start > 0) {x_m = 1;} else{x_m=-1;}
+            if(y_start > 0) {y_m = 1;} else{y_m=-1;}
             double x_moved = 0;
             double y_moved = 0;
-            while(Math.abs(x_moved)<1) {
-                drive.drive(0.40,0,0);
+            while(Math.abs(x_moved-x_start)<1) {
+                drive.drive(0.40*x_m,0,0);
                 x_moved = odometry.give_me_the_X()-x_start;
             }
             drive.drive(0,0,0);
-            sleep(20);
-            while(Math.abs(y_moved)<1) {
-                drive.drive(0,0.40,0);
+            sleep(2);
+            while(Math.abs(y_moved-y_start)<1) {
+                drive.drive(0,0.40*y_m,0);
                 y_moved = odometry.give_me_the_Y()-y_start;
             }
             drive.drive(0,0,0);
-            sleep(10);
+            sleep(1);
             freeReturn.freely_hugging = false;
         }
 
