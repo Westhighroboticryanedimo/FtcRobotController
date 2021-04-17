@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
@@ -21,6 +22,7 @@ public class Freehugteleop extends OpMode {
     private boolean fullpower;
     private boolean shooting;
     private o_d_o_m_e_t_r_y odometry;
+    private Servo ringKicker;
 
     private GrabberFree grabber;
     double adjustment = 0.07;
@@ -34,7 +36,6 @@ public class Freehugteleop extends OpMode {
 
     @Override
     public void init() {
-
         fullpower = false;
         adjustment = 1;
         drive = new Freehugdrive(this, hardwareMap);
@@ -46,22 +47,19 @@ public class Freehugteleop extends OpMode {
         shooterL.setDirection(DcMotor.Direction.REVERSE);
         shooterR.setDirection(DcMotor.Direction.FORWARD);
         grabber = new GrabberFree(this, hardwareMap);
-
+        ringKicker = hardwareMap.get(Servo.class,"ringKicker");
+        ringKicker.setDirection(Servo.Direction.FORWARD);
+        ringKicker.setPosition(0);
         freeReturn = new FreeReturn();
-        odometry = new o_d_o_m_e_t_r_y();
-        odometry.robot_position(hardwareMap.get(DcMotor.class, "intake"), hardwareMap.get(DcMotor.class, ""), hardwareMap.get(DcMotor.class, ""), 307.699557, 50);
-        odometry.recalibrate_position();
-        odometry.running = true;
-        //odometry.run();
 
-       /* odometry = new o_d_o_m_e_t_r_y();
+        odometry = new o_d_o_m_e_t_r_y();
         odometry.robot_position(hardwareMap.get(DcMotor.class,"frontRight"),hardwareMap.get(DcMotor.class,"backLeft"),hardwareMap.get(DcMotor.class,"frontLeft"), 307.699557,50);
         odometry.recalibrate_position();
-        odometry.running = true;
-        odometry.run();
-         */
+        //odometry.running = false;
+        //odometry.run();
 
-        drive.debug();
+        //DO WE NEED THIS?
+        //drive.debug();
 
         freeReturn.xOffset = 0;
         freeReturn.yOffset = 0;
@@ -74,6 +72,9 @@ public class Freehugteleop extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("x", odometry.give_me_the_X());
+        telemetry.addData("y", odometry.give_me_the_Y());
+        telemetry.update();
         odometry.robot_position_update();
         if (!fullpower) {
             intake.rightPower = calculateshooterpowerbasedonbatterypower();
@@ -89,18 +90,6 @@ public class Freehugteleop extends OpMode {
         if (!freeReturn.freely_hugging) {
             drive.drive(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment, controller.right_stick_x * adjustment);
 
-            if (drive.isPOVMode()) {
-
-                freeReturn.updateAngle(controller.right_stick_x * adjustment * ANGLE_CALIBRATION);
-                freeReturn.updateOffsets(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment);
-
-            } else if (!drive.isPOVMode()) {
-
-                //yes, updateAngle(0) MUST be here
-                freeReturn.updateAngle(0);
-                freeReturn.updateOffsets(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment);
-
-            }
         }
 
         intake.intake(controller.B(), controller.A());
@@ -113,8 +102,10 @@ public class Freehugteleop extends OpMode {
             }
         }
         if (shooting) {
-            shooterL.setPower(intake.leftPower);
-            shooterR.setPower(intake.rightPower * 0.92);
+            //shooterL.setPower(intake.leftPower);
+            //shooterR.setPower(intake.rightPower * 0.92);
+            shooterL.setPower(0.389);
+            shooterR.setPower(0.389*0.92);
         } else {
             shooterL.setPower(0);
             shooterR.setPower(0);
@@ -143,7 +134,7 @@ public class Freehugteleop extends OpMode {
         } else {
             grabber.restElbow();
         }
-
+/*
         //position lock and return commands
         if (controller.leftBumperOnce()) {
             odometry.recalibrate_position();
@@ -167,7 +158,7 @@ public class Freehugteleop extends OpMode {
             drive.drive(0,0,0);
             sleep(10);
             freeReturn.freely_hugging = false;
-        }
+        }*/
 
 
             //grabber hand open / close
@@ -184,6 +175,12 @@ public class Freehugteleop extends OpMode {
                 grabber.tiltHandDown();
             } else {
                 grabber.restWrist();
+            }
+
+            if (controller.Y()) {
+                ringKicker.setPosition(0.7);
+            } else{
+                ringKicker.setPosition(0);
             }
 
     }
