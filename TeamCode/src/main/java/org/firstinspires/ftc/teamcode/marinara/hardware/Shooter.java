@@ -18,25 +18,13 @@ import static org.firstinspires.ftc.teamcode.Constants.*;
 
 public class Shooter extends BaseHardware {
 
-    // Unit conversions
-    private static final double R_TICKS_PER_REV = 103.6;
-    private static final double L_TICKS_PER_REV = 74.3; // Empirically saw that the tpr for left motor is 74.3
-    private static final double R_REV_PER_TICKS = 1 / R_TICKS_PER_REV;
-    private static final double L_REV_PER_TICKS = 1 / L_TICKS_PER_REV;
-
-    // Final variables that won't change; used for calculations
-    private static final double GEAR_RATIO = 40.0 / 64.0;
-    private static final double WHEEL_DIAMETER_IN = 4;
-    private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_IN * METERS_PER_INCHES * Math.PI;
-
     // Motors
     private DcMotor shooterL = null;
     private DcMotor shooterR = null;
 
-
     // Servo
     private Servo stopper = null;
-    private static final double STOP_POS = 0.3;
+    private static final double STOP_POS = 0.4;
     private static final double OPEN_POS = 0;
 
     // Timer
@@ -47,13 +35,12 @@ public class Shooter extends BaseHardware {
     private double lastTime = 0;
     private long lastPosL = 0;
     private long lastPosR = 0;
-    private static final double CALC_TIME_INTERVAL = 0.001;
     private static final double AUTO_SHOOT_TIME = 6;
 
     // Misc variables
     private static final double SHOOT_WAIT = 2;
-    private static final double SHOOT_POW_L = 0.75;
-    private static final double SHOOT_POW_R = 0.6;
+    private static final double SHOOT_POW = 0.86;
+    private static final double SHOOT_DIFF = 0.5;
 
     // Teleop constructor
     public Shooter(OpMode opMode, HardwareMap hwMap) {
@@ -115,14 +102,14 @@ public class Shooter extends BaseHardware {
 
     }
 
-    private double calculateMotorSpeed(double power, double voltage) {
+    private double calculateMotorSpeed(double voltage) {
 
         // Quadratic relationship
-        return 0.0268 * Math.pow(voltage, 2) - 0.734 * voltage + 5.0128 + power;
+        return 4.53 - 0.556 * voltage + 0.0207 * Math.pow(voltage, 2);
 
     }
 
-    public void shoot(double power, double voltage, Intake intake) {
+    public void shoot(double voltage, Intake intake) {
 
         runtime.reset();
         lastTime = timer.seconds();
@@ -131,15 +118,12 @@ public class Shooter extends BaseHardware {
             // Open shooter
             stopper.setPosition(OPEN_POS);
 
-            // Difference in time since last time
-            double timeDiff = timer.seconds() - lastTime;
-
             // Calculate motor speeds
-            double p = calculateMotorSpeed(power, voltage);
+            double p = calculateMotorSpeed(voltage);
 
             // Set power to the motors
             shooterL.setPower(p);
-            shooterR.setPower(SHOOT_POW_R);
+            shooterR.setPower(p * SHOOT_DIFF);
 
             // Feed intake if close to shoot speed and waited a little
             if (runtime.seconds() > SHOOT_WAIT) {
@@ -148,37 +132,9 @@ public class Shooter extends BaseHardware {
 
             }
 
-            // Only calculate after CALC_TIME_INTERVAL seconds
-            if (timeDiff > CALC_TIME_INTERVAL) {
-
-                // Difference in encoder position since last time
-                double posLDiff = shooterL.getCurrentPosition() - lastPosL;
-                double posRDiff = shooterR.getCurrentPosition() - lastPosR;
-
-                // Set last time for next calculations
-                lastTime = timer.seconds();
-                lastPosL = shooterL.getCurrentPosition();
-                lastPosR = shooterR.getCurrentPosition();
-
-                // Calculate speed in m/s
-                double speedLTPS = (posLDiff / timeDiff) * GEAR_RATIO;
-                double speedLRPS = speedLTPS * L_REV_PER_TICKS;
-                double speedLMPS = speedLRPS * WHEEL_CIRCUMFERENCE;
-                double speedRTPS = (posRDiff / timeDiff) * GEAR_RATIO;
-                double speedRRPS = speedRTPS * R_REV_PER_TICKS;
-                double speedRMPS = speedRRPS * WHEEL_CIRCUMFERENCE;
-
-                // Data to send to telemetry
-                print("Time difference", timeDiff);
-                print("Left motor position", shooterL.getCurrentPosition());
-                print("Right motor position", shooterR.getCurrentPosition());
-                print("Left position difference", posLDiff);
-                print("Right position difference", posRDiff);
-                print("Power: ", power);
-                print("Left motor speed (m/s): ", speedLMPS);
-                print("Right motor speed (m/s): ", speedRMPS);
-
-            }
+            // Data to send to telemetry
+            print("Left motor position", shooterL.getCurrentPosition());
+            print("Right motor position", shooterR.getCurrentPosition());
 
         }
 
@@ -197,53 +153,19 @@ public class Shooter extends BaseHardware {
             // Open the stopper after a second of shooting
             stopper.setPosition(OPEN_POS);
 
-            // Difference in time since last time
-            double timeDiff = timer.seconds() - lastTime;
-
             // Calculate shooter power
-            double powerL = calculateMotorSpeed(SHOOT_POW_L, voltage);
-            double powerR = SHOOT_POW_R;
+            double powerL = calculateMotorSpeed(voltage);
+            double powerR = powerL * SHOOT_DIFF;
 
             // Set power to the motors
             shooterL.setPower(powerL);
             shooterR.setPower(powerR);
 
-            shooterL.setPower(SHOOT_POW_L);
-            shooterR.setPower(SHOOT_POW_R);
-
-            // Only calculate after CALC_TIME_INTERVAL seconds
-            if (timeDiff > CALC_TIME_INTERVAL) {
-
-                // Difference in encoder position since last time
-                double posLDiff = shooterL.getCurrentPosition() - lastPosL;
-                double posRDiff = shooterR.getCurrentPosition() - lastPosR;
-
-                // Set last time for next calculations
-                lastTime = timer.seconds();
-                lastPosL = shooterL.getCurrentPosition();
-                lastPosR = shooterR.getCurrentPosition();
-
-                // Calculate speed in m/s
-                double speedLTPS = (posLDiff / timeDiff) * GEAR_RATIO;
-                double speedLRPS = speedLTPS * L_REV_PER_TICKS;
-                double speedLMPS = speedLRPS * WHEEL_CIRCUMFERENCE;
-
-                double speedRTPS = (posRDiff / timeDiff) * GEAR_RATIO;
-                double speedRRPS = speedRTPS * R_REV_PER_TICKS;
-                double speedRMPS = speedRRPS * WHEEL_CIRCUMFERENCE;
-
-                // Data to send to telemetry
-                print("Time difference", timeDiff);
-                print("Left motor position", shooterL.getCurrentPosition());
-                print("Right motor position", shooterR.getCurrentPosition());
-                print("Left position difference", posLDiff);
-                print("Right position difference", posRDiff);
-                //print("Power L: ", powerL);
-                //print("Power R: ", powerR);
-                print("Left motor speed (m/s): ", speedLMPS);
-                print("Right motor speed (m/s): ", speedRMPS);
-
-            }
+            // Data to send to telemetry
+            print("Left motor position", shooterL.getCurrentPosition());
+            print("Right motor position", shooterR.getCurrentPosition());
+            print("Power L: ", powerL);
+            print("Power R: ", powerR);
 
         } else {
 

@@ -22,10 +22,9 @@ public class Grabber extends BaseHardware {
     private static final double GRABBER_POS_OPEN = 0.4;
     private static final double ROTATOR_POS_EXT = 0.9;
     private static final double ROTATOR_POS_RETRACT = 0.4;
-    private static final double ROTATOR_ABLE_LIFT_MIN_POS = 1400;
+    private static final double ROTATOR_ABLE_LIFT_MIN_POS = 750;
     private static final double SERVO_THRESHOLD = 0.01;
-    private static final double LIFT_MAX_POS = 5800;
-    private static final double LIFT_GRAB_POS = 1100;
+    private static final double LIFT_MAX_POS = 5100;
     private static final double LIFT_POWER = 1;
 
     // Misc
@@ -59,11 +58,16 @@ public class Grabber extends BaseHardware {
 
         // Setup rotator
         rotator = hwMap.get(Servo.class, "rotator");
-        retractRotator();
 
         // Setup grabber
         grabber = hwMap.get(Servo.class, "grabber");
-        closeGrabber();
+
+        if (this.linearOpMode != null) {
+
+            retractRotator();
+            closeGrabber();
+
+        }
 
         // Setup sensor
         touch = hwMap.get(TouchSensor.class, "touch");
@@ -86,7 +90,7 @@ public class Grabber extends BaseHardware {
             extendRotator();
             openGrabber();
 
-            if (getLiftPosition() < LIFT_GRAB_POS) {
+            if (isLimitPressed()) {
 
                 isLower = false;
 

@@ -35,6 +35,26 @@ public class Gyro {
 
     }
 
+    public Gyro(HardwareMap hwMap, boolean isCalibrate) {
+
+        // IMU parameters
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+
+        // Define and initialize IMU
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+        // If isCalibrate, calibrate gyro
+        if (isCalibrate) while (!imu.isGyroCalibrated()) {}
+
+        reset();
+
+    }
+
     public void reset() {
 
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);

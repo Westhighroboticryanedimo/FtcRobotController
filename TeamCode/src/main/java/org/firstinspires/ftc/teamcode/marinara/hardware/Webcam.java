@@ -380,14 +380,14 @@ public class Webcam extends BaseHardware {
 
         private static final int REGION_WIDTH = 100;
         private static final int REGION_HEIGHT = 80;
-        private static final int X_DIFF = 150;
-        private static final int Y_DIFF = -52;
+        private static final int X_DIFF = 135;
+        private static final int Y_DIFF = -60;
 
         // The core values which define the location and size of the sample regions
         private static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((int) (WIDTH / 2 + REGION_WIDTH / 2 + X_DIFF), (int) (HEIGHT / 2 + REGION_HEIGHT / 2 + Y_DIFF));
 
         private static final int FOUR_RING_THRESHOLD = 158;
-        private static final int ONE_RING_THRESHOLD = 140;
+        private static final int ONE_RING_THRESHOLD = 137;
 
         private Point region1_pointA = new Point(
                       REGION1_TOPLEFT_ANCHOR_POINT.x,

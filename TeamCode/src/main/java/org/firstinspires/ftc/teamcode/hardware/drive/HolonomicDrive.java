@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.firstinspires.ftc.teamcode.PIDController;
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
+import org.firstinspires.ftc.teamcode.hardware.drive.odometry.OdometryGlobalCoordinatePosition;
 
 public abstract class HolonomicDrive extends BaseHardware {
 
@@ -21,31 +22,35 @@ public abstract class HolonomicDrive extends BaseHardware {
     }
 
     // Motors
-    private DcMotor frontLeft;
-    private DcMotor frontRight;
-    private DcMotor backLeft;
-    private DcMotor backRight;
+    protected DcMotor frontLeft;
+    protected DcMotor frontRight;
+    protected DcMotor backLeft;
+    protected DcMotor backRight;
 
-    private Gyro gyro;
+    // Gyro
+    protected Gyro gyro;
+
+    // Odometry
+    protected OdometryGlobalCoordinatePosition odometry = null;
 
     // Modes
-    private boolean isDrivePOV = false;
-    private boolean isSlow = false;
+    protected boolean isDrivePOV = false;
+    protected boolean isSlow = false;
 
     // For autonomous driving
-    private double wheelDiameter = 4;   // Diameter of driving wheels, default is 4
-    private double ticksPerRev = 1120;  // TPR of driving motors, defalut is 1120
+    protected double wheelDiameter = 4;   // Diameter of driving wheels, default is 4
+    protected double ticksPerRev = 1120;  // TPR of driving motors, defalut is 1120
 
     // For PID corrections
-    private PIDController pidDrive = new PIDController(0, 0, 0);
-    private PIDController pidFLBR = new PIDController(0, 0, 0);
-    private PIDController pidFRBL = new PIDController(0, 0, 0);
-    private PIDController pidTurn = new PIDController(0, 0, 0);
-    private double prevAngle;
-    private double correction;
-    private boolean isPID = true;
+    protected PIDController pidDrive = new PIDController(0, 0, 0);
+    protected PIDController pidFLBR = new PIDController(0, 0, 0);
+    protected PIDController pidFRBL = new PIDController(0, 0, 0);
+    protected PIDController pidTurn = new PIDController(0, 0, 0);
+    protected double prevAngle;
+    protected double correction;
+    protected boolean isPID = true;
 
-    private static final double SLOW_MULTIPLIER = 0.6;
+    protected static final double SLOW_MULTIPLIER = 0.6;
 
     // Set pidDrive values
     protected void setPidDrive(double p, double i, double d) {
@@ -54,7 +59,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     }
 
-    // Set pidStop values
+    // Set pidSpeed values
     protected void setPidSpeed(double p, double i, double d) {
 
         pidFLBR = new PIDController(p, i, d);
@@ -75,7 +80,6 @@ public abstract class HolonomicDrive extends BaseHardware {
         isPID = false;
 
     }
-
 
     protected void setMotorDir(boolean flDir, boolean frDir, boolean blDir, boolean brDir) {
 
@@ -107,12 +111,19 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     }
 
+    // Get odometry
+    public void getOdometry(OdometryGlobalCoordinatePosition odometry) {
+
+        this.odometry = odometry;
+
+    }
+
     // For teleop
     public HolonomicDrive(OpMode opMode, HardwareMap hwMap) {
 
         super(opMode);
 
-        gyro = new Gyro(hwMap);
+        gyro = new Gyro(hwMap, false);
         prevAngle = gyro.getAngleDegrees();
 
         setupMotors(hwMap);
@@ -126,6 +137,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         gyro = new Gyro(hwMap);
         prevAngle = gyro.getAngleDegrees();
+        gyro.reset();
 
         setupMotors(hwMap);
 
@@ -155,11 +167,6 @@ public abstract class HolonomicDrive extends BaseHardware {
     }
 
     private void setupEncoders() {
-
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -212,15 +219,14 @@ public abstract class HolonomicDrive extends BaseHardware {
     public void drive(double joystickX, double joystickY, double joystickTurn) {
 
         // Reduce joystick turn
-        double turn = joystickTurn / 1.5;
+        double turn = joystickTurn / 1.8;
 
         // PID calculation
         pidDrive.setSetpoint(prevAngle);
         correction = pidDrive.performPID(gyro.getAngleDegrees());
 
         // If turning or not moving then don't correct
-        if (Math.abs(turn) != 0 ||
-           (joystickX == 0 && joystickY == 0)) {
+        if (Math.abs(turn) != 0 || (joystickX == 0 && joystickY == 0)) {
 
             pidDrive.disable();
             pidDrive.reset();
@@ -299,18 +305,20 @@ public abstract class HolonomicDrive extends BaseHardware {
         print("FLPow: ", frontLeft.getPower());
         print("FRPow: ", frontRight.getPower());
         print("BLPow: ", backLeft.getPower());
-        print("Encoder fl ", frontLeft.getCurrentPosition());
         print("BRPow: ", backRight.getPower());
+        print("Encoder fl ", frontLeft.getCurrentPosition());
+        print("Encoder fr ", frontRight.getCurrentPosition());
+        print("Encoder bl ", backLeft.getCurrentPosition());
+        print("Encoder br ", backRight.getCurrentPosition());
         print("Gyro: ", gyro.getAngleDegrees());
 
     }
 
     public void moveUntil(double speed, double angleMove, BoolCommand command) {
 
+        // Reset motors and gyro
         gyro.reset();
         resetMotors();
-
-        linearOpMode.sleep(100);
 
         // For correction turning
         pidDrive.reset();
@@ -318,7 +326,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidDrive.enable();
 
         // Calculate speed
-        double flbrSpeed = Math.sin((45.0 + angleMove) * Math.PI / 180);
+        double flbrSpeed = speed * Math.sin((45.0 + angleMove) * Math.PI / 180);
         double frblSpeed = speed * Math.cos((45.0 + angleMove) * Math.PI / 180);
 
         // Maximize speed by calculating ratio
@@ -333,11 +341,11 @@ public abstract class HolonomicDrive extends BaseHardware {
             frontLeft.setPower(flbrSpeed - correction);
             frontRight.setPower(frblSpeed + correction);
             backLeft.setPower(frblSpeed - correction);
-            backRight.setPower(flbrSpeed+ correction);
+            backRight.setPower(flbrSpeed + correction);
 
-            print("Gyro: ", gyro.getAngleDegrees());
+            print("flbrP", flbrSpeed);
+            print("frblP", frblSpeed);
             print("Boolean value: ", command.check());
-            print("Correction: ", correction);
 
             linearOpMode.telemetry.update();
 
@@ -345,21 +353,22 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         stop();
 
+        linearOpMode.sleep(100);
+
     }
 
     public void move(double speed, double distance, double angleMove) {
 
+        // Reset motors and gyro
         gyro.reset();
         resetMotors();
-
-        linearOpMode.sleep(100);
 
         // The number of ticks the motors have to move without considering direction of motors
         int goalTicks = (int) ((distance / (wheelDiameter * Math.PI)) * ticksPerRev);
 
         // Calculate distance of motors
-        int flbrDist = (int) (goalTicks * Math.sin((45.0 + angleMove) * Math.PI / 180));
-        int frblDist = (int) (goalTicks * Math.cos((45.0 + angleMove) * Math.PI / 180));
+        int flbrDist = (int) (goalTicks * Math.sin(Math.toRadians(45.0 + angleMove)));
+        int frblDist = (int) (goalTicks * Math.cos(Math.toRadians(45.0 + angleMove)));
 
         // Calculate speeds
         double max = Math.max(Math.abs(flbrDist), Math.abs(frblDist));
@@ -400,7 +409,7 @@ public abstract class HolonomicDrive extends BaseHardware {
             double speedFLBR = pidFLBR.performPID(avgFLBRPos);
 
             double avgFRBLPos = (frontRight.getCurrentPosition() + backLeft.getCurrentPosition()) / 2.0;
-            double speedFRBL = pidFRBL.performPID(frontRight.getCurrentPosition());
+            double speedFRBL = pidFRBL.performPID(avgFLBRPos);
 
             frontLeft.setPower(speedFLBR - correction);
             frontRight.setPower(speedFRBL + correction);
@@ -412,10 +421,7 @@ public abstract class HolonomicDrive extends BaseHardware {
             print("FR: ", frontRight.getCurrentPosition());
             print("BL: ", backLeft.getCurrentPosition());
             print("BR: ", backRight.getCurrentPosition());
-            print("PPR: ", ticksPerRev);
             print("Correction: ", correction);
-            //print("Average FLBR: ", avgFLBRPos);
-            //print("Average FRBL: ", avgFRBLPos);
             print("FLBR Setpoint: ", pidFLBR.getSetpoint() + " " + Double.toString(flbrDist));
             print("FRBL Setpoint: ", pidFRBL.getSetpoint() + " " + Double.toString(frblDist));
             print("FLBR Speed: ", speedFLBR);
@@ -429,10 +435,99 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         stop();
 
+        linearOpMode.sleep(100);
+
+    }
+
+    public void goTo(double targetX, double targetY, double targetOrientation, double speed) {
+
+        if (linearOpMode == null) {
+
+            // Teleop version
+
+
+        } else {
+
+            // Autonomous version
+
+            // Calculating distances
+            double goalDistanceX = targetX - odometry.getX();
+            double goalDistanceY = targetY - odometry.getY();
+            double goalDistance = Math.hypot(goalDistanceX, goalDistanceY);
+            double angleMove = Math.atan2(goalDistanceX, goalDistanceY);
+            double cosineDistance = goalDistance * Math.cos(Math.PI / 4 - angleMove - Math.toRadians(odometry.getOrientation()));
+            double sineDistance = goalDistance * Math.sin(Math.PI / 4 - angleMove - Math.toRadians(odometry.getOrientation()));
+
+            // Calculate ratio between two distances
+            double max = Math.max(Math.abs(cosineDistance), Math.abs(sineDistance));
+            double goalCosineSpeed = speed * (cosineDistance / max);
+            double goalSineSpeed = speed * (sineDistance / max);
+
+            // For frontleft and backright motors
+            pidFLBR.reset();
+            pidFLBR.setInputRange(0, goalDistance);
+            pidFLBR.setOutputRange(0, goalCosineSpeed);
+            pidFLBR.setSetpoint(0);
+            pidFLBR.setTolerance(1);
+            pidFLBR.enable();
+
+            // For frontright and backleft motors
+            pidFRBL.reset();
+            pidFRBL.setInputRange(0, goalDistance);
+            pidFRBL.setOutputRange(0, goalSineSpeed);
+            pidFRBL.setSetpoint(0);
+            pidFRBL.setTolerance(1);
+            pidFRBL.enable();
+
+            // For turning
+            pidTurn.reset();
+            pidTurn.setInputRange(0, 360);
+            pidTurn.setOutputRange(0, speed);
+            pidTurn.setSetpoint(targetOrientation);
+            pidTurn.setTolerance(1);
+            pidTurn.enable();
+
+            do {
+
+                // Calculate correction for turning
+                double turnCorrection = pidDrive.performPID(odometry.getOrientation());
+
+                // Calculate correction for moving
+                goalDistanceX = targetX - odometry.getX();
+                goalDistanceY = targetY - odometry.getY();
+                goalDistance = Math.hypot(goalDistanceX, goalDistanceY);
+                angleMove = Math.atan2(goalDistanceX, goalDistanceY);
+                cosineDistance = goalDistance * Math.cos(Math.PI / 4 - angleMove - Math.toRadians(odometry.getOrientation()));
+                sineDistance = goalDistance * Math.sin(Math.PI / 4 - angleMove - Math.toRadians(odometry.getOrientation()));
+
+                // Calculate ratio between two distances
+                max = Math.max(Math.abs(cosineDistance), Math.abs(sineDistance));
+                goalCosineSpeed = speed * (cosineDistance / max);
+                goalSineSpeed = speed * (sineDistance / max);
+
+                // Set output range of PID
+                pidFLBR.setOutputRange(0, goalCosineSpeed);
+                pidFRBL.setOutputRange(0, goalSineSpeed);
+
+                // Calculate speed using PID
+                double speedFLBR = pidFLBR.performPID(cosineDistance);
+                double speedFRBL = pidFRBL.performPID(sineDistance);
+
+                // Set motor powers
+                frontLeft.setPower(speedFLBR - turnCorrection);
+                frontRight.setPower(speedFRBL + turnCorrection);
+                backLeft.setPower(speedFRBL - turnCorrection);
+                backRight.setPower(speedFLBR + turnCorrection);
+
+            } while (linearOpMode.opModeIsActive() && (!pidFRBL.onTarget() || !pidFLBR.onTarget()));
+
+        }
+
     }
 
     public void turn(double speed, int angle) {
 
+        // Reset motors and gyro
         gyro.reset();
         resetMotors();
 
@@ -444,8 +539,6 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidTurn.setSetpoint(-angle);
         pidTurn.setTolerance(0.5);
         pidTurn.enable();
-
-        linearOpMode.sleep(100);
 
         do {
 
@@ -466,6 +559,8 @@ public abstract class HolonomicDrive extends BaseHardware {
         } while (linearOpMode.opModeIsActive() && !pidTurn.onTarget());
 
         stop();
+
+        linearOpMode.sleep(100);
 
     }
 
