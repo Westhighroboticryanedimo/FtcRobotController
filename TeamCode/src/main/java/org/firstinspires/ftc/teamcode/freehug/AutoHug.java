@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="autohug")
 public class AutoHug extends LinearOpMode {
-    o_d_o_m_e_t_r_y odometry;
+    //o_d_o_m_e_t_r_y odometry;
     Freehugdrive drive;
     static double SHOOTER_CALIBRATION = 0.375;
     GrabberFree grabber;
@@ -18,7 +18,7 @@ public class AutoHug extends LinearOpMode {
     private double current_y;
     private double close_enough = 1;
 
-    public void go_definite(double x, double y) {
+    /*public void go_definite(double x, double y) {
         go_relative(x-current_x,y-current_y);
     }
     public void go_relative(double x_add, double y_add) {
@@ -28,17 +28,19 @@ public class AutoHug extends LinearOpMode {
         double y_moved = 0;
         while(Math.abs(x_moved-x_add)<close_enough) {
             drive.drive(0.40,0,0);
+            sleep(20);
             x_moved = odometry.give_me_the_X()-x_start;
         }
         drive.drive(0,0,0);
         sleep(20);
         while(Math.abs(y_moved-y_add)<close_enough) {
             drive.drive(0,0.40,0);
+            sleep(20);
             y_moved = odometry.give_me_the_Y()-y_start;
         }
         drive.drive(0,0,0);
         sleep(10);
-    }
+    }*/
 
     public double calculateshooterpowerbasedonbatterypower() {return (0.0268 * (drive.getVoltage(hardwareMap)*drive.getVoltage(hardwareMap))) - (0.734 * drive.getVoltage(hardwareMap)) + 5.0128 + SHOOTER_CALIBRATION; }
 
@@ -57,7 +59,7 @@ public class AutoHug extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        odometry = new o_d_o_m_e_t_r_y();
+        //odometry = new o_d_o_m_e_t_r_y();
         drive = new Freehugdrive(this, hardwareMap);
         WebcamFree webcam = new WebcamFree(this, hardwareMap);
         grabber = new GrabberFree(this, hardwareMap);
@@ -66,10 +68,11 @@ public class AutoHug extends LinearOpMode {
         shooterR = hardwareMap.get(DcMotor.class, "shooterR");
         shooterL.setDirection(DcMotor.Direction.REVERSE);
         shooterR.setDirection(DcMotor.Direction.REVERSE);
-        odometry.robot_position(hardwareMap.get(DcMotor.class,"odo_vert_L"),hardwareMap.get(DcMotor.class,"odo_vert_R"),hardwareMap.get(DcMotor.class,"odo_horiz"), 307.699557,50);
+        /*odometry.robot_position(hardwareMap.get(DcMotor.class,"odo_vert_L"),hardwareMap.get(DcMotor.class,"odo_vert_R"),hardwareMap.get(DcMotor.class,"odo_horiz"), 307.699557,50);
         odometry.recalibrate_position();
         odometry.running = true;
-        odometry.run();
+        odometry.run();*/
+        drive.debug();
         
         ElapsedTime runtime = new ElapsedTime();
 
@@ -93,13 +96,14 @@ public class AutoHug extends LinearOpMode {
 
         }
 
-        spinFlies();
+        //spinFlies();
         //move up to shooting distance
         //the actual measurement is 68 inches
-        //drive.move(0.43,35,0);
-        go_relative(0,35);
-        //drive.move(0.43,10,90);
-        go_relative(10,0);
+        drive.move(0.43,35,0);
+        //go_relative(0,35);
+        /*
+        drive.move(0.43,10,270);
+        //go_relative(10,0);
 
         //move intake
         intake.intake(false,true);
@@ -118,7 +122,7 @@ public class AutoHug extends LinearOpMode {
         intake.intake(false,false);
 
         if (rings == 0) {
-            drive.move(0.40,35,0);
+            //drive.move(0.40,35,0);
             //go_relative(0,35);
             drive.move(0.40,32,270);
             //go_relative(-32,0);
@@ -141,6 +145,6 @@ public class AutoHug extends LinearOpMode {
             drive.move(0.40,46,180);
             //go_relative(0,-46);
 
-        }
+        }*/
     }
 }

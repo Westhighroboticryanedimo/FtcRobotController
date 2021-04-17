@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class o_d_o_m_e_t_r_y implements Runnable{
     //public double COUNTS_PER_INCH = 307.699557;
-    private double degrees_per_inch = 38.1971863421;
+    private double degrees_per_inch = 38.1971863421*4;
     private DcMotor vertical_1, vertical_2, horizontal;
     public boolean running = true;
     double vertical_1_position = 0, vertical_2_position = 0, horizontal_position = 0, change_in_angle = 0;
@@ -40,8 +40,8 @@ public class o_d_o_m_e_t_r_y implements Runnable{
 
         double pp = ((v1_change - v2_change)/2);
 
-        robot_x = (robot_x + pp*Math.sin(robot_turn) + horizontal_change*Math.cos(robot_turn));
-        robot_y = (robot_y + pp*Math.cos(robot_turn) - horizontal_change * Math.sin(robot_turn));
+        robot_x = (robot_x + ((pp*Math.sin(robot_turn) + horizontal_change*Math.cos(robot_turn))/encoder_wheel_distance));
+        robot_y = (robot_y + ((pp*Math.cos(robot_turn) - horizontal_change * Math.sin(robot_turn))/encoder_wheel_distance));
 
         vertical_1_position_prev = vertical_1_position;
         vertical_2_position_prev = vertical_2_position;
@@ -54,7 +54,7 @@ public class o_d_o_m_e_t_r_y implements Runnable{
     public void recalibrate_position() {robot_x = 0; robot_y = 0; robot_turn = 0;}
 
     @Override
-    public void run() {
+    public void run() {/*
 
         while(running) {
 
@@ -68,7 +68,7 @@ public class o_d_o_m_e_t_r_y implements Runnable{
                 e.printStackTrace();
 
             }
-        }
+        }*/
 
     }
 }
