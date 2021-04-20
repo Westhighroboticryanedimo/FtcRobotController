@@ -23,6 +23,7 @@ public class Freehugteleop extends OpMode {
     private boolean shooting;
     private o_d_o_m_e_t_r_y odometry;
     private Servo ringKicker;
+    private double right, left;
 
     private GrabberFree grabber;
     double adjustment = 0.07;
@@ -52,6 +53,9 @@ public class Freehugteleop extends OpMode {
         ringKicker.setPosition(0);
         freeReturn = new FreeReturn();
 
+        left = 1;
+        right = 1;
+
         odometry = new o_d_o_m_e_t_r_y();
         odometry.robot_position(hardwareMap.get(DcMotor.class,"frontRight"),hardwareMap.get(DcMotor.class,"backLeft"),hardwareMap.get(DcMotor.class,"frontLeft"), 307.699557,50);
         odometry.recalibrate_position();
@@ -77,8 +81,10 @@ public class Freehugteleop extends OpMode {
         telemetry.update();
         odometry.robot_position_update();
         if (!fullpower) {
-            intake.rightPower = calculateshooterpowerbasedonbatterypower();
-            intake.leftPower = calculateshooterpowerbasedonbatterypower();
+            //intake.rightPower = calculateshooterpowerbasedonbatterypower();
+            //intake.leftPower = calculateshooterpowerbasedonbatterypower();
+            right = 0.389;
+            left = 0.389;
         } else if (fullpower) {
             intake.rightPower = 1;
             intake.leftPower = 1;
@@ -104,8 +110,8 @@ public class Freehugteleop extends OpMode {
         if (shooting) {
             //shooterL.setPower(intake.leftPower);
             //shooterR.setPower(intake.rightPower * 0.92);
-            shooterL.setPower(0.389);
-            shooterR.setPower(0.389*0.92);
+            shooterL.setPower(left);
+            shooterR.setPower(right*0.92);
         } else {
             shooterL.setPower(0);
             shooterR.setPower(0);
