@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.freehug;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Controller;
 
 import static android.os.SystemClock.sleep;
 
-
+@Disabled
 @TeleOp(name = "Free Hugs teleop")
 public class Freehugteleop extends OpMode {
     private Freehugdrive drive;

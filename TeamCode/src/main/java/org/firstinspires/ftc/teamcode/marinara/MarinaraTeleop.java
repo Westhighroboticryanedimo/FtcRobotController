@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.marinara;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.marinara.hardware.Shooter;
 import org.firstinspires.ftc.teamcode.marinara.hardware.MarinaraDrive;
 import org.firstinspires.ftc.teamcode.marinara.hardware.Webcam;
 
+@Disabled
 @TeleOp(name = "Marinara: TeleOp", group = "Marinara")
 public class MarinaraTeleop extends OpMode {
 

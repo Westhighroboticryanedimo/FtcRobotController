@@ -104,8 +104,10 @@ public class Shooter extends BaseHardware {
 
     private double calculateMotorSpeed(double voltage) {
 
+        final double FINE_JUST_FOR_ARELI = 0.1;
+
         // Quadratic relationship
-        return 4.53 - 0.556 * voltage + 0.0207 * Math.pow(voltage, 2);
+        return 4.53 - 0.556 * voltage + 0.0207 * Math.pow(voltage, 2) + FINE_JUST_FOR_ARELI;
 
     }
 
