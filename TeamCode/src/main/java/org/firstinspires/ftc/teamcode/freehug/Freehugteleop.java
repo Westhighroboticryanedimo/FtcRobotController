@@ -4,12 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Controller;
-
-import static android.os.SystemClock.sleep;
 
 @Disabled
 @TeleOp(name = "Free Hugs teleop")
@@ -62,7 +59,7 @@ public class Freehugteleop extends OpMode {
         odometry.recalibrate_position();
         //odometry.running = false;
         //odometry.run();
-
+        //test do i work
         //DO WE NEED THIS?
         //drive.debug();
 
