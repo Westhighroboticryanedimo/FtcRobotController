@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Controller;
 
 @Disabled
 @TeleOp(name = "Free Hugs teleop")
+//test 2 with drugs
 public class Freehugteleop extends OpMode {
     private Freehugdrive drive;
     private IntakeFree intake;
@@ -31,6 +32,7 @@ public class Freehugteleop extends OpMode {
     static double TIME_CALIBRATION = 50;
     static double ANGLE_CALIBRATION = 20;
     //DONT CHANGE THIS ONE
+
     static double SHOOTER_CALIBRATION = 0.3745;
 
     @Override
