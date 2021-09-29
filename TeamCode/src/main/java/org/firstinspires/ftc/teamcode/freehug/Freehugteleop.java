@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Controller;
 @Disabled
 @TeleOp(name = "Free Hugs teleop")
 //test 2 with drugs
+//test my *****
 public class Freehugteleop extends OpMode {
     private Freehugdrive drive;
     private IntakeFree intake;
