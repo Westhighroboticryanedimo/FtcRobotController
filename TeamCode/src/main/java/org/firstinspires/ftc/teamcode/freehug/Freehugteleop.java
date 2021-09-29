@@ -14,9 +14,9 @@ import org.firstinspires.ftc.teamcode.Controller;
 //test my *****
 public class Freehugteleop extends OpMode {
     private Freehugdrive drive;
-    private IntakeFree intake;
+    //private IntakeFree intake;
     private Controller controller;
-    private DcMotor shooterL;
+    /*private DcMotor shooterL;
     private DcMotor shooterR;
     private FreeReturn freeReturn;
     private boolean fullpower;
@@ -34,16 +34,16 @@ public class Freehugteleop extends OpMode {
     static double ANGLE_CALIBRATION = 20;
     //DONT CHANGE THIS ONE
 
-    static double SHOOTER_CALIBRATION = 0.3745;
+    static double SHOOTER_CALIBRATION = 0.3745;*/
 
     @Override
     public void init() {
-        fullpower = false;
-        adjustment = 1;
+        //fullpower = false;
+        //adjustment = 1;
         drive = new Freehugdrive(this, hardwareMap);
-        intake = new IntakeFree(this, hardwareMap);
+        //intake = new IntakeFree(this, hardwareMap);
         controller = new Controller(gamepad1);
-
+/*
         shooterL = hardwareMap.get(DcMotor.class, "shooterL");
         shooterR = hardwareMap.get(DcMotor.class, "shooterR");
         shooterL.setDirection(DcMotor.Direction.REVERSE);
@@ -68,16 +68,16 @@ public class Freehugteleop extends OpMode {
 
         freeReturn.xOffset = 0;
         freeReturn.yOffset = 0;
-        freeReturn.robotCurrentAngle = 0;
+        freeReturn.robotCurrentAngle = 0;*/
     }
-
+/*
     public double calculateshooterpowerbasedonbatterypower() {
         return (0.0268 * (drive.getVoltage(hardwareMap) * drive.getVoltage(hardwareMap))) - (0.734 * drive.getVoltage(hardwareMap)) + 5.0128 + SHOOTER_CALIBRATION;
     }
-
+*/
     @Override
     public void loop() {
-        telemetry.addData("x", odometry.give_me_the_X());
+        /*telemetry.addData("x", odometry.give_me_the_X());
         telemetry.addData("y", odometry.give_me_the_Y());
         telemetry.update();
         odometry.robot_position_update();
@@ -89,15 +89,15 @@ public class Freehugteleop extends OpMode {
         } else if (fullpower) {
             intake.rightPower = 1;
             intake.leftPower = 1;
-        }
+        }*/
         controller.update();
 
         drive.togglePOV(controller.backOnce());
+/*
+        if (!freeReturn.freely_hugging) {*/
+            drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
 
-        if (!freeReturn.freely_hugging) {
-            drive.drive(controller.left_stick_x * adjustment, controller.left_stick_y * adjustment, controller.right_stick_x * adjustment);
-
-        }
+       /* }
 
         intake.intake(controller.B(), controller.A());
 
@@ -165,7 +165,7 @@ public class Freehugteleop extends OpMode {
             drive.drive(0,0,0);
             sleep(10);
             freeReturn.freely_hugging = false;
-        }*/
+        }
 
 
             //grabber hand open / close
@@ -189,6 +189,6 @@ public class Freehugteleop extends OpMode {
             } else{
                 ringKicker.setPosition(0);
             }
-
+*/
     }
 }
