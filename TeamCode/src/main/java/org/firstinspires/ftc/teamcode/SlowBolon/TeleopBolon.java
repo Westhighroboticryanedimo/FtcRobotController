@@ -39,7 +39,7 @@ public class TeleopBolon extends OpMode{
         telemetry.addData("milfs",gyro.getAngleDegrees());
         /*telemetry.addData("angle",orientation.getAngle());
         telemetry.addData("angle2", orientation.getAzimuth());
-        telemetry.addData("tobias commited arson", orientatigon.etMagnitude());
+        telemetry.addData("tobias commited arson", orientatigon-/.etMagnitude());
         telemetry.addData("tobias executed for arson", orientation.getPitch());
         telemetry.addData("ben", orientation.getRoll());
         telemetry.addData("available",orientation.isAvailable());*/
