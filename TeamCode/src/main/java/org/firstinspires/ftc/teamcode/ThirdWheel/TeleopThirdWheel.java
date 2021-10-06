@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.SlowBolon;
+package org.firstinspires.ftc.teamcode.ThirdWheel;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -14,9 +14,9 @@ import org.firstinspires.ftc.teamcode.hardware.Gyro;
 
 
 @TeleOp(name = "BOLON teleop")
-public class TeleopBolon extends OpMode{
+public class TeleopThirdWheel extends OpMode{
 
-    private DriveBolon drive;
+    private DriveThirdWheel drive;
     private Controller controller;
     private Gyro gyro;
     //private AndroidOrientation orientation;
@@ -24,7 +24,7 @@ public class TeleopBolon extends OpMode{
 
     @Override
     public void init() {
-        drive = new DriveBolon(this, hardwareMap);
+        drive = new DriveThirdWheel(this, hardwareMap);
         gyro = new Gyro(hardwareMap, false);
         //orientation = new AndroidOrientation();
         controller = new Controller(gamepad1);
