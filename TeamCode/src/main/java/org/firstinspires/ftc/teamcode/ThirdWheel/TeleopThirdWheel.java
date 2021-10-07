@@ -18,25 +18,25 @@ public class TeleopThirdWheel extends OpMode{
 
     private DriveThirdWheel drive;
     private Controller controller;
-    private Gyro gyro;
+    //private Gyro gyro;
     //private AndroidOrientation orientation;
 
 
     @Override
     public void init() {
         drive = new DriveThirdWheel(this, hardwareMap);
-        gyro = new Gyro(hardwareMap, false);
+        //gyro = new Gyro(hardwareMap, false);
         //orientation = new AndroidOrientation();
         controller = new Controller(gamepad1);
         drive.togglePOV(true);
         //orientation.startListening();
-        gyro.reset();
+        //gyro.reset();
     }
 
     @Override
     public void loop() {
 
-        telemetry.addData("milfs",gyro.getAngleDegrees());
+        //telemetry.addData("milfs",gyro.getAngleDegrees());
         /*telemetry.addData("angle",orientation.getAngle());
         telemetry.addData("angle2", orientation.getAzimuth());
         telemetry.addData("tobias commited arson", orientatigon-/.etMagnitude());
