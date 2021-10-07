@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.freehug.Freehugdrive;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
 
 
-@TeleOp(name = "BOLON teleop")
+@TeleOp(name = "elijha teleop")
 public class TeleopThirdWheel extends OpMode{
 
     private DriveThirdWheel drive;
