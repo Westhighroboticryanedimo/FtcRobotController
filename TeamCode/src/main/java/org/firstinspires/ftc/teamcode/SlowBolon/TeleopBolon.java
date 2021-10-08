@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.hardware.Gyro;
 
 
 @TeleOp(name = "BOLON teleop")
-public class TeleopBolon extends OpMode{
+public class TeleopBolon extends OpMode {
 
     private DriveBolon drive;
     private Controller controller;
@@ -36,7 +36,7 @@ public class TeleopBolon extends OpMode{
     @Override
     public void loop() {
 
-        telemetry.addData("milfs",gyro.getAngleDegrees());
+        telemetry.addData("milfs", gyro.getAngleDegrees());
         /*telemetry.addData("angle",orientation.getAngle());
         telemetry.addData("angle2", orientation.getAzimuth());
         telemetry.addData("tobias commited arson", orientatigon-/.etMagnitude());
@@ -45,7 +45,8 @@ public class TeleopBolon extends OpMode{
         telemetry.addData("available",orientation.isAvailable());*/
         telemetry.update();
         controller.update();
-        drive.drive(controller.left_stick_x,controller.left_stick_y,controller.right_stick_x);
+        drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         drive.togglePOV(controller.leftStickButtonOnce());
     }
+
 }
