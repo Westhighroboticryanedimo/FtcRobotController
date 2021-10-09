@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ThirdWheel;
+package org.firstinspires.ftc.teamcode.slowBolon;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
-public class DriveThirdWheel extends HolonomicDrive {
+public class DriveBolon extends HolonomicDrive {
 
 
     // For autonomous
-    public DriveThirdWheel(LinearOpMode opMode, HardwareMap hwMap) {
+    public DriveBolon(LinearOpMode opMode, HardwareMap hwMap) {
 
         super(opMode, hwMap);
         setup();
@@ -18,7 +18,7 @@ public class DriveThirdWheel extends HolonomicDrive {
     }
 
     // teleop
-    public DriveThirdWheel(OpMode opMode, HardwareMap hwMap) {
+    public DriveBolon(OpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
     }
 
