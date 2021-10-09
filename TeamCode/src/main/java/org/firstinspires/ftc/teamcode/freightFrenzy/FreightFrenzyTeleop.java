@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.freightFrenzy.hardware.Intake;
 
-@TeleOp(name = "Freight Frenzy: TeleOp", group = "FF")
+@TeleOp(name = "Freight Frenzy: TeleOp")
 public class FreightFrenzyTeleop extends OpMode {
 
     private Intake intake;
