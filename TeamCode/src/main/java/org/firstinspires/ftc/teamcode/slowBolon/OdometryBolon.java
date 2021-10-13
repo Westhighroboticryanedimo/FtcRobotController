@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.SlowBolon;
+package org.firstinspires.ftc.teamcode.slowBolon;
 
 public class OdometryBolon {
     public void init() {

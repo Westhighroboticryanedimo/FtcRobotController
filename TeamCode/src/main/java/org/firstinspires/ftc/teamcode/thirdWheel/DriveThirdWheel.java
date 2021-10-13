@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ThirdWheel;
+package org.firstinspires.ftc.teamcode.thirdWheel;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;

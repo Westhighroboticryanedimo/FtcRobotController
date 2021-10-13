@@ -240,7 +240,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         double angleCompensation = 0;
         if (!isDrivePOV)
             angleCompensation = gyro.getAngleRadians();
-
+        angleCompensation = 0;
         // Holonomic drive calculations
 
         // The magnitude of the joystick
@@ -284,6 +284,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         // Don't correct if isPID is false
         if (!isPID) correction = 0;
+        correction = 0;
 
         // Add PID corrections
         v1 -= correction;
@@ -306,10 +307,12 @@ public abstract class HolonomicDrive extends BaseHardware {
         print("FRPow: ", frontRight.getPower());
         print("BLPow: ", backLeft.getPower());
         print("BRPow: ", backRight.getPower());
-        print("Encoder fl ", frontLeft.getCurrentPosition());
-        print("Encoder fr ", frontRight.getCurrentPosition());
-        print("Encoder bl ", backLeft.getCurrentPosition());
-        print("Encoder br ", backRight.getCurrentPosition());
+        print("IsPOV: ", isDrivePOV);
+        print("IsSlow", isSlow);
+        //print("Encoder fl ", frontLeft.getCurrentPosition());
+        //print("Encoder fr ", frontRight.getCurrentPosition());
+        //print("Encoder bl ", backLeft.getCurrentPosition());
+        //print("Encoder br ", backRight.getCurrentPosition());
         print("Gyro: ", gyro.getAngleDegrees());
 
     }

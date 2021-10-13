@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
 public class MarinaraDrive extends HolonomicDrive {
 
+    // For autonomous
+
     private ColorSensor color;
     private DistanceSensor distanceRight;
     private DistanceSensor distanceBack;
@@ -24,8 +26,6 @@ public class MarinaraDrive extends HolonomicDrive {
         setup(hwMap);
 
     }
-
-    // For autonomous
     public MarinaraDrive(LinearOpMode opMode, HardwareMap hwMap) {
 
         super(opMode, hwMap);
