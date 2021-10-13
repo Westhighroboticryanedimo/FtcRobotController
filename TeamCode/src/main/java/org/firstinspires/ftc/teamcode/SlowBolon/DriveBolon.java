@@ -25,7 +25,7 @@ public class DriveBolon extends HolonomicDrive {
     // PID setup
     private void setup() {
 
-        setPidDrive(0.04, 0, 0);
+        setPidDrive(0.0, 0, 0);
         setPidSpeed(0.05, 0.001, 0);
         setPidTurn(0.028, 0.001, 0);
 
