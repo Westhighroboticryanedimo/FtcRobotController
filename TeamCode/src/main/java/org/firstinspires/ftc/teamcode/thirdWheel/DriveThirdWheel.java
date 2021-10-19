@@ -9,15 +9,13 @@ import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 public class DriveThirdWheel extends HolonomicDrive {
 
 
-    // For autonomous
+    // Autonomous
     public DriveThirdWheel(LinearOpMode opMode, HardwareMap hwMap) {
-
         super(opMode, hwMap);
         setup();
-
     }
 
-    // teleop
+    // Teleop
     public DriveThirdWheel(OpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
     }
@@ -25,7 +23,7 @@ public class DriveThirdWheel extends HolonomicDrive {
     // PID setup
     private void setup() {
 
-        setPidDrive(0.04, 0, 0);
+        setPidDrive(1, 0.01, 0);
         setPidSpeed(0.05, 0.001, 0);
         setPidTurn(0.028, 0.001, 0);
 
