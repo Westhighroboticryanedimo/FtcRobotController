@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.thirdWheel.hardware;
 
+import java.lang.Math;
+import java.lang.Thread;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,11 +13,12 @@ import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 public class LinearSlider extends BaseHardware {
     private DcMotor sliderMotor;
     private int level = 0;
+    private int ticks = 0;
 
-    private final double levelZeroRots     = 0.0;
-    private final double levelOneRots      = 3.0/4.0;
-    private final double levelTwoRots      = 2.0;
-    private final double levelThreeRots    = 13.0/4.0;
+    private final int levelZeroTicks     = (0)*560;
+    private final int levelOneTicks      = (3/4)*560;
+    private final int levelTwoTicks      = (2)*560;
+    private final int levelThreeTicks    = (13/4)*560;
 
     public LinearSlider(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode);
@@ -25,44 +29,46 @@ public class LinearSlider extends BaseHardware {
         sliderMotor = hwMap.get(DcMotor.class, "sliderMotor");
         sliderMotor.setDirection(DcMotor.Direction.FORWARD);
         sliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        sliderMotor.setPower(0);
         sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         sliderMotor.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
+    }
+
+    // Move the slider to the position specified, in ticks
+    private void move(int desiredTicks) {
+        int difference = desiredTicks - ticks;
+        // Go forwards/backwards depending on the desired position relative to the current position
+        sliderMotor.setPower(0.1 * (difference)/abs(difference));
+        // Wait while current difference < difference between old position and desired position
+        while (abs(sliderMotor.getCurrentPosition() - ticks) < abs(difference)) { Thread.sleep(1) }
         sliderMotor.setPower(0);
     }
 
-    // Only moves directly from level 0 to desired level or back to 0
     public int setLevel(int desiredLevel) {
         switch (desiredLevel) {
             case 0:
-                // Reverse from the current level
-                move(-level);
+                move(levelZeroTicks);
                 break;
             case 1:
-                move(levelOneRots);
+                move(levelOneTicks);
                 break;
             case 2:
-                move(levelTwoRots);
+                move(levelTwoTicks);
                 break;
             case 3:
-                move(levelThreeRots);
+                move(levelThreeTicks);
                 break;
             default:
                 telemetry.addData("bruh", "Invalid level")
                 return 1;
                 break;
         }
+        ticks = sliderMotor.getCurrentPosition();
         level = desiredLevel;
         return 0;
     }
 
     public int getLevel() {
         return level;
-    }
-
-    // Moves the slider to the desired level
-    private void move(double rotations) {
-        sliderMotor.setPower(0.1);
-        while ((sliderMotor.getCurrentPosition() / 560.0) != rotations) {}
-        sliderMotor.setPower(0);
     }
 }
