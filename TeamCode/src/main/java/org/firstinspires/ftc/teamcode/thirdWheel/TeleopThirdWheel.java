@@ -12,12 +12,15 @@ import org.firstinspires.ftc.teamcode.thirdWheel.hardware;
 public class TeleopThirdWheel extends OpMode {
 
     private DriveThirdWheel drive;
+    private LinearSlide linearSlide;
     private Gyro gyro;
     private Controller controller;
+    private int level = 0;
 
     @Override
     public void init() {
         drive = new DriveThirdWheel(this, hardwareMap);
+        linearSlide = new LinearSlide(this, hardwareMap);
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
         drive.togglePOV(true);
@@ -29,7 +32,18 @@ public class TeleopThirdWheel extends OpMode {
         telemetry.addData("gyro", gyro.getAngleDegrees());
         telemetry.update();
         controller.update();
-        drive.drive(controller.left_stick_x,controller.left_stick_y,controller.right_stick_x);
+        drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         drive.togglePOV(controller.leftStickButtonOnce());
+        if (controller.right_bumper()) {
+            if (level < 3) {
+                level += 1;
+            }
+        }
+        if (controller.left_bumper()) {
+            if (level > 1) {
+                level -= 1;
+            }
+        }
+        linearSlide.setLevel(level);
     }
 }

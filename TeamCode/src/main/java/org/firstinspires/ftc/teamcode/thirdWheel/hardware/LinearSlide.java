@@ -25,7 +25,7 @@ public class LinearSlide extends BaseHardware {
         init(hwMap);
     }
 
-    public void init(HardwareMap hwMap) {
+    private void init(HardwareMap hwMap) {
         slideMotor = hwMap.get(DcMotor.class, "slideMotor");
         slideMotor.setDirection(DcMotor.Direction.FORWARD);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
