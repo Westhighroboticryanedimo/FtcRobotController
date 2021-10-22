@@ -9,19 +9,19 @@ import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
 public class LinearSlider extends BaseHardware {
     private DcMotor sliderMotor;
-    private int level;
+    private int level = 0;
 
-    private final int levelZeroRots     = 0.0;
-    private final int levelOneRots      = 3.0/4.0;
-    private final int levelTwoRots      = 2.0;
-    private final int levelThreeRots    = 13.0/4.0;
+    private final double levelZeroRots     = 0.0;
+    private final double levelOneRots      = 3.0/4.0;
+    private final double levelTwoRots      = 2.0;
+    private final double levelThreeRots    = 13.0/4.0;
 
     public LinearSlider(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode);
         init(hwMap);
     }
 
-    public init(HardwareMap hwMap) {
+    public void init(HardwareMap hwMap) {
         sliderMotor = hwMap.get(DcMotor.class, "sliderMotor");
         sliderMotor.setDirection(DcMotor.Direction.FORWARD);
         sliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -30,9 +30,11 @@ public class LinearSlider extends BaseHardware {
         sliderMotor.setPower(0);
     }
 
-    public setLevel(int desiredLevel) {
+    // Only moves directly from level 0 to desired level or back to 0
+    public int setLevel(int desiredLevel) {
         switch (desiredLevel) {
             case 0:
+                // Reverse from the current level
                 move(-level);
                 break;
             case 1:
@@ -45,16 +47,20 @@ public class LinearSlider extends BaseHardware {
                 move(levelThreeRots);
                 break;
             default:
+                telemetry.addData("bruh", "Invalid level")
+                return 1;
                 break;
         }
         level = desiredLevel;
+        return 0;
     }
 
-    public getLevel() {
+    public int getLevel() {
         return level;
     }
 
-    private move(int rotations) {
+    // Moves the slider to the desired level
+    private void move(double rotations) {
         sliderMotor.setPower(0.1);
         while ((sliderMotor.getCurrentPosition() / 560.0) != rotations) {}
         sliderMotor.setPower(0);
