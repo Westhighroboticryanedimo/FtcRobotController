@@ -59,7 +59,8 @@ public class LinearSlide extends BaseHardware {
                 move(levelThreeTicks);
                 break;
             default:
-                telemetry.addData("bruh", "Invalid level")
+                telemetry.addData("bruh", "Invalid level");
+                telemetry.update();
                 return 1;
                 break;
         }
