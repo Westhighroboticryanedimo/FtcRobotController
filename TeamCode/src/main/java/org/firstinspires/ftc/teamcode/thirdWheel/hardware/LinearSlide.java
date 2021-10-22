@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
-public class LinearSlider extends BaseHardware {
-    private DcMotor sliderMotor;
+public class LinearSlide extends BaseHardware {
+    private DcMotor slideMotor;
     private int level = 0;
     private int ticks = 0;
 
@@ -20,28 +20,28 @@ public class LinearSlider extends BaseHardware {
     private final int levelTwoTicks      = (2)*560;
     private final int levelThreeTicks    = (13/4)*560;
 
-    public LinearSlider(LinearOpMode opMode, HardwareMap hwMap) {
+    public LinearSlide(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode);
         init(hwMap);
     }
 
     public void init(HardwareMap hwMap) {
-        sliderMotor = hwMap.get(DcMotor.class, "sliderMotor");
-        sliderMotor.setDirection(DcMotor.Direction.FORWARD);
-        sliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        sliderMotor.setPower(0);
-        sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        sliderMotor.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
+        slideMotor = hwMap.get(DcMotor.class, "slideMotor");
+        slideMotor.setDirection(DcMotor.Direction.FORWARD);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotor.setPower(0);
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
     }
 
-    // Move the slider to the position specified, in ticks
+    // Move the slide to the position specified, in ticks
     private void move(int desiredTicks) {
         int difference = desiredTicks - ticks;
         // Go forwards/backwards depending on the desired position relative to the current position
-        sliderMotor.setPower(0.1 * (difference)/abs(difference));
+        slideMotor.setPower(0.1 * (difference)/abs(difference));
         // Wait while current difference < difference between old position and desired position
-        while (abs(sliderMotor.getCurrentPosition() - ticks) < abs(difference)) { Thread.sleep(1) }
-        sliderMotor.setPower(0);
+        while (abs(slideMotor.getCurrentPosition() - ticks) < abs(difference)) { Thread.sleep(1) }
+        slideMotor.setPower(0);
     }
 
     public int setLevel(int desiredLevel) {
@@ -63,7 +63,7 @@ public class LinearSlider extends BaseHardware {
                 return 1;
                 break;
         }
-        ticks = sliderMotor.getCurrentPosition();
+        ticks = slideMotor.getCurrentPosition();
         level = desiredLevel;
         return 0;
     }
