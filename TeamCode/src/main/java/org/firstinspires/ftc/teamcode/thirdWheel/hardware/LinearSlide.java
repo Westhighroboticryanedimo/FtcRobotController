@@ -15,10 +15,10 @@ public class LinearSlide extends BaseHardware {
     private int level = 0;
     private int ticks = 0;
 
-    private final int levelZeroTicks     = (0)*560;
-    private final int levelOneTicks      = (3/4)*560;
-    private final int levelTwoTicks      = (2)*560;
-    private final int levelThreeTicks    = (13/4)*560;
+    private final int LEV_ZERO_TICKS     = 0;
+    private final int LEV_ONE_TICKS      = 420;
+    private final int LEV_TWO_TICKS      = 1120;
+    private final int LEV_THREE_TICKS    = 1820;
 
     public LinearSlide(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode);
@@ -47,16 +47,16 @@ public class LinearSlide extends BaseHardware {
     public int setLevel(int desiredLevel) {
         switch (desiredLevel) {
             case 0:
-                move(levelZeroTicks);
+                move(LEV_ZERO_TICKS);
                 break;
             case 1:
-                move(levelOneTicks);
+                move(LEV_ONE_TICKS);
                 break;
             case 2:
-                move(levelTwoTicks);
+                move(LEV_TWO_TICKS);
                 break;
             case 3:
-                move(levelThreeTicks);
+                move(LEV_THREE_TICKS);
                 break;
             default:
                 telemetry.addData("bruh", "Invalid level");
