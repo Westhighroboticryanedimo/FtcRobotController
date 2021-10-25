@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 public class LinearSlide extends BaseHardware {
     private DcMotor slideMotor;
     private int level = 0;
-    private int ticks = 0;
 
     private final int LEV_ZERO_TICKS     = 0;
     private final int LEV_ONE_TICKS      = 420;
@@ -36,11 +35,12 @@ public class LinearSlide extends BaseHardware {
 
     // Move the slide to the position specified, in ticks
     private void move(int desiredTicks) {
-        int difference = desiredTicks - ticks;
+        int difference = desiredTicks - slideMotor.getCurrentPosition();
         // Go forwards/backwards depending on the desired position relative to the current position
         slideMotor.setPower(0.1 * (difference)/abs(difference));
-        // Wait while current difference < difference between old position and desired position
-        while (abs(slideMotor.getCurrentPosition() - ticks) < abs(difference)) { Thread.sleep(1) }
+        // Wait until there is no difference between the desired position and the current position
+        // Making the threshold 0 might cause some overcorrection
+        while (abs(desiredTicks - slideMotor.getCurrentPosition()) > 0) { Thread.sleep(1) }
         slideMotor.setPower(0);
     }
 
@@ -64,7 +64,6 @@ public class LinearSlide extends BaseHardware {
                 return 1;
                 break;
         }
-        ticks = slideMotor.getCurrentPosition();
         level = desiredLevel;
         return 0;
     }
