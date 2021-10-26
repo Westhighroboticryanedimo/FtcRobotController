@@ -6,6 +6,7 @@ import java.lang.Thread;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
@@ -15,11 +16,16 @@ public class LinearSlide extends BaseHardware {
     private int level = 0;
 
     private final int LEV_ZERO_TICKS     = 0;
-    private final int LEV_ONE_TICKS      = 420;
-    private final int LEV_TWO_TICKS      = 1120;
-    private final int LEV_THREE_TICKS    = 1820;
+    private final int LEV_ONE_TICKS      = 1260;
+    private final int LEV_TWO_TICKS      = 3360;
+    private final int LEV_THREE_TICKS    = 5460;
 
     public LinearSlide(LinearOpMode opMode, HardwareMap hwMap) {
+        super(opMode);
+        init(hwMap);
+    }
+
+    public LinearSlide(OpMode opMode, HardwareMap hwMap) {
         super(opMode);
         init(hwMap);
     }
@@ -30,17 +36,19 @@ public class LinearSlide extends BaseHardware {
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideMotor.setPower(0);
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideMotor.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     // Move the slide to the position specified, in ticks
     private void move(int desiredTicks) {
         int difference = desiredTicks - slideMotor.getCurrentPosition();
         // Go forwards/backwards depending on the desired position relative to the current position
-        slideMotor.setPower(0.1 * (difference)/abs(difference));
+        slideMotor.setPower(1 * difference/Math.abs(difference));
         // Wait until there is no difference between the desired position and the current position
-        // Making the threshold 0 might cause some overcorrection
-        while (abs(desiredTicks - slideMotor.getCurrentPosition()) > 0) { Thread.sleep(1) }
+        // Making the threshold 0 might cause some overcorrection, so 50 for now
+        while (Math.abs(desiredTicks - slideMotor.getCurrentPosition()) > 50) {
+            // Thread.sleep(1);
+        }
         slideMotor.setPower(0);
     }
 
@@ -59,10 +67,9 @@ public class LinearSlide extends BaseHardware {
                 move(LEV_THREE_TICKS);
                 break;
             default:
-                telemetry.addData("bruh", "Invalid level");
-                telemetry.update();
+                // telemetry.addData("bruh", "Invalid level");
+                // telemetry.update();
                 return 1;
-                break;
         }
         level = desiredLevel;
         return 0;
@@ -71,4 +78,6 @@ public class LinearSlide extends BaseHardware {
     public int getLevel() {
         return level;
     }
+
+    public int getTicks() { return slideMotor.getCurrentPosition(); }
 }

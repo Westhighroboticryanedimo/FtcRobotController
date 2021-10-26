@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
 import org.firstinspires.ftc.teamcode.Controller;
 
-import org.firstinspires.ftc.teamcode.thirdWheel.hardware;
+import org.firstinspires.ftc.teamcode.thirdWheel.hardware.DriveThirdWheel;
+import org.firstinspires.ftc.teamcode.thirdWheel.hardware.LinearSlide;
 
 @TeleOp(name = "ThirdWheel TeleOp")
 public class TeleopThirdWheel extends OpMode {
@@ -30,20 +31,23 @@ public class TeleopThirdWheel extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("gyro", gyro.getAngleDegrees());
+        telemetry.addData("ticks", linearSlide.getTicks());
+        telemetry.addData("level", linearSlide.getLevel());
         telemetry.update();
         controller.update();
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         drive.togglePOV(controller.leftStickButtonOnce());
-        if (controller.right_bumper()) {
+        if (controller.rightBumper()) {
             if (level < 3) {
                 level += 1;
+                linearSlide.setLevel(level);
             }
         }
-        if (controller.left_bumper()) {
-            if (level > 1) {
+        if (controller.leftBumper()) {
+            if (level > 0) {
                 level -= 1;
+                linearSlide.setLevel(level);
             }
         }
-        linearSlide.setLevel(level);
     }
 }
