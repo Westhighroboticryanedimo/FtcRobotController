@@ -16,9 +16,9 @@ public class LinearSlide extends BaseHardware {
     private int level = 0;
 
     private final int LEV_ZERO_TICKS     = 0;
-    private final int LEV_ONE_TICKS      = 1260;
-    private final int LEV_TWO_TICKS      = 3360;
-    private final int LEV_THREE_TICKS    = 5460;
+    private final int LEV_ONE_TICKS      = 840;
+    private final int LEV_TWO_TICKS      = 2240;
+    private final int LEV_THREE_TICKS    = 3640;
 
     public LinearSlide(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode);
@@ -32,7 +32,7 @@ public class LinearSlide extends BaseHardware {
 
     private void init(HardwareMap hwMap) {
         slideMotor = hwMap.get(DcMotor.class, "slideMotor");
-        slideMotor.setDirection(DcMotor.Direction.FORWARD);
+        slideMotor.setDirection(DcMotor.Direction.REVERSE);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideMotor.setPower(0);
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -45,8 +45,8 @@ public class LinearSlide extends BaseHardware {
         // Go forwards/backwards depending on the desired position relative to the current position
         slideMotor.setPower(1 * difference/Math.abs(difference));
         // Wait until there is no difference between the desired position and the current position
-        // Making the threshold 0 might cause some overcorrection, so 50 for now
-        while (Math.abs(desiredTicks - slideMotor.getCurrentPosition()) > 50) {
+        // Making the threshold 0 might cause the motor to spin infinitely (encoder skips over 0), so 20 for now
+        while (Math.abs(desiredTicks - slideMotor.getCurrentPosition()) > 20) {
             // Thread.sleep(1);
         }
         slideMotor.setPower(0);
