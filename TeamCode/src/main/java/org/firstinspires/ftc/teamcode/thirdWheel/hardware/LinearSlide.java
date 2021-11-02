@@ -16,9 +16,9 @@ public class LinearSlide extends BaseHardware {
     private int level = 0;
 
     private final int LEV_ZERO_TICKS     = 0;
-    private final int LEV_ONE_TICKS      = 840;
-    private final int LEV_TWO_TICKS      = 2240;
-    private final int LEV_THREE_TICKS    = 3640;
+    private final int LEV_ONE_TICKS      = 560;
+    private final int LEV_TWO_TICKS      = 1680;
+    private final int LEV_THREE_TICKS    = 2800;
 
     public LinearSlide(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode);
@@ -46,7 +46,7 @@ public class LinearSlide extends BaseHardware {
         slideMotor.setPower(1 * difference/Math.abs(difference));
         // Wait until there is no difference between the desired position and the current position
         // Making the threshold 0 might cause the motor to spin infinitely (encoder skips over 0), so 20 for now
-        while (Math.abs(desiredTicks - slideMotor.getCurrentPosition()) > 20) {
+        while (Math.abs(desiredTicks - slideMotor.getCurrentPosition()) > 50    ) {
             // Thread.sleep(1);
         }
         slideMotor.setPower(0);
