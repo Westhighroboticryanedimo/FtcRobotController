@@ -41,14 +41,11 @@ public class LinearSlide extends BaseHardware {
     }
 
     // Move the slide to the position specified, in ticks
-    private void move(int desiredTicks, int power) {
-        // Go forwards/backwards depending on the desired position relative to the current position
-        slideMotor.setPower(power * getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks)));
+    private void move(int desiredTicks, int tolerance, int power) {
+        int direction = getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks));
+        slideMotor.setPower(power * direction));
         // Wait until there is no difference between the desired position and the current position
-        // Making the threshold 0 might cause the motor to spin infinitely (encoder skips over 0), so 20 for now
-        while (Math.abs(getDifference(desiredTicks)) > 50 ) {
-            // Thread.sleep(1);
-        }
+        while (Math.abs(getDifference(desiredTicks)) > tolerance ) { }
         slideMotor.setPower(0);
     }
 
@@ -71,16 +68,10 @@ public class LinearSlide extends BaseHardware {
                 // telemetry.update();
                 return 1;
         }
-        move(endPos, 1);
+        move(endPos, 50, 1);    // Move to position quickly (inaccurate)
+        move(endPos, 2, 0.1);   // Correct position slowly (accurate)
         level = desiredLevel;
         return 0;
-    }
-
-    public void correct(int desiredTicks) {
-        while (Math.abs(getDifference(desiredTicks)) > 2) {
-            slideMotor.setPower(0.1 * getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks)));
-        }
-        slideMotor.setPower(0);
     }
 
     private int getDifference(int desiredTicks) { return desiredTicks - slideMotor.getCurrentPosition(); }

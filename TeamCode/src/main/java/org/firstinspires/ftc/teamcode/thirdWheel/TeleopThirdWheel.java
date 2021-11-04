@@ -42,14 +42,12 @@ public class TeleopThirdWheel extends OpMode {
                 level += 1;
                 linearSlide.setLevel(level);
             }
-            linearSlide.correct(linearSlide.getEndPos());
         }
         if (controller.leftBumper()) {
             if (level > 0) {
                 level -= 1;
                 linearSlide.setLevel(level);
             }
-            linearSlide.correct(linearSlide.getEndPos());
         }
     }
 }
