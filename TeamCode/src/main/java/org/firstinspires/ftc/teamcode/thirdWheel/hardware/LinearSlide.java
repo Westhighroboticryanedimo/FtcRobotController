@@ -41,9 +41,9 @@ public class LinearSlide extends BaseHardware {
     }
 
     // Move the slide to the position specified, in ticks
-    private void move(int desiredTicks, int tolerance, int power) {
+    private void move(int desiredTicks, int tolerance, double power) {
         int direction = getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks));
-        slideMotor.setPower(power * direction));
+        slideMotor.setPower(power * direction);
         // Wait until there is no difference between the desired position and the current position
         while (Math.abs(getDifference(desiredTicks)) > tolerance ) { }
         slideMotor.setPower(0);
