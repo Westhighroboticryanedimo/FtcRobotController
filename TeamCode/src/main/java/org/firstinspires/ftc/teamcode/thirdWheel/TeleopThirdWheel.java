@@ -31,7 +31,7 @@ public class TeleopThirdWheel extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("gyro", gyro.getAngleDegrees());
-        telemetry.addData("ticks", linearSlide.getTicks());
+        telemetry.addData("ticks", linearSlide.getCurrentTicks());
         telemetry.addData("level", linearSlide.getLevel());
         telemetry.update();
         controller.update();
@@ -42,12 +42,14 @@ public class TeleopThirdWheel extends OpMode {
                 level += 1;
                 linearSlide.setLevel(level);
             }
+            linearSlide.correct(linearSlide.getEndPos());
         }
         if (controller.leftBumper()) {
             if (level > 0) {
                 level -= 1;
                 linearSlide.setLevel(level);
             }
+            linearSlide.correct(linearSlide.getEndPos());
         }
     }
 }

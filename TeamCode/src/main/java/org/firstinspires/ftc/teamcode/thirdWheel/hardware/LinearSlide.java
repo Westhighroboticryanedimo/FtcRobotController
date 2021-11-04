@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 public class LinearSlide extends BaseHardware {
     private DcMotor slideMotor;
     private int level = 0;
+    private int endPos = 0;
 
     private final int LEV_ZERO_TICKS     = 0;
     private final int LEV_ONE_TICKS      = 560;
@@ -40,13 +41,12 @@ public class LinearSlide extends BaseHardware {
     }
 
     // Move the slide to the position specified, in ticks
-    private void move(int desiredTicks) {
-        int difference = desiredTicks - slideMotor.getCurrentPosition();
+    private void move(int desiredTicks, int power) {
         // Go forwards/backwards depending on the desired position relative to the current position
-        slideMotor.setPower(1 * difference/Math.abs(difference));
+        slideMotor.setPower(power * getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks)));
         // Wait until there is no difference between the desired position and the current position
         // Making the threshold 0 might cause the motor to spin infinitely (encoder skips over 0), so 20 for now
-        while (Math.abs(desiredTicks - slideMotor.getCurrentPosition()) > 50    ) {
+        while (Math.abs(getDifference(desiredTicks)) > 50 ) {
             // Thread.sleep(1);
         }
         slideMotor.setPower(0);
@@ -55,29 +55,37 @@ public class LinearSlide extends BaseHardware {
     public int setLevel(int desiredLevel) {
         switch (desiredLevel) {
             case 0:
-                move(LEV_ZERO_TICKS);
+                endPos = LEV_ZERO_TICKS;
                 break;
             case 1:
-                move(LEV_ONE_TICKS);
+                endPos = LEV_ONE_TICKS;
                 break;
             case 2:
-                move(LEV_TWO_TICKS);
+                endPos = LEV_TWO_TICKS;
                 break;
             case 3:
-                move(LEV_THREE_TICKS);
+                endPos = LEV_THREE_TICKS;
                 break;
             default:
-                // telemetry.addData("bruh", "Invalid level");
+                // telemetry.addData("bruh", "Invalid level");actualDesiredTicks
                 // telemetry.update();
                 return 1;
         }
+        move(endPos, 1);
         level = desiredLevel;
         return 0;
     }
 
-    public int getLevel() {
-        return level;
+    public void correct(int desiredTicks) {
+        while (Math.abs(getDifference(desiredTicks)) > 2) {
+            slideMotor.setPower(0.1 * getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks)));
+        }
+        slideMotor.setPower(0);
     }
 
-    public int getTicks() { return slideMotor.getCurrentPosition(); }
+    private int getDifference(int desiredTicks) { return desiredTicks - slideMotor.getCurrentPosition(); }
+    public int getEndPos() { return endPos; }
+    public int getLevel() { return level; }
+    public int getCurrentTicks() { return slideMotor.getCurrentPosition(); }
 }
+
