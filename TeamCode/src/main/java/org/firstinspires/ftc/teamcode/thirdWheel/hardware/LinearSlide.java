@@ -41,11 +41,14 @@ public class LinearSlide extends BaseHardware {
     }
 
     // Move the slide to the position specified, in ticks
-    private void move(int desiredTicks, int tolerance, double power) {
+    private void move(int desiredTicks, int tolerance, int startDec) {
         int direction = getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks));
-        slideMotor.setPower(power * direction);
-        // Wait until there is no difference between the desired position and the current position
-        while (Math.abs(getDifference(desiredTicks)) > tolerance ) { }
+        // Ignore this: Deceleration: -1.02^(-x) + 1 where x = difference
+        // Deceleration: min(x, 1) where x = difference
+        while (Math.abs(getDifference(desiredTicks)) > tolerance ) {       // BUG: When 1/startDec < 1, it gets stuck in an infinite loop?
+            slideMotor.setPower((Math.min(Math.abs(getDifference(desiredTicks))*(1/startDec), 1)) * direction);
+            // slideMotor.setPower(-Math.pow(-1.02, -getDifference(desiredTicks)) + 1);
+        }
         slideMotor.setPower(0);
     }
 
@@ -64,19 +67,17 @@ public class LinearSlide extends BaseHardware {
                 endPos = LEV_THREE_TICKS;
                 break;
             default:
-                // telemetry.addData("bruh", "Invalid level");actualDesiredTicks
+                // telemetry.addData("bruh", "Invalid level");
                 // telemetry.update();
                 return 1;
         }
-        move(endPos, 50, 1);    // Move to position quickly (inaccurate)
-        move(endPos, 2, 0.1);   // Correct position slowly (accurate)
+        move(endPos, 50, 10);    // Move to position quickly (inaccurate)
         level = desiredLevel;
         return 0;
     }
 
-    private int getDifference(int desiredTicks) { return desiredTicks - slideMotor.getCurrentPosition(); }
+    public int getDifference(int desiredTicks) { return desiredTicks - slideMotor.getCurrentPosition(); }
     public int getEndPos() { return endPos; }
     public int getLevel() { return level; }
     public int getCurrentTicks() { return slideMotor.getCurrentPosition(); }
 }
-
