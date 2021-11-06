@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.thirdWheel.hardware;
 
 import java.lang.Math;
-import java.lang.Thread;
+// import java.lang.Thread;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
@@ -43,11 +42,9 @@ public class LinearSlide extends BaseHardware {
     // Move the slide to the position specified, in ticks
     private void move(int desiredTicks, int tolerance, int startDec) {
         int direction = getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks));
-        // Ignore this: Deceleration: -1.02^(-x) + 1 where x = difference
-        // Deceleration: min(x, 1) where x = difference
-        while (Math.abs(getDifference(desiredTicks)) > tolerance ) {       // BUG: When 1/startDec < 1, it gets stuck in an infinite loop?
-            slideMotor.setPower((Math.min(Math.abs(getDifference(desiredTicks))*(1/startDec), 1)) * direction);
-            // slideMotor.setPower(-Math.pow(-1.02, -getDifference(desiredTicks)) + 1);
+        // Deceleration: min(x, 1) * 1/startDec where x = difference
+        while (Math.abs(getDifference(desiredTicks)) > tolerance ) {
+            slideMotor.setPower(Math.min(Math.abs(getDifference(desiredTicks))*(1.0/startDec), 1) * direction);
         }
         slideMotor.setPower(0);
     }
@@ -71,7 +68,7 @@ public class LinearSlide extends BaseHardware {
                 // telemetry.update();
                 return 1;
         }
-        move(endPos, 50, 10);    // Move to position quickly (inaccurate)
+        move(endPos, 20, 200);
         level = desiredLevel;
         return 0;
     }
