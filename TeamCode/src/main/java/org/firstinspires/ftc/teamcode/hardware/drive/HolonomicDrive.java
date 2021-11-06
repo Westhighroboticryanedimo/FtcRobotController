@@ -309,10 +309,10 @@ public abstract class HolonomicDrive extends BaseHardware {
         print("BRPow: ", backRight.getPower());
         print("IsPOV: ", isDrivePOV);
         print("IsSlow", isSlow);
-        //print("Encoder fl ", frontLeft.getCurrentPosition());
-        //print("Encoder fr ", frontRight.getCurrentPosition());
-        //print("Encoder bl ", backLeft.getCurrentPosition());
-        //print("Encoder br ", backRight.getCurrentPosition());
+        print("Encoder fl ", frontLeft.getCurrentPosition());
+        print("Encoder fr ", frontRight.getCurrentPosition());
+        print("Encoder bl ", backLeft.getCurrentPosition());
+        print("Encoder br ", backRight.getCurrentPosition());
         print("Gyro: ", gyro.getAngleDegrees());
 
     }
