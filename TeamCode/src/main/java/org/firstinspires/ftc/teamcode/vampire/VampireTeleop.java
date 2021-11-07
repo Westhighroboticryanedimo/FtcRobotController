@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.miscellaneous.Shooter;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Arm;
+import org.firstinspires.ftc.teamcode.vampire.hardware.DuckDuckSpin;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Intake;
 import org.firstinspires.ftc.teamcode.vampire.hardware.VampireDrive;
 
@@ -16,6 +17,7 @@ public class VampireTeleop extends OpMode {
     private VampireDrive drive;
     private Intake intake;
     private Arm arm;
+    private DuckDuckSpin spin;
     private Controller controller;
 
     @Override
@@ -25,9 +27,8 @@ public class VampireTeleop extends OpMode {
         drive = new VampireDrive(this, hardwareMap);
         intake = new Intake(this, hardwareMap);
         arm = new Arm(this, hardwareMap);
+        spin = new DuckDuckSpin(this, hardwareMap);
         controller = new Controller(gamepad1);
-
-        drive.debug();
 
     }
 
@@ -43,6 +44,7 @@ public class VampireTeleop extends OpMode {
 
         // Other subsystem controls
         intake.intake(controller.leftBumper(), controller.rightBumper());
+        spin.spin(controller.leftBumper());
         arm.lift(controller.dpadUp(), controller.dpadDown());
         arm.angle(controller.dpadRight(), controller.dpadLeft());
 
