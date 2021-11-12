@@ -36,7 +36,7 @@ public class DuckDuckGo extends BaseHardware {
 
         // Set up servo
         duckSpin = hwMap.get(CRServo.class, "spin");
-        duckSpin.setDirection(DcMotorSimple.Direction.FORWARD);
+        duckSpin.setDirection(DcMotor.Direction.FORWARD);
 
     }
 
