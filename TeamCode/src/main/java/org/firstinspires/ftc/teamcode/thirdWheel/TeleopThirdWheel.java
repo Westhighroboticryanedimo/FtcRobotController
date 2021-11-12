@@ -37,6 +37,12 @@ public class TeleopThirdWheel extends OpMode {
         controller.update();
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         drive.togglePOV(controller.leftStickButtonOnce());
+        if (controller.dpadUp()) {
+            linearSlide.setLevel(3);
+        }
+        if (controller.dpadDown()) {
+            linearSlide.setLevel(0);
+        }
         if (controller.rightBumper()) {
             if (level < 3) {
                 level += 1;
