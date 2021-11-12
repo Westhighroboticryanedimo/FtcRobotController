@@ -10,14 +10,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
-public class DuckDuckSpin extends BaseHardware {
+public class DuckDuckGo extends BaseHardware {
 
     // Motor and motor power
     private CRServo duckSpin;
     private static final double SPIN_POWER = 1;
 
     // Teleop constructor
-    public DuckDuckSpin(OpMode opMode, HardwareMap hwMap) {
+    public DuckDuckGo(OpMode opMode, HardwareMap hwMap) {
 
         super(opMode);
         setup(hwMap);
@@ -25,7 +25,7 @@ public class DuckDuckSpin extends BaseHardware {
     }
 
     // Autonomous constructor
-    public DuckDuckSpin(LinearOpMode opMode, HardwareMap hwMap) {
+    public DuckDuckGo(LinearOpMode opMode, HardwareMap hwMap) {
 
         super(opMode);
         setup(hwMap);
