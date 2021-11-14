@@ -14,7 +14,7 @@ public class DuckDuckGo extends BaseHardware {
 
     // Motor and motor power
     private CRServo duckSpin;
-    private static final double SPIN_POWER = 1;
+    private static final double SPIN_POWER = 0.9;
 
     // Teleop constructor
     public DuckDuckGo(OpMode opMode, HardwareMap hwMap) {
@@ -36,13 +36,14 @@ public class DuckDuckGo extends BaseHardware {
 
         // Set up servo
         duckSpin = hwMap.get(CRServo.class, "spin");
-        duckSpin.setDirection(DcMotorSimple.Direction.FORWARD);
+        duckSpin.setDirection(DcMotor.Direction.FORWARD);
 
     }
 
-    public void spin(boolean button) {
+    public void spin(boolean b1, boolean b2) {
 
-        if (button) duckSpin.setPower(SPIN_POWER);
+        if (b1) duckSpin.setPower(SPIN_POWER);
+        else if (b2) duckSpin.setPower(-SPIN_POWER);
         else duckSpin.setPower(0);
 
     }
