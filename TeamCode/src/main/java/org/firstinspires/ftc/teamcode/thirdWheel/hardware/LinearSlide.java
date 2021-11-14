@@ -40,14 +40,15 @@ public class LinearSlide extends BaseHardware {
     }
 
     // Move the slide to the position specified, in ticks
+    // Except it only sets the power and you have to run it in the loop() thing, because yes
     private void move(int desiredTicks, int tolerance, int startDec) {
-        int direction = getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks));
         // Deceleration: min(x * 1/startDec, 1) where x = difference
-        while (Math.abs(getDifference(desiredTicks)) > tolerance ) {
-            direction = getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks));
+        if (Math.abs(getDifference(desiredTicks)) > tolerance ) {
+            int direction = getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks));
             slideMotor.setPower(Math.min(Math.abs(getDifference(desiredTicks))*(1.0/startDec), 1) * direction);
+        } else {
+            slideMotor.setPower(0);
         }
-        slideMotor.setPower(0);
     }
 
     public int setLevel(int desiredLevel) {
