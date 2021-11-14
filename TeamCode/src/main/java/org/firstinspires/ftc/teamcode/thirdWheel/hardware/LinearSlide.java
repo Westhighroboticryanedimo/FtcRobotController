@@ -69,7 +69,7 @@ public class LinearSlide extends BaseHardware {
                 // telemetry.update();
                 return 1;
         }
-        move(endPos, 20, 200);
+        move(endPos, 20, 560);
         level = desiredLevel;
         return 0;
     }
