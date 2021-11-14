@@ -11,7 +11,7 @@ public class Intake extends BaseHardware {
 
     // Motor and motor power
     private DcMotor intakeMotor;
-    private static final double INTAKE_POWER = 0.5;
+    private static final double INTAKE_POWER = 0.7;
     private static final double OUTTAKE_POWER = 1;
 
     // Teleop constructor
