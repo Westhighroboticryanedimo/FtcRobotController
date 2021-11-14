@@ -8,17 +8,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
 public class Cage extends BaseHardware {
-    private Servo cageServo;
+    public Servo cageServo;
 
-    private final double CAGE_OPEN_POS = 1;
-    private final double CAGE_CLOSE_POS = 0;
+    private final double CAGE_OPEN_POS = 0.7;
+    private final double CAGE_CLOSE_POS = 0.0;
 
-    public void Cage(LinearOpMode opMode, HardwareMap hwMap) {
+    public Cage(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode);
         init(hwMap);
     }
 
-    public void Cage(OpMode opMode, HardwareMap hwMap) {
+    public Cage(OpMode opMode, HardwareMap hwMap) {
         super(opMode);
         init(hwMap);
     }

@@ -8,12 +8,14 @@ import org.firstinspires.ftc.teamcode.Controller;
 
 import org.firstinspires.ftc.teamcode.thirdWheel.hardware.DriveThirdWheel;
 import org.firstinspires.ftc.teamcode.thirdWheel.hardware.LinearSlide;
+import org.firstinspires.ftc.teamcode.thirdWheel.hardware.Cage;
 
 @TeleOp(name = "ThirdWheel TeleOp")
 public class TeleopThirdWheel extends OpMode {
 
     private DriveThirdWheel drive;
     private LinearSlide linearSlide;
+    private Cage cageServo;
     private Gyro gyro;
     private Controller controller;
     private int level = 0;
@@ -22,6 +24,7 @@ public class TeleopThirdWheel extends OpMode {
     public void init() {
         drive = new DriveThirdWheel(this, hardwareMap);
         linearSlide = new LinearSlide(this, hardwareMap);
+        cageServo = new Cage(this, hardwareMap);
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
         drive.togglePOV(true);
@@ -54,6 +57,12 @@ public class TeleopThirdWheel extends OpMode {
                 level -= 1;
                 linearSlide.setLevel(level);
             }
+        }
+        if (controller.A()) {
+            cageServo.cageOpen();
+        }
+        if (controller.B()) {
+            cageServo.cageClose();
         }
     }
 }
