@@ -44,9 +44,9 @@ public class VampireTeleop extends OpMode {
 
         // Other subsystem controls
         intake.intake(controller.leftBumper(), controller.rightBumper());
-        spin.spin(controller.X());
+        spin.spin(controller.X(), controller.A());
+        arm.toggleAuto(controller.startOnce());
         arm.lift(controller.dpadUp(), controller.dpadDown());
-        arm.angle(controller.dpadRight(), controller.dpadLeft());
         arm.changeStage(controller.dpadUpOnce(), controller.dpadDownOnce());
 
         telemetry.update();
