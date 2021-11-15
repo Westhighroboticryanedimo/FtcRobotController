@@ -42,9 +42,21 @@ public class Intake extends BaseHardware {
 
     public void intake(boolean intake, boolean reverse) {
 
-        if (intake) intakeMotor.setPower(INTAKE_POWER);
-        else if (reverse) intakeMotor.setPower(-OUTTAKE_POWER);
+        if (intake) intake();
+        else if (reverse) reverse();
         else stop();
+
+    }
+
+    public void intake() {
+
+        intakeMotor.setPower(INTAKE_POWER);
+
+    }
+
+    public void reverse() {
+
+        intakeMotor.setPower(-OUTTAKE_POWER);
 
     }
 

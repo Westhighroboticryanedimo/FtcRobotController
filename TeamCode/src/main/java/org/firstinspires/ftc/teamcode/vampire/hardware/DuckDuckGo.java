@@ -40,11 +40,29 @@ public class DuckDuckGo extends BaseHardware {
 
     }
 
-    public void spin(boolean b1, boolean b2) {
+    public void spin(boolean red, boolean blue) {
 
-        if (b1) duckSpin.setPower(SPIN_POWER);
-        else if (b2) duckSpin.setPower(-SPIN_POWER);
-        else duckSpin.setPower(0);
+        if (red) spinRed();
+        else if (blue) spinBlue();
+        else stop();
+
+    }
+
+    public void spinRed() {
+
+        duckSpin.setPower(SPIN_POWER);
+
+    }
+
+    public void spinBlue() {
+
+        duckSpin.setPower(-SPIN_POWER);
+
+    }
+
+    public void stop() {
+
+        duckSpin.setPower(0);
 
     }
 
