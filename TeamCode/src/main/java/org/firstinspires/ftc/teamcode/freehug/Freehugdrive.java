@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
 public class Freehugdrive extends HolonomicDrive {
 
-    //pog
 
     // For teleop
     public Freehugdrive(OpMode opMode, HardwareMap hwMap) {
