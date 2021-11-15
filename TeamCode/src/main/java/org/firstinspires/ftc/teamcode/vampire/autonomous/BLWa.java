@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.vampire.hardware.Arm;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Intake;
 import org.firstinspires.ftc.teamcode.vampire.roadrunner.drive.VampireRRDrive;
 
-@Autonomous(name="Vampire: RRDWa", group="Vampire")
+@Autonomous(name="Vampire: BLWa", group="Vampire")
 public class BLWa extends LinearOpMode {
 
     @Override

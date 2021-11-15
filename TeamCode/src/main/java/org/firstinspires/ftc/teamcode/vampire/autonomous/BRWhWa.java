@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.vampire.hardware.DuckDuckGo;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Intake;
 import org.firstinspires.ftc.teamcode.vampire.roadrunner.drive.VampireRRDrive;
 
-@Autonomous(name="Vampire: RLDWhWa", group="Vampire")
+@Autonomous(name="Vampire: BRWhWa", group="Vampire")
 public class BRWhWa extends LinearOpMode {
 
     @Override
