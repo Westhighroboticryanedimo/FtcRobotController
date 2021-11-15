@@ -18,6 +18,7 @@ public class TeleopThirdWheel extends OpMode {
     private Cage cageServo;
     private Gyro gyro;
     private Controller controller;
+
     private int level = 0;
 
     @Override

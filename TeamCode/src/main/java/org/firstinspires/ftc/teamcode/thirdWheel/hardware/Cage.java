@@ -30,6 +30,7 @@ public class Cage extends BaseHardware {
     public void cageOpen() {
         cageServo.setPosition(CAGE_OPEN_POS);
     }
+
     public void cageClose() {
         cageServo.setPosition(CAGE_CLOSE_POS);
     }
