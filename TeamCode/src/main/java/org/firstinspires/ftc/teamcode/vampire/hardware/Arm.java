@@ -161,6 +161,14 @@ public class Arm extends BaseHardware {
 
             }
 
+        } else {
+
+            // While not autonomous mode, set stage to closest level
+            if (liftMotor.getCurrentPosition() < (ARM_STAGES[0] + ARM_STAGES[1]) / 2) stage = 0;
+            else if (liftMotor.getCurrentPosition() < (ARM_STAGES[1] + ARM_STAGES[2]) / 2) stage = 1;
+            else if (liftMotor.getCurrentPosition() < (ARM_STAGES[2] + ARM_STAGES[3]) / 2) stage = 2;
+            else stage = 3;
+
         }
 
     }
