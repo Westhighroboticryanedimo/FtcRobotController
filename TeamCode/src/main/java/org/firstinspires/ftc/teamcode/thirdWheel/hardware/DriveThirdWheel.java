@@ -29,8 +29,8 @@ public class DriveThirdWheel extends HolonomicDrive {
 
         setMotorDir(true, true, false, false);
 
-        setWheelDiameter(3.89);
-        setTicksPerRev(537.6);
+        setWheelDiameter(3.7795);
+        setTicksPerRev(537.7);
     }
 
 }
