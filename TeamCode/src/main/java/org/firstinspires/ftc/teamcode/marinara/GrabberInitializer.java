@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.marinara;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.marinara.hardware.Grabber;
 
 @Autonomous(name = "Marinara Grabber Init", group = "Marinara")
+@Disabled
 public class GrabberInitializer extends LinearOpMode {
 
     @Override

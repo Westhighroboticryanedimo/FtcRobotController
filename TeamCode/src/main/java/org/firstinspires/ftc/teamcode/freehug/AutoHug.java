@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.freehug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="autohug")
+@Disabled
 public class AutoHug extends LinearOpMode {
     //o_d_o_m_e_t_r_y odometry;
     Freehugdrive drive;
