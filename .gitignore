@@ -90,4 +90,4 @@ lint/tmp/
 
 .project
 .settings
-java_pid327.hprof
+java_pid*.hprof
