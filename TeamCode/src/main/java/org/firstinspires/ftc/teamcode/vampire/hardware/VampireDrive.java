@@ -35,7 +35,7 @@ public class VampireDrive extends HolonomicDrive {
     private void setup(HardwareMap hwMap) {
 
         // PID Values
-        setPidDrive(0.02, 0, 0);
+        setPidDrive(0.05, 0, 0.009);
         setPidSpeed(0.03, 0.002, 0);
         setPidTurn(0.03, 0.001, 0);
 

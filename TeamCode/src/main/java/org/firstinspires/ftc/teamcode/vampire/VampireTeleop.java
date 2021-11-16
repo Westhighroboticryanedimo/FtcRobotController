@@ -28,6 +28,9 @@ public class VampireTeleop extends OpMode {
         arm = new Arm(this, hardwareMap);
         spin = new DuckDuckGo(this, hardwareMap);
         controller = new Controller(gamepad1);
+
+        // Debug mode
+        drive.debug();
         arm.debug();
 
     }

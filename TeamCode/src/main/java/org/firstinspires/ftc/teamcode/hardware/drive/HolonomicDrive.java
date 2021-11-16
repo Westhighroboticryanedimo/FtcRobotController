@@ -34,7 +34,7 @@ public abstract class HolonomicDrive extends BaseHardware {
     protected OdometryGlobalCoordinatePosition odometry = null;
 
     // Modes
-    protected boolean isDrivePOV = false;
+    protected boolean isDrivePOV = true;
     protected boolean isSlow = false;
 
     // For autonomous driving
@@ -50,7 +50,7 @@ public abstract class HolonomicDrive extends BaseHardware {
     protected double correction;
     protected boolean isPID = true;
 
-    protected static final double SLOW_MULTIPLIER = 0.6;
+    protected static final double SLOW_MULTIPLIER = 0.5;
 
     // Set pidDrive values
     protected void setPidDrive(double p, double i, double d) {
@@ -240,7 +240,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         double angleCompensation = 0;
         if (!isDrivePOV)
             angleCompensation = gyro.getAngleRadians();
-        angleCompensation = 0;
+        //angleCompensation = 0;
         // Holonomic drive calculations
 
         // The magnitude of the joystick
@@ -284,7 +284,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         // Don't correct if isPID is false
         if (!isPID) correction = 0;
-        correction = 0;
+        //correction = 0;
 
         // Add PID corrections
         v1 -= correction;
@@ -303,16 +303,17 @@ public abstract class HolonomicDrive extends BaseHardware {
         backRight.setPower(v4 * multiplier);
 
         // Telemetry values
-        print("FLPow: ", frontLeft.getPower());
-        print("FRPow: ", frontRight.getPower());
-        print("BLPow: ", backLeft.getPower());
-        print("BRPow: ", backRight.getPower());
+        //print("FLPow: ", frontLeft.getPower());
+        //print("FRPow: ", frontRight.getPower());
+        //print("BLPow: ", backLeft.getPower());
+        //print("BRPow: ", backRight.getPower());
+        print("Correction: ", correction);
         print("IsPOV: ", isDrivePOV);
-        print("IsSlow", isSlow);
-        print("Encoder fl ", frontLeft.getCurrentPosition());
-        print("Encoder fr ", frontRight.getCurrentPosition());
-        print("Encoder bl ", backLeft.getCurrentPosition());
-        print("Encoder br ", backRight.getCurrentPosition());
+        print("IsSlow: ", isSlow);
+        //print("Encoder fl: ", frontLeft.getCurrentPosition());
+        //print("Encoder fr: ", frontRight.getCurrentPosition());
+        //print("Encoder bl: ", backLeft.getCurrentPosition());
+        //print("Encoder br: ", backRight.getCurrentPosition());
         print("Gyro: ", gyro.getAngleDegrees());
 
     }

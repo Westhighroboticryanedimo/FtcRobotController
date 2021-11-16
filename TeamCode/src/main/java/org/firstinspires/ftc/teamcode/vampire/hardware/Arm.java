@@ -86,7 +86,7 @@ public class Arm extends BaseHardware {
             } else {
 
                 liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                if (up) liftMotor.setPower(LIFT_POWER);
+                if (up && liftMotor.getCurrentPosition() < ARM_STAGES[3]) liftMotor.setPower(LIFT_POWER);
                 else if (down) liftMotor.setPower(-LOWER_POWER);
                 else liftMotor.setPower(0);
 
@@ -131,11 +131,6 @@ public class Arm extends BaseHardware {
         print("Touch Arm", armTouch.isPressed());
         print("Stage", stage);
         print("Is Auto", isAuto);
-
-        // Print PID info
-        print("P", pidArm.getP());
-        print("I", pidArm.getI());
-        print("D", pidArm.getD());
 
         if (isAuto) {
 
