@@ -11,12 +11,12 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 @Autonomous(name = "Balloon Mode")
 public class AutoBolon extends LinearOpMode{
 
-    private CamBolon Cam;
+    private org.firstinspires.ftc.teamcode.SlowBolon.CamBolon Cam;
     private int DONDEESTAELDUCKY;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Cam = new CamBolon();
+        Cam = new org.firstinspires.ftc.teamcode.SlowBolon.CamBolon();
         Cam.init(hardwareMap);
         DONDEESTAELDUCKY = Cam.getspot();
 
