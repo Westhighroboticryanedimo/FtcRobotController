@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.SlowBolon;
+package org.firstinspires.ftc.teamcode.slowBolon;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraCaptureRequest;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraCaptureSession;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.slowBolon.duckyPipeline;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;

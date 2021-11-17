@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.SlowBolon;
+package org.firstinspires.ftc.teamcode.slowBolon;
 
 import android.graphics.Color;
 import android.graphics.Color.*;
