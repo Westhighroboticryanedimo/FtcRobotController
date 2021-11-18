@@ -39,14 +39,10 @@ class duckyPipeline extends OpenCvPipeline
         rgb = new int[] {};
 
         width = input.width(); height = input.height();
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++) {
+        for(int y = 0; y < height; y+=2) {
+            for(int x = 0; x < width; x+=2) {
                 //for each pixel
                 int pixel = input.get(x,y,bytebuffer); // hopefully hex value
-                rgb[0] = Color.red(pixel);
-                rgb[1] = Color.green(pixel);
-                rgb[2] = Color.blue(pixel);
-
 
                 if(closeness(pixel, duckycolor) <= duckyadecuado) {
                     duckypixel = true;
