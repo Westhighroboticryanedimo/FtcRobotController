@@ -91,7 +91,8 @@ public class ConceptVuforiaFieldNavigationWebcam extends LinearOpMode {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY = "Ad5o3uP/////AAABmZiHw0ExfEhJiGOj+a+euvV6cr7YdCbHAhFHDHW1effZUyKZ6QqwBvhDfgeu+flW5W6/uLkd5H2LYVeFlDHPdhbSwRx5mzj/IcQPSFKkhS6JkBM8DwnKa7B/c/jNykBPOXPG7RGpMRtqnq/A6jq5dZqqGgHGIkuN6TvED2ofqSsQD1F+QcBA9y8GHfenkdNlMIwzc+KAEtHwhFqXzG7K6PY9Yad/c/MV5U+aVZ0fcd9zKexVbj19mTJ7UwHCmkWKZvR7u3UHzF07/eWUO9KfqyGYtoYuX6hgfDw3/XTg5rLFMqvLpSCZK6jbLADHTkYMReDqu8wi4oPG4XlG8tCfLduGNLVXIm1NpYN/59Pg5ptq";
+    private static final String VUFORIA_KEY =
+            " --- YOUR NEW VUFORIA KEY GOES HERE  --- ";
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
@@ -110,11 +111,8 @@ public class ConceptVuforiaFieldNavigationWebcam extends LinearOpMode {
     private boolean targetVisible       = false;
 
     @Override public void runOpMode() {
-
-        /*
-         * Retrieve the camera we are to use.
-         */
-        webcamName = hardwareMap.get(WebcamName.class, "webcam");
+        // Connect to the camera we are to use.  This name must match what is set up in Robot Configuration
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
