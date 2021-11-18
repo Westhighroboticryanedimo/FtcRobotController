@@ -119,7 +119,16 @@ public class WebcamFree extends BaseHardware {
         webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
         // Start video streaming
-        webcam.openCameraDeviceAsync(() -> webcam.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPRIGHT));
+        // Start video streaming
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+
+            @Override
+            public void onOpened() { webcam.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPRIGHT); }
+
+            @Override
+            public void onError(int errorCode) {}
+
+        });
 
     }
 

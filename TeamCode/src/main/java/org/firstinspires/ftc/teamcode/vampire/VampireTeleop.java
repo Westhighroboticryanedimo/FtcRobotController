@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.vampire.hardware.Arm;
 import org.firstinspires.ftc.teamcode.vampire.hardware.DuckDuckGo;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Intake;
 import org.firstinspires.ftc.teamcode.vampire.hardware.VampireDrive;
+import org.firstinspires.ftc.teamcode.vampire.hardware.Webcam;
 
 @TeleOp(name = "VAMPIRE: TeleOp")
 public class VampireTeleop extends OpMode {
@@ -17,6 +18,7 @@ public class VampireTeleop extends OpMode {
     private Intake intake;
     private Arm arm;
     private DuckDuckGo spin;
+    private Webcam webcam;
     private Controller controller;
 
     @Override
@@ -27,6 +29,7 @@ public class VampireTeleop extends OpMode {
         intake = new Intake(this, hardwareMap);
         arm = new Arm(this, hardwareMap);
         spin = new DuckDuckGo(this, hardwareMap);
+        webcam = new Webcam(this, hardwareMap);
         controller = new Controller(gamepad1);
 
         // Debug mode
@@ -51,6 +54,9 @@ public class VampireTeleop extends OpMode {
         arm.toggleAuto(controller.startOnce());
         arm.lift(controller.dpadUp(), controller.dpadDown());
         arm.changeStage(controller.dpadUpOnce(), controller.dpadDownOnce());
+
+        // Update webcam
+        webcam.update();
 
         telemetry.update();
 

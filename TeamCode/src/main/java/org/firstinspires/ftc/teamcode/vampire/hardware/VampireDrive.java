@@ -40,7 +40,7 @@ public class VampireDrive extends HolonomicDrive {
         setPidTurn(0.03, 0.001, 0);
 
         // Set motor direction
-        setMotorDir(false, true, true, false);
+        setMotorDir(false, true, false, true);
 
         // Robot characteristics
         setWheelDiameter(3.9);
