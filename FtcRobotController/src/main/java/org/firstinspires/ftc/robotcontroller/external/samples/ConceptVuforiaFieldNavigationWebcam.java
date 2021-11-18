@@ -110,10 +110,10 @@ public class ConceptVuforiaFieldNavigationWebcam extends LinearOpMode {
     private boolean targetVisible       = false;
 
     @Override public void runOpMode() {
-
+       
         /*
-         * Retrieve the camera we are to use.
-         */
+        * Retrieve the camera we are to use.
+        */
         webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
         /*
