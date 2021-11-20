@@ -90,10 +90,13 @@ public class TeleopBolon extends OpMode {
         else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.4);}
         else{lift.setPower(0);}
 
-
-        if(controller.dpadRight()/* && (outok==true)*/) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(1);}
-        else if(controller.dpadLeft()/* && (backok==true)*/) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(1);}
+        if(controller.dpadUp()) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(0.4);}
+        else if(controller.dpadDown()) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(0.4);}
         else{extend.setPower(0);}
+
+        //if(controller.dpadRight()/* && (outok==true)*/) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(1);}
+        //else if(controller.dpadLeft()/* && (backok==true)*/) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(1);}
+        //else{extend.setPower(0);}
 
         if(controller.A()) {duckDumpy.setPower(1);}
         telemetry.update();
