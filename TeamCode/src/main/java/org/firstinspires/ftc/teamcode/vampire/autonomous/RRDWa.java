@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.vampire.hardware.Arm;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Intake;
+import org.firstinspires.ftc.teamcode.vampire.hardware.VampireDrive;
 import org.firstinspires.ftc.teamcode.vampire.roadrunner.drive.VampireRRDrive;
 
 @Autonomous(name="Vampire: RRDWa", group="Vampire")
@@ -15,7 +16,7 @@ public class RRDWa extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+/*
         // Subsystems
         VampireRRDrive drive = new VampireRRDrive(hardwareMap);
         Arm arm = new Arm(this, hardwareMap);
@@ -34,7 +35,7 @@ public class RRDWa extends LinearOpMode {
                 .build();
 
         waitForStart();
-        if(isStopRequested()) return;
+        if (isStopRequested()) return;
 
         // Deploy cargo
         drive.followTrajectory(deploy);
@@ -46,6 +47,14 @@ public class RRDWa extends LinearOpMode {
 
         // Go to warehouse
         drive.followTrajectory(warehouse);
+*/
+
+        // Dum auto RIP
+        VampireDrive drive = new VampireDrive(this, hardwareMap);
+        waitForStart();
+        if (isStopRequested()) return;
+
+        drive.move(0.8, 70, 180);
 
     }
 

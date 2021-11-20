@@ -35,6 +35,7 @@ public class VampireTeleop extends OpMode {
         // Debug mode
         drive.debug();
         arm.debug();
+        webcam.debug();
 
     }
 
@@ -55,7 +56,7 @@ public class VampireTeleop extends OpMode {
         arm.lift(controller.dpadUp(), controller.dpadDown());
         arm.changeStage(controller.dpadUpOnce(), controller.dpadDownOnce());
 
-        // Update webcam
+        // Update webcam values
         webcam.update();
 
         telemetry.update();
