@@ -28,12 +28,15 @@ public class TeleopBolon extends OpMode {
     private DcMotor extend;
 
     private boolean outok, backok;
+    private boolean slowbol;
+    private double speed;
 
 
     @Override
     public void init() {
-
-        //backok = true; outok = true;
+        speed=1;
+        slowbol = false;
+        backok = true; outok = true;
         drive = new DriveBolon(this, hardwareMap);
         drive.setup();
         gyro = new Gyro(hardwareMap, false);
@@ -49,6 +52,7 @@ public class TeleopBolon extends OpMode {
 
         duckDumpy = hardwareMap.get(CRServo.class,"duckDumpy");
         extend = hardwareMap.get(DcMotor.class,"extend");
+        //extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift = hardwareMap.get(DcMotor.class,"lift");
         o = new OdometryBolon();
@@ -72,32 +76,30 @@ public class TeleopBolon extends OpMode {
         telemetry.addData("milfs",gyro.getAngleDegrees());
         telemetry.addData("distance",o.distance);
         telemetry.addData("extender-check", extend.getCurrentPosition());
-        telemetry.addData("OUTWARDS",controller.dpadRight());
-        telemetry.addData("INWARDS",controller.dpadLeft());
-        telemetry.addData("version",22);
+        telemetry.addData("OUTWARDS",controller.right_trigger>0.2);
+        telemetry.addData("INWARDS",controller.left_trigger>0.2);
+        telemetry.addData("version","29 -- attempting encoder brake redemption");
 
         controller.update();
-        drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+        drive.drive(controller.left_stick_x*speed, controller.left_stick_y*speed, controller.right_stick_x);
         drive.togglePOV(controller.leftStickButtonOnce());
         if(controller.dpadDownOnce()) {o.resetdistance();}
 
-        //outok = (extend.getCurrentPosition()<1680);
-        //backok = (extend.getCurrentPosition()>-2);
+        outok = (extend.getCurrentPosition()<1600);//real number around 1690
+        backok = (extend.getCurrentPosition()>-2);
 
+        if(controller.leftStickButtonOnce()) {slowbol = !slowbol;}
+        if(slowbol) {speed=0.4;} else {speed=1;}
         if(controller.leftBumperOnce()) {cat1.setPosition(0.4); cat2.setPosition(0.5);}
         if(controller.rightBumperOnce()){cat1.setPosition(0); cat2.setPosition(0.8);}
 
-        if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.4);}
-        else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.4);}
+        if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.27*speed);}
+        else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.27*speed);}
         else{lift.setPower(0);}
 
-        if(controller.right_trigger > 0.2) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(0.4);}
-        else if(controller.left_trigger > 0.2) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(0.4);}
+        if(controller.right_trigger>0.2&&outok) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(0.4*speed);}
+        else if(controller.left_trigger>0.2&&backok) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(0.4*speed);}
         else{extend.setPower(0);}
-
-        //if(controller.dpadRight()/* && (outok==true)*/) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(1);}
-        //else if(controller.dpadLeft()/* && (backok==true)*/) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(1);}
-        //else{extend.setPower(0);}
 
         if(controller.B()) {duckDumpy.setPower(1);} else{duckDumpy.setPower(0);}
         telemetry.update();
