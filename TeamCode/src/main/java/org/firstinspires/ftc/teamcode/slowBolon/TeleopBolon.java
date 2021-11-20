@@ -91,7 +91,7 @@ public class TeleopBolon extends OpMode {
         else{lift.setPower(0);}
 
 
-        if(controller.dpadRight() && (outok==true)) {telemetry.addData("flakhdfladsfladhf", "difjadslf;adhfd"); extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(1);}
+        if(controller.dpadRight() && (outok==true)) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(1);}
         else if(controller.dpadLeft() && (backok==true)) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(1);}
         else{extend.setPower(0);}
 
