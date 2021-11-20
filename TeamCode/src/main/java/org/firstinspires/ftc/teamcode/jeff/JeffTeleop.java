@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.marinara.hardware.Shooter;
 import org.firstinspires.ftc.teamcode.marinara.hardware.Webcam;
 
 @TeleOp(name = "Jeffy boi")
-//@Disabled
+@Disabled
 public class JeffTeleop extends OpMode {
 
     // Objects
