@@ -88,6 +88,12 @@ public class Webcam extends BaseHardware {
 
     }
 
+    public int[] getRaw() {
+
+        return pipeline.getRaw();
+
+    }
+
     private static class CargoDeterminationPipeline extends OpenCvPipeline {
 
         private enum CargoPosition {
@@ -217,6 +223,12 @@ public class Webcam extends BaseHardware {
             else position = CargoPosition.TOP;
 
             return input;
+
+        }
+
+        private int[] getRaw() {
+
+            return new int[] { avgL, avgM, avgR };
 
         }
 

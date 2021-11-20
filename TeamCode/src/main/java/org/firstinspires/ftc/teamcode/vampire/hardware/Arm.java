@@ -20,11 +20,11 @@ public class Arm extends BaseHardware {
     // Constants
     private static final double LIFT_POWER = 1;
     private static final double LOWER_POWER = 0.75;
-    private static final int[] ARM_STAGES = { -70, 500, 1500, 2000 };
+    private static final int[] ARM_STAGES = { -70, 1000, 1600, 2550 };
 
     // Mutable variables
     private int stage = 0;
-    private boolean isAuto = false;
+    private boolean isAuto = true;
 
     // PID
     private PIDController pidArm = new PIDController(0.005, 0, 0.004);
