@@ -415,7 +415,7 @@ public abstract class HolonomicDrive extends BaseHardware {
             double speedFLBR = pidFLBR.performPID(avgFLBRPos);
 
             double avgFRBLPos = (frontRight.getCurrentPosition() + backLeft.getCurrentPosition()) / 2.0;
-            double speedFRBL = pidFRBL.performPID(avgFLBRPos);
+            double speedFRBL = pidFRBL.performPID(avgFRBLPos);
 
             frontLeft.setPower(speedFLBR - correction);
             frontRight.setPower(speedFRBL + correction);
