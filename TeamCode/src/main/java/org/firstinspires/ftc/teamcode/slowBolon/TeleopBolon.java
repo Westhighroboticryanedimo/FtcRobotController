@@ -86,19 +86,19 @@ public class TeleopBolon extends OpMode {
         if(controller.leftBumperOnce()) {cat1.setPosition(0.4); cat2.setPosition(0.5);}
         if(controller.rightBumperOnce()){cat1.setPosition(0); cat2.setPosition(0.8);}
 
-        if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.4);}
-        else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.4);}
+        if(controller.rightBumper()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.4);}
+        else if(controller.leftBumper()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.4);}
         else{lift.setPower(0);}
 
-        if(controller.dpadUp()) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(0.4);}
-        else if(controller.dpadDown()) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(0.4);}
+        if(controller.rightBumper()) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(0.4);}
+        else if(controller.leftBumper()) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(0.4);}
         else{extend.setPower(0);}
 
         //if(controller.dpadRight()/* && (outok==true)*/) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(1);}
         //else if(controller.dpadLeft()/* && (backok==true)*/) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(1);}
         //else{extend.setPower(0);}
 
-        if(controller.A()) {duckDumpy.setPower(1);}
+        if(controller.B()) {duckDumpy.setPower(1);} else{duckDumpy.setPower(0);}
         telemetry.update();
         if(controller.XOnce()) {telemetry.speak("que deporte te gusta me gusta el beisbol");}
     }
