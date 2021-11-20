@@ -31,13 +31,20 @@ public class CamBolon {
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "camera");
         OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         camera.openCameraDevice();
-        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+        // Start video streaming
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+
+            @Override
+            public void onOpened() { camera.startStreaming(640,480, OpenCvCameraRotation.UPRIGHT); }
+
+            @Override
+            public void onError(int errorCode) {}
+
+        });
 
         pipeline = new duckyPipeline();
 
         camera.setPipeline(pipeline);
-
-        whichspot = pipeline.getspot();
     }
     public int getspot() {return whichspot;}
     public int[] getleastdiffs() {return new int[] {pipeline.leastduckydiff,pipeline.leasttapediff};}
