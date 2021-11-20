@@ -74,7 +74,7 @@ public class TeleopBolon extends OpMode {
         telemetry.addData("extender-check", extend.getCurrentPosition());
         telemetry.addData("OUTWARDS",controller.dpadRight());
         telemetry.addData("INWARDS",controller.dpadLeft());
-        telemetry.addData("version",21);
+        telemetry.addData("version",22);
 
         controller.update();
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
