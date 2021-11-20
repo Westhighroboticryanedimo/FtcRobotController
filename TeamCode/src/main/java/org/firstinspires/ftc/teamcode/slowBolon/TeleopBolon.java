@@ -72,8 +72,9 @@ public class TeleopBolon extends OpMode {
         telemetry.addData("milfs",gyro.getAngleDegrees());
         telemetry.addData("distance",o.distance);
         telemetry.addData("extender-check", extend.getCurrentPosition());
-        //telemetry.addData("OUTWARDS",controller.dpadRight() && outok);
-        //telemetry.addData("INWARDS",controller.dpadLeft() && backok);
+        telemetry.addData("OUTWARDS",controller.dpadRight());
+        telemetry.addData("INWARDS",controller.dpadLeft());
+        telemetry.addData("version",21);
 
         controller.update();
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
@@ -90,8 +91,8 @@ public class TeleopBolon extends OpMode {
         else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.4);}
         else{lift.setPower(0);}
 
-        if(controller.rightBumper()) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(0.4);}
-        else if(controller.leftBumper()) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(0.4);}
+        if(controller.right_trigger > 0.2) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(0.4);}
+        else if(controller.left_trigger > 0.2) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(0.4);}
         else{extend.setPower(0);}
 
         //if(controller.dpadRight()/* && (outok==true)*/) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(1);}
