@@ -33,7 +33,7 @@ public class TeleopBolon extends OpMode {
     @Override
     public void init() {
 
-        backok = true; outok = true;
+        //backok = true; outok = true;
         drive = new DriveBolon(this, hardwareMap);
         drive.setup();
         gyro = new Gyro(hardwareMap, false);
@@ -72,8 +72,8 @@ public class TeleopBolon extends OpMode {
         telemetry.addData("milfs",gyro.getAngleDegrees());
         telemetry.addData("distance",o.distance);
         telemetry.addData("extender-check", extend.getCurrentPosition());
-        telemetry.addData("OUTWARDS",controller.dpadRight() && outok);
-        telemetry.addData("INWARDS",controller.dpadLeft() && backok);
+        //telemetry.addData("OUTWARDS",controller.dpadRight() && outok);
+        //telemetry.addData("INWARDS",controller.dpadLeft() && backok);
 
         controller.update();
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
@@ -91,8 +91,8 @@ public class TeleopBolon extends OpMode {
         else{lift.setPower(0);}
 
 
-        if(controller.dpadRight() && (outok==true)) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(1);}
-        else if(controller.dpadLeft() && (backok==true)) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(1);}
+        if(controller.dpadRight()/* && (outok==true)*/) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(1);}
+        else if(controller.dpadLeft()/* && (backok==true)*/) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(1);}
         else{extend.setPower(0);}
 
         if(controller.A()) {duckDumpy.setPower(1);}
