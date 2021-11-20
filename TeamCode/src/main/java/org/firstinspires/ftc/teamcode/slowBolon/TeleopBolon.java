@@ -86,8 +86,8 @@ public class TeleopBolon extends OpMode {
         if(controller.leftBumperOnce()) {cat1.setPosition(0.4); cat2.setPosition(0.5);}
         if(controller.rightBumperOnce()){cat1.setPosition(0); cat2.setPosition(0.8);}
 
-        if(controller.rightBumper()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.4);}
-        else if(controller.leftBumper()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.4);}
+        if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.4);}
+        else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.4);}
         else{lift.setPower(0);}
 
         if(controller.rightBumper()) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(0.4);}
