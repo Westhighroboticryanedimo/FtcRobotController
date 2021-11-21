@@ -102,6 +102,7 @@ public class TeleopBolon extends OpMode {
         if(controller.B()) {duckDumpy.setPower(1);} else{duckDumpy.setPower(0);}
         telemetry.update();
         if(controller.XOnce()) {telemetry.speak("We win");}
+        //no changes here you saw nothing 
     }
 
 }
