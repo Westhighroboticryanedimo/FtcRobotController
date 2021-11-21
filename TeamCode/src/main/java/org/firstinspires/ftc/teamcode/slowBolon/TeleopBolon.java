@@ -2,10 +2,8 @@ package org.firstinspires.ftc.teamcode.slowBolon;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Controller;
@@ -103,7 +101,7 @@ public class TeleopBolon extends OpMode {
 
         if(controller.B()) {duckDumpy.setPower(1);} else{duckDumpy.setPower(0);}
         telemetry.update();
-        if(controller.XOnce()) {telemetry.speak("que deporte te gusta me gusta el beisbol");}
+        if(controller.XOnce()) {telemetry.speak("We win");}
     }
 
 }
