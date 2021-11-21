@@ -51,10 +51,20 @@ public class RRDWa extends LinearOpMode {
 
         // Dum auto RIP
         VampireDrive drive = new VampireDrive(this, hardwareMap);
+        Arm arm = new Arm(this, hardwareMap);
+        Intake intake = new Intake(this, hardwareMap);
         waitForStart();
         if (isStopRequested()) return;
 
-        drive.move(0.8, 70, 180);
+        arm.setLift(3);
+        drive.move(0.5, 40, -27);
+        drive.turn(0.5, -45);
+        intake.reverse();
+        sleep(3000);
+        intake.stop();
+        drive.move(0.3, 15, 180);
+        drive.turn(0.5, -25);
+        drive.move(1, 90, 180);
 
     }
 
