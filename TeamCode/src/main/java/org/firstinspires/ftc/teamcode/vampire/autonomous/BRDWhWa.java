@@ -62,11 +62,18 @@ public class BRDWhWa extends LinearOpMode {
 
         // Dum auto RIP
         VampireDrive drive = new VampireDrive(this, hardwareMap);
-        drive.debug();
+        Arm arm = new Arm(this, hardwareMap);
+        Intake intake = new Intake(this, hardwareMap);
         waitForStart();
         if (isStopRequested()) return;
 
-        drive.move(0.8, 50, 45);
+        arm.setLift(3);
+        drive.move(0.5, 40, -27);
+        drive.turn(0.5, -45);
+        intake.reverse();
+        sleep(3000);
+        intake.stop();
+        drive.move(0.5, 50, 139);
 
     }
 
