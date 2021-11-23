@@ -56,9 +56,14 @@ public class BLDWa extends LinearOpMode {
         Arm arm = new Arm(this, hardwareMap);
         Intake intake = new Intake(this, hardwareMap);
         Webcam webcam = new Webcam(this, hardwareMap);
+        webcam.debug();
 
         // Elapsed time for timed motion
         ElapsedTime runtime = new ElapsedTime();
+
+        // Send telemetry message to signify robot waiting;
+        telemetry.addData("Status", "Ready to run");
+        telemetry.update();
 
         waitForStart();
         if (isStopRequested()) return;
