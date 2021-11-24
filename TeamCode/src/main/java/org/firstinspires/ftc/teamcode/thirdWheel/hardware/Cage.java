@@ -9,11 +9,9 @@ import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
 public class Cage extends BaseHardware {
     public Servo cageServo;
-    private int status;
 
-    private final double CAGE_OPEN_POS = 0.83;
-    private final double CAGE_CLOSE_POS = 0.45;
-    private final double CAGE_DROP_POS = 0.98;
+    private final double CAGE_OPEN_POS = 0.7;
+    private final double CAGE_CLOSE_POS = 0.0;
 
     public Cage(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode);
@@ -31,18 +29,9 @@ public class Cage extends BaseHardware {
 
     public void cageOpen() {
         cageServo.setPosition(CAGE_OPEN_POS);
-        status = 0;
     }
 
     public void cageClose() {
         cageServo.setPosition(CAGE_CLOSE_POS);
-        status = 1;
     }
-
-    public void cageDrop() {
-        cageServo.setPosition(CAGE_DROP_POS);
-        status = 2;
-    }
-
-    public int getStatus() { return status; }
 }

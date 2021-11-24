@@ -30,7 +30,6 @@ public class TeleopThirdWheel extends OpMode {
         controller = new Controller(gamepad1);
         drive.togglePOV(true);
         gyro.reset();
-        linearSlide.setLevel(1);
     }
 
     @Override
@@ -42,17 +41,14 @@ public class TeleopThirdWheel extends OpMode {
         controller.update();
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         drive.togglePOV(controller.leftStickButtonOnce());
-        // if (controller.dpadUp()) {
-        //     level = 3;
-        // }
-        // if (controller.dpadDown()) {
-        //     level = 0;
-        // }
+        if (controller.dpadUp()) {
+            level = 3;
+        }
+        if (controller.dpadDown()) {
+            level = 0;
+        }
         if (controller.rightBumperOnce()) {
-            // if (level < 3) {
-            //     level += 1;
-            // }
-            if (level < 2) {
+            if (level < 3) {
                 level += 1;
             }
         }
@@ -61,19 +57,12 @@ public class TeleopThirdWheel extends OpMode {
                 level -= 1;
             }
         }
+        linearSlide.setLevel(level);
         if (controller.A()) {
             cageServo.cageOpen();
-            level = 0;
         }
         if (controller.B()) {
             cageServo.cageClose();
-            level = 2;
         }
-        if (controller.X()) {
-            if (level != 0) {
-                cageServo.cageDrop();
-            }
-        }
-        linearSlide.setLevel(level);
     }
 }
