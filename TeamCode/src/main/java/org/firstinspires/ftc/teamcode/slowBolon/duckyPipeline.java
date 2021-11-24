@@ -7,6 +7,9 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 class duckyPipeline extends OpenCvPipeline
@@ -25,8 +28,9 @@ class duckyPipeline extends OpenCvPipeline
     boolean tapepixel, duckypixel;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public Mat processFrame(Mat input)
-    {
+    public Mat processFrame(Mat inputoo) {
+        Mat input = inputoo.clone();
+
         lefttapelimit = width/2; righttapelimit = lefttapelimit;
         tapecolor = Color.RED; duckycolor = Color.YELLOW;
         //define rgb requirements to be considered tape
@@ -39,14 +43,11 @@ class duckyPipeline extends OpenCvPipeline
         rgb = new int[] {};
 
         width = input.width(); height = input.height();
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++) {
+        for(int y = 0; y < height; y+=2) {
+            for(int x = 0; x < width; x+=2) {
                 //for each pixel
                 int pixel = input.get(x,y,bytebuffer); // hopefully hex value
-                rgb[0] = Color.red(pixel);
-                rgb[1] = Color.green(pixel);
-                rgb[2] = Color.blue(pixel);
-
+                //double[] pixel = input.get(new int[] {x,y});
 
                 if(closeness(pixel, duckycolor) <= duckyadecuado) {
                     duckypixel = true;
@@ -56,7 +57,7 @@ class duckyPipeline extends OpenCvPipeline
                     if(x > righttapelimit) {righttapelimit = x;}
                     else if(x < lefttapelimit) {lefttapelimit = x;}
                 } else {tapepixel = false;}
-
+                /*
                 // doock
                 if(duckypixel) {
                     whichspot = (int) ((3*(x-lefttapelimit)/(righttapelimit-lefttapelimit)));
@@ -64,7 +65,7 @@ class duckyPipeline extends OpenCvPipeline
 
                 // testing
                 if(diff(pixel,tapecolor) < leasttapediff) {leasttapediff = (int)(diff(pixel,tapecolor));}
-                if(diff(pixel,duckycolor) < leastduckydiff) {leastduckydiff = (int)(diff(pixel,duckycolor));}
+                if(diff(pixel,duckycolor) < leastduckydiff) {leastduckydiff = (int)(diff(pixel,duckycolor));}*/
             }
         }
         return input;

@@ -5,10 +5,13 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.vampire.hardware.Arm;
 import org.firstinspires.ftc.teamcode.vampire.hardware.DuckDuckGo;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Intake;
+import org.firstinspires.ftc.teamcode.vampire.hardware.VampireDrive;
+import org.firstinspires.ftc.teamcode.vampire.hardware.Webcam;
 import org.firstinspires.ftc.teamcode.vampire.roadrunner.drive.VampireRRDrive;
 
 @Autonomous(name="Vampire: RLDWhWa", group="Vampire")
@@ -16,7 +19,7 @@ public class RLDWhWa extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+/*
         // Subsystems
         VampireRRDrive drive = new VampireRRDrive(hardwareMap);
         Arm arm = new Arm(this, hardwareMap);
@@ -39,7 +42,7 @@ public class RLDWhWa extends LinearOpMode {
                 .build();
 
         waitForStart();
-        if(isStopRequested()) return;
+        if (isStopRequested()) return;
 
         // Deploy cargo
         drive.followTrajectory(deploy);
@@ -57,6 +60,43 @@ public class RLDWhWa extends LinearOpMode {
 
         // Go to warehouse
         drive.followTrajectory(warehouse);
+*/
+
+        // Dum auto RIP
+        VampireDrive drive = new VampireDrive(this, hardwareMap);
+        Arm arm = new Arm(this, hardwareMap);
+        Intake intake = new Intake(this, hardwareMap);
+        Webcam webcam = new Webcam(this, hardwareMap);
+        webcam.debug();
+
+        // Elapsed time for timed motion
+        ElapsedTime runtime = new ElapsedTime();
+
+        // Send telemetry message to signify robot waiting;
+        telemetry.addData("Status", "Ready to run");
+        telemetry.update();
+
+        waitForStart();
+        if (isStopRequested()) return;
+
+        // Get how many rings are stacked
+        int position = 3;
+        runtime.reset();
+        while (opModeIsActive() && runtime.seconds() < 4) {
+
+            position = webcam.getCargoPos();
+            webcam.update();
+            telemetry.update();
+
+        }
+
+        arm.setLift(position);
+        drive.move(0.5, 43, 30);
+        drive.turn(0.5, 48);
+        intake.reverse();
+        sleep(3000);
+        intake.stop();
+        drive.move(0.5, 50, -139);
 
     }
 

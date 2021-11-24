@@ -168,6 +168,8 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     private void setupEncoders() {
 
+        resetMotors();
+
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -310,10 +312,10 @@ public abstract class HolonomicDrive extends BaseHardware {
         print("Correction: ", correction);
         print("IsPOV: ", isDrivePOV);
         print("IsSlow: ", isSlow);
-        //print("Encoder fl: ", frontLeft.getCurrentPosition());
-        //print("Encoder fr: ", frontRight.getCurrentPosition());
-        //print("Encoder bl: ", backLeft.getCurrentPosition());
-        //print("Encoder br: ", backRight.getCurrentPosition());
+        print("Encoder fl: ", frontLeft.getCurrentPosition());
+        print("Encoder fr: ", frontRight.getCurrentPosition());
+        print("Encoder bl: ", backLeft.getCurrentPosition());
+        print("Encoder br: ", backRight.getCurrentPosition());
         print("Gyro: ", gyro.getAngleDegrees());
 
     }
@@ -413,7 +415,7 @@ public abstract class HolonomicDrive extends BaseHardware {
             double speedFLBR = pidFLBR.performPID(avgFLBRPos);
 
             double avgFRBLPos = (frontRight.getCurrentPosition() + backLeft.getCurrentPosition()) / 2.0;
-            double speedFRBL = pidFRBL.performPID(avgFLBRPos);
+            double speedFRBL = pidFRBL.performPID(avgFRBLPos);
 
             frontLeft.setPower(speedFLBR - correction);
             frontRight.setPower(speedFRBL + correction);

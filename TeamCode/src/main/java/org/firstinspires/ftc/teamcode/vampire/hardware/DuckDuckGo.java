@@ -14,7 +14,7 @@ public class DuckDuckGo extends BaseHardware {
 
     // Motor and motor power
     private CRServo duckSpin;
-    private static final double SPIN_POWER = 0.9;
+    private static final double SPIN_POWER = 0.7;
 
     // Teleop constructor
     public DuckDuckGo(OpMode opMode, HardwareMap hwMap) {

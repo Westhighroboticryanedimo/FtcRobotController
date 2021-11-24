@@ -18,7 +18,10 @@ public class AutoBolon extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         Cam = new org.firstinspires.ftc.teamcode.slowBolon.CamBolon();
         Cam.init(hardwareMap);
+
+        waitForStart();
         DONDEESTAELDUCKY = Cam.getspot();
+        ElapsedTime runtime = new ElapsedTime();
 
         telemetry.addData("where",DONDEESTAELDUCKY);
         telemetry.addData("leastduckydiff", Cam.pipeline.leastduckydiff);
@@ -34,6 +37,10 @@ public class AutoBolon extends LinearOpMode{
         }
 
         else {
+
+        }
+
+        while(runtime.seconds() < 30) {
 
         }
 

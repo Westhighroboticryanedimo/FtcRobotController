@@ -35,12 +35,12 @@ public class VampireDrive extends HolonomicDrive {
     private void setup(HardwareMap hwMap) {
 
         // PID Values
-        setPidDrive(0.05, 0, 0.009);
+        setPidDrive(0.05, 0, 0.01);
         setPidSpeed(0.03, 0.002, 0);
         setPidTurn(0.03, 0.001, 0);
 
         // Set motor direction
-        setMotorDir(false, true, true, false);
+        setMotorDir(false, true, false, true);
 
         // Robot characteristics
         setWheelDiameter(3.9);

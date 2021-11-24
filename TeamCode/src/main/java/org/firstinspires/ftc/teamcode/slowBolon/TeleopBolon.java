@@ -2,10 +2,8 @@ package org.firstinspires.ftc.teamcode.slowBolon;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Controller;
@@ -28,12 +26,17 @@ public class TeleopBolon extends OpMode {
     private DcMotor extend;
 
     private boolean outok, backok;
+    private boolean slowbol;
+    private double speed;
 
 
     @Override
     public void init() {
-        backok = false; outok = true;
+        speed=1;
+        slowbol = false;
+        backok = true; outok = true;
         drive = new DriveBolon(this, hardwareMap);
+        drive.setup();
         gyro = new Gyro(hardwareMap, false);
         //orientation = new AndroidOrientation();
         controller = new Controller(gamepad1);
@@ -41,12 +44,14 @@ public class TeleopBolon extends OpMode {
         //orientation.startListening();
         gyro.reset();
         cat1 = hardwareMap.get(Servo.class,"cat1");
-        cat1.setPosition(0.6);
+        cat1.setPosition(0);
         cat2 = hardwareMap.get(Servo.class, "cat2");
-        cat2.setPosition(0);
+        cat2.setPosition(0.8);
 
         duckDumpy = hardwareMap.get(CRServo.class,"duckDumpy");
         extend = hardwareMap.get(DcMotor.class,"extend");
+        //extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift = hardwareMap.get(DcMotor.class,"lift");
         o = new OdometryBolon();
         o.init(hardwareMap.get(DcMotor.class,"frontLeft"));
@@ -68,28 +73,36 @@ public class TeleopBolon extends OpMode {
 
         telemetry.addData("milfs",gyro.getAngleDegrees());
         telemetry.addData("distance",o.distance);
-        telemetry.update();
+        telemetry.addData("extender-check", extend.getCurrentPosition());
+        telemetry.addData("OUTWARDS",controller.right_trigger>0.2);
+        telemetry.addData("INWARDS",controller.left_trigger>0.2);
+        telemetry.addData("version","29 -- attempting encoder brake redemption");
+
         controller.update();
-        drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+        drive.drive(controller.left_stick_x*speed, controller.left_stick_y*speed, controller.right_stick_x);
         drive.togglePOV(controller.leftStickButtonOnce());
         if(controller.dpadDownOnce()) {o.resetdistance();}
 
-        if(controller.leftBumperOnce()) {cat1.setPosition(0.6); cat2.setPosition(0);}
-        if(controller.rightBumperOnce()){cat1.setPosition(0); cat2.setPosition(0.6);}
+        outok = (extend.getCurrentPosition()<1600);//real number around 1690
+        backok = (extend.getCurrentPosition()>-2);
 
-        if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.78);}
-        else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.6);}
+        if(controller.leftStickButtonOnce()) {slowbol = !slowbol;}
+        if(slowbol) {speed=0.4;} else {speed=1;}
+        if(controller.leftBumperOnce()) {cat1.setPosition(0.4); cat2.setPosition(0.5);}
+        if(controller.rightBumperOnce()){cat1.setPosition(0); cat2.setPosition(0.8);}
+
+        if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.27*speed);}
+        else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.27*speed);}
         else{lift.setPower(0);}
 
-        if(extend.getCurrentPosition()<=10) {backok = false;} else{backok = true;}
-        if(extend.getCurrentPosition() >= 100) {outok = false;} else {outok = true;}
-        if(controller.dpadRight() && outok) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(1);}
-        else if(controller.dpadLeft() && backok) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(1);}
+        if(controller.right_trigger>0.2&&outok) {extend.setDirection(DcMotor.Direction.FORWARD);extend.setPower(0.4*speed);}
+        else if(controller.left_trigger>0.2&&backok) {extend.setDirection(DcMotor.Direction.REVERSE);extend.setPower(0.4*speed);}
         else{extend.setPower(0);}
 
-        if(controller.A()) {duckDumpy.setPower(1);}
-
-        if(controller.XOnce()) {telemetry.speak("que deporte te gusta me gusta el beisbol");}
+        if(controller.B()) {duckDumpy.setPower(1);} else{duckDumpy.setPower(0);}
+        telemetry.update();
+        if(controller.XOnce()) {telemetry.speak("We win");}
+        //no changes here you saw nothing
     }
 
 }

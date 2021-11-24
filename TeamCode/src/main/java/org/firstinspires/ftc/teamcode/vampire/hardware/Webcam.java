@@ -54,7 +54,15 @@ public class Webcam extends BaseHardware {
         webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
         // Start video streaming
-        webcam.openCameraDeviceAsync(() -> webcam.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPRIGHT));
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+
+            @Override
+            public void onOpened() { webcam.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPSIDE_DOWN); }
+
+            @Override
+            public void onError(int errorCode) {}
+
+        });
 
     }
 
@@ -68,15 +76,21 @@ public class Webcam extends BaseHardware {
 
     }
 
-    public char getCargoPos() {
+    public int getCargoPos() {
 
         if (pipeline.getPosition() == CargoDeterminationPipeline.CargoPosition.BOTTOM)
-            return 'b';
+            return 1;
         else if (pipeline.getPosition() == CargoDeterminationPipeline.CargoPosition.MIDDLE)
-            return 'm';
+            return 2;
         else if (pipeline.getPosition() == CargoDeterminationPipeline.CargoPosition.TOP)
-            return 't';
-        else return ' ';
+            return 3;
+        else return 0;
+
+    }
+
+    public int[] getRaw() {
+
+        return pipeline.getRaw();
 
     }
 
@@ -90,11 +104,11 @@ public class Webcam extends BaseHardware {
 
         }
 
-        private static final int REGION_WIDTH = 50;
-        private static final int REGION_HEIGHT = 50;
-        private static final Point REGION_LEFT = new Point(-100, -60);
-        private static final Point REGION_MID = new Point(0, -60);
-        private static final Point REGION_RIGHT = new Point(100, -60);
+        private static final int REGION_WIDTH = 80;
+        private static final int REGION_HEIGHT = 80;
+        private static final Point REGION_LEFT = new Point(-320, -200);
+        private static final Point REGION_MID = new Point(-40, -200);
+        private static final Point REGION_RIGHT = new Point(230, -200);
 
         // The core values which define the location and size of the sample regions
         private static final Point REGION_LEFT_TOPLEFT = new Point((int) (WIDTH / 2 + REGION_WIDTH / 2 + REGION_LEFT.x), (int) (HEIGHT / 2 + REGION_HEIGHT / 2 + REGION_LEFT.y));
@@ -203,12 +217,18 @@ public class Webcam extends BaseHardware {
                     -1); // Negative thickness means solid fill
 
             // Get position
-            int max = Math.max(avgL, Math.max(avgM, avgR));
-            if (max == avgL) position = CargoPosition.BOTTOM;
-            else if (max == avgM) position = CargoPosition.MIDDLE;
+            int min = Math.min(avgL, Math.min(avgM, avgR));
+            if (min == avgL) position = CargoPosition.BOTTOM;
+            else if (min == avgM) position = CargoPosition.MIDDLE;
             else position = CargoPosition.TOP;
 
             return input;
+
+        }
+
+        private int[] getRaw() {
+
+            return new int[] { avgL, avgM, avgR };
 
         }
 

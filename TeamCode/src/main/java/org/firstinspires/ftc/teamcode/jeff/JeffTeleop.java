@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.jeff;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.marinara.hardware.Shooter;
 import org.firstinspires.ftc.teamcode.marinara.hardware.Webcam;
 
 @TeleOp(name = "Jeffy boi")
+@Disabled
 public class JeffTeleop extends OpMode {
 
     // Objects
@@ -35,18 +37,18 @@ public class JeffTeleop extends OpMode {
         controller.update();
 
         // Drive
-        drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+        //drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
 
         drive.highFive(controller.YOnce());
         drive.wave(controller.AOnce());
 
         telemetry.addData("Wave timer", drive.waveTimer);
         telemetry.addData("Five timer", drive.fiveTimer);
-        telemetry.addData("red", drive.color.red());
-        telemetry.addData("green", drive.color.green());
-        telemetry.addData("blue", drive.color.blue());
+        //telemetry.addData("red", drive.color.red());
+        //telemetry.addData("green", drive.color.green());
+        //telemetry.addData("blue", drive.color.blue());
 
-        drive.checkColor();
+        //drive.checkColor();
 
         // Telemetry
         telemetry.update();

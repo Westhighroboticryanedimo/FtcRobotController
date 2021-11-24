@@ -20,11 +20,11 @@ public class Arm extends BaseHardware {
     // Constants
     private static final double LIFT_POWER = 1;
     private static final double LOWER_POWER = 0.75;
-    private static final int[] ARM_STAGES = { -70, 500, 1500, 2000 };
+    private static final int[] ARM_STAGES = { -70, 1000, 1600, 2550 };
 
     // Mutable variables
-    private int stage = 0;
-    private boolean isAuto = false;
+    private int stage;
+    private boolean isAuto = true;
 
     // PID
     private PIDController pidArm = new PIDController(0.005, 0, 0.004);
@@ -57,11 +57,16 @@ public class Arm extends BaseHardware {
         liftMotor.setDirection(DcMotor.Direction.REVERSE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor.setPower(0);
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Set up touch sensors
         armTouch = hwMap.get(TouchSensor.class, "armTouch");
+
+        // Set stage to closest level
+        if (liftMotor.getCurrentPosition() < (ARM_STAGES[0] + ARM_STAGES[1]) / 2) stage = 0;
+        else if (liftMotor.getCurrentPosition() < (ARM_STAGES[1] + ARM_STAGES[2]) / 2) stage = 1;
+        else if (liftMotor.getCurrentPosition() < (ARM_STAGES[2] + ARM_STAGES[3]) / 2) stage = 2;
+        else stage = 3;
 
     }
 
