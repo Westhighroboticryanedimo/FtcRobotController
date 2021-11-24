@@ -16,9 +16,9 @@ public class LinearSlide extends BaseHardware {
     private int endPos = 0;
 
     private final int LEV_ZERO_TICKS     = 0;
-    private final int LEV_ONE_TICKS      = 560;
-    private final int LEV_TWO_TICKS      = 1680;
-    private final int LEV_THREE_TICKS    = 2800;
+    private final int LEV_ONE_TICKS      = 800;
+    private final int LEV_TWO_TICKS      = 1900;
+    private final int LEV_THREE_TICKS    = 3100;
 
     public LinearSlide(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode);
@@ -70,7 +70,7 @@ public class LinearSlide extends BaseHardware {
                 // telemetry.update();
                 return 1;
         }
-        move(endPos, 20, 560);
+        move(endPos, 20, 1120);
         level = desiredLevel;
         return 0;
     }

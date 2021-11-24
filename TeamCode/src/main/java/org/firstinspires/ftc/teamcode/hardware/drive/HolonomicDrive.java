@@ -34,7 +34,7 @@ public abstract class HolonomicDrive extends BaseHardware {
     protected OdometryGlobalCoordinatePosition odometry = null;
 
     // Modes
-    protected boolean isDrivePOV = true;
+    protected boolean isDrivePOV = false;
     protected boolean isSlow = false;
 
     // For autonomous driving
@@ -225,8 +225,8 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidDrive.setSetpoint(prevAngle);
         correction = pidDrive.performPID(gyro.getAngleDegrees());
 
-        // If turning or not moving then don't correct
-        if (Math.abs(turn) != 0 || (joystickX == 0 && joystickY == 0)) {
+        // If turning then don't correct
+        if (turn != 0) {
 
             pidDrive.disable();
             pidDrive.reset();
