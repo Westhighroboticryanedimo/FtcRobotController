@@ -41,7 +41,6 @@ public class CamBolon {
             public void onError(int errorCode) {}
 
         });
-
         pipeline = new duckyPipeline();
 
         camera.setPipeline(pipeline);
