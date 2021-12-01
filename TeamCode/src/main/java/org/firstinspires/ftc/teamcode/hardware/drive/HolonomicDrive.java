@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.odometry.OdometryGlobalCoor
 
 public abstract class HolonomicDrive extends BaseHardware {
 
+    protected boolean thirdWheel = false;
     // Boolean function for moveUntil()
     public interface BoolCommand {
 
@@ -227,16 +228,29 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidDrive.setSetpoint(prevAngle);
         correction = pidDrive.performPID(gyro.getAngleDegrees());
 
-        // If turning or not moving then don't correct
-        if (Math.abs(turn) != 0 || (joystickX == 0 && joystickY == 0)) {
+        // make this better
+        if (!thirdWheel) {
+            // If turning or not moving then don't correct
+            if (Math.abs(turn) != 0 || (joystickX == 0 && joystickY == 0)) {
 
-            pidDrive.disable();
-            pidDrive.reset();
-            prevAngle = gyro.getAngleDegrees();
-            correction = 0;
+                pidDrive.disable();
+                pidDrive.reset();
+                prevAngle = gyro.getAngleDegrees();
+                correction = 0;
 
-        } else
-            pidDrive.enable();
+            } else
+                pidDrive.enable();
+        } else {
+            if (Math.abs(turn) != 0) {
+
+                pidDrive.disable();
+                pidDrive.reset();
+                prevAngle = gyro.getAngleDegrees();
+                correction = 0;
+
+            } else
+                pidDrive.enable();
+        }
 
         // If field oriented drive, then set angleCompensation to gyro angle
         double angleCompensation = 0;
