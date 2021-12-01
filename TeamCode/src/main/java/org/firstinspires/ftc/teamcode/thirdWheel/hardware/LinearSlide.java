@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
+import org.firstinspires.ftc.teamcode.hardware.utils.DcMotorUtils;
+
 public class LinearSlide extends BaseHardware {
     private DcMotor slideMotor;
     private int level = 0;
@@ -41,14 +43,8 @@ public class LinearSlide extends BaseHardware {
 
     // Move the slide to the position specified, in ticks
     // Except it only sets the power and you have to run it in the loop() thing, because yes
-    private void move(int desiredTicks, int tolerance, int startDec) {
-        // Deceleration: min(x * 1/startDec, 1) where x = difference
-        if (Math.abs(getDifference(desiredTicks)) > tolerance ) {
-            int direction = getDifference(desiredTicks)/Math.abs(getDifference(desiredTicks));
-            slideMotor.setPower(Math.min(Math.abs(getDifference(desiredTicks))*(1.0/startDec), 1) * direction);
-        } else {
-            slideMotor.setPower(0);
-        }
+    private void moveSlide(int desiredTicks, int tolerance, int startDec) {
+        DcMotorUtils.move(slideMotor, desiredTicks, tolerance, startDec);
     }
 
     public int setLevel(int desiredLevel) {
@@ -70,13 +66,12 @@ public class LinearSlide extends BaseHardware {
                 // telemetry.update();
                 return 1;
         }
-        move(endPos, 20, 560);
+        moveSlide(endPos, 20, 560);
         level = desiredLevel;
         return 0;
     }
 
-    public int getDifference(int desiredTicks) { return desiredTicks - slideMotor.getCurrentPosition(); }
+
     public int getEndPos() { return endPos; }
     public int getLevel() { return level; }
-    public int getCurrentTicks() { return slideMotor.getCurrentPosition(); }
 }
