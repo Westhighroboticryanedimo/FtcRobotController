@@ -33,8 +33,9 @@ public class VampireTeleop extends OpMode {
         controller = new Controller(gamepad1);
 
         // Debug mode
-        drive.debug();
-        arm.debug();
+        intake.debug();
+        //drive.debug();
+        //arm.debug();
         webcam.debug();
 
     }
@@ -52,7 +53,7 @@ public class VampireTeleop extends OpMode {
         // Other subsystem controls
         intake.intake(controller.leftBumper(), controller.rightBumper());
         spin.spin(controller.X(), controller.A());
-        arm.toggleAuto(controller.startOnce());
+        // arm.toggleAuto(controller.startOnce());
         arm.lift(controller.dpadUp(), controller.dpadDown());
         arm.changeStage(controller.dpadUpOnce(), controller.dpadDownOnce());
 
