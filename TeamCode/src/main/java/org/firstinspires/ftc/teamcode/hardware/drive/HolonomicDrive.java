@@ -128,6 +128,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         gyro = new Gyro(hwMap, false);
         prevAngle = gyro.getAngleDegrees();
+        gyro.reset();
 
         setupMotors(hwMap);
 
@@ -375,7 +376,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         stop();
 
-        linearOpMode.sleep(100);
+        linearOpMode.sleep(500);
 
     }
 
@@ -403,7 +404,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidFLBR.setInputRange(currFlbr, currFlbr + flbrDist);
         pidFLBR.setOutputRange(0, goalFLBRSpeed);
         pidFLBR.setSetpoint(currFlbr + flbrDist);
-        pidFLBR.setTolerance(0.5);
+        pidFLBR.setTolerance(3);
         pidFLBR.enable();
 
         // For frontright and backleft motors
@@ -411,7 +412,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidFRBL.setInputRange(currFrbl, currFrbl + frblDist);
         pidFRBL.setOutputRange(0, goalFRBLSpeed);
         pidFRBL.setSetpoint(currFrbl + frblDist);
-        pidFRBL.setTolerance(0.5);
+        pidFRBL.setTolerance(3);
         pidFRBL.enable();
 
         boolean isFLBROnTarget = false;
@@ -439,13 +440,13 @@ public abstract class HolonomicDrive extends BaseHardware {
             print("FR: ", frontRight.getCurrentPosition());
             print("BL: ", backLeft.getCurrentPosition());
             print("BR: ", backRight.getCurrentPosition());
-            print("Correction: ", correction);
-            print("FLBR Setpoint: ", pidFLBR.getSetpoint() + " " + Double.toString(flbrDist));
-            print("FRBL Setpoint: ", pidFRBL.getSetpoint() + " " + Double.toString(frblDist));
+            //print("Correction: ", correction);
+            //print("FLBR Setpoint: ", pidFLBR.getSetpoint() + " " + Double.toString(flbrDist));
+            //print("FRBL Setpoint: ", pidFRBL.getSetpoint() + " " + Double.toString(frblDist));
             print("FLBR Speed: ", speedFLBR);
             print("FRBL Speed: ", speedFRBL);
-            print("FLBR Ontarget: ", pidFLBR.onTarget() || isFLBROnTarget);
-            print("FRBL Ontarget: ", pidFRBL.onTarget() || isFRBLOnTarget);
+            //print("FLBR Ontarget: ", pidFLBR.onTarget() || isFLBROnTarget);
+            //print("FRBL Ontarget: ", pidFRBL.onTarget() || isFRBLOnTarget);
 
             linearOpMode.telemetry.update();
 
@@ -459,7 +460,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         currFrbl += frblDist;
 
         // Add slight delay
-        linearOpMode.sleep(100);
+        linearOpMode.sleep(500);
 
     }
 
@@ -471,7 +472,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidTurn.setInputRange(0, currAngle - angle);
         pidTurn.setOutputRange(0, speed);
         pidTurn.setSetpoint(currAngle - angle);
-        pidTurn.setTolerance(0.5);
+        pidTurn.setTolerance(3);
         pidTurn.enable();
 
         do {
@@ -487,6 +488,8 @@ public abstract class HolonomicDrive extends BaseHardware {
             print("FR: ", frontRight.getCurrentPosition());
             print("BL: ", backLeft.getCurrentPosition());
             print("BR: ", backRight.getCurrentPosition());
+            print("Curr Angle: ", gyro.getAngleDegrees());
+            print("Setpoint: ", pidTurn.getSetpoint());
 
             linearOpMode.telemetry.update();
 
@@ -499,7 +502,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         stop();
 
         // Add slight delay
-        linearOpMode.sleep(100);
+        linearOpMode.sleep(500);
 
     }
 

@@ -82,7 +82,7 @@ public class BRDWhWa extends LinearOpMode {
         // Get how many rings are stacked
         int position = 3;
         runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 4) {
+        while (opModeIsActive() && runtime.seconds() < 2) {
 
             position = webcam.getCargoPos();
             webcam.update();

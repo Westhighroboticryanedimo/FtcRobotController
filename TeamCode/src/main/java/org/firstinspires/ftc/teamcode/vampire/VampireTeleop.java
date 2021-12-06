@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Arm;
 import org.firstinspires.ftc.teamcode.vampire.hardware.DuckDuckGo;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Intake;
+import org.firstinspires.ftc.teamcode.vampire.hardware.MiniArm;
 import org.firstinspires.ftc.teamcode.vampire.hardware.VampireDrive;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Webcam;
 
@@ -19,6 +20,7 @@ public class VampireTeleop extends OpMode {
     private Arm arm;
     private DuckDuckGo spin;
     private Webcam webcam;
+    private MiniArm miniArm;
     private Controller controller;
 
     @Override
@@ -29,13 +31,15 @@ public class VampireTeleop extends OpMode {
         intake = new Intake(this, hardwareMap);
         arm = new Arm(this, hardwareMap);
         spin = new DuckDuckGo(this, hardwareMap);
+        miniArm = new MiniArm(this, hardwareMap);
         webcam = new Webcam(this, hardwareMap);
         controller = new Controller(gamepad1);
 
         // Debug mode
-        intake.debug();
+        //intake.debug();
         //drive.debug();
         //arm.debug();
+        miniArm.debug();
         webcam.debug();
 
     }
@@ -48,7 +52,7 @@ public class VampireTeleop extends OpMode {
         // Drive controls
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         drive.togglePOV(controller.backOnce());
-        drive.toggleSlow(controller.leftStickButtonOnce());
+        // drive.toggleSlow(controller.leftStickButtonOnce());
 
         // Other subsystem controls
         intake.intake(controller.leftBumper(), controller.rightBumper());
@@ -56,6 +60,11 @@ public class VampireTeleop extends OpMode {
         // arm.toggleAuto(controller.startOnce());
         arm.lift(controller.dpadUp(), controller.dpadDown());
         arm.changeStage(controller.dpadUpOnce(), controller.dpadDownOnce());
+
+        // Second controller
+        miniArm.moveArm(controller.YOnce());
+        miniArm.moveClaw(controller.BOnce());
+        miniArm.continuousMoveArm(controller.dpadRight(), controller.dpadLeft());
 
         // Update webcam values
         webcam.update();

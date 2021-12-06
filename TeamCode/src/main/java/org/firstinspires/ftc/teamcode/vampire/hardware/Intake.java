@@ -19,8 +19,8 @@ public class Intake extends BaseHardware {
 
     // Servo
     private Servo flag;
-    private static final double POS_UP = 1;
-    private static final double POS_DOWN = 0;
+    private static final double POS_UP = 0;
+    private static final double POS_DOWN = 0.6;
 
     // For distance sensor
     private DistanceSensor distanceSensor;

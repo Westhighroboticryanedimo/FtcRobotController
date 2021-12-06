@@ -35,8 +35,8 @@ public class TeleopThirdWheel extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("gyro", gyro.getAngleDegrees());
-        telemetry.addData("ticks", linearSlide.getCurrentTicks());
-        telemetry.addData("level", linearSlide.getLevel());
+        //telemetry.addData("ticks", linearSlide.getCurrentTicks());
+        //telemetry.addData("level", linearSlide.getLevel());
         telemetry.update();
         controller.update();
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);

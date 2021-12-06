@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
-import org.firstinspires.ftc.teamcode.hardware.utils.DcMotorUtils;
+//import org.firstinspires.ftc.teamcode.hardware.utils.DcMotorUtils;
 
 public class LinearSlide extends BaseHardware {
     private DcMotor slideMotor;
@@ -44,7 +44,7 @@ public class LinearSlide extends BaseHardware {
     // Move the slide to the position specified, in ticks
     // Except it only sets the power and you have to run it in the loop() thing, because yes
     private void moveSlide(int desiredTicks, int tolerance, int startDec) {
-        DcMotorUtils.move(slideMotor, desiredTicks, tolerance, startDec);
+        //DcMotorUtils.move(slideMotor, desiredTicks, tolerance, startDec);
     }
 
     public int setLevel(int desiredLevel) {
