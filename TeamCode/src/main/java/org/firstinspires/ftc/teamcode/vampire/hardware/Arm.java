@@ -20,7 +20,7 @@ public class Arm extends BaseHardware {
     // Constants
     private static final double LIFT_POWER = 1;
     private static final double LOWER_POWER = 0.75;
-    private static final int[] ARM_STAGES = { -70, 1000, 1600, 2550 };
+    private static final int[] ARM_STAGES = { -50, 1000, 1600, 2550 };
 
     // Mutable variables
     private int stage;

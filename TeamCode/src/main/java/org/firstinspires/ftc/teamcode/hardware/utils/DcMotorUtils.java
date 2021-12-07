@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware.utils;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+/*
 public class DcMotorUtils {
     // Move the motor to the position specified, in ticks
     // Except it only sets the power and you have to run it in the loop() thing, because yes
@@ -22,3 +22,4 @@ public class DcMotorUtils {
     static public double getDifference(DcMotor motor, double desiredTicks) { return desiredTicks - getCurrentTicks(motor); }
     static public int getCurrentTicks(DcMotor motor) { return motor.getCurrentPosition(); }
 }
+*/

@@ -10,8 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Arm;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Intake;
 import org.firstinspires.ftc.teamcode.vampire.hardware.VampireDrive;
-import org.firstinspires.ftc.teamcode.vampire.hardware.Webcam;
-import org.firstinspires.ftc.teamcode.vampire.roadrunner.drive.VampireRRDrive;
+import org.firstinspires.ftc.teamcode.vampire.hardware.Webcam; import org.firstinspires.ftc.teamcode.vampire.roadrunner.drive.VampireRRDrive;
 
 @Autonomous(name="Vampire: BLDWa", group="Vampire")
 public class BLDWa extends LinearOpMode {
@@ -58,6 +57,8 @@ public class BLDWa extends LinearOpMode {
         Webcam webcam = new Webcam(this, hardwareMap);
         webcam.debug();
 
+        drive.debug();
+
         // Elapsed time for timed motion
         ElapsedTime runtime = new ElapsedTime();
 
@@ -71,7 +72,7 @@ public class BLDWa extends LinearOpMode {
         // Get how many rings are stacked
         int position = 3;
         runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 4) {
+        while (opModeIsActive() && runtime.seconds() < 2) {
 
             position = webcam.getCargoPos();
             webcam.update();
@@ -81,8 +82,7 @@ public class BLDWa extends LinearOpMode {
 
         arm.setLift(position);
         drive.move(0.5, 40, 27);
-        drive.turn(0.5, 45);
-        intake.reverse();
+        drive.turn(0.5, 45); intake.reverse();
         sleep(3000);
         intake.stop();
         drive.move(0.3, 15, 180);
@@ -92,5 +92,3 @@ public class BLDWa extends LinearOpMode {
     }
 
 }
-
-
