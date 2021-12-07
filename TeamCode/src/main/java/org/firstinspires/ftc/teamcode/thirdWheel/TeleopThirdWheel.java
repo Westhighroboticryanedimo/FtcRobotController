@@ -7,25 +7,20 @@ import org.firstinspires.ftc.teamcode.hardware.Gyro;
 import org.firstinspires.ftc.teamcode.Controller;
 
 import org.firstinspires.ftc.teamcode.thirdWheel.hardware.DriveThirdWheel;
-import org.firstinspires.ftc.teamcode.thirdWheel.hardware.LinearSlide;
-import org.firstinspires.ftc.teamcode.thirdWheel.hardware.Cage;
+import org.firstinspires.ftc.teamcode.thirdWheel.hardware.lift.Lift;
 
 @TeleOp(name = "ThirdWheel TeleOp")
 public class TeleopThirdWheel extends OpMode {
 
     private DriveThirdWheel drive;
-    private LinearSlide linearSlide;
-    private Cage cageServo;
+    private Lift lift;
     private Gyro gyro;
     private Controller controller;
-
-    private int level = 0;
 
     @Override
     public void init() {
         drive = new DriveThirdWheel(this, hardwareMap);
-        linearSlide = new LinearSlide(this, hardwareMap);
-        cageServo = new Cage(this, hardwareMap);
+        lift = new Lift(this, hardwareMap);
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
         drive.togglePOV(true);
@@ -35,34 +30,37 @@ public class TeleopThirdWheel extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("gyro", gyro.getAngleDegrees());
-        telemetry.addData("ticks", linearSlide.getCurrentTicks());
-        telemetry.addData("level", linearSlide.getLevel());
+        telemetry.addData("ticks", lift.getCurrentTicks());
+        telemetry.addData("level", lift.getLevel());
         telemetry.update();
         controller.update();
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
-        drive.togglePOV(controller.leftStickButtonOnce());
+        // drive.togglePOV(controller.leftStickButtonOnce());
         if (controller.dpadUp()) {
-            level = 3;
+            lift.override(3,-1);
         }
         if (controller.dpadDown()) {
-            level = 0;
+            lift.inhale();
         }
         if (controller.rightBumperOnce()) {
-            if (level < 3) {
-                level += 1;
+            if (lift.getLevel() != 3) {
+                lift.override((lift.getLevel()+1), -1);
             }
         }
         if (controller.leftBumperOnce()) {
-            if (level > 0) {
-                level -= 1;
+            if (lift.getLevel() != 0) {
+                lift.override((lift.getLevel()-1), -1);
             }
         }
-        linearSlide.setLevel(level);
         if (controller.A()) {
-            cageServo.cageOpen();
+            lift.override(-1, 0);
         }
         if (controller.B()) {
-            cageServo.cageClose();
+            lift.override(-1, 1);
         }
+        if (controller.X()) {
+            lift.override(-1, 2);
+        }
+        lift.assist();
     }
 }
