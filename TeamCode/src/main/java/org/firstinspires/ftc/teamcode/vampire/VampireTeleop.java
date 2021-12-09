@@ -51,7 +51,7 @@ public class VampireTeleop extends OpMode {
 
         // Drive controls
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
-        drive.togglePOV(controller.backOnce());
+        // drive.togglePOV(controller.backOnce());
         // drive.toggleSlow(controller.leftStickButtonOnce());
 
         // Other subsystem controls
