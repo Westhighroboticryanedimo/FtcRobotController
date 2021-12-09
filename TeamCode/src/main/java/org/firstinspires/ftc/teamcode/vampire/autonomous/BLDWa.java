@@ -80,14 +80,15 @@ public class BLDWa extends LinearOpMode {
 
         }
 
+        drive.move(0.7, 32, 27);
         arm.setLift(position);
-        drive.move(0.5, 40, 27);
-        drive.turn(0.5, 45); intake.reverse();
+        drive.turn(1, 45);
+        intake.reverse();
         sleep(3000);
         intake.stop();
-        drive.move(0.3, 15, 180);
-        drive.turn(0.5, 25);
-        drive.move(1, 80, 180);
+        drive.turn(1, 45);
+        drive.move(0.4, 37, 90);
+        drive.move(0.5, 55, 170);
 
     }
 

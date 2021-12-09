@@ -401,18 +401,18 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         // For frontleft and backright motors
         pidFLBR.reset();
-        pidFLBR.setInputRange(currFlbr, currFlbr + flbrDist);
+        pidFLBR.setInputRange((frontLeft.getCurrentPosition() + backRight.getCurrentPosition()) / 2.0, currFlbr + flbrDist);
         pidFLBR.setOutputRange(0, goalFLBRSpeed);
         pidFLBR.setSetpoint(currFlbr + flbrDist);
-        pidFLBR.setTolerance(3);
+        pidFLBR.setTolerance(5);
         pidFLBR.enable();
 
         // For frontright and backleft motors
         pidFRBL.reset();
-        pidFRBL.setInputRange(currFrbl, currFrbl + frblDist);
+        pidFRBL.setInputRange((frontRight.getCurrentPosition() + backLeft.getCurrentPosition()) / 2.0, currFrbl + frblDist);
         pidFRBL.setOutputRange(0, goalFRBLSpeed);
         pidFRBL.setSetpoint(currFrbl + frblDist);
-        pidFRBL.setTolerance(3);
+        pidFRBL.setTolerance(5);
         pidFRBL.enable();
 
         boolean isFLBROnTarget = false;
@@ -469,10 +469,10 @@ public abstract class HolonomicDrive extends BaseHardware {
         if (Math.abs(angle) > 359) angle = (int) Math.copySign(359, angle);
 
         pidTurn.reset();
-        pidTurn.setInputRange(0, currAngle - angle);
+        pidTurn.setInputRange(gyro.getAngleDegrees(), currAngle - angle);
         pidTurn.setOutputRange(0, speed);
         pidTurn.setSetpoint(currAngle - angle);
-        pidTurn.setTolerance(3);
+        pidTurn.setTolerance(5);
         pidTurn.enable();
 
         do {
@@ -490,6 +490,7 @@ public abstract class HolonomicDrive extends BaseHardware {
             print("BR: ", backRight.getCurrentPosition());
             print("Curr Angle: ", gyro.getAngleDegrees());
             print("Setpoint: ", pidTurn.getSetpoint());
+            print("Is setpoint: ", pidTurn.onTarget());
 
             linearOpMode.telemetry.update();
 
@@ -534,11 +535,8 @@ public abstract class HolonomicDrive extends BaseHardware {
     public double getVoltage(HardwareMap hwMap) {
 
         double result = Double.POSITIVE_INFINITY;
-        for (VoltageSensor sensor : hwMap.voltageSensor) {
-
+        for (VoltageSensor sensor : hwMap.voltageSensor)
             if (sensor.getVoltage() > 0) result = Math.min(result, sensor.getVoltage());
-
-        }
         return result;
 
     }

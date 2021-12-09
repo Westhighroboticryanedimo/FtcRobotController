@@ -79,15 +79,15 @@ public class RRDWa extends LinearOpMode {
 
         }
 
+        drive.move(0.8, 28, -28);
         arm.setLift(position);
-        drive.move(0.5, 40, -27);
-        drive.turn(0.5, -45);
+        drive.turn(1, -45);
         intake.reverse();
         sleep(3000);
         intake.stop();
-        drive.move(0.3, 15, 180);
-        drive.turn(0.5, -25);
-        drive.move(1, 90, 180);
+        drive.turn(1, -45);
+        drive.move(0.5, 35, -90);
+        drive.move(0.5, 55, -175);
 
     }
 

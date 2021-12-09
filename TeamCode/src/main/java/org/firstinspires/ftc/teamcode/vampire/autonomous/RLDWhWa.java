@@ -66,6 +66,7 @@ public class RLDWhWa extends LinearOpMode {
         VampireDrive drive = new VampireDrive(this, hardwareMap);
         Arm arm = new Arm(this, hardwareMap);
         Intake intake = new Intake(this, hardwareMap);
+        DuckDuckGo spin = new DuckDuckGo(this, hardwareMap);
         Webcam webcam = new Webcam(this, hardwareMap);
         webcam.debug();
 
@@ -90,13 +91,20 @@ public class RLDWhWa extends LinearOpMode {
 
         }
 
+        drive.move(0.5, 30, 28);
         arm.setLift(position);
-        drive.move(0.5, 43, 30);
-        drive.turn(0.5, 48);
+        drive.turn(0.5, 45);
         intake.reverse();
         sleep(3000);
         intake.stop();
-        drive.move(0.5, 50, -139);
+        drive.turn(1, 45);
+        drive.move(0.5, 18, 90);
+        drive.move(0.5, 32, 165);
+        spin.spinRed();
+        sleep(3000);
+        spin.stop();
+        drive.move(0.5, 23, -90);
+        arm.setLift(0);
 
     }
 

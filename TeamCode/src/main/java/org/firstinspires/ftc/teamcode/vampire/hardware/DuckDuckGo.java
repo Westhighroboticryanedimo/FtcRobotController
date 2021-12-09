@@ -50,13 +50,13 @@ public class DuckDuckGo extends BaseHardware {
 
     public void spinRed() {
 
-        duckSpin.setPower(SPIN_POWER);
+        duckSpin.setPower(-SPIN_POWER);
 
     }
 
     public void spinBlue() {
 
-        duckSpin.setPower(-SPIN_POWER);
+        duckSpin.setPower(SPIN_POWER);
 
     }
 

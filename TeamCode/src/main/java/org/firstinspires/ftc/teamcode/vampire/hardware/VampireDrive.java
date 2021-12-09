@@ -27,8 +27,8 @@ public class VampireDrive extends HolonomicDrive {
 
         // PID Values
         setPidDrive(0.04, 0, 0.005);
-        setPidSpeed(0.001, 0.00001, 0);
-        setPidTurn(0.009, 0.0001, 0);
+        setPidSpeed(0.001, 0.00003, 0);
+        setPidTurn(0.009, 0.0003, 0.0005);
 
         // Set motor direction
         setMotorDir(false, true, false, true);

@@ -20,7 +20,7 @@ public class Arm extends BaseHardware {
     // Constants
     private static final double LIFT_POWER = 1;
     private static final double LOWER_POWER = 0.75;
-    private static final int[] ARM_STAGES = { -50, 1000, 1600, 2550 };
+    private static final int[] ARM_STAGES = { -50, 1000, 1680, 2600 };
 
     // Mutable variables
     private int stage;
@@ -121,6 +121,7 @@ public class Arm extends BaseHardware {
         } while (!pidArm.onTarget() ||
                 (stage == 0 && !armTouch.isPressed()));
 
+        liftMotor.setPower(0);
         if (stage == 0) {
 
             liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
