@@ -23,7 +23,7 @@ public class AutoBolon extends LinearOpMode{
         waitForStart();
 
         Cam = new org.firstinspires.ftc.teamcode.slowBolon.CamBolon();
-        //Cam.init(hardwareMap);
+        Cam.init(hardwareMap);
 
         OdometryBolon o = new OdometryBolon();
         o.init(hardwareMap.get(DcMotor.class,"frontRight"));
@@ -33,31 +33,54 @@ public class AutoBolon extends LinearOpMode{
 
         o.run();
         d = new DriveBolon(this,hardwareMap);
-        //DONDEESTAELDUCKY = Cam.getspot();
+        DONDEESTAELDUCKY = Cam.getspot();
         ElapsedTime runtime = new ElapsedTime();
 
-        /*telemetry.addData("where",DONDEESTAELDUCKY);
+        //telemetry.addData("where",DONDEESTAELDUCKY);
         telemetry.addData("leastduckydiff", Cam.pipeline.leastduckydiff);
-        telemetry.addData("leasttapediff", Cam.pipeline.leasttapediff);*/
+        telemetry.addData("leasttapediff", Cam.pipeline.leasttapediff);
+        telemetry.addData("x", Cam.pipeline.gx);
+        telemetry.addData("y", Cam.pipeline.gy);
+        telemetry.addData("gYELLOW", Cam.pipeline.greatestyellow);
+        telemetry.addData("gRED", Cam.pipeline.greatestred);
         telemetry.addData("distance",o.distance);
+        telemetry.addData("HELLOW",1);
         telemetry.update();
 
-        /*if(DONDEESTAELDUCKY <= 1) {
+        int dx = Cam.pipeline.gx;
+        int wthird = (int)(Math.floor(Cam.pipeline.w/3));
 
+
+        if(dx <= wthird) {
+            while(distance < 400) {
+                d.drive(-0.4,0,0);
+                o.updatedistance();
+                distance=o.distance;
+                //telemetry.addData("WHERE","LEFT");
+                //telemetry.update();
+            }
         }
 
-        else if(DONDEESTAELDUCKY <= 2) {
-
+        else if(dx <= 2*wthird) {
+            while(distance < 400) {
+                d.drive(0,0.4,0);
+                o.updatedistance();
+                distance=o.distance;
+                //telemetry.addData("WHERE","MIDDLE");
+                //telemetry.update();
+            }
         }
 
         else {
-
+            while(distance < 400) {
+                d.drive(0.4,0,0);
+                o.updatedistance();
+                distance=o.distance;
+                //telemetry.addData("WHERE","RIGHT");
+                //telemetry.update();
+            }
         }
-
-        while(runtime.seconds() < 30) {
-
-        }*/
-
+        /*
         while(distance < 1184) {
             d.drive(0,-0.4,0);
             o.updatedistance();
@@ -72,6 +95,6 @@ public class AutoBolon extends LinearOpMode{
             distance=o.distance;
             telemetry.addData("dostance",o.distance);
             telemetry.update();
-        }
+        }*/
     }
 }

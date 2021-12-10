@@ -28,6 +28,7 @@ public class TeleopBolon extends OpMode {
     private DcMotor extend;
 
     private boolean outok, backok;
+    private int autoextend; // 0 = nothing 1 = in 2 = out
     private boolean slowbol;
     private double speed;
 
@@ -35,6 +36,7 @@ public class TeleopBolon extends OpMode {
 
     @Override
     public void init() {
+        autoextend = 0;
         speed=1; handopen = true;
         slowbol = false;
         backok = true; outok = true;
@@ -48,8 +50,10 @@ public class TeleopBolon extends OpMode {
         gyro.reset();
         cat1 = hardwareMap.get(Servo.class,"cat1");
         cat1.setPosition(0);
+        cat1.setDirection(Servo.Direction.FORWARD);
         cat2 = hardwareMap.get(Servo.class, "cat2");
         cat2.setPosition(0.8);
+        cat2.setDirection(Servo.Direction.FORWARD);
 
         duckDumpy = hardwareMap.get(CRServo.class,"duckDumpy");
         extend = hardwareMap.get(DcMotor.class,"extend");
@@ -82,7 +86,8 @@ public class TeleopBolon extends OpMode {
         telemetry.addData("extender-check", extend.getCurrentPosition());
         telemetry.addData("OUTWARDS",controller.right_trigger>0.2&&outok);
         telemetry.addData("INWARDS",controller.left_trigger>0.2&&backok);
-        telemetry.addData("version","30");
+        telemetry.addData("bee boo",autoextend);
+        telemetry.addData("version","31");
 
         controller.update();
         drive.drive(controller.left_stick_x*speed, controller.left_stick_y*speed, controller.right_stick_x);
@@ -100,11 +105,25 @@ public class TeleopBolon extends OpMode {
         if(!handopen) {cat1.setPosition(0.4); cat2.setPosition(0.5);}
         else {cat1.setPosition(0); cat2.setPosition(0.8);}
 
-        if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.37*speed);}
-        else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.27*speed);}
+        if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.37);}
+        else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.27);}
         else{lift.setPower(0);}
 
-        if(controller.right_trigger>0.2&&outok) {extend.setPower(0.4*speed);}
+        if(controller.leftBumperOnce()) {
+            if(autoextend == 0) {
+                // if in middle, go back, if out, go back, it in, go out
+                if(outok && backok) {autoextend = 1;}
+                if(!outok) {autoextend = 1;}
+                if(!backok) {autoextend = 2;}
+            }
+            //if(autoextend != 0) {autoextend = 0;}
+        }
+
+        if(autoextend == 2 && outok) {extend.setPower(1);}
+        else if(autoextend == 2 && !outok) {autoextend = 0;extend.setPower(0);}
+        else if(autoextend == 1 && (extend.getCurrentPosition()>7)) {extend.setPower(-0.7);}
+        else if(autoextend == 1 && !backok) {autoextend = 0;extend.setPower(0);}
+        else if(controller.right_trigger>0.2&&outok) {extend.setPower(0.4*speed);}
         else if(controller.left_trigger>0.2&&backok) {extend.setPower(-0.4*speed);}
         else{extend.setPower(0);}
 
