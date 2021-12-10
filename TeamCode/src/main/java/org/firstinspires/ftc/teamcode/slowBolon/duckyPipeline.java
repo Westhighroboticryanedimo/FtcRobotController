@@ -95,3 +95,5 @@ class duckyPipeline extends OpenCvPipeline
     private double diff(double a, double b) {return Math.abs(a-b);}
     public int getspot() {return whichspot;}
 }
+
+// removed

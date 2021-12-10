@@ -48,3 +48,4 @@ public class CamBolon {
     public int getspot() {return pipeline.getspot();}
     public int[] getleastdiffs() {return new int[] {pipeline.leastduckydiff,pipeline.leasttapediff};}
 }
+// removed
