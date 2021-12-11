@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
-@Autonomous(name = "REDTONOMOUS+++++++++++++++++++++++++++++a")
+@Autonomous(name = "BLUETONOMOUS+++++++++++++++++++++++++++++a")
 public class BLUEtonomous extends LinearOpMode {
 
     //private org.firstinspires.ftc.teamcode.slowBolon.CamBolon Cam;
@@ -81,7 +81,7 @@ public class BLUEtonomous extends LinearOpMode {
             }
         }*/
 
-        while(distance < 1184) {
+        while(distance < 1000) {
             d.drive(0,-0.4,0);
             o.updatedistance();
             distance=o.distance;
