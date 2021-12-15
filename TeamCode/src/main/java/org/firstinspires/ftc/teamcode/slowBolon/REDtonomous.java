@@ -1,17 +1,18 @@
+
 package org.firstinspires.ftc.teamcode.slowBolon;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
+        import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+        import com.qualcomm.robotcore.hardware.DcMotor;
+        import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+        import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
+        import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
-@Autonomous(name = "Balloon Mode")
-public class AutoBolon extends LinearOpMode{
+@Autonomous(name = "REDTONOMOUS+++++++++++++++++++++++++++++a")
+public class REDtonomous extends LinearOpMode {
 
-    private org.firstinspires.ftc.teamcode.slowBolon.CamBolon Cam;
+    //private org.firstinspires.ftc.teamcode.slowBolon.CamBolon Cam;
     private int DONDEESTAELDUCKY;
     private OdometryBolon o;
     private DriveBolon d;
@@ -22,8 +23,8 @@ public class AutoBolon extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         waitForStart();
 
-        Cam = new org.firstinspires.ftc.teamcode.slowBolon.CamBolon();
-        Cam.init(hardwareMap);
+        //Cam = new org.firstinspires.ftc.teamcode.slowBolon.CamBolon();
+        //Cam.init(hardwareMap);
 
         OdometryBolon o = new OdometryBolon();
         o.init(hardwareMap.get(DcMotor.class,"frontRight"));
@@ -33,11 +34,11 @@ public class AutoBolon extends LinearOpMode{
 
         o.run();
         d = new DriveBolon(this,hardwareMap);
-        DONDEESTAELDUCKY = Cam.getspot();
+        //DONDEESTAELDUCKY = Cam.getspot();
         ElapsedTime runtime = new ElapsedTime();
 
         //telemetry.addData("where",DONDEESTAELDUCKY);
-        telemetry.addData("leastduckydiff", Cam.pipeline.leastduckydiff);
+        /*telemetry.addData("leastduckydiff", Cam.pipeline.leastduckydiff);
         telemetry.addData("leasttapediff", Cam.pipeline.leasttapediff);
         telemetry.addData("x", Cam.pipeline.gx);
         telemetry.addData("y", Cam.pipeline.gy);
@@ -78,13 +79,13 @@ public class AutoBolon extends LinearOpMode{
                 telemetry.addData("WHERE","RIGHT");
                 telemetry.update();
             }
-        }
-        /*
-        while(distance < 1184) {
+        }*/
+
+        while(distance < 1000) {
             d.drive(0,-0.4,0);
             o.updatedistance();
             distance=o.distance;
-            telemetry.addData("distancee",o.distance);
+            telemetry.addData("distahcee",o.distance);
             telemetry.update();
         }
         o.resetdistance(); distance=o.distance;
@@ -94,6 +95,6 @@ public class AutoBolon extends LinearOpMode{
             distance=o.distance;
             telemetry.addData("dostance",o.distance);
             telemetry.update();
-        }*/
+        }
     }
 }
