@@ -16,9 +16,9 @@ public class LinearSlide {
     private double endPos = 0;
 
     private final double LEV_ZERO_TICKS     = 0.0;
-    private final double LEV_ONE_TICKS      = 560.0;
-    private final double LEV_TWO_TICKS      = 1680.0;
-    private final double LEV_THREE_TICKS    = 2800.0;
+    private final double LEV_ONE_TICKS      = 650.0;
+    private final double LEV_TWO_TICKS      = 1800.0;
+    private final double LEV_THREE_TICKS    = 3200.0;
 
     public LinearSlide(HardwareMap hwMap) {
         init(hwMap);
