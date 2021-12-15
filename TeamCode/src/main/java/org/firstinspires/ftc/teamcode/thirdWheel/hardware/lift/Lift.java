@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
-import org.firstinspires.ftc.teamcode.hardware.utils.DcMotorUtils;
-
 import org.firstinspires.ftc.teamcode.thirdWheel.hardware.lift.LinearSlide;
 import org.firstinspires.ftc.teamcode.thirdWheel.hardware.lift.Intake;
 
@@ -16,8 +14,8 @@ public class Lift extends BaseHardware {
     private LinearSlide linearSlide;
     private Intake intake;
     private TouchSensor touchSensor;
-    private int currentLevel;
-    private int currentIntakeState;
+    private int currentLevel = 0;
+    private int currentIntakeState = 2;
     private enum State {
         INHALING,
         CAPTURED,
@@ -42,10 +40,11 @@ public class Lift extends BaseHardware {
         touchSensor = hwMap.get(TouchSensor.class, "touchSensor");
     }
 
+    // WARNING: Needs to be called in a loop
     public void assist() {
         switch (state) {
         case INHALING:
-            intake.in();
+            // intake.in();
             linearSlide.setLevel(0);
             if (touchSensor.isPressed()) {
                 state = State.CAPTURED;
@@ -74,4 +73,5 @@ public class Lift extends BaseHardware {
 
     public int getLevel() { return linearSlide.getLevel(); }
     public double getCurrentTicks() { return linearSlide.getCurrentTicks(); }
+    public boolean touchPressed() { return touchSensor.isPressed(); }
 }
