@@ -30,6 +30,7 @@ public class CamBolon {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "camera");
         OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        camera.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
         camera.openCameraDevice();
         // Start video streaming
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -41,6 +42,7 @@ public class CamBolon {
             public void onError(int errorCode) {}
 
         });
+
         pipeline = new duckyPipeline();
 
         camera.setPipeline(pipeline);

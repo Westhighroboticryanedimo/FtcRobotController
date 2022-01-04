@@ -55,7 +55,7 @@ class duckyPipeline extends OpenCvPipeline
         //leastduckydiff = mean2;
 
         //check all pixels and return location of dook
-        for(int y = 0; y < input.height(); y+=3) {
+        for(int y = 150; y < input.height()-150; y+=3) {
             for(int x = 0; x < input.width(); x+=3) {
                 /*if((int) (Core.mean(Cb.submat(new Rect(x,y, 1, 1))).val[2])>=greatestred) {
                     greatestred=(int) (Core.mean(Cb.submat(new Rect(x,y, 1, 1))).val[2]);
@@ -63,7 +63,7 @@ class duckyPipeline extends OpenCvPipeline
                 }*/
 
                 try{
-                    Rect r = new Rect(x-3, y-3, 6, 6);
+                    Rect r = new Rect(x-10, y-10, 20, 20);
                     if(
                              (Core.mean(Cb.submat(r)).val[1])<=greatestyellow
                             //&&
