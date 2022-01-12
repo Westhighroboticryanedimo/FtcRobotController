@@ -91,7 +91,7 @@ public class RLDWhWa extends LinearOpMode {
 
         }
 
-        drive.move(0.5, 30, 28);
+        drive.move(0.5, 32, 28);
         arm.setLift(position);
         drive.turn(0.5, 45);
         intake.reverse();
@@ -99,9 +99,9 @@ public class RLDWhWa extends LinearOpMode {
         intake.stop();
         drive.turn(1, 45);
         drive.move(0.5, 18, 90);
-        drive.move(0.5, 32, 165);
+        drive.move(0.4, 28, 155);
         spin.spinRed();
-        sleep(3000);
+        sleep(5000);
         spin.stop();
         drive.move(0.5, 23, -90);
         arm.setLift(0);

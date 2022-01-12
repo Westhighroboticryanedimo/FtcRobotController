@@ -14,7 +14,7 @@ public class Intake extends BaseHardware {
 
     // Motor and motor power
     private DcMotor intakeMotor;
-    private static final double INTAKE_POWER = 0.7;
+    private static final double INTAKE_POWER = 1;
     private static final double OUTTAKE_POWER = 1;
 
     // Servo
@@ -75,13 +75,13 @@ public class Intake extends BaseHardware {
 
     public void intake() {
 
-        intakeMotor.setPower(INTAKE_POWER);
+        intakeMotor.setPower(-INTAKE_POWER);
 
     }
 
     public void reverse() {
 
-        intakeMotor.setPower(-OUTTAKE_POWER);
+        intakeMotor.setPower(OUTTAKE_POWER);
 
     }
 

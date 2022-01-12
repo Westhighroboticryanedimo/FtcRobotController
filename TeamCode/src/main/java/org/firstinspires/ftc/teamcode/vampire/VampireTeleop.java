@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Arm;
 import org.firstinspires.ftc.teamcode.vampire.hardware.DuckDuckGo;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Intake;
-import org.firstinspires.ftc.teamcode.vampire.hardware.MiniArm;
+import org.firstinspires.ftc.teamcode.vampire.hardware.TapeArm;
 import org.firstinspires.ftc.teamcode.vampire.hardware.VampireDrive;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Webcam;
 
@@ -20,8 +20,10 @@ public class VampireTeleop extends OpMode {
     private Arm arm;
     private DuckDuckGo spin;
     private Webcam webcam;
-    private MiniArm miniArm;
-    private Controller controller;
+    //private MiniArm miniArm;
+    private TapeArm tapeArm;
+    private Controller controller1;
+    private Controller controller2;
 
     @Override
     public void init() {
@@ -31,40 +33,50 @@ public class VampireTeleop extends OpMode {
         intake = new Intake(this, hardwareMap);
         arm = new Arm(this, hardwareMap);
         spin = new DuckDuckGo(this, hardwareMap);
-        miniArm = new MiniArm(this, hardwareMap);
+        //miniArm = new MiniArm(this, hardwareMap);
         webcam = new Webcam(this, hardwareMap);
-        controller = new Controller(gamepad1);
+        tapeArm = new TapeArm(this, hardwareMap);
+        controller1 = new Controller(gamepad1);
+        controller2 = new Controller(gamepad2);
 
         // Debug mode
-        //intake.debug();
-        drive.debug();
+        intake.debug();
+        //drive.debug();
         //arm.debug();
-        miniArm.debug();
+        //miniArm.debug();
         webcam.debug();
+        tapeArm.debug();
 
     }
 
     @Override
     public void loop() {
 
-        controller.update();
+        // Update controller values
+        controller1.update();
+        controller2.update();
 
         // Drive controls
-        drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+        drive.drive(controller1.left_stick_x, controller1.left_stick_y, controller1.right_stick_x);
         // drive.togglePOV(controller.backOnce());
         // drive.toggleSlow(controller.leftStickButtonOnce());
 
         // Other subsystem controls
-        intake.intake(controller.leftBumper(), controller.rightBumper());
-        spin.spin(controller.A(), controller.X());
+        intake.intake(controller1.leftBumper(), controller1.rightBumper());
+        spin.spin(controller1.A(), controller1.X());
         // arm.toggleAuto(controller.startOnce());
-        arm.lift(controller.dpadUp(), controller.dpadDown());
-        arm.changeStage(controller.dpadUpOnce(), controller.dpadDownOnce());
+        arm.lift(controller1.dpadUp(), controller1.dpadDown());
+        arm.changeStage(controller1.dpadUpOnce(), controller1.dpadDownOnce());
 
-        // Second controller
-        miniArm.moveArm(controller.YOnce());
-        miniArm.moveClaw(controller.BOnce());
-        miniArm.continuousMoveArm(controller.dpadRight(), controller.dpadLeft());
+        // Mini arm which is not used anymore
+        //miniArm.moveArm(controller.YOnce());
+        //miniArm.moveClaw(controller.BOnce());
+        //miniArm.continuousMoveArm(controller.dpadRight(), controller.dpadLeft());
+
+        // The tape measure...
+        tapeArm.horzMove(controller2.dpadRight(), controller2.dpadLeft());
+        tapeArm.vertMove(controller2.dpadUp(), controller2.dpadDown());
+        tapeArm.roll(controller2.leftBumper(), controller2.rightBumper());
 
         // Update webcam values
         webcam.update();

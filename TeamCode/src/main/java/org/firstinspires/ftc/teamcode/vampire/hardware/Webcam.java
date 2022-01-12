@@ -57,7 +57,7 @@ public class Webcam extends BaseHardware {
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
 
             @Override
-            public void onOpened() { webcam.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPSIDE_DOWN); }
+            public void onOpened() { webcam.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPRIGHT); }
 
             @Override
             public void onError(int errorCode) {}
