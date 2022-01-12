@@ -401,7 +401,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         // For frontleft and backright motors
         pidFLBR.reset();
-        pidFLBR.setInputRange((frontLeft.getCurrentPosition() + backRight.getCurrentPosition()) / 2.0, currFlbr + flbrDist);
+        pidFLBR.setInputRange(currFlbr, currFlbr + flbrDist);
         pidFLBR.setOutputRange(0, goalFLBRSpeed);
         pidFLBR.setSetpoint(currFlbr + flbrDist);
         pidFLBR.setTolerance(5);
@@ -409,7 +409,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         // For frontright and backleft motors
         pidFRBL.reset();
-        pidFRBL.setInputRange((frontRight.getCurrentPosition() + backLeft.getCurrentPosition()) / 2.0, currFrbl + frblDist);
+        pidFRBL.setInputRange(currFrbl, currFrbl + frblDist);
         pidFRBL.setOutputRange(0, goalFRBLSpeed);
         pidFRBL.setSetpoint(currFrbl + frblDist);
         pidFRBL.setTolerance(5);
@@ -469,7 +469,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         if (Math.abs(angle) > 359) angle = (int) Math.copySign(359, angle);
 
         pidTurn.reset();
-        pidTurn.setInputRange(gyro.getAngleDegrees(), currAngle - angle);
+        pidTurn.setInputRange(currAngle, currAngle - angle);
         pidTurn.setOutputRange(0, speed);
         pidTurn.setSetpoint(currAngle - angle);
         pidTurn.setTolerance(5);
