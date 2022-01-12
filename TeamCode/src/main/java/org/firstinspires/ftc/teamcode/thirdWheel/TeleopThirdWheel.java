@@ -32,7 +32,8 @@ public class TeleopThirdWheel extends OpMode {
         telemetry.addData("gyro", gyro.getAngleDegrees());
         telemetry.addData("ticks", lift.getCurrentTicks());
         telemetry.addData("level", lift.getLevel());
-        telemetry.addData("touch", lift.touchPressed());
+        telemetry.addData("picked", lift.picked());
+        telemetry.addData("state", lift.state());
         telemetry.update();
         controller.update();
         drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
@@ -54,7 +55,7 @@ public class TeleopThirdWheel extends OpMode {
             }
         }
         if (controller.A()) {
-            lift.override(-1, 0);
+            lift.inhale();
         }
         if (controller.B()) {
             lift.override(-1, 1);

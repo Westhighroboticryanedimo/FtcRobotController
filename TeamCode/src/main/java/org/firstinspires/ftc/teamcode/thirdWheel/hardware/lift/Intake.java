@@ -1,14 +1,16 @@
 package org.firstinspires.ftc.teamcode.thirdWheel.hardware.lift;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Intake {
     private DcMotor intakeOne;
     private DcMotor intakeTwo;
+    private DistanceSensor distanceSensor;
+    private double DIST_THRESH = 1.0;
 
     public Intake(HardwareMap hwMap) {
         init(hwMap);
@@ -28,6 +30,8 @@ public class Intake {
         intakeTwo.setPower(0);
         intakeTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        distanceSensor = hwMap.get(DistanceSensor.class, "distanceSensor");
     }
 
     public void setState(int state) {
@@ -48,18 +52,28 @@ public class Intake {
                 break;
         }
     }
+
     public void in() {
-        intakeOne.setPower(1);
-        intakeTwo.setPower(1);
+        intakeOne.setPower(0.8);
+        intakeTwo.setPower(0.8);
     }
 
     public void out() {
-        intakeOne.setPower(-1);
-        intakeTwo.setPower(-1);
+        intakeOne.setPower(-0.8);
+        intakeTwo.setPower(-0.8);
     }
 
     public void stop() {
         intakeOne.setPower(0);
         intakeTwo.setPower(0);
     }
+
+    public boolean check() {
+        if (picked()) {
+            stop();
+            return true;
+        }
+        return false;
+    }
+    public boolean picked() { return distanceSensor.getDistance(DistanceUnit.INCH) < DIST_THRESH; }
 }

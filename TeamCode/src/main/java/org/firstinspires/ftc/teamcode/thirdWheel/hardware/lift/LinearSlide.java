@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.thirdWheel.hardware.lift;
 import java.lang.Math;
 // import java.lang.Thread;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -64,11 +62,11 @@ public class LinearSlide {
             // telemetry.update();
             break;
         }
-        moveSlide(endPos, 230.0, 0.0);
+        moveSlide(endPos, 230.0,0.0);
         return 0;
     }
 
-
+    public boolean arrived() { return DcMotorUtils.arrived(slideMotor, endPos, 5); }
     public double getEndPos() { return endPos; }
     public int getLevel() { return level; }
     public double getCurrentTicks() { return DcMotorUtils.getCurrentTicks(slideMotor); }
