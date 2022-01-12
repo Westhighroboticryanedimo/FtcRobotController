@@ -43,13 +43,16 @@ public class AutoBolon extends LinearOpMode{
         telemetry.addData("y", Cam.pipeline.gy);
         telemetry.addData("gYELLOW", Cam.pipeline.greatestyellow);
         telemetry.addData("distance",o.distance);
-        telemetry.addData("HELLOW",1);
         telemetry.update();
 
         int dx = Cam.pipeline.gx;
         int wthird = (int)(Math.floor(Cam.pipeline.w/3));
 
+        while(runtime.seconds() < 5) {
 
+        }
+
+        /*
         if(dx <= wthird) {
             while(distance < 400) {
                 d.drive(-0.4,0,0);
@@ -78,7 +81,7 @@ public class AutoBolon extends LinearOpMode{
                 telemetry.addData("WHERE","RIGHT");
                 telemetry.update();
             }
-        }
+        }*/
         /*
         while(distance < 1184) {
             d.drive(0,-0.4,0);
