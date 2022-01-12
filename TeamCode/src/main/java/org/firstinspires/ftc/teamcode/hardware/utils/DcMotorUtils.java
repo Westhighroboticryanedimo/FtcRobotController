@@ -21,4 +21,5 @@ public class DcMotorUtils {
 
     static public double getDifference(DcMotor motor, double desiredTicks) { return desiredTicks - getCurrentTicks(motor); }
     static public int getCurrentTicks(DcMotor motor) { return motor.getCurrentPosition(); }
+    static public boolean arrived(DcMotor motor, double desiredTicks, double tolerance) { return (getDifference(motor, desiredTicks) < tolerance); }
 }
