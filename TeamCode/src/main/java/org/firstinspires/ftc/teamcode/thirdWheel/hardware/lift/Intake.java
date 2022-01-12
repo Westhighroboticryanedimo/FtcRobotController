@@ -3,22 +3,31 @@ package org.firstinspires.ftc.teamcode.thirdWheel.hardware.lift;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
-    private DcMotor intake;
+    private DcMotor intakeOne;
+    private DcMotor intakeTwo;
 
     public Intake(HardwareMap hwMap) {
         init(hwMap);
     }
 
     private void init(HardwareMap hwMap) {
-        intake = hwMap.get(DcMotor.class, "intake");
-        intake.setDirection(DcMotor.Direction.REVERSE);
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setPower(0);
-        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeOne = hwMap.get(DcMotor.class, "intakeOne");
+        intakeOne.setDirection(DcMotor.Direction.FORWARD);
+        intakeOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeOne.setPower(0);
+        intakeOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        intakeTwo = hwMap.get(DcMotor.class, "intakeTwo");
+        intakeTwo.setDirection(DcMotor.Direction.REVERSE);
+        intakeTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeTwo.setPower(0);
+        intakeTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setState(int state) {
@@ -40,14 +49,17 @@ public class Intake {
         }
     }
     public void in() {
-        intake.setPower(1);
+        intakeOne.setPower(1);
+        intakeTwo.setPower(1);
     }
 
     public void out() {
-        intake.setPower(-1);
+        intakeOne.setPower(-1);
+        intakeTwo.setPower(-1);
     }
 
     public void stop() {
-        intake.setPower(0);
+        intakeOne.setPower(0);
+        intakeTwo.setPower(0);
     }
 }
