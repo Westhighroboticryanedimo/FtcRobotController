@@ -19,8 +19,8 @@ public class TeleopBolon extends OpMode {
     private Controller controller;
     private Gyro gyro;
     private OdometryBolon o;
-    private Servo cat1;
-    private Servo cat2;
+    //private Servo cat1;
+    //private Servo cat2;
     private CRServo newgrab1, newgrab2;
 
     private CRServo duckDumpy;
@@ -49,13 +49,14 @@ public class TeleopBolon extends OpMode {
         //drive.togglePOV(true);
         //orientation.startListening();
         gyro.reset();
+        /*
         cat1 = hardwareMap.get(Servo.class,"cat1");
         cat1.setPosition(0);
         cat1.setDirection(Servo.Direction.FORWARD);
         cat2 = hardwareMap.get(Servo.class, "cat2");
         cat2.setPosition(0.8);
         cat2.setDirection(Servo.Direction.FORWARD);
-
+*/
         newgrab1 = hardwareMap.get(CRServo.class, "grab1");
         newgrab2 = hardwareMap.get(CRServo.class, "grab2");
         newgrab1.setDirection(CRServo.Direction.FORWARD); newgrab2.setDirection(CRServo.Direction.REVERSE);
@@ -105,10 +106,21 @@ public class TeleopBolon extends OpMode {
         if(controller.leftStickButtonOnce()) {slowbol = !slowbol;}
         if(slowbol) {speed=0.4;} else {speed=1;}
 
-        if(controller.rightBumperOnce()) {handopen = !handopen;}
+        //if(controller.rightBumperOnce()) {handopen = !handopen;}
 
-        if(!handopen) {cat1.setPosition(0.4); cat2.setPosition(0.5);}
-        else {cat1.setPosition(0); cat2.setPosition(0.8);}
+        if(controller.dpadLeft()) {
+            newgrab1.setDirection(CRServo.Direction.FORWARD);newgrab2.setDirection(CRServo.Direction.REVERSE);
+            newgrab1.setPower(1);
+            newgrab2.setPower(1);
+        }
+        else if(controller.dpadRight()) {
+            newgrab1.setDirection(CRServo.Direction.REVERSE);newgrab2.setDirection(CRServo.Direction.FORWARD);
+            newgrab2.setPower(1);
+            newgrab1.setPower(1);
+        } else {
+            newgrab2.setPower(0);
+            newgrab1.setPower(0);
+        }
 
         if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.37);}
         else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.27);}
@@ -133,13 +145,9 @@ public class TeleopBolon extends OpMode {
         else{extend.setPower(0);}
 
         if(controller.B()) {duckDumpy.setDirection(DcMotorSimple.Direction.FORWARD);duckDumpy.setPower(1);
-        newgrab1.setDirection(CRServo.Direction.FORWARD);newgrab2.setDirection(CRServo.Direction.REVERSE);
-        newgrab1.setPower(1);
-        newgrab2.setPower(1);}
+        }
         else if(controller.Y()) {duckDumpy.setDirection(DcMotorSimple.Direction.REVERSE);duckDumpy.setPower(1);
-
-        newgrab1.setDirection(CRServo.Direction.FORWARD);newgrab2.setDirection(CRServo.Direction.REVERSE);
-        newgrab2.setPower(1);newgrab1.setPower(1);}
+}
         else{duckDumpy.setPower(0);newgrab1.setPower(0);newgrab2.setPower(0);}
         telemetry.update();
         if(controller.XOnce()) {telemetry.speak("que deporte te gusta me gusta el beisbol");}
