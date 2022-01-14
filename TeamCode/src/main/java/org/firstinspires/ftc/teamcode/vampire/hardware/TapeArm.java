@@ -18,7 +18,7 @@ public class TapeArm extends BaseHardware {
     private CRServo roll;
 
     // Constants
-    private static final double MOVE_POW = 0.0004;
+    private static final double MOVE_POW = 0.005;
     private static final double ROLL_POW = 1;
 
     // Teleop constructor
@@ -43,15 +43,15 @@ public class TapeArm extends BaseHardware {
         horz = hwMap.get(Servo.class, "horz");
         horz.setPosition(0);
         vert = hwMap.get(Servo.class, "vert");
-        vert.setPosition(0);
+        vert.setPosition(1);
         roll = hwMap.get(CRServo.class, "roll");
 
     }
 
     public void horzMove(boolean cw, boolean ccw) {
         print("horz", horz.getPosition());
-        if (cw) horz.setPosition(horz.getPosition() + MOVE_POW);
-        if (ccw) horz.setPosition(horz.getPosition() - MOVE_POW);
+        if (cw) horz.setPosition(horz.getPosition() - MOVE_POW);
+        if (ccw) horz.setPosition(horz.getPosition() + MOVE_POW);
 
     }
 
