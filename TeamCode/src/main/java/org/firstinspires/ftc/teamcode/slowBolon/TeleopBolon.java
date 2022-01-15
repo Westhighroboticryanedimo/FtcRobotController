@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
 
 
-@TeleOp(name = " teleop")
+@TeleOp(name = "smol bolon teleop")
 public class TeleopBolon extends OpMode {
 
     private DriveBolon drive;
@@ -56,7 +56,7 @@ public class TeleopBolon extends OpMode {
     public void loop() {
 
         telemetry.addData("milfs", gyro.getAngleDegrees());
-        telemetry.addData("version","31");
+        telemetry.addData("version","32");
 
         controller.update();
         drive.drive(controller.left_stick_x*speed, controller.left_stick_y*speed, controller.right_stick_x);
