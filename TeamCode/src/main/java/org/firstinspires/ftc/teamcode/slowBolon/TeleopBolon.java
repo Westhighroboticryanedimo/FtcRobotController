@@ -40,7 +40,7 @@ public class TeleopBolon extends OpMode {
         gyro.reset();
         newgrab1 = hardwareMap.get(CRServo.class, "grab1");
         newgrab2 = hardwareMap.get(CRServo.class, "grab2");
-        newgrab1.setDirection(CRServo.Direction.FORWARD); newgrab2.setDirection(CRServo.Direction.REVERSE);
+        //newgrab1.setDirection(CRServo.Direction.FORWARD); newgrab2.setDirection(CRServo.Direction.REVERSE);
 
         duckDumpy = hardwareMap.get(DcMotor.class,"duckDumpy");
 
@@ -66,13 +66,13 @@ public class TeleopBolon extends OpMode {
         if(slowbol) {speed=0.4;} else {speed=1;}
 
         if(controller.dpadLeft()) {
-            newgrab1.setDirection(CRServo.Direction.FORWARD);newgrab2.setDirection(CRServo.Direction.REVERSE);
-            newgrab1.setPower(1);
+            //newgrab1.setDirection(CRServo.Direction.FORWARD);newgrab2.setDirection(CRServo.Direction.REVERSE);
+            newgrab1.setPower(-1);
             newgrab2.setPower(1);
         }
         else if(controller.dpadRight()) {
-            newgrab1.setDirection(CRServo.Direction.REVERSE);newgrab2.setDirection(CRServo.Direction.FORWARD);
-            newgrab2.setPower(1);
+            //newgrab1.setDirection(CRServo.Direction.REVERSE);newgrab2.setDirection(CRServo.Direction.FORWARD);
+            newgrab2.setPower(-1);
             newgrab1.setPower(1);
         } else {
             newgrab2.setPower(0);
