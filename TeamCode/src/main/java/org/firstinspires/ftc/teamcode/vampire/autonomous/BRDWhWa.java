@@ -69,7 +69,7 @@ public class BRDWhWa extends LinearOpMode {
         DuckDuckGo spin = new DuckDuckGo(this, hardwareMap);
         Webcam webcam = new Webcam(this, hardwareMap);
         webcam.debug();
-drive.debug();
+
         // Elapsed time for timed motion
         ElapsedTime runtime = new ElapsedTime();
 

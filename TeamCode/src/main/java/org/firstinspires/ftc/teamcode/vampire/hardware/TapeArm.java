@@ -3,10 +3,8 @@ package org.firstinspires.ftc.teamcode.vampire.hardware;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
@@ -18,8 +16,11 @@ public class TapeArm extends BaseHardware {
     private CRServo roll;
 
     // Constants
-    private static final double MOVE_POW = 0.005;
+    private double speed = SLOW_SPEED;
+    private static final double SLOW_SPEED = 0.003;
+    private static final double FAST_SPEED = 0.015;
     private static final double ROLL_POW = 1;
+    private static final double MAX_POS = 0.75;
 
     // Teleop constructor
     public TapeArm(OpMode opMode, HardwareMap hwMap) {
@@ -43,22 +44,36 @@ public class TapeArm extends BaseHardware {
         horz = hwMap.get(Servo.class, "horz");
         horz.setPosition(0);
         vert = hwMap.get(Servo.class, "vert");
-        vert.setPosition(1);
+        vert.setPosition(MAX_POS);
         roll = hwMap.get(CRServo.class, "roll");
 
     }
 
+    public void toggleSpeed(boolean button) {
+
+        if (button) speed = FAST_SPEED;
+        else speed = SLOW_SPEED;
+
+    }
+
     public void horzMove(boolean cw, boolean ccw) {
+
         print("horz", horz.getPosition());
-        if (cw) horz.setPosition(horz.getPosition() - MOVE_POW);
-        if (ccw) horz.setPosition(horz.getPosition() + MOVE_POW);
+        if (cw) horz.setPosition(horz.getPosition() - speed);
+        if (ccw) horz.setPosition(horz.getPosition() + speed);
 
     }
 
     public void vertMove(boolean up, boolean down) {
+
         print("vert", vert.getPosition());
-        if (up) vert.setPosition(vert.getPosition() + MOVE_POW);
-        if (down) vert.setPosition(vert.getPosition() - MOVE_POW);
+        if (up) {
+
+            if (vert.getPosition() < MAX_POS) vert.setPosition(vert.getPosition() + speed);
+            else vert.setPosition(MAX_POS);
+
+        }
+        if (down) vert.setPosition(vert.getPosition() - speed);
 
     }
 
