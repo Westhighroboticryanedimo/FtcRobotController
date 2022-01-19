@@ -11,6 +11,9 @@ import org.firstinspires.ftc.teamcode.vampire.hardware.TapeArm;
 import org.firstinspires.ftc.teamcode.vampire.hardware.VampireDrive;
 import org.firstinspires.ftc.teamcode.vampire.hardware.Webcam;
 
+import java.util.ArrayList;
+import java.util.stream.IntStream;
+
 @TeleOp(name = "VAMPIRE: TeleOp")
 public class VampireTeleop extends OpMode {
 
@@ -24,6 +27,11 @@ public class VampireTeleop extends OpMode {
     private TapeArm tapeArm;
     private Controller controller1;
     private Controller controller2;
+
+    // Variables for driving
+    private static final int STORE_NUM = 13;
+    private ArrayList<Double> x = new ArrayList<>();
+    private ArrayList<Double> y = new ArrayList<>();
 
     @Override
     public void init() {
@@ -39,13 +47,16 @@ public class VampireTeleop extends OpMode {
         controller1 = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
 
+        // Turn on squared inputs
+        drive.enableSquaredInputs();
+
         // Debug mode
-        intake.debug();
-        //drive.debug();
-        //arm.debug();
+        //intake.debug();
+        drive.debug();
+        arm.debug();
         //miniArm.debug();
-        webcam.debug();
-        tapeArm.debug();
+        //webcam.debug();
+        //tapeArm.debug();
 
     }
 
@@ -56,10 +67,30 @@ public class VampireTeleop extends OpMode {
         controller1.update();
         controller2.update();
 
+        // Add drive power
+        x.add(controller1.left_stick_x);
+        y.add(controller1.left_stick_y);
+
+        // Remove
+        if (x.size() > STORE_NUM) x.remove(0);
+        if (y.size() > STORE_NUM) y.remove(0);
+
+        // Average out x
+        double avgX = 0;
+        for (int i = 0; i < x.size(); i++) avgX += x.get(i);
+        avgX /= x.size();
+
+        // Average out y
+        double avgY = 0;
+        for (int i = 0; i < y.size(); i++) avgY += y.get(i);
+        avgY /= y.size();
+
         // Drive controls
-        drive.drive(controller1.left_stick_x, controller1.left_stick_y, controller1.right_stick_x);
-        // drive.togglePOV(controller.backOnce());
-        // drive.toggleSlow(controller.leftStickButtonOnce());
+        drive.drive(avgX, avgY, controller1.right_stick_x);
+
+        // Print out change in x and y
+        telemetry.addData("avgX", avgX);
+        telemetry.addData("avgY", avgY);
 
         // Other subsystem controls
         intake.intake(controller1.leftBumper(), controller1.rightBumper());
@@ -77,6 +108,7 @@ public class VampireTeleop extends OpMode {
         tapeArm.horzMove(controller2.dpadRight(), controller2.dpadLeft());
         tapeArm.vertMove(controller2.dpadUp(), controller2.dpadDown());
         tapeArm.roll(controller2.leftBumper(), controller2.rightBumper());
+        tapeArm.toggleSpeed(controller2.X());
 
         // Update webcam values
         webcam.update();

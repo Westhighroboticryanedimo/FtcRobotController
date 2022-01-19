@@ -36,6 +36,7 @@ public abstract class HolonomicDrive extends BaseHardware {
     // Modes
     protected boolean isDrivePOV = true;
     protected boolean isSlow = false;
+    protected boolean isSquaredInputs = false;
 
     // For autonomous driving
     protected double wheelDiameter = 4;   // Diameter of driving wheels, default is 4
@@ -214,6 +215,13 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     }
 
+    // Enable squared inputs
+    public void enableSquaredInputs() {
+
+        isSquaredInputs = true;
+
+    }
+
     // Toggle slow mode
     public void toggleSlow(boolean button) {
 
@@ -224,6 +232,26 @@ public abstract class HolonomicDrive extends BaseHardware {
     // TeleOp Drive
     public void drive(double joystickX, double joystickY, double joystickTurn) {
 
+        double x = joystickX;
+        double y = joystickY;
+
+        // Squared inputs mode
+        if (isSquaredInputs) {
+
+            // Store sign of value
+            double signX;
+            double signY;
+            if (x < 0) signX = -1;
+            else signX = 1;
+            if (y < 0) signY = -1;
+            else signY = 1;
+
+            // Square the inputs
+            x = Math.pow(x, 2) * signX;
+            y = Math.pow(y, 2) * signY;
+
+        }
+
         // Reduce joystick turn
         double turn = joystickTurn / 1.8;
 
@@ -231,19 +259,21 @@ public abstract class HolonomicDrive extends BaseHardware {
         pidDrive.setSetpoint(prevAngle);
         correction = pidDrive.performPID(gyro.getAngleDegrees());
 
-        // make this better
         if (!thirdWheel) {
+
             // If turning or not moving then don't correct
-            if (Math.abs(turn) != 0 || (joystickX == 0 && joystickY == 0)) {
+            if (Math.abs(turn) != 0 || (x == 0 && y == 0)) {
 
                 pidDrive.disable();
                 pidDrive.reset();
                 prevAngle = gyro.getAngleDegrees();
                 correction = 0;
 
-            } else
-                pidDrive.enable();
+            } else pidDrive.enable();
+
         } else {
+
+            // Continuous tuning
             if (Math.abs(turn) != 0) {
 
                 pidDrive.disable();
@@ -251,22 +281,22 @@ public abstract class HolonomicDrive extends BaseHardware {
                 prevAngle = gyro.getAngleDegrees();
                 correction = 0;
 
-            } else
-                pidDrive.enable();
+            } else pidDrive.enable();
+
         }
 
         // If field oriented drive, then set angleCompensation to gyro angle
         double angleCompensation = 0;
         if (!isDrivePOV)
             angleCompensation = gyro.getAngleRadians();
-        //angleCompensation = 0;
+
         // Holonomic drive calculations
 
         // The magnitude of the joystick
-        double r = Math.hypot(joystickX, joystickY);
+        double r = Math.hypot(x, y);
 
         // The angle of the robot it is supposed to move towards
-        double robotAngle = Math.atan2(-joystickY, joystickX) - Math.PI / 4 - angleCompensation;
+        double robotAngle = Math.atan2(-y, x) - Math.PI / 4 - angleCompensation;
 
         // Takes the x and y components of the vector
         double cosinePow = r * Math.cos(robotAngle);

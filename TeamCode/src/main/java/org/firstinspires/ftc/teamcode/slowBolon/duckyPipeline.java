@@ -32,7 +32,7 @@ class duckyPipeline extends OpenCvPipeline
 
     // colors
     public double greatestred;
-    public double greatestyellow;
+    public double greatestyellow, greatestgreen;
     public int gx, gy;
     public int w;
 
@@ -40,14 +40,17 @@ class duckyPipeline extends OpenCvPipeline
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Mat processFrame(Mat input) {
+        return input;
+    }
+    /*public Mat processFrame(Mat input) {
         w = input.width();
-        greatestred = 0; greatestyellow = 1000;
+        greatestred = 0; greatestyellow = 2000; greatestgreen = 0;
         //
         // Convert to YCrCb
         Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
 
         // Extracts the Cb channel to the 'Cb' variable
-        Core.extractChannel(YCrCb, Cb, 1);
+        Core.extractChannel(YCrCb, Cb, 0);
 
         //int mean = (int) (Core.mean(Cb.submat(new Rect(300, 200, 1, 1))).val[0]);
         //int mean2 = (int) (Core.mean(Cb.submat(new Rect(300, 200, 1, 1))).val[2]);
@@ -55,32 +58,47 @@ class duckyPipeline extends OpenCvPipeline
         //leastduckydiff = mean2;
 
         //check all pixels and return location of dook
-        for(int y = 150; y < input.height()-150; y+=3) {
-            for(int x = 0; x < input.width(); x+=3) {
-                /*if((int) (Core.mean(Cb.submat(new Rect(x,y, 1, 1))).val[2])>=greatestred) {
-                    greatestred=(int) (Core.mean(Cb.submat(new Rect(x,y, 1, 1))).val[2]);
-                    gx = x; gy = y;
-                }*/
+        for(int y = 40; y < input.height()-40; y+=6) {
+            for(int x = 0; x < input.width(); x+=6) {
 
                 try{
                     Rect r = new Rect(x-10, y-10, 20, 20);
+                    Scalar mean = Core.mean(input.submat(r));
                     if(
-                             (Core.mean(Cb.submat(r)).val[1])<=greatestyellow
-                            //&&
-                            //Math.abs(Core.mean(Cb.submat(r)).val[2])<Core.mean(Cb.submat(r)).val[1]
+                            //Core.mean(input.submat(r)).val[0] >= greatestred
+                            mean.val[0] >= greatestred
+                            &&
+                            //Core.mean(input.submat(r)).val[2] >= greatestgreen
+                            mean.val[2] >= greatestgreen
+                            &&
+                            //Core.mean(input.submat(r)).val[1] <= 100
+                            mean.val[1] <= 100
                     ) {
-                        greatestyellow = (Core.mean(Cb.submat(r)).val[1]);
+                        greatestred = mean.val[0]; greatestgreen = mean.val[2];
+                        greatestyellow = (mean.val[0]+mean.val[2])/2;
+                        //greatestyellow = (Core.mean(input.submat(r)).val[0] + Core.mean(input.submat(r)).val[2])/2;
+                        //greatestyellow = (Core.mean(input.submat(r)).val[0]);
                         gx = x; gy = y;
                     }
 
-                    if( (Math.abs(Core.mean(Cb.submat(r)).val[2]))>=greatestred) {greatestred = Core.mean(Cb.submat(r)).val[2];}
+                    //if( (Math.abs(Core.mean(YCrCb.submat(r)).val[2]))>=greatestred) {greatestred = Core.mean(YCrCb.submat(r)).val[2];}
+                    //if(Math.abs(Core.mean(input.submat(r)).val[2])>=greatestred) {greatestred = Core.mean(input.submat(r)).val[2];}
                 } catch(Exception e) {}
             }
         }
+        Point REGION_RIGHT_A = new Point(gx,gy);
+        Point REGION_RIGHT_B = new Point(gx+20,gy+20);
+
+        Imgproc.rectangle(
+                input, // Buffer to draw on
+                REGION_RIGHT_A, // First point which defines the rectangle
+                REGION_RIGHT_B, // Second point which defines the rectangle
+                new Scalar(0, 0, 255), // The color the rectangle is drawn in
+                6); // Thickness of the rectangle lines
 
         return input;
 
-    }
+    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private double closeness(int aa, int bb) {

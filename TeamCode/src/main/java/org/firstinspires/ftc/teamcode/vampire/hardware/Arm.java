@@ -20,14 +20,14 @@ public class Arm extends BaseHardware {
     // Constants
     private static final double LIFT_POWER = 1;
     private static final double LOWER_POWER = 0.75;
-    private static final int[] ARM_STAGES = { -50, 1000, 1680, 2600 };
+    private static final int[] ARM_STAGES = { 0, 1000, 1680, 2600 };
 
     // Mutable variables
     private int stage;
     private boolean isAuto = true;
 
     // PID
-    private PIDController pidArm = new PIDController(0.005, 0, 0.004);
+    private PIDController pidArm = new PIDController(0.004, 0, 0.002);
 
     // Teleop constructor
     public Arm(OpMode opMode, HardwareMap hwMap) {
@@ -57,7 +57,6 @@ public class Arm extends BaseHardware {
         liftMotor.setDirection(DcMotor.Direction.REVERSE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor.setPower(0);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Set up touch sensors
         armTouch = hwMap.get(TouchSensor.class, "armTouch");
@@ -141,8 +140,18 @@ public class Arm extends BaseHardware {
         if (isAuto) {
 
             // Move up and down stage
-            if (up && stage != 3) stage++;
-            if (down && stage != 0) stage--;
+            if (up && stage != 3) {
+
+                pidArm.setOutputRange(0, LIFT_POWER);
+                stage++;
+
+            }
+            if (down && stage != 0) {
+
+                pidArm.setOutputRange(0, LIFT_POWER / 1.5);
+                stage--;
+
+            }
 
             // Set PID
             pidArm.setSetpoint(ARM_STAGES[stage]);
