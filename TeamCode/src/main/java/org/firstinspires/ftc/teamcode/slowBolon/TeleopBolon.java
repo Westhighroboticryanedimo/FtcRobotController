@@ -23,6 +23,7 @@ public class TeleopBolon extends OpMode {
     private DcMotor lift;
 
     private boolean slowbol;
+    private boolean grabtoggle;
     private double speed;
 
     private boolean handopen;
@@ -30,7 +31,7 @@ public class TeleopBolon extends OpMode {
     @Override
     public void init() {
         speed=1; handopen = true;
-        slowbol = false;
+        slowbol = false; grabtoggle = false;
         drive = new DriveBolon(this, hardwareMap);
         drive.setup();
         gyro = new Gyro(hardwareMap,false);
@@ -68,7 +69,9 @@ public class TeleopBolon extends OpMode {
             newgrab1.setPower(1);
             newgrab2.setPower(-1);
         }
-        else if(controller.dpadRight()) {
+        if(controller.rightBumperOnce()) {grabtoggle = !grabtoggle;}
+
+        if(grabtoggle) {
             //newgrab1.setDirection(CRServo.Direction.REVERSE);newgrab2.setDirection(CRServo.Direction.FORWARD);
             newgrab2.setPower(1);
             newgrab1.setPower(-1);
