@@ -14,9 +14,10 @@ public class LinearSlide {
     private double endPos = 0;
 
     private final double LEV_ZERO_TICKS     = 0.0;
-    private final double LEV_ONE_TICKS      = 650.0;
-    private final double LEV_TWO_TICKS      = 1800.0;
-    private final double LEV_THREE_TICKS    = 3200.0;
+    private final double LEV_ONE_TICKS      = 900.0;
+    private final double LEV_TWO_TICKS      = 2000.0;
+    private final double LEV_THREE_TICKS    = 3400.0;
+    private final double LEV_FOUR_TICKS     = 3600.0;
 
     public LinearSlide(HardwareMap hwMap) {
         init(hwMap);
@@ -62,7 +63,7 @@ public class LinearSlide {
             // telemetry.update();
             break;
         }
-        moveSlide(endPos, 230.0,0.0);
+        moveSlide(endPos, 230.0, 5.0);
         return 0;
     }
 

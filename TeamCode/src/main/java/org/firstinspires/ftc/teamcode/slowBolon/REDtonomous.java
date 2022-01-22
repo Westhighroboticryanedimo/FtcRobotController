@@ -27,9 +27,9 @@ public class REDtonomous extends LinearOpMode {
         //Cam.init(hardwareMap);
 
         OdometryBolon o = new OdometryBolon();
-        o.init(hardwareMap.get(DcMotor.class,"frontRight"));
-        hardwareMap.get(DcMotor.class,"frontRight").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hardwareMap.get(DcMotor.class,"frontRight").setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        o.init(hardwareMap.get(DcMotor.class,"frontLeft"));
+        hardwareMap.get(DcMotor.class,"frontLeft").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardwareMap.get(DcMotor.class,"frontLeft").setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         distance = o.distance;
 
         o.run();
@@ -81,7 +81,7 @@ public class REDtonomous extends LinearOpMode {
             }
         }*/
 
-        while(distance < 1000) {
+        while(distance < 1100) {
             d.drive(0,-0.4,0);
             o.updatedistance();
             distance=o.distance;
@@ -89,7 +89,7 @@ public class REDtonomous extends LinearOpMode {
             telemetry.update();
         }
         o.resetdistance(); distance=o.distance;
-        while(distance < 1900) {
+        while(distance < 1000) {
             d.drive(-0.4,0,0);
             o.updatedistance();
             distance=o.distance;

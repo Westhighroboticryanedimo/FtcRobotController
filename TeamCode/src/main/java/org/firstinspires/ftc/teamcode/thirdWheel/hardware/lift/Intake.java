@@ -10,7 +10,7 @@ public class Intake {
     private DcMotor intakeOne;
     private DcMotor intakeTwo;
     private DistanceSensor distanceSensor;
-    private double DIST_THRESH = 1.0;
+    private double DIST_THRESH = 2.0;
 
     public Intake(HardwareMap hwMap) {
         init(hwMap);
@@ -75,5 +75,6 @@ public class Intake {
         }
         return false;
     }
+
     public boolean picked() { return distanceSensor.getDistance(DistanceUnit.INCH) < DIST_THRESH; }
 }

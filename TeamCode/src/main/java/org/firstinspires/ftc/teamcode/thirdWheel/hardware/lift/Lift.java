@@ -21,7 +21,6 @@ public class Lift extends BaseHardware {
         CAPTURED,
         OVERRIDDEN
     }
-
     private State state = State.INHALING;
     
     public Lift(LinearOpMode opMode, HardwareMap hwMap) {
@@ -72,16 +71,17 @@ public class Lift extends BaseHardware {
     public int getLevel() { return linearSlide.getLevel(); }
     public double getCurrentTicks() { return linearSlide.getCurrentTicks(); }
     public boolean arrived() { return linearSlide.arrived(); }
+    public boolean check() { return intake.check(); }
+    public boolean picked() { return intake.picked(); }
     public int state() {
         switch (state) {
         case INHALING:
             return 1;
-	    case CAPTURED:
-	        return 2;
+        case CAPTURED:
+            return 2;
     	case OVERRIDDEN:
-	        return 3;
+            return 3;
         }
         return 0;
     }
-    public boolean picked() { return intake.picked(); }
 }
