@@ -19,48 +19,6 @@ public class RLDWhWa extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-/*
-        // Subsystems
-        VampireRRDrive drive = new VampireRRDrive(hardwareMap);
-        Arm arm = new Arm(this, hardwareMap);
-        Intake intake = new Intake(this, hardwareMap);
-        DuckDuckGo spin = new DuckDuckGo(this, hardwareMap);
-
-        // Set starting position
-        Pose2d startPose = new Pose2d(-27, -63.75, Math.toRadians(90));
-        drive.setPoseEstimate(startPose);
-
-        // Create trajectories
-        Trajectory deploy = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(-23.75, -40), Math.toRadians(55))
-                .build();
-        Trajectory wheel = drive.trajectoryBuilder(deploy.end(), true)
-                .lineToLinearHeading(new Pose2d(-60, -60, 0))
-                .build();
-        Trajectory warehouse = drive.trajectoryBuilder(wheel.end())
-                .splineToConstantHeading(new Vector2d(40, -40), 0)
-                .build();
-
-        waitForStart();
-        if (isStopRequested()) return;
-
-        // Deploy cargo
-        drive.followTrajectory(deploy);
-        arm.setLift(3);
-        sleep(1000);
-        intake.reverse();
-        sleep(2000);
-        intake.stop();
-
-        // Spin wheel
-        drive.followTrajectory(wheel);
-        spin.spinRed();
-        sleep(3000);
-        spin.stop();
-
-        // Go to warehouse
-        drive.followTrajectory(warehouse);
-*/
 
         // Dum auto RIP
         VampireDrive drive = new VampireDrive(this, hardwareMap);
@@ -69,6 +27,8 @@ public class RLDWhWa extends LinearOpMode {
         DuckDuckGo spin = new DuckDuckGo(this, hardwareMap);
         Webcam webcam = new Webcam(this, hardwareMap);
         webcam.debug();
+        //drive.debug();
+        arm.debug();
 
         // Elapsed time for timed motion
         ElapsedTime runtime = new ElapsedTime();
@@ -91,19 +51,25 @@ public class RLDWhWa extends LinearOpMode {
 
         }
 
-        drive.move(0.5, 32, 28);
+        if (position == 3) {
+
+            drive.move(0.6, 27, 0);
+            drive.move(0.6, 13, 90);
+
+        } else drive.move(0.6, 29, 30);
+
         arm.setLift(position);
-        drive.turn(0.5, 45);
+        drive.turn(1, 45);
         intake.reverse();
         sleep(3000);
         intake.stop();
         drive.turn(1, 45);
-        drive.move(0.5, 18, 90);
-        drive.move(0.4, 28, 155);
+        drive.move(0.5, 30, 95);
+        drive.move(0.4, 34,-178);
         spin.spinRed();
-        sleep(5000);
+        sleep(4000);
         spin.stop();
-        drive.move(0.5, 23, -90);
+        drive.move(0.6, 28, -93);
         arm.setLift(0);
 
     }

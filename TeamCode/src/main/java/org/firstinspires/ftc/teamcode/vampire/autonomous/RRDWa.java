@@ -18,40 +18,7 @@ public class RRDWa extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-/*
-        // Subsystems
-        VampireRRDrive drive = new VampireRRDrive(hardwareMap);
-        Arm arm = new Arm(this, hardwareMap);
-        Intake intake = new Intake(this, hardwareMap);
 
-        // Set starting position
-        Pose2d startPose = new Pose2d(3.25, -63.75, Math.toRadians(90));
-        drive.setPoseEstimate(startPose);
-
-        // Create trajectories
-        Trajectory deploy = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(0, -40), Math.toRadians(125))
-                .build();
-        Trajectory warehouse = drive.trajectoryBuilder(deploy.end(), true)
-                .splineTo(new Vector2d(60, -40), 180)
-                .build();
-
-        waitForStart();
-        if (isStopRequested()) return;
-
-        // Deploy cargo
-        drive.followTrajectory(deploy);
-        arm.setLift(3);
-        sleep(1000);
-        intake.reverse();
-        sleep(2000);
-        intake.stop();
-
-        // Go to warehouse
-        drive.followTrajectory(warehouse);
-*/
-
-        // Dum auto RIP
         VampireDrive drive = new VampireDrive(this, hardwareMap);
         Arm arm = new Arm(this, hardwareMap);
         Intake intake = new Intake(this, hardwareMap);
@@ -79,7 +46,13 @@ public class RRDWa extends LinearOpMode {
 
         }
 
-        drive.move(0.5, 28, -28);
+        if (position == 1) {
+
+            drive.move(0.6, 27, 0);
+            drive.move(0.6, 13, -90);
+
+        } else drive.move(0.6, 30, -28);
+
         arm.setLift(position);
         drive.turn(1, -45);
         intake.reverse();
@@ -87,7 +60,8 @@ public class RRDWa extends LinearOpMode {
         intake.stop();
         drive.turn(1, -45);
         drive.move(0.5, 35, -90);
-        drive.move(0.5, 55, -175);
+        drive.move(0.5, 40, -175);
+        arm.setLift(0);
 
     }
 
