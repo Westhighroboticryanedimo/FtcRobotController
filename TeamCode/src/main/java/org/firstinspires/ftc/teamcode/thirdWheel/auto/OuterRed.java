@@ -17,6 +17,7 @@ public class OuterRed extends LinearOpMode {
         DriveThirdWheel drive = new DriveThirdWheel(this, hardwareMap);
         Lift lift = new Lift(this, hardwareMap);
 
+        drive.debug();
         // Elapsed time for timed motion
         ElapsedTime runtime = new ElapsedTime();
 
@@ -27,14 +28,23 @@ public class OuterRed extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
 
-        while (runtime.seconds() < 6) {
-            lift.override(1, -1);
+        lift.override(1, -1);
+        lift.assist(); // to set level and stuff
+        while (!lift.arrived()) {
             lift.assist();
-            drive.setPowers(0.5, -0.5, -0.5, 0.5);
+        }
+        drive.move(1, 40, 90);
+        // drive.move(0.5, 12, 0);
+        // this doesn't work
+        while (runtime.seconds() < 2) {
+            drive.setPowers(0.5, 0.5, 0.5, 0.5);
         }
         drive.stop();
         lift.override(0, -1);
         lift.assist();
+        while (!lift.arrived()) {
+            lift.assist();
+        }
     }
 
 }
