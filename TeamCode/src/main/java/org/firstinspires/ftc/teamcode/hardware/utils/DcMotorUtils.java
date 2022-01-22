@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class DcMotorUtils {
     // Move the motor to the position specified, in ticks
     // Except it only sets the power and you have to run it in the loop() thing, because yes
+    // NOTE: in the future add lambdas so that you can pass your preferred decel func to it
     static public void moveByTicks(DcMotor motor, double desiredTicks, double startDec, double tolerance) {
         // Deceleration: min(x * 1/startDec, 1) where x = difference
         if (Math.abs(getDifference(motor, desiredTicks)) > tolerance ) {
