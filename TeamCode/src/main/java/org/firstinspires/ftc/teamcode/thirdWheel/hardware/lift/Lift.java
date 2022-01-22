@@ -21,7 +21,6 @@ public class Lift extends BaseHardware {
         CAPTURED,
         OVERRIDDEN
     }
-
     private State state = State.INHALING;
     
     public Lift(LinearOpMode opMode, HardwareMap hwMap) {
