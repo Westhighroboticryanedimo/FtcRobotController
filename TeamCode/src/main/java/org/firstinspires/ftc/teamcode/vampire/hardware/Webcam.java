@@ -57,7 +57,7 @@ public class Webcam extends BaseHardware {
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
 
             @Override
-            public void onOpened() { webcam.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPRIGHT); }
+            public void onOpened() { webcam.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPSIDE_DOWN); }
 
             @Override
             public void onError(int errorCode) {}
@@ -106,9 +106,9 @@ public class Webcam extends BaseHardware {
 
         private static final int REGION_WIDTH = 80;
         private static final int REGION_HEIGHT = 80;
-        private static final Point REGION_LEFT = new Point(-320, -200);
-        private static final Point REGION_MID = new Point(-40, -200);
-        private static final Point REGION_RIGHT = new Point(230, -200);
+        private static final Point REGION_LEFT = new Point(-320, 0);
+        private static final Point REGION_MID = new Point(-40, 0);
+        private static final Point REGION_RIGHT = new Point(230, 0);
 
         // The core values which define the location and size of the sample regions
         private static final Point REGION_LEFT_TOPLEFT = new Point((int) (WIDTH / 2 + REGION_WIDTH / 2 + REGION_LEFT.x), (int) (HEIGHT / 2 + REGION_HEIGHT / 2 + REGION_LEFT.y));
@@ -217,9 +217,9 @@ public class Webcam extends BaseHardware {
                     -1); // Negative thickness means solid fill
 
             // Get position
-            int min = Math.min(avgL, Math.min(avgM, avgR));
-            if (min == avgL) position = CargoPosition.BOTTOM;
-            else if (min == avgM) position = CargoPosition.MIDDLE;
+            int max = Math.max(avgL, Math.max(avgM, avgR));
+            if (max == avgL) position = CargoPosition.BOTTOM;
+            else if (max == avgM) position = CargoPosition.MIDDLE;
             else position = CargoPosition.TOP;
 
             return input;
