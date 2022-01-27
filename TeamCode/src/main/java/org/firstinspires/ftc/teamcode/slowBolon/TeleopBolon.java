@@ -22,6 +22,8 @@ public class TeleopBolon extends OpMode {
     private DcMotor duckDumpy;
     private DcMotor lift;
 
+    DcMotor fl, fr, br, bl;
+
     private boolean slowbol;
     private double speed;
     private double armposition;
@@ -55,7 +57,13 @@ public class TeleopBolon extends OpMode {
         o.init(hardwareMap.get(DcMotor.class,"frontLeft"));
 
 
+
         o.run();
+
+        fl = hardwareMap.get(DcMotor.class,"frontLeft");
+        fr = hardwareMap.get(DcMotor.class,"frontRight");
+        bl = hardwareMap.get(DcMotor.class,"backLeft");
+        br = hardwareMap.get(DcMotor.class,"backRight");
     }
 
     @Override
@@ -80,10 +88,14 @@ public class TeleopBolon extends OpMode {
             else if(armgoalposition == armdownposition) {armgoalposition = -1;}
         }
 
-        telemetry.addData("lift goal", armgoalposition);
-        telemetry.addData("lift", lift.getCurrentPosition());
         telemetry.addData("milfs", gyro.getAngleDegrees());
-        telemetry.addData("version","33");
+        telemetry.addData("FL",fl.getCurrentPosition());
+        telemetry.addData("FR",fr.getCurrentPosition());
+        telemetry.addData("BR",br.getCurrentPosition());
+        telemetry.addData("BL",bl.getCurrentPosition());
+        telemetry.addData("version","34");
+        telemetry.update();
+
 
         controller.update();
         drive.drive(controller.left_stick_x*speed, controller.left_stick_y*speed, controller.right_stick_x);
@@ -116,7 +128,7 @@ public class TeleopBolon extends OpMode {
 }
         else{duckDumpy.setPower(0);}/*newgrab1.setPower(0);newgrab2.setPower(0);}*/
         telemetry.update();
-        if(controller.XOnce()) {telemetry.speak("que deporte te gusta me gusta el beisbol");}
+        if(controller.XOnce()) {telemetry.speak("que deporte te gusta me gusta el beisbol. AYUDAME NECESITO AYUDO PORQUE LOS AVES HACE LOS COSAS MAS HORIBLES QUE PUEDES COMPRENDER!!!");}
     }
 
 }

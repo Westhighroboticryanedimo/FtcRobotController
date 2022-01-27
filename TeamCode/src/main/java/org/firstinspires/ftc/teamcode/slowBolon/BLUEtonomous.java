@@ -30,6 +30,10 @@ public class BLUEtonomous extends LinearOpMode {
         o.init(hardwareMap.get(DcMotor.class,"frontLeft"));
         hardwareMap.get(DcMotor.class,"frontLeft").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hardwareMap.get(DcMotor.class,"frontLeft").setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        DcMotor duck = hardwareMap.get(DcMotor.class,"duckDumpy");
+
         distance = o.distance;
 
         o.run();
@@ -61,6 +65,9 @@ public class BLUEtonomous extends LinearOpMode {
             }
         }
 
+// i praay to the java gods 'git [pls fix'
+
+
         else if(dx <= 2*wthird) {
             while(distance < 400) {
                 d.drive(0,0.4,0);
@@ -80,7 +87,7 @@ public class BLUEtonomous extends LinearOpMode {
                 telemetry.update();
             }
         }*/
-
+/*
         while(distance < 1100) {
             d.drive(0,-0.4,0);
             o.updatedistance();
@@ -96,6 +103,19 @@ public class BLUEtonomous extends LinearOpMode {
             telemetry.addData("dostance",o.distance);
             telemetry.update();
         }
+        }*/
+
+        d.move(0.4,11,0);
+        d.turn(0.4,180);
+        d.move(0.4,47,270);
+        d.move(0.4,4,0);
+        double time = runtime.seconds();
+        double mark = time;
+        while(time <= mark+5) {
+            time = runtime.seconds();
+            duck.setPower(0.2);
+        }
+        d.move(0.4,30,170);
     }
 }
 //
