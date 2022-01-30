@@ -18,8 +18,6 @@ public class InnerRed extends LinearOpMode {
         Lift lift = new Lift(this, hardwareMap);
 
         drive.debug();
-        // Elapsed time for timed motion
-        ElapsedTime runtime = new ElapsedTime();
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");
@@ -33,16 +31,17 @@ public class InnerRed extends LinearOpMode {
         while (!lift.arrived()) {
             lift.assist();
         }
-        drive.move(1, 20, 90);
+        drive.move(0.5, 40, 90);
         // drive.move(0.5, 12, 0);
         // this doesn't work
-        while (runtime.seconds() < 2) {
+        ElapsedTime runtime = new ElapsedTime();
+        while (runtime.seconds() < 0.75) {
             drive.setPowers(0.5, 0.5, 0.5, 0.5);
         }
         drive.stop();
         lift.override(0, -1);
         lift.assist();
-        while (!lift.arrived()) {
+        while (runtime.seconds() < 5) {
             lift.assist();
         }
     }
