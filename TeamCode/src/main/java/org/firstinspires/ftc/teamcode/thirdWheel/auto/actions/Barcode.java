@@ -88,36 +88,6 @@ public class Barcode extends BaseHardware {
         }
     }
 
-    public void park(int color, int side) {
-        lift.override(2, -1);
-        lift.assist();
-        while (!lift.arrived()) {
-            lift.assist();
-        }
-        if (color == 1) {
-            /*if (side == 1) {
-                drive.move(0.5, 60, 270);
-            } else if (side == 2) {
-                drive.move(0.5, 120, 270);
-            }*/
-            drive.move(0.5, 80, 265);
-            drive.move(0.5, 15, 0);
-        } else if (color == 2) {
-            /*if (side == 1) {
-                drive.move(0.25, 120, 90);
-            } else if (side == 2) {
-                drive.move(0.5, 60, 90);
-            }*/
-            drive.move(0.5, 80, 95);
-            drive.move(0.5, 15, 0);
-        }
-        lift.override(0, -1);
-        ElapsedTime runtime = new ElapsedTime();
-        while (runtime.seconds() < 3)  {
-            lift.assist();
-        }
-    }
-
     public double dist() {
         return distanceSensor.getDistance(DistanceUnit.INCH);
     }
