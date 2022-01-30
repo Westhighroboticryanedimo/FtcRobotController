@@ -42,7 +42,7 @@ public class TeleopThirdWheel extends OpMode {
             lift.override(3, -1);
         }
         if (controller.dpadDown()) {
-            lift.inhale();
+            lift.override(0, -1);
         }
         if (controller.rightBumperOnce()) {
             if (lift.getLevel() != 3) {
@@ -55,6 +55,8 @@ public class TeleopThirdWheel extends OpMode {
             }
         }
         if (controller.A()) {
+            // max doesn't want this
+            // lift.inhale();
             lift.override(-1, 0);
         }
         if (controller.B()) {
