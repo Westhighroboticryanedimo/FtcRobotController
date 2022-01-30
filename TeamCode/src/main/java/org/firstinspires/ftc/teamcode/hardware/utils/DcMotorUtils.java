@@ -7,10 +7,11 @@ public class DcMotorUtils {
     // Except it only sets the power and you have to run it in the loop() thing, because yes
     // NOTE: in the future add lambdas so that you can pass your preferred decel func to it
     static public void moveByTicks(DcMotor motor, double desiredTicks, double startDec, double tolerance) {
+        int diff = getDifference(motor, desiredTicks);
         // Deceleration: min(x * 1/startDec, 1) where x = difference
-        if (Math.abs(getDifference(motor, desiredTicks)) > tolerance ) {
-            int direction = (int) (getDifference(motor, desiredTicks)/Math.abs(getDifference(motor, desiredTicks)));
-            motor.setPower(Math.min(Math.abs(getDifference(motor, desiredTicks))*(1.0/startDec), 1) * direction);
+        if (Math.abs(diff) > tolerance ) {
+            int direction = (int) (diff/Math.abs(diff));
+            motor.setPower(Math.min(Math.abs(diff)*(1.0/startDec), 1) * direction);
         } else {
             motor.setPower(0);
         }
