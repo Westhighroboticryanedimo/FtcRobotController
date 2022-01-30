@@ -21,14 +21,11 @@ public class RLDWhWa extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         // Dum auto RIP
-        VampireDrive drive = new VampireDrive(this, hardwareMap);
-        Arm arm = new Arm(this, hardwareMap);
-        Intake intake = new Intake(this, hardwareMap);
-        DuckDuckGo spin = new DuckDuckGo(this, hardwareMap);
-        Webcam webcam = new Webcam(this, hardwareMap);
-        webcam.debug();
-        //drive.debug();
-        arm.debug();
+        VampireDrive drive;
+        Arm arm;
+        Intake intake;
+        DuckDuckGo spin;
+        Webcam webcam;
 
         // Elapsed time for timed motion
         ElapsedTime runtime = new ElapsedTime();
@@ -39,6 +36,16 @@ public class RLDWhWa extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
+
+        drive = new VampireDrive(this, hardwareMap);
+        arm = new Arm(this, hardwareMap);
+        intake = new Intake(this, hardwareMap);
+        spin = new DuckDuckGo(this, hardwareMap);
+        webcam = new Webcam(this, hardwareMap);
+
+        webcam.debug();
+        //drive.debug();
+        arm.debug();
 
         // Get how many rings are stacked
         int position = 3;

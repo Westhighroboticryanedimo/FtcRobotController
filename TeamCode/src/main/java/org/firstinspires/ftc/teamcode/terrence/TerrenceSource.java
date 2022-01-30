@@ -6,16 +6,16 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Controller;
+import org.firstinspires.ftc.teamcode.hardware.Gyro;
 import org.firstinspires.ftc.teamcode.hardware.drive.DifferentialDrive;
 
-@Disabled
+//@Disabled
 @TeleOp(name="Terrence: Teleop", group="Terrence")
 
 public class TerrenceSource extends OpMode {
 
     private DifferentialDrive drive;
-    private Servo highFive;
-    private Servo wave;
+    private Gyro gyro;
 
     private Controller controller;
 
@@ -24,8 +24,7 @@ public class TerrenceSource extends OpMode {
 
         drive = new DifferentialDrive(this, hardwareMap);
         drive.debug();
-        highFive = hardwareMap.get(Servo.class, "highFive");
-        wave = hardwareMap.get(Servo.class, "wave");
+        gyro = new Gyro(hardwareMap);
 
         controller = new Controller(gamepad1);
 
@@ -35,15 +34,9 @@ public class TerrenceSource extends OpMode {
     public void loop() {
 
         controller.update();
-
+        telemetry.addData("Gyro", gyro.getAngleRadians());
         drive.toggleArcade(controller.backOnce());
         drive.drive(controller.left_stick_y, controller.right_stick_y, controller.right_stick_x);
-
-        if (controller.XOnce()) wave.setPosition(0.3);
-        else wave.setPosition(0.7);
-
-        if (controller.AOnce()) highFive.setPosition(0.3);
-        else highFive.setPosition(0.7);
 
         telemetry.update();
 

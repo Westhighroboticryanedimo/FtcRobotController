@@ -23,7 +23,6 @@ public class VampireTeleop extends OpMode {
     private Arm arm;
     private DuckDuckGo spin;
     private Webcam webcam;
-    //private MiniArm miniArm;
     private TapeArm tapeArm;
     private Controller controller1;
     private Controller controller2;
@@ -41,21 +40,19 @@ public class VampireTeleop extends OpMode {
         intake = new Intake(this, hardwareMap);
         arm = new Arm(this, hardwareMap);
         spin = new DuckDuckGo(this, hardwareMap);
-        //miniArm = new MiniArm(this, hardwareMap);
         webcam = new Webcam(this, hardwareMap);
         tapeArm = new TapeArm(this, hardwareMap);
         controller1 = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
 
         // Turn on squared inputs
-        drive.enableSquaredInputs();
+        //drive.enableSquaredInputs();
 
         // Debug mode
         //intake.debug();
-        drive.debug();
+        //drive.debug();
         arm.debug();
-        //miniArm.debug();
-        webcam.debug();
+        //webcam.debug();
         //tapeArm.debug();
 
     }
@@ -87,6 +84,7 @@ public class VampireTeleop extends OpMode {
 
         // Drive controls
         drive.drive(avgX, avgY, controller1.right_stick_x);
+        drive.togglePOV(controller1.backOnce());
 
         // Other subsystem controls
         intake.intake(controller1.leftBumper(), controller1.rightBumper());

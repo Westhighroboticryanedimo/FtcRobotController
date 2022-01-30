@@ -19,11 +19,10 @@ public class RRDWa extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        VampireDrive drive = new VampireDrive(this, hardwareMap);
-        Arm arm = new Arm(this, hardwareMap);
-        Intake intake = new Intake(this, hardwareMap);
-        Webcam webcam = new Webcam(this, hardwareMap);
-        webcam.debug();
+        VampireDrive drive;
+        Arm arm;
+        Intake intake;
+        Webcam webcam;
 
         // Elapsed time for timed motion
         ElapsedTime runtime = new ElapsedTime();
@@ -34,6 +33,12 @@ public class RRDWa extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
+
+        drive = new VampireDrive(this, hardwareMap);
+        arm = new Arm(this, hardwareMap);
+        intake = new Intake(this, hardwareMap);
+        webcam = new Webcam(this, hardwareMap);
+        webcam.debug();
 
         // Get how many rings are stacked
         int position = 3;
