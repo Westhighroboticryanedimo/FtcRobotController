@@ -23,7 +23,7 @@ public class DriveThirdWheel extends HolonomicDrive {
 
     // PID setup
     private void setup() {
-        thirdWheel = true;
+        thirdWheel = false;
         isDrivePOV = false;
 
         setPidDrive(0.02, 0, 0.01);
