@@ -6,11 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-
-@Autonomous(name = "BLUETONOMOUS+++++++++++++++++++++++++++++a")
-public class BLUEtonomous extends LinearOpMode {
+@Autonomous(name = "DRIVE-FORWARD-tonomous+++++++++++++++++++++++++++++a")
+public class DRIVE_FORWARD_tonomous extends LinearOpMode {
 
     //private org.firstinspires.ftc.teamcode.slowBolon.CamBolon Cam;
     private int DONDEESTAELDUCKY;
@@ -105,17 +102,7 @@ public class BLUEtonomous extends LinearOpMode {
         }
         }*/
 
-        d.move(0.4,11,0);
-        d.turn(0.4,180);
-        d.move(0.4,47,270);
-        d.move(0.4,4,0);
-        double time = runtime.seconds();
-        double mark = time;
-        while(time <= mark+5) {
-            time = runtime.seconds();
-            duck.setPower(0.2);
-        }
-        d.move(0.4,30,170);
+        d.move(0.4,50,0);
     }
 }
 //
