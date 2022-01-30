@@ -42,11 +42,11 @@ public class Lift extends BaseHardware {
     public void assist() {
         switch (state) {
         case INHALING:
-            linearSlide.setLevel(0);
+            // linearSlide.setLevel(0);
             intake.in();
-            if (intake.check()) {
-                state = State.CAPTURED;
-            }
+            // if (intake.check()) {
+            //     state = State.CAPTURED;
+            // }
             break;
         case CAPTURED:
             linearSlide.setLevel(1);
@@ -73,6 +73,7 @@ public class Lift extends BaseHardware {
     public boolean arrived() { return linearSlide.arrived(); }
     public boolean check() { return intake.check(); }
     public boolean picked() { return intake.picked(); }
+    public boolean ejected() { return intake.ejected(); }
     public int state() {
         switch (state) {
         case INHALING:
