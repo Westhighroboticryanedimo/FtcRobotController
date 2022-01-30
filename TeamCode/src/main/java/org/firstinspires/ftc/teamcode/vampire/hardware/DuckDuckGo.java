@@ -10,11 +10,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
+import java.util.ArrayList;
+
 public class DuckDuckGo extends BaseHardware {
 
     // Motor and motor power
     private CRServo duckSpin;
-    private static final double SPIN_POWER = 0.7;
+    private static final double SPIN_POWER = 1;
 
     // Teleop constructor
     public DuckDuckGo(OpMode opMode, HardwareMap hwMap) {

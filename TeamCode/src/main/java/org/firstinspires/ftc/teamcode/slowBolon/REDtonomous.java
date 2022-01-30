@@ -27,15 +27,19 @@ public class REDtonomous extends LinearOpMode {
         //Cam.init(hardwareMap);
 
         OdometryBolon o = new OdometryBolon();
-        o.init(hardwareMap.get(DcMotor.class,"frontRight"));
-        hardwareMap.get(DcMotor.class,"frontRight").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hardwareMap.get(DcMotor.class,"frontRight").setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        o.init(hardwareMap.get(DcMotor.class,"frontLeft"));
+        hardwareMap.get(DcMotor.class,"frontLeft").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardwareMap.get(DcMotor.class,"frontLeft").setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         distance = o.distance;
+
+        DcMotor duck = hardwareMap.get(DcMotor.class,"duckDumpy");
 
         o.run();
         d = new DriveBolon(this,hardwareMap);
         //DONDEESTAELDUCKY = Cam.getspot();
         ElapsedTime runtime = new ElapsedTime();
+        runtime.reset();
+        runtime.startTime();
 
         //telemetry.addData("where",DONDEESTAELDUCKY);
         /*telemetry.addData("leastduckydiff", Cam.pipeline.leastduckydiff);
@@ -80,8 +84,8 @@ public class REDtonomous extends LinearOpMode {
                 telemetry.update();
             }
         }*/
-
-        while(distance < 1000) {
+/*
+        while(distance < 1100) {
             d.drive(0,-0.4,0);
             o.updatedistance();
             distance=o.distance;
@@ -89,12 +93,28 @@ public class REDtonomous extends LinearOpMode {
             telemetry.update();
         }
         o.resetdistance(); distance=o.distance;
-        while(distance < 1900) {
+        while(distance < 1000) {
             d.drive(-0.4,0,0);
             o.updatedistance();
             distance=o.distance;
             telemetry.addData("dostance",o.distance);
             telemetry.update();
         }
+        }*/
+        d.debug();
+        //d.move(0.5,25,0);
+        //d.move(0.5,24,270);
+        //d.move(0,0,)
+
+        d.move(0.4,7,0);
+        d.turn(0.4,-45);
+        d.move(0.4,47,315);
+        double time = runtime.seconds();
+        double mark = time;
+        while(time <= mark+5) {
+            time = runtime.seconds();
+            duck.setPower(-0.16);
+        }
+        d.move(0.4,38,45);
     }
 }

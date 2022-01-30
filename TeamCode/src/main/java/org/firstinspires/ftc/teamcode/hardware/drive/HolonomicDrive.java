@@ -480,8 +480,8 @@ public abstract class HolonomicDrive extends BaseHardware {
             print("BL: ", backLeft.getCurrentPosition());
             print("BR: ", backRight.getCurrentPosition());
             //print("Correction: ", correction);
-            //print("FLBR Setpoint: ", pidFLBR.getSetpoint() + " " + Double.toString(flbrDist));
-            //print("FRBL Setpoint: ", pidFRBL.getSetpoint() + " " + Double.toString(frblDist));
+            print("FLBR Setpoint: ", pidFLBR.getSetpoint() + " " + Double.toString(flbrDist));
+            print("FRBL Setpoint: ", pidFRBL.getSetpoint() + " " + Double.toString(frblDist));
             print("FLBR Speed: ", speedFLBR);
             print("FRBL Speed: ", speedFRBL);
             //print("FLBR Ontarget: ", pidFLBR.onTarget() || isFLBROnTarget);

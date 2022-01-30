@@ -23,13 +23,12 @@ public class VampireTeleop extends OpMode {
     private Arm arm;
     private DuckDuckGo spin;
     private Webcam webcam;
-    //private MiniArm miniArm;
     private TapeArm tapeArm;
     private Controller controller1;
     private Controller controller2;
 
     // Variables for driving
-    private static final int STORE_NUM = 13;
+    private static final int STORE_NUM = 8;
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
 
@@ -41,20 +40,18 @@ public class VampireTeleop extends OpMode {
         intake = new Intake(this, hardwareMap);
         arm = new Arm(this, hardwareMap);
         spin = new DuckDuckGo(this, hardwareMap);
-        //miniArm = new MiniArm(this, hardwareMap);
         webcam = new Webcam(this, hardwareMap);
         tapeArm = new TapeArm(this, hardwareMap);
         controller1 = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
 
         // Turn on squared inputs
-        drive.enableSquaredInputs();
+        //drive.enableSquaredInputs();
 
         // Debug mode
         //intake.debug();
-        drive.debug();
+        //drive.debug();
         arm.debug();
-        //miniArm.debug();
         //webcam.debug();
         //tapeArm.debug();
 
@@ -87,22 +84,17 @@ public class VampireTeleop extends OpMode {
 
         // Drive controls
         drive.drive(avgX, avgY, controller1.right_stick_x);
-
-        // Print out change in x and y
-        telemetry.addData("avgX", avgX);
-        telemetry.addData("avgY", avgY);
+        drive.togglePOV(controller1.backOnce());
 
         // Other subsystem controls
         intake.intake(controller1.leftBumper(), controller1.rightBumper());
         spin.spin(controller1.A(), controller1.X());
-        // arm.toggleAuto(controller.startOnce());
         arm.lift(controller1.dpadUp(), controller1.dpadDown());
         arm.changeStage(controller1.dpadUpOnce(), controller1.dpadDownOnce());
 
-        // Mini arm which is not used anymore
-        //miniArm.moveArm(controller.YOnce());
-        //miniArm.moveClaw(controller.BOnce());
-        //miniArm.continuousMoveArm(controller.dpadRight(), controller.dpadLeft());
+        // Second controller
+        arm.lift(controller2.Y(), controller2.A());
+        arm.toggleAuto(controller2.B());
 
         // The tape measure...
         tapeArm.horzMove(controller2.dpadRight(), controller2.dpadLeft());

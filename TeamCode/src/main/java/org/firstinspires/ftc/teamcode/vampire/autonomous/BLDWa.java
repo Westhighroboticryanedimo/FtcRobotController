@@ -17,45 +17,12 @@ public class BLDWa extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-/*
-        // Subsystems
-        VampireRRDrive drive = new VampireRRDrive(hardwareMap);
-        Arm arm = new Arm(this, hardwareMap);
-        Intake intake = new Intake(this, hardwareMap);
-
-        // Set starting position
-        Pose2d startPose = new Pose2d(3.25, 63.75, Math.toRadians(-90));
-        drive.setPoseEstimate(startPose);
-
-        // Create trajectories
-        Trajectory deploy = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(0, 40), Math.toRadians(125))
-                .build();
-        Trajectory warehouse = drive.trajectoryBuilder(deploy.end(), true)
-                .splineTo(new Vector2d(60, -40), 180)
-                .build();
-
-        waitForStart();
-        if (isStopRequested()) return;
-
-        // Deploy cargo
-        drive.followTrajectory(deploy);
-        arm.setLift(3);
-        sleep(1000);
-        intake.reverse();
-        sleep(2000);
-        intake.stop();
-
-        // Go to warehouse
-        drive.followTrajectory(warehouse);
-*/
 
         // Dum auto RIP
-        VampireDrive drive = new VampireDrive(this, hardwareMap);
-        Arm arm = new Arm(this, hardwareMap);
-        Intake intake = new Intake(this, hardwareMap);
-        Webcam webcam = new Webcam(this, hardwareMap);
-        webcam.debug();
+        VampireDrive drive;
+        Arm arm;
+        Intake intake;
+        Webcam webcam;
 
         // Elapsed time for timed motion
         ElapsedTime runtime = new ElapsedTime();
@@ -66,6 +33,12 @@ public class BLDWa extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
+
+        drive = new VampireDrive(this, hardwareMap);
+        arm = new Arm(this, hardwareMap);
+        intake = new Intake(this, hardwareMap);
+        webcam = new Webcam(this, hardwareMap);
+        webcam.debug();
 
         // Get how many rings are stacked
         int position = 3;
@@ -78,15 +51,22 @@ public class BLDWa extends LinearOpMode {
 
         }
 
-        drive.move(0.5, 32, 27);
+        if (position == 3) {
+
+            drive.move(0.6, 27, 0);
+            drive.move(0.6, 13, 90);
+
+        } else drive.move(0.6, 30, 32);
+
         arm.setLift(position);
         drive.turn(1, 45);
         intake.reverse();
         sleep(3000);
         intake.stop();
         drive.turn(1, 45);
-        drive.move(0.4, 37, 90);
-        drive.move(0.5, 55, 170);
+        drive.move(0.4, 35, 90);
+        drive.move(0.5, 40, 175);
+        arm.setLift(0);
 
     }
 

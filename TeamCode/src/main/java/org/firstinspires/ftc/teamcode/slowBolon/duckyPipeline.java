@@ -101,12 +101,6 @@ class duckyPipeline extends OpenCvPipeline
     }*/
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private double closeness(int aa, int bb) {
-        Color a = Color.valueOf(aa);
-        Color b = Color.valueOf(bb);
-        return ((diff(a.red(),b.red()))/255+(diff(a.green(),b.green()))/255+(diff(a.blue(),b.blue()))/255)/3;
-    }
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private double difference(Color a, Color b) {
         return (diff(a.red(),b.red())+diff(a.green(),b.green())+diff(a.blue(),b.blue()));
     }

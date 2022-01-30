@@ -19,56 +19,13 @@ public class BRDWhWa extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-/*
-        // Subsystems
-        VampireRRDrive drive = new VampireRRDrive(hardwareMap);
-        Arm arm = new Arm(this, hardwareMap);
-        Intake intake = new Intake(this, hardwareMap);
-        DuckDuckGo spin = new DuckDuckGo(this, hardwareMap);
-
-        // Set starting position
-        Pose2d startPose = new Pose2d(-27, 63.75, Math.toRadians(-90));
-        drive.setPoseEstimate(startPose);
-
-        // Create trajectories
-        Trajectory deploy = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(-23.75, 40), Math.toRadians(-55))
-                .build();
-        Trajectory wheel = drive.trajectoryBuilder(deploy.end(), true)
-                .lineToLinearHeading(new Pose2d(-60, 60, Math.toRadians(-90)))
-                .build();
-        Trajectory warehouse = drive.trajectoryBuilder(wheel.end())
-                .lineToLinearHeading(new Pose2d(40, 40, 0))
-                .build();
-
-        waitForStart();
-        if (isStopRequested()) return;
-
-        // Deploy cargo
-        drive.followTrajectory(deploy);
-        arm.setLift(3);
-        sleep(1000);
-        intake.reverse();
-        sleep(2000);
-        intake.stop();
-
-        // Spin wheel
-        drive.followTrajectory(wheel);
-        spin.spinBlue();
-        sleep(3000);
-        spin.stop();
-
-        // Go to warehouse
-        drive.followTrajectory(warehouse);
-*/
 
         // Dum auto RIP
-        VampireDrive drive = new VampireDrive(this, hardwareMap);
-        Arm arm = new Arm(this, hardwareMap);
-        Intake intake = new Intake(this, hardwareMap);
-        DuckDuckGo spin = new DuckDuckGo(this, hardwareMap);
-        Webcam webcam = new Webcam(this, hardwareMap);
-        webcam.debug();
+        VampireDrive drive;
+        Arm arm;
+        Intake intake;
+        DuckDuckGo spin;
+        Webcam webcam;
 
         // Elapsed time for timed motion
         ElapsedTime runtime = new ElapsedTime();
@@ -79,6 +36,13 @@ public class BRDWhWa extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
+
+        drive = new VampireDrive(this, hardwareMap);
+        arm = new Arm(this, hardwareMap);
+        intake = new Intake(this, hardwareMap);
+        spin = new DuckDuckGo(this, hardwareMap);
+        webcam = new Webcam(this, hardwareMap);
+        webcam.debug();
 
         // Get how many rings are stacked
         int position = 3;
@@ -91,18 +55,25 @@ public class BRDWhWa extends LinearOpMode {
 
         }
 
-        drive.move(0.5, 29, -28);
+        if (position == 1) {
+
+            drive.move(0.6, 28, 0);
+            drive.move(0.6, 13, -90);
+
+        } else drive.move(0.5, 28, -33);
+
         arm.setLift(position);
-        drive.turn(0.5, -47);
+        drive.turn(0.5, -45);
         intake.reverse();
         sleep(3000);
         intake.stop();
-        drive.turn(1, 48);
-        drive.move(0.5, 48, 110);
+        drive.turn(1, 45);
+        drive.move(0.5, 40, 111);
         spin.spinBlue();
         sleep(5000);
         spin.stop();
-        drive.move(0.5, 21, 0);
+        drive.turn(1, 10);
+        drive.move(0.6, 22, 20);
         arm.setLift(0);
     }
 
