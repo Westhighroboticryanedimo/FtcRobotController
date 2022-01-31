@@ -13,7 +13,6 @@ public class AutoBolon extends LinearOpMode{
 
     private org.firstinspires.ftc.teamcode.slowBolon.CamBolon Cam;
     private int DONDEESTAELDUCKY;
-    private OdometryBolon o;
     private DriveBolon d;
 
     double distance;
@@ -25,13 +24,8 @@ public class AutoBolon extends LinearOpMode{
         Cam = new org.firstinspires.ftc.teamcode.slowBolon.CamBolon();
         Cam.init(hardwareMap);
 
-        OdometryBolon o = new OdometryBolon();
-        o.init(hardwareMap.get(DcMotor.class,"frontRight"));
         hardwareMap.get(DcMotor.class,"frontRight").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hardwareMap.get(DcMotor.class,"frontRight").setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        distance = o.distance;
-
-        o.run();
         d = new DriveBolon(this,hardwareMap);
         DONDEESTAELDUCKY = Cam.getspot();
         ElapsedTime runtime = new ElapsedTime();
@@ -42,7 +36,6 @@ public class AutoBolon extends LinearOpMode{
         telemetry.addData("x", Cam.pipeline.gx);
         telemetry.addData("y", Cam.pipeline.gy);
         telemetry.addData("gYELLOW", Cam.pipeline.greatestyellow);
-        telemetry.addData("distance",o.distance);
         telemetry.update();
 
         int dx = Cam.pipeline.gx;

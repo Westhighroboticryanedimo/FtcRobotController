@@ -14,7 +14,6 @@ public class REDtonomous extends LinearOpMode {
 
     //private org.firstinspires.ftc.teamcode.slowBolon.CamBolon Cam;
     private int DONDEESTAELDUCKY;
-    private OdometryBolon o;
     private DriveBolon d;
 
     double distance;
@@ -26,15 +25,10 @@ public class REDtonomous extends LinearOpMode {
         //Cam = new org.firstinspires.ftc.teamcode.slowBolon.CamBolon();
         //Cam.init(hardwareMap);
 
-        OdometryBolon o = new OdometryBolon();
-        o.init(hardwareMap.get(DcMotor.class,"frontLeft"));
         hardwareMap.get(DcMotor.class,"frontLeft").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hardwareMap.get(DcMotor.class,"frontLeft").setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        distance = o.distance;
 
         DcMotor duck = hardwareMap.get(DcMotor.class,"duckDumpy");
-
-        o.run();
         d = new DriveBolon(this,hardwareMap);
         //DONDEESTAELDUCKY = Cam.getspot();
         ElapsedTime runtime = new ElapsedTime();

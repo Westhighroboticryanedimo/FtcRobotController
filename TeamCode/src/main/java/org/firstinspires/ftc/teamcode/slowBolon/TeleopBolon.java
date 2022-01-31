@@ -16,9 +16,7 @@ public class TeleopBolon extends OpMode {
     private DriveBolon drive;
     private Controller controller;
     private Gyro gyro;
-    private OdometryBolon o;
     private CRServo newgrab1, newgrab2;
-
     private DcMotor duckDumpy;
     private DcMotor lift;
 
@@ -26,14 +24,22 @@ public class TeleopBolon extends OpMode {
 
     private boolean slowbol;
     private double speed;
+    private double smoothing;
+    private static double SMOOTH_RATE;
+    private double stick_x, stick_y;
     private double armposition;
     private int armupposition = 3000, armdownposition = 0;
     private int armgoalposition;
 
     private boolean handopen;
 
+    private Bolodometry bd;
+
     @Override
     public void init() {
+        smoothing = 0;
+        SMOOTH_RATE = 0.1;
+        stick_x = 0; stick_y = 0;
         armgoalposition = -1;
         armupposition = 3000; armdownposition = 0;
         speed=1; handopen = true;
@@ -45,7 +51,7 @@ public class TeleopBolon extends OpMode {
         gyro.reset();
         newgrab1 = hardwareMap.get(CRServo.class, "grab1");
         newgrab2 = hardwareMap.get(CRServo.class, "grab2");
-        //newgrab1.setDirection(CRServo.Direction.FORWARD); newgrab2.setDirection(CRServo.Direction.REVERSE);
+        bd = new Bolodometry();
 
         duckDumpy = hardwareMap.get(DcMotor.class,"duckDumpy");
 
@@ -53,12 +59,6 @@ public class TeleopBolon extends OpMode {
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        o = new OdometryBolon();
-        o.init(hardwareMap.get(DcMotor.class,"frontLeft"));
-
-
-
-        o.run();
 
         fl = hardwareMap.get(DcMotor.class,"frontLeft");
         fr = hardwareMap.get(DcMotor.class,"frontRight");
@@ -68,6 +68,7 @@ public class TeleopBolon extends OpMode {
 
     @Override
     public void loop() {
+        bd.updateposition(fr.getCurrentPosition(),fl.getCurrentPosition(),br.getCurrentPosition(),bl.getCurrentPosition(),gyro.getAngleDegrees());
         armposition = lift.getCurrentPosition();
 
         if(armgoalposition != -1) {
@@ -89,17 +90,37 @@ public class TeleopBolon extends OpMode {
         }
 
         telemetry.addData("milfs", gyro.getAngleDegrees());
+        telemetry.addData("Bolodometry y: ",bd.y);
         telemetry.addData("FL",fl.getCurrentPosition());
         telemetry.addData("FR",fr.getCurrentPosition());
         telemetry.addData("BR",br.getCurrentPosition());
         telemetry.addData("BL",bl.getCurrentPosition());
-        telemetry.addData("version","34");
+        telemetry.addData("version","35");
         telemetry.update();
 
 
         controller.update();
-        drive.drive(controller.left_stick_x*speed, controller.left_stick_y*speed, controller.right_stick_x);
-        if(controller.dpadDownOnce()) {o.resetdistance();}
+
+        if(controller.left_stick_x > stick_x) {
+            stick_x = controller.left_stick_x;
+        } else if(controller.left_stick_x < stick_x) {
+            stick_x -= SMOOTH_RATE;
+        }
+        if(controller.left_stick_y > stick_y) {
+            stick_y = controller.left_stick_y;
+        } else if(controller.left_stick_y < stick_y) {
+            stick_y -= SMOOTH_RATE;
+        }
+
+        drive.drive(stick_x*speed*smoothing, stick_y*speed*smoothing, controller.right_stick_x*smoothing);
+
+        if(controller.left_stick_x > 0.2 || controller.left_stick_y > 0.2
+                || controller.dpadUp() || controller.dpadDown()) {
+            if(smoothing < 1) {smoothing += SMOOTH_RATE;}
+        } else {
+            smoothing = 0;
+        }
+        if(smoothing > 1) {smoothing = 1;}
 
         if(controller.leftStickButtonOnce()) {slowbol = !slowbol;}
         if(slowbol) {speed=0.4;} else {speed=1;}
@@ -115,8 +136,8 @@ public class TeleopBolon extends OpMode {
             newgrab1.setPower(0);
         }
 
-        if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.55); armgoalposition = -1;}
-        else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.4); armgoalposition = -1;}
+        if(controller.dpadUp()) {lift.setDirection(DcMotor.Direction.FORWARD);lift.setPower(0.55*smoothing); armgoalposition = -1;}
+        else if(controller.dpadDown()) {lift.setDirection(DcMotor.Direction.REVERSE);lift.setPower(0.4*smoothing); armgoalposition = -1;}
         else if(armgoalposition == -1) {lift.setPower(0);}
 
         if(controller.leftBumperOnce()) {
