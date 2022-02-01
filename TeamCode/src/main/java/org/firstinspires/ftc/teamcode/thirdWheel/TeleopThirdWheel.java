@@ -36,7 +36,10 @@ public class TeleopThirdWheel extends OpMode {
         telemetry.addData("state", lift.state());
         telemetry.update();
         controller.update();
-        drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+        // invert right trigger so that unpressed is 1 and fully pressed is 0
+        // math is gud
+        double slow = (-1)*controller.right_trigger + 1;
+        drive.drive(controller.left_stick_x*slow, controller.left_stick_y*slow, controller.right_stick_x*slow);
         // drive.togglePOV(controller.leftStickButtonOnce());
         if (controller.dpadUp()) {
             lift.override(3, -1);
