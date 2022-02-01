@@ -15,6 +15,7 @@ public class TeleopBolon extends OpMode {
 
     private DriveBolon drive;
     private Controller controller;
+    //private Controller controller2;
     private Gyro gyro;
     private CRServo newgrab1, newgrab2;
     private DcMotor duckDumpy;
@@ -48,6 +49,7 @@ public class TeleopBolon extends OpMode {
         drive.setup();
         gyro = new Gyro(hardwareMap,false);
         controller = new Controller(gamepad1);
+        //controller2 = new Controller(gamepad2);
         gyro.reset();
         newgrab1 = hardwareMap.get(CRServo.class, "grab1");
         newgrab2 = hardwareMap.get(CRServo.class, "grab2");
@@ -91,36 +93,40 @@ public class TeleopBolon extends OpMode {
 
         telemetry.addData("milfs", gyro.getAngleDegrees());
         telemetry.addData("Bolodometry y: ",bd.y);
+        telemetry.addData("smoothing: ", smoothing);
+        telemetry.addData("l: ", "stick_x " + stick_x + " stick_y" + stick_y);
         telemetry.addData("FL",fl.getCurrentPosition());
         telemetry.addData("FR",fr.getCurrentPosition());
         telemetry.addData("BR",br.getCurrentPosition());
         telemetry.addData("BL",bl.getCurrentPosition());
-        telemetry.addData("version","35");
+        telemetry.addData("version","36");
         telemetry.update();
 
 
         controller.update();
 
-        if(controller.left_stick_x > stick_x) {
+        if(Math.abs(controller.left_stick_x) > Math.abs(stick_x)) {
             stick_x = controller.left_stick_x;
-        } else if(controller.left_stick_x < stick_x) {
-            stick_x -= SMOOTH_RATE;
+        } else if(Math.abs(controller.left_stick_x) < Math.abs(stick_x)) {
+            stick_x = 0;
         }
-        if(controller.left_stick_y > stick_y) {
+        if(Math.abs(controller.left_stick_y) > Math.abs(stick_y)) {
             stick_y = controller.left_stick_y;
-        } else if(controller.left_stick_y < stick_y) {
-            stick_y -= SMOOTH_RATE;
+        } else if(Math.abs(controller.left_stick_y) < Math.abs(stick_y)) {
+            stick_y = 0;
         }
 
-        drive.drive(stick_x*speed*smoothing, stick_y*speed*smoothing, controller.right_stick_x*smoothing);
-
-        if(controller.left_stick_x > 0.2 || controller.left_stick_y > 0.2
+        if(Math.abs(controller.left_stick_x) > 0.2 || Math.abs(controller.left_stick_y) > 0.2 ||
+                Math.abs(controller.right_stick_x) > 0.2
                 || controller.dpadUp() || controller.dpadDown()) {
             if(smoothing < 1) {smoothing += SMOOTH_RATE;}
         } else {
             smoothing = 0;
         }
         if(smoothing > 1) {smoothing = 1;}
+
+        drive.drive(stick_x*speed*smoothing, stick_y*speed*smoothing, controller.right_stick_x*Math.sqrt(smoothing));
+
 
         if(controller.leftStickButtonOnce()) {slowbol = !slowbol;}
         if(slowbol) {speed=0.4;} else {speed=1;}
@@ -142,14 +148,14 @@ public class TeleopBolon extends OpMode {
 
         if(controller.leftBumperOnce()) {
         }
-
+        
         if(controller.B()) {duckDumpy.setDirection(DcMotorSimple.Direction.FORWARD);duckDumpy.setPower(0.2);
         }
         else if(controller.Y()) {duckDumpy.setDirection(DcMotorSimple.Direction.REVERSE);duckDumpy.setPower(0.2);
 }
         else{duckDumpy.setPower(0);}/*newgrab1.setPower(0);newgrab2.setPower(0);}*/
         telemetry.update();
-        if(controller.XOnce()) {telemetry.speak("que deporte te gusta me gusta el beisbol. AYUDAME NECESITO AYUDO PORQUE LOS AVES HACE LOS COSAS MAS HORIBLES QUE PUEDES COMPRENDER!!!");}
+        if(controller.XOnce()) {telemetry.speak("que deporte te gusta me gusta el beisbol. ");}
     }
 
 }

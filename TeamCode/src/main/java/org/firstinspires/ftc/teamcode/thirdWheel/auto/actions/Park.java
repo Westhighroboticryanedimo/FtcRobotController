@@ -51,10 +51,10 @@ public class Park extends BaseHardware {
             drive.move(0.5, 15, 0);
         }
         lift.override(0, -1);
-        elapsedtime runtime = new elapsedtime();
-        while (runtime.seconds() < 3)  {
+        //elapsedtime runtime = new elapsedtime();
+        /*while (runtime.seconds() < 3)  {
             lift.assist();
-        }
+        }*/
     }
 
 }
