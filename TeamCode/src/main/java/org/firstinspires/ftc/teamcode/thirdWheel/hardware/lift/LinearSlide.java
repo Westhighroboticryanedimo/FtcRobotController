@@ -33,9 +33,13 @@ public class LinearSlide {
     }
 
     // Move the slide to the position specified, in ticks
-    // Except it only sets the power and you have to run it in the loop() thing, because yes
-    private void moveSlide(double desiredTicks, double startDec, double tolerance) {
+    // Except it only sets the power and you have to run it in a loop, because yes
+    public int moveSlide(double desiredTicks, double startDec, double tolerance) {
+        if ((desiredTicks < LEV_ZERO_TICKS) || (desiredTicks > LEV_THREE_TICKS)) {
+            return 1;
+        }
         DcMotorUtils.moveByTicks(slideMotor, desiredTicks, startDec, tolerance);
+        return 0;
     }
 
     public int setLevel(int desiredLevel) {
