@@ -54,6 +54,7 @@ public class TeleopBolon extends OpMode {
         newgrab1 = hardwareMap.get(CRServo.class, "grab1");
         newgrab2 = hardwareMap.get(CRServo.class, "grab2");
         bd = new Bolodometry();
+        bd.init();
 
         duckDumpy = hardwareMap.get(DcMotor.class,"duckDumpy");
 
