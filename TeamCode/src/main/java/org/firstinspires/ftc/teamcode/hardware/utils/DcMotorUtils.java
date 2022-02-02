@@ -9,6 +9,10 @@ public class DcMotorUtils {
     static public void moveByTicks(DcMotor motor, double desiredTicks, double startDec, double tolerance) {
         double diff = getDifference(motor, desiredTicks);
         // Deceleration: min(x * 1/startDec, 1) where x = difference
+        // Hacky workaround for startDec being zero
+        if (startDec == 0.0) {
+            startDec = 0.1;
+        }
         if (Math.abs(diff) > tolerance ) {
             int direction = (int) (diff/Math.abs(diff));
             motor.setPower(Math.min(Math.abs(diff)*(1.0/startDec), 1) * direction);
