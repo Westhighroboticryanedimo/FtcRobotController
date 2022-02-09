@@ -15,11 +15,13 @@ public class Lift extends BaseHardware {
     private LinearSlide linearSlide;
     private Intake intake;
     private int currentLevel = 0;
+    private double desiredTicks = 0;
     private int currentIntakeState = 2;
     private enum State {
         INHALING,
         CAPTURED,
-        OVERRIDDEN
+        OVERRIDDEN,
+        MANUAL
     }
     private State state = State.INHALING;
     
@@ -55,6 +57,8 @@ public class Lift extends BaseHardware {
             intake.setState(currentIntakeState);
             linearSlide.setLevel(currentLevel);
             break;
+        case MANUAL:
+            linearSlide.moveSlide(desiredTicks, 0.0, 3.0);
         }
     }
 
@@ -68,8 +72,15 @@ public class Lift extends BaseHardware {
         state = State.INHALING;
     }
 
+    // probably only manual usage
+    public void manual(double ticks) {
+        state = State.MANUAL;
+        desiredTicks = ticks;
+    }
+
     public int getLevel() { return linearSlide.getLevel(); }
     public double getCurrentTicks() { return linearSlide.getCurrentTicks(); }
+    public double getEndPos() { return linearSlide.getEndPos(); }
     public boolean arrived() { return linearSlide.arrived(); }
     public boolean check() { return intake.check(); }
     public boolean picked() { return intake.picked(); }
