@@ -16,6 +16,7 @@ public class TeleopThirdWheel extends OpMode {
     private Lift lift;
     private Gyro gyro;
     private Controller controller;
+    private double desiredTicks = 0.0;
 
     @Override
     public void init() {
@@ -41,20 +42,24 @@ public class TeleopThirdWheel extends OpMode {
         double slow = (-1)*controller.right_trigger + 1;
         drive.drive(controller.left_stick_x*slow, controller.left_stick_y*slow, controller.right_stick_x*slow);
         // drive.togglePOV(controller.leftStickButtonOnce());
-        if (controller.dpadUp()) {
+        if (controller.dpadRight()) {
             lift.override(3, -1);
+            desiredTicks = lift.getEndPos();
         }
-        if (controller.dpadDown()) {
+        if (controller.dpadLeft()) {
             lift.override(0, -1);
+            desiredTicks = lift.getEndPos();
         }
         if (controller.rightBumperOnce()) {
             if (lift.getLevel() != 3) {
                 lift.override((lift.getLevel()+1), -1);
+                desiredTicks = lift.getEndPos();
             }
         }
         if (controller.leftBumperOnce()) {
             if (lift.getLevel() != 0) {
                 lift.override((lift.getLevel()-1), -1);
+                desiredTicks = lift.getEndPos();
             }
         }
         if (controller.A()) {
@@ -67,6 +72,13 @@ public class TeleopThirdWheel extends OpMode {
         }
         if (controller.X()) {
             lift.override(-1, 2);
+        }
+        if (controller.dpadUp()) {
+            desiredTicks += 20;
+            lift.manual(desiredTicks);
+        } else if (controller.dpadDown()) {
+            desiredTicks -= 20;
+            lift.manual(desiredTicks);
         }
         lift.assist();
     }
