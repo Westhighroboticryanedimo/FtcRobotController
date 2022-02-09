@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.odometry.OdometryGlobalCoor
 public abstract class HolonomicDrive extends BaseHardware {
 
     protected boolean thirdWheel = false;
+
     // Boolean function for moveUntil()
     public interface BoolCommand {
 
@@ -227,6 +228,21 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         if (button) isSlow = !isSlow;
 
+    }
+
+    public double celerate(double currentTime, double max, double endTime, double accelStop, double decelStart) {
+        return Math.min(Math.min(Math.sqrt(currentTime) * (1 / accelStop), max), Math.sqrt(endTime - currentTime) * (1 / decelStart));
+    }
+    public double normie(double time, double end) {
+        return celerate(time, 1, end, 1, 1);
+    }
+
+    public void justX(double time, double endTime, int dir) {
+        drive(celerate(time, 0.5, endTime, 1, 1)*dir, 0, 0);
+    }
+
+    public void fakeRoadrunner(double time, double xEnd, int xDir, double yEnd, int yDir, double turnEnd, double turnDir) {
+        drive(normie(time, xEnd)*xDir, normie(time, yEnd)*yDir, normie(time, turnEnd)*turnDir);
     }
 
     // TeleOp Drive
