@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.thirdWheel.auto.actions;
 
+import com.qualcomm.ftccommon.configuration.EditLegacyServoControllerActivity;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -44,11 +45,25 @@ public class Park extends BaseHardware {
             lift.assist();
         }
         if (color == 1) {
-            drive.move(0.5, 80, 265);
-            drive.move(0.5, 15, 0);
+            {
+                ElapsedTime runtime = new ElapsedTime();
+                while (runtime.seconds() < 2.25) {
+                    drive.mehRoadrunner(runtime.seconds(), 2.25, -1, 1, -1, 0, 0);
+                }
+            }
         } else if (color == 2) {
-            drive.move(0.5, 80, 95);
-            drive.move(0.5, 15, 0);
+            {
+                ElapsedTime runtime = new ElapsedTime();
+                while (runtime.seconds() < 2.25) {
+                    drive.mehRoadrunner(runtime.seconds(), 2.25, 1, 1, -1, 0, 0);
+                }
+            }
+        }
+        {
+            ElapsedTime runtime = new ElapsedTime();
+            while (runtime.seconds() < 1) {
+                drive.mehRoadrunner(runtime.seconds(), 0, 0, 1, 1, 0, 0);
+            }
         }
         lift.override(0, -1);
         ElapsedTime runtime = new ElapsedTime();
