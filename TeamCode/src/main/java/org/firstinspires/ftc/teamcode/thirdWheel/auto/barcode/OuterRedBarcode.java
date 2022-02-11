@@ -32,5 +32,3 @@ public class OuterRedBarcode extends LinearOpMode {
     }
 
 }
-
-

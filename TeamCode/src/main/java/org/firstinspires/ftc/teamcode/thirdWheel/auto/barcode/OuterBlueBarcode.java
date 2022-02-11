@@ -25,6 +25,7 @@ public class OuterBlueBarcode extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
+
         barcode.setup();
         barcode.detect(2);
         barcode.put(2);
@@ -32,5 +33,3 @@ public class OuterBlueBarcode extends LinearOpMode {
     }
 
 }
-
-

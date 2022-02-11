@@ -32,5 +32,3 @@ public class InnerBlueBarcode extends LinearOpMode {
     }
 
 }
-
-
