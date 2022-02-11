@@ -1,14 +1,14 @@
 package org.firstinspires.ftc.teamcode.thirdWheel.hardware.lift;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Intake {
-    private DcMotor intakeOne;
-    private DcMotor intakeTwo;
+    private CRServo intakeOne;
+    private CRServo intakeTwo;
     private DistanceSensor distanceSensor;
     private double DIST_THRESH = 2.0;
     private double OUT_THRESH = 5.0;
@@ -18,20 +18,8 @@ public class Intake {
     }
 
     private void init(HardwareMap hwMap) {
-        intakeOne = hwMap.get(DcMotor.class, "intakeOne");
-        intakeOne.setDirection(DcMotor.Direction.FORWARD);
-        intakeOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intakeOne.setPower(0);
-        intakeOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        intakeTwo = hwMap.get(DcMotor.class, "intakeTwo");
-        intakeTwo.setDirection(DcMotor.Direction.REVERSE);
-        intakeTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intakeTwo.setPower(0);
-        intakeTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        intakeOne = hwMap.get(CRServo.class, "intakeOne");
+        intakeTwo = hwMap.get(CRServo.class, "intakeTwo");
         distanceSensor = hwMap.get(DistanceSensor.class, "distanceSensor");
     }
 
@@ -55,13 +43,13 @@ public class Intake {
     }
 
     public void in() {
-        intakeOne.setPower(0.8);
-        intakeTwo.setPower(0.8);
+        intakeOne.setPower(1);
+        intakeTwo.setPower(1);
     }
 
     public void out() {
-        intakeOne.setPower(-0.8);
-        intakeTwo.setPower(-0.8);
+        intakeOne.setPower(-1);
+        intakeTwo.setPower(-1);
     }
 
     public void stop() {
