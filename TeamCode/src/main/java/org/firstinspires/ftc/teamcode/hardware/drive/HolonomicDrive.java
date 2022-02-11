@@ -230,19 +230,33 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     }
 
-    public double celerate(double currentTime, double max, double endTime, double accelStop, double decelStart) {
-        return Math.min(Math.min(Math.sqrt(currentTime) * (1 / accelStop), max), Math.sqrt(endTime - currentTime) * (1 / decelStart));
+    public double celerate(double currentTime, double start, double max, double end, double accel, double decel) {
+        if (end - currentTime < 0) {
+            return 0;
+        }
+        return Math.min(Math.min(Math.sqrt(currentTime - start) * (1 / accel),
+                                 max),
+                        Math.sqrt(end - currentTime) * (1 / decel));
     }
     public double normie(double time, double end) {
-        return celerate(time, 1, end, 1, 1);
+        return celerate(time, 1, 0, end, 1, 1);
     }
 
     public void justX(double time, double endTime, int dir) {
-        drive(celerate(time, 0.5, endTime, 1, 1)*dir, 0, 0);
+        drive(celerate(time, 0.5, 0, endTime, 2, 2)*dir, 0, 0);
     }
 
-    public void fakeRoadrunner(double time, double xEnd, int xDir, double yEnd, int yDir, double turnEnd, double turnDir) {
-        drive(normie(time, xEnd)*xDir, normie(time, yEnd)*yDir, normie(time, turnEnd)*turnDir);
+    public void fakeRoadrunner(double time,
+                               double xStart, double xMax, double xEnd, double xAccel, double xDecel, int xDir,
+                               double yStart, double yMax, double yEnd, double yAccel, double yDecel, int yDir,
+                               double turnStart, double turnMax, double turnEnd, double turnAccel, double turnDecel, int turnDir) {
+        drive(celerate(time, xStart, xMax, xEnd, xAccel, xDecel)*xDir,
+              celerate(time, yStart, yMax, yEnd, yAccel, yDecel)*yDir,
+              celerate(time, turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
+    }
+
+    public void mehRoadrunner(double time, double xEnd, int xDir, double yEnd, int yDir, double turnEnd, double turnDir) {
+        drive(normie(time, xEnd)*xDir, normie(time, yEnd)*(-yDir), normie(time, turnEnd)*turnDir);
     }
 
     // TeleOp Drive
