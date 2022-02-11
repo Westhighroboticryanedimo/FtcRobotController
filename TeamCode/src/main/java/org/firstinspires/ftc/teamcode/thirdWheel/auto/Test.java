@@ -12,6 +12,8 @@ public class Test extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         DriveThirdWheel drive = new DriveThirdWheel(this, hardwareMap);
         double totalTime = 4.0;
+        waitForStart();
+        if (isStopRequested()) return;
         {
             ElapsedTime runtime = new ElapsedTime();
             while (runtime.seconds() < totalTime) {
