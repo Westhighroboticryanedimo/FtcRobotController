@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.PIDController;
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
@@ -239,7 +240,7 @@ public abstract class HolonomicDrive extends BaseHardware {
                         Math.sqrt(end - currentTime) * (1 / decel));
     }
     public double normie(double time, double end) {
-        return celerate(time, 1, 0, end, 1, 1);
+        return celerate(time, 0, 1, end, 1, 1);
     }
 
     public void justX(double time, double endTime, int dir) {
@@ -257,6 +258,13 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     public void mehRoadrunner(double time, double xEnd, int xDir, double yEnd, int yDir, double turnEnd, double turnDir) {
         drive(normie(time, xEnd)*xDir, normie(time, yEnd)*(-yDir), normie(time, turnEnd)*turnDir);
+    }
+
+    public void frrMove(double totalTime, double xEnd, int xDir, double yEnd, int yDir, double turnEnd, double turnDir) {
+        ElapsedTime runtime = new ElapsedTime();
+        while (runtime.seconds() < totalTime) {
+            mehRoadrunner(runtime.seconds(), xEnd, xDir, yEnd, yDir, turnEnd, turnDir);
+        }
     }
 
     // TeleOp Drive
