@@ -239,6 +239,7 @@ public abstract class HolonomicDrive extends BaseHardware {
                                  max),
                         Math.sqrt(end - currentTime) * (1 / decel));
     }
+
     public double normie(double time, double end) {
         return celerate(time, 0, 1, end, 1, 1);
     }
@@ -256,6 +257,81 @@ public abstract class HolonomicDrive extends BaseHardware {
               celerate(time, turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
     }
 
+    public void frr(double xDist, double xStart, double xMax, double xAccel, double xDecel, int xDir,
+                    double yDist, double yStart, double yMax, double yAccel, double yDecel, int yDir,
+                    double turnDist, double turnStart, double turnMax, double turnAccel, double turnDecel, int turnDir) {
+        double xEnd = 0;
+        double yEnd = 0;
+        double turnEnd = 0;
+        double k_x = Math.pow(xAccel, 2) + Math.pow(xDecel, 2);
+        double k_y = Math.pow(yAccel, 2) + Math.pow(yDecel, 2);
+        double k_turn = Math.pow(turnAccel, 2) + Math.pow(turnDecel, 2);
+        if (xDist > (2/3)*Math.pow(xMax, 3)*k_x) {
+            xEnd = (xDist/xMax) + (1/3)*Math.pow(xMax, 2)*k_x;
+        } else {
+            xEnd = Math.pow(3*xDist/2, (2/3))*Math.pow(k_x, (1/3));
+        }
+        xEnd += xStart;
+        if (yDist > (2/3)*Math.pow(yMax, 3)*k_y) {
+            yEnd = (yDist/yMax) + (1/3)*Math.pow(yMax, 2)*k_y;
+        } else {
+            yEnd = Math.pow(3*yDist/2, (2/3))*Math.pow(k_y, (1/3));
+        }
+        yEnd += yStart;
+        if (turnDist > (2/3)*Math.pow(turnMax, 3)*k_turn) {
+            turnEnd = (turnDist/turnMax) + (1/3)*Math.pow(turnMax, 2)*k_turn;
+        } else {
+            turnEnd = Math.pow(3*turnDist/2, (2/3))*Math.pow(k_turn, (1/3));
+        }
+        turnEnd += turnStart;
+        double maxTime = Math.max(Math.max(xEnd, yEnd), turnEnd);
+        ElapsedTime runtime = new ElapsedTime();
+        double time = 0;
+        while (runtime.seconds() <= maxTime) {
+            time = runtime.seconds();
+            drive(celerate(time, xStart, xMax, xEnd, xAccel, xDecel)*xDir,
+                  celerate(time, yStart, yMax, yEnd, yAccel, yDecel)*yDir,
+                  celerate(time, turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
+        }
+    }
+
+    public boolean frrToBeUsedInALoop(double currentTime,
+                                      double xDist, double xStart, double xMax, double xAccel, double xDecel, int xDir,
+                                      double yDist, double yStart, double yMax, double yAccel, double yDecel, int yDir,
+                                      double turnDist, double turnStart, double turnMax, double turnAccel, double turnDecel, int turnDir) {
+        double xEnd = 0;
+        double yEnd = 0;
+        double turnEnd = 0;
+        double k_x = Math.pow(xAccel, 2) + Math.pow(xDecel, 2);
+        double k_y = Math.pow(yAccel, 2) + Math.pow(yDecel, 2);
+        double k_turn = Math.pow(turnAccel, 2) + Math.pow(turnDecel, 2);
+        if (xDist > (2/3)*Math.pow(xMax, 3)*k_x) {
+            xEnd = (xDist/xMax) + (1/3)*Math.pow(xMax, 2)*k_x;
+        } else {
+            xEnd = Math.pow(3*xDist/2, (2/3))*Math.pow(k_x, (1/3));
+        }
+        xEnd += xStart;
+        if (yDist > (2/3)*Math.pow(yMax, 3)*k_y) {
+            yEnd = (yDist/yMax) + (1/3)*Math.pow(yMax, 2)*k_y;
+        } else {
+            yEnd = Math.pow(3*yDist/2, (2/3))*Math.pow(k_y, (1/3));
+        }
+        yEnd += yStart;
+        if (turnDist > (2/3)*Math.pow(turnMax, 3)*k_turn) {
+            turnEnd = (turnDist/turnMax) + (1/3)*Math.pow(turnMax, 2)*k_turn;
+        } else {
+            turnEnd = Math.pow(3*turnDist/2, (2/3))*Math.pow(k_turn, (1/3));
+        }
+        turnEnd += turnStart;
+        double maxTime = Math.max(Math.max(xEnd, yEnd), turnEnd);
+        if (currentTime > maxTime) { return false; }
+        drive(celerate(currentTime, xStart, xMax, xEnd, xAccel, xDecel)*xDir,
+              celerate(currentTime, yStart, yMax, yEnd, yAccel, yDecel)*yDir,
+              celerate(currentTime, turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
+        return true;
+    }
+
+    // what was this for again?
     public void mehRoadrunner(double time, double xEnd, int xDir, double yEnd, int yDir, double turnEnd, double turnDir) {
         drive(normie(time, xEnd)*xDir, normie(time, yEnd)*(-yDir), normie(time, turnEnd)*turnDir);
     }
