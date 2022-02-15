@@ -28,15 +28,6 @@ public class Park extends BaseHardware {
         lift = l;
     }
 
-    public void comeBackPlease(int color) {
-        drive.move(0.25, 4, 180);
-        if (color == 1) {
-            drive.move(0.25, 40, -90);
-        } if (color == 2) {
-            drive.move(0.25, 20, 90);
-        }
-    }
-
     // Assumes in line with center of alliance shipping hub
     public void warehouse(int color) {
         lift.override(2, -1);
@@ -45,26 +36,13 @@ public class Park extends BaseHardware {
             lift.assist();
         }
         if (color == 1) {
-            {
-                ElapsedTime runtime = new ElapsedTime();
-                while (runtime.seconds() < 2.25) {
-                    drive.mehRoadrunner(runtime.seconds(), 2.25, -1, 1, -1, 0, 0);
-                }
-            }
+            // drive.frrNormie(2.5, 0, -1, 0.5, 1, -1, 0, 0, 0);
+            drive.frrNormie(2.5, 0, -1, 0, 0, 0, 0, 0, 0);
+            // drive.frrNormieByTime(2.5, 2.5, -1, 0.5, 1, 0, 0);
         } else if (color == 2) {
-            {
-                ElapsedTime runtime = new ElapsedTime();
-                while (runtime.seconds() < 2.25) {
-                    drive.mehRoadrunner(runtime.seconds(), 2.25, 1, 1, -1, 0, 0);
-                }
-            }
+            drive.frrNormie(2.5, 0, -1, 0.5, 1, -1, 0, 0, 0);
         }
-        {
-            ElapsedTime runtime = new ElapsedTime();
-            while (runtime.seconds() < 1) {
-                drive.mehRoadrunner(runtime.seconds(), 0, 0, 1, 1, 0, 0);
-            }
-        }
+        // drive.frrNormie(0, 0, 0, 1, 0, 1, 0, 0, 0);
         lift.override(0, -1);
         ElapsedTime runtime = new ElapsedTime();
         while (runtime.seconds() < 3)  {

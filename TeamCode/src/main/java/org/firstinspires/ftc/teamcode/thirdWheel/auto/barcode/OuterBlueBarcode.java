@@ -26,9 +26,9 @@ public class OuterBlueBarcode extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
 
-        barcode.setup();
-        barcode.detect(2);
-        barcode.put(2);
+        barcode.setup(2);
+        barcode.detect();
+        barcode.put();
         park.warehouse(1);
     }
 

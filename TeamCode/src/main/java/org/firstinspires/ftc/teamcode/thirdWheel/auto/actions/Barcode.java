@@ -19,6 +19,7 @@ public class Barcode extends BaseHardware {
     private DistanceSensor distanceSensor;
     private final int PIECE_DIST = 24;
     private int level = 1;
+    private int dir = 1;
 
     public Barcode(LinearOpMode opMode, DriveThirdWheel d, Lift l, DistanceSensor ds) {
         super(opMode);
@@ -31,55 +32,56 @@ public class Barcode extends BaseHardware {
         distanceSensor = ds;
     }
 
-    public void setup() {
+    private void setSide(int side) {
+        if (side == 1) {
+            dir = -1;
+        } else if (side == 2) {
+            dir = 1;
+        }
+    }
+
+    public void setup(int side) {
+        setSide(side);
         drive.move(0.25, 4, 0);
     }
 
-    public void detect(int side) {
-        for (; level <= 2; ++level) {
-            if (distanceSensor.getDistance(DistanceUnit.INCH) < PIECE_DIST) {
-                break;
+    public boolean there() {
+        return distanceSensor.getDistance(DistanceUnit.INCH) < PIECE_DIST;
+    }
+
+    public void detect() {
+        if (there()) {
+            level = 1;
+        } else {
+            drive.turn(0.5, 15*dir);
+            if (there()) {
+                level = 2;
+            } else {
+                level = 3;
             }
-            if (side == 2) {
-                drive.turn(0.25, 15);
-            } else if (side == 1) {
-                drive.turn(0.25, -15);
-            }
+            drive.turn(0.5, -15*dir);
         }
         drive.stop();
-        if (side == 1) {
+        if (dir == -1) {
             level = -level + 4;
-        }
-        if (side == 2) {
-            for (int i = 1; i < level; ++i) {
-                drive.turn(0.25, -15);
-            }
-        } else if (side == 1) {
-            for (int i = 1; i < (-level + 4); ++i) {
-                drive.turn(0.25, 15);
-            }
         }
     }
 
-    public void put(int side) {
-        if (side == 1) {
-            drive.move(0.25, 25, 90);
-        } else if (side == 2) {
-            drive.move(0.25, 25, -90);
-        }
+    public void put() {
+        drive.frrNormieByTime(1.25, 1.25, -dir, 0, 0, 0, 0);
         lift.override(level, -1);
         lift.assist();
         while (!lift.arrived()) {
             lift.assist();
         }
-        drive.move(0.25, 28, 0);
+        drive.frrNormieByTime(1.25, 0, 0, 1.25, 1, 0, 0);
         lift.override(-1, 1);
         for (int i = 0; i < 400; ++i) {
             lift.assist();
         }
         lift.override(-1, 2);
         lift.assist();
-        drive.move(0.25, 36, 180);
+        drive.frrNormieByTime(1.25, 0, 0, 1.25, -1, 0, 0);
         lift.override(0, -1);
         lift.assist();
         ElapsedTime runtime = new ElapsedTime();

@@ -25,9 +25,10 @@ public class InnerBlueBarcode extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
-        barcode.setup();
-        barcode.detect(1);
-        barcode.put(1);
+
+        barcode.setup(1);
+        barcode.detect();
+        barcode.put();
         park.warehouse(1);
     }
 

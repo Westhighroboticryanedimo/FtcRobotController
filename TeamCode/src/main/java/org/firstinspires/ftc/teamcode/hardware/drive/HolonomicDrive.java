@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.odometry.OdometryGlobalCoor
 public abstract class HolonomicDrive extends BaseHardware {
 
     protected boolean thirdWheel = false;
+    protected boolean reduceTurn = true;
 
     // Boolean function for moveUntil()
     public interface BoolCommand {
@@ -286,15 +287,20 @@ public abstract class HolonomicDrive extends BaseHardware {
         turnEnd += turnStart;
         double maxTime = Math.max(Math.max(xEnd, yEnd), turnEnd);
         ElapsedTime runtime = new ElapsedTime();
-        double time = 0;
         while (runtime.seconds() <= maxTime) {
-            time = runtime.seconds();
-            drive(celerate(time, xStart, xMax, xEnd, xAccel, xDecel)*xDir,
-                  celerate(time, yStart, yMax, yEnd, yAccel, yDecel)*yDir,
-                  celerate(time, turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
+            drive(celerate(runtime.seconds(), xStart, xMax, xEnd, xAccel, xDecel)*xDir,
+                  celerate(runtime.seconds(), yStart, yMax, yEnd, yAccel, yDecel)*(-yDir),
+                  celerate(runtime.seconds(), turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
         }
     }
 
+    public void frrNormie(double xDist, double xStart, int xDir,
+                          double yDist, double yStart, int yDir,
+                          double turnDist, double turnStart, int turnDir) {
+        frr(xDist, xStart, 1, 1, 1, xDir,
+            yDist, yStart, 1, 1, 1, yDir,
+            turnDist, turnStart, 1, 1, 1, turnDir);
+    }
     public boolean frrToBeUsedInALoop(double currentTime,
                                       double xDist, double xStart, double xMax, double xAccel, double xDecel, int xDir,
                                       double yDist, double yStart, double yMax, double yAccel, double yDecel, int yDir,
@@ -326,7 +332,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         double maxTime = Math.max(Math.max(xEnd, yEnd), turnEnd);
         if (currentTime > maxTime) { return false; }
         drive(celerate(currentTime, xStart, xMax, xEnd, xAccel, xDecel)*xDir,
-              celerate(currentTime, yStart, yMax, yEnd, yAccel, yDecel)*yDir,
+              celerate(currentTime, yStart, yMax, yEnd, yAccel, yDecel)*(-yDir),
               celerate(currentTime, turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
         return true;
     }
@@ -336,7 +342,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         drive(normie(time, xEnd)*xDir, normie(time, yEnd)*(-yDir), normie(time, turnEnd)*turnDir);
     }
 
-    public void frrMove(double totalTime, double xEnd, int xDir, double yEnd, int yDir, double turnEnd, double turnDir) {
+    public void frrNormieByTime(double totalTime, double xEnd, int xDir, double yEnd, int yDir, double turnEnd, double turnDir) {
         ElapsedTime runtime = new ElapsedTime();
         while (runtime.seconds() < totalTime) {
             mehRoadrunner(runtime.seconds(), xEnd, xDir, yEnd, yDir, turnEnd, turnDir);
@@ -366,8 +372,11 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         }
 
-        // Reduce joystick turn
-        double turn = joystickTurn / 1.8;
+        double turn = joystickTurn;
+        if (reduceTurn) {
+            // Reduce joystick turn
+            turn = turn / 1.8;
+        }
 
         // PID calculation
         pidDrive.setSetpoint(prevAngle);

@@ -46,19 +46,19 @@ public class Lift extends BaseHardware {
         case INHALING:
             // linearSlide.setLevel(0);
             intake.in();
-            // if (intake.check()) {
-            //     state = State.CAPTURED;
-            // }
+            if (intake.check()) {
+                state = State.CAPTURED;
+            }
             break;
         case CAPTURED:
-            linearSlide.setLevel(1);
+            // linearSlide.setLevel(1);
             break;
         case OVERRIDDEN:
             intake.setState(currentIntakeState);
             linearSlide.setLevel(currentLevel);
             break;
         case MANUAL:
-            linearSlide.moveSlide(desiredTicks, 0.0, 3.0);
+            // linearSlide.moveSlide(desiredTicks, 0.0, 3.0);
         }
     }
 
@@ -74,8 +74,8 @@ public class Lift extends BaseHardware {
 
     // probably only manual usage
     public void manual(double ticks) {
-        state = State.MANUAL;
-        desiredTicks = ticks;
+        // state = State.MANUAL;
+        // desiredTicks = ticks;
     }
 
     public int getLevel() { return linearSlide.getLevel(); }

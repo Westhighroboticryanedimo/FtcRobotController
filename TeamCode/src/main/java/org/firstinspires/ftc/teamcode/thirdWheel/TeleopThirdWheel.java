@@ -39,14 +39,15 @@ public class TeleopThirdWheel extends OpMode {
         controller.update();
         // invert right trigger so that unpressed is 1 and fully pressed is 0
         // math is gud
+        // this is kinda weird ngl, a pain to use
         double slow = (-1)*controller.right_trigger + 1;
-        drive.drive(controller.left_stick_x*slow, controller.left_stick_y*slow, controller.right_stick_x*slow);
+        drive.drive(controller.left_stick_x*0.75, controller.left_stick_y*0.75, controller.right_stick_x*0.75);
         // drive.togglePOV(controller.leftStickButtonOnce());
-        if (controller.dpadRight()) {
+        if (controller.dpadUp()) {
             lift.override(3, -1);
             desiredTicks = lift.getEndPos();
         }
-        if (controller.dpadLeft()) {
+        if (controller.dpadDown()) {
             lift.override(0, -1);
             desiredTicks = lift.getEndPos();
         }
@@ -73,13 +74,13 @@ public class TeleopThirdWheel extends OpMode {
         if (controller.X()) {
             lift.override(-1, 2);
         }
-        if (controller.dpadUp()) {
-            desiredTicks += 20;
-            lift.manual(desiredTicks);
-        } else if (controller.dpadDown()) {
-            desiredTicks -= 20;
-            lift.manual(desiredTicks);
-        }
+//        if (controller.dpadUp()) {
+//            desiredTicks += 20;
+//            lift.manual(desiredTicks);
+//        } else if (controller.dpadDown()) {
+//            desiredTicks -= 20;
+//            lift.manual(desiredTicks);
+//        }
         lift.assist();
     }
 }
