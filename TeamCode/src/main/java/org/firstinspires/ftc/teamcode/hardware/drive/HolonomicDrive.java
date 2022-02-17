@@ -16,6 +16,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
     protected boolean thirdWheel = false;
     protected boolean reduceTurn = true;
+    protected int inchesPerSecAtMax = 12;
 
     // Boolean function for moveUntil()
     public interface BoolCommand {
@@ -261,6 +262,10 @@ public abstract class HolonomicDrive extends BaseHardware {
     public void frr(double xDist, double xStart, double xMax, double xAccel, double xDecel, int xDir,
                     double yDist, double yStart, double yMax, double yAccel, double yDecel, int yDir,
                     double turnDist, double turnStart, double turnMax, double turnAccel, double turnDecel, int turnDir) {
+        xDist = xDist / inchesPerSecAtMax;
+        yDist = yDist / inchesPerSecAtMax;
+        turnDist = turnDist / inchesPerSecAtMax;
+
         double xEnd = 0;
         double yEnd = 0;
         double turnEnd = 0;
@@ -301,10 +306,14 @@ public abstract class HolonomicDrive extends BaseHardware {
             yDist, yStart, 1, 1, 1, yDir,
             turnDist, turnStart, 1, 1, 1, turnDir);
     }
+
     public boolean frrToBeUsedInALoop(double currentTime,
                                       double xDist, double xStart, double xMax, double xAccel, double xDecel, int xDir,
                                       double yDist, double yStart, double yMax, double yAccel, double yDecel, int yDir,
                                       double turnDist, double turnStart, double turnMax, double turnAccel, double turnDecel, int turnDir) {
+        xDist = xDist / inchesPerSecAtMax;
+        yDist = yDist / inchesPerSecAtMax;
+        turnDist = turnDist / inchesPerSecAtMax;
         double xEnd = 0;
         double yEnd = 0;
         double turnEnd = 0;
