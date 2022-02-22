@@ -234,7 +234,12 @@ public abstract class HolonomicDrive extends BaseHardware {
     }
 
     public double celerate(double currentTime, double start, double max, double end, double accel, double decel) {
+        // if after it's done
         if (end - currentTime < 0) {
+            return 0;
+        }
+        // if before it's started
+        if (currentTime - start < 0) {
             return 0;
         }
         return Math.min(Math.min(Math.sqrt(currentTime - start) * (1 / accel),
@@ -292,10 +297,12 @@ public abstract class HolonomicDrive extends BaseHardware {
         turnEnd += turnStart;
         double maxTime = Math.max(Math.max(xEnd, yEnd), turnEnd);
         ElapsedTime runtime = new ElapsedTime();
-        while (runtime.seconds() <= maxTime) {
-            drive(celerate(runtime.seconds(), xStart, xMax, xEnd, xAccel, xDecel)*xDir,
-                  celerate(runtime.seconds(), yStart, yMax, yEnd, yAccel, yDecel)*(-yDir),
-                  celerate(runtime.seconds(), turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
+        int time = 0;
+        while (time - 0.5 <= maxTime) {
+            time = runtime.seconds();
+            drive(celerate(runtime.seconds() - 0.5, xStart, xMax, xEnd, xAccel, xDecel)*xDir,
+                  celerate(runtime.seconds() - 0.5, yStart, yMax, yEnd, yAccel, yDecel)*(-yDir),
+                  celerate(runtime.seconds() - 0.5, turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
         }
     }
 
