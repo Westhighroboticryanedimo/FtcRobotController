@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.thirdWheel.hardware.DriveThirdWheel;
 import org.firstinspires.ftc.teamcode.thirdWheel.hardware.lift.Lift;
 
+import java.util.ArrayList;
+
 @TeleOp(name = "ThirdWheel TeleOp")
 public class TeleopThirdWheel extends OpMode {
 
@@ -17,6 +19,11 @@ public class TeleopThirdWheel extends OpMode {
     private Gyro gyro;
     private Controller controller;
     private double desiredTicks = 0.0;
+
+    private static final int STORE_NUM = 8;
+    private ArrayList<Double> x = new ArrayList<>();
+    private ArrayList<Double> y = new ArrayList<>();
+    private ArrayList<Double> turn = new ArrayList<>();
 
     @Override
     public void init() {
@@ -40,8 +47,30 @@ public class TeleopThirdWheel extends OpMode {
         // invert right trigger so that unpressed is 1 and fully pressed is 0
         // math is gud
         // this is kinda weird ngl, a pain to use
-        double slow = (-1)*controller.right_trigger + 1;
-        drive.drive(controller.left_stick_x*0.75, controller.left_stick_y*0.75, controller.right_stick_x*0.75);
+        // double slow = (-1)*controller.right_trigger + 1;
+
+        x.add(controller1.left_stick_x);
+        y.add(controller1.left_stick_y);
+        turn.add(controller1.right_stick_x);
+
+        // Remove
+        if (x.size() > STORE_NUM) x.remove(0);
+        if (y.size() > STORE_NUM) y.remove(0);
+        if (turn.size() > STORE_NUM) turn.remove(0);
+
+        double avgX = 0;
+        for (int i = 0; i < x.size(); i++) avgX += x.get(i);
+        avgX /= x.size();
+
+        double avgY = 0;
+        for (int i = 0; i < y.size(); i++) avgY += y.get(i);
+        avgY /= y.size();
+
+        double avgTurn = 0;
+        for (int i = 0; i < turn.size(); i++) avgTurn += turn.get(i);
+        avgTurn /= turn.size();
+
+        drive.drive(avgX*0.75, avgY*0.75, avgTurn*0.75);
         // drive.togglePOV(controller.leftStickButtonOnce());
         if (controller.dpadUp()) {
             lift.override(3, -1);
