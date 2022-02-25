@@ -14,9 +14,9 @@ import org.firstinspires.ftc.teamcode.hardware.drive.odometry.OdometryGlobalCoor
 
 public abstract class HolonomicDrive extends BaseHardware {
 
-    protected boolean thirdWheel = false;
+    public boolean thirdWheel = false;
     protected boolean reduceTurn = true;
-    protected int inchesPerSecAtMax = 12;
+    protected double inchesPerSecAtMax = 36.0;
 
     // Boolean function for moveUntil()
     public interface BoolCommand {
@@ -184,7 +184,7 @@ public abstract class HolonomicDrive extends BaseHardware {
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        if (linearOpMode == null) {
+/*        if (linearOpMode == null) {
 
             frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -192,13 +192,13 @@ public abstract class HolonomicDrive extends BaseHardware {
             backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         } else {
-
+*/
             frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        }
+//        }
 
     }
 
@@ -267,9 +267,10 @@ public abstract class HolonomicDrive extends BaseHardware {
     public void frr(double xDist, double xStart, double xMax, double xAccel, double xDecel, int xDir,
                     double yDist, double yStart, double yMax, double yAccel, double yDecel, int yDir,
                     double turnDist, double turnStart, double turnMax, double turnAccel, double turnDecel, int turnDir) {
+
         xDist = xDist / inchesPerSecAtMax;
         yDist = yDist / inchesPerSecAtMax;
-        turnDist = turnDist / inchesPerSecAtMax;
+        turnDist = turnDist;
 
         double xEnd = 0;
         double yEnd = 0;
@@ -277,32 +278,32 @@ public abstract class HolonomicDrive extends BaseHardware {
         double k_x = Math.pow(xAccel, 2) + Math.pow(xDecel, 2);
         double k_y = Math.pow(yAccel, 2) + Math.pow(yDecel, 2);
         double k_turn = Math.pow(turnAccel, 2) + Math.pow(turnDecel, 2);
-        if (xDist > (2/3)*Math.pow(xMax, 3)*k_x) {
-            xEnd = (xDist/xMax) + (1/3)*Math.pow(xMax, 2)*k_x;
+        if (xDist > (2/3.0)*Math.pow(xMax, 3)*k_x) {
+            xEnd = (xDist/xMax) + (1/3.0)*Math.pow(xMax, 2)*k_x;
         } else {
-            xEnd = Math.pow(3*xDist/2, (2/3))*Math.pow(k_x, (1/3));
+            xEnd = Math.pow(3*xDist/2.0, (2/3.0))*Math.pow(k_x, (1/3.0));
         }
         xEnd += xStart;
-        if (yDist > (2/3)*Math.pow(yMax, 3)*k_y) {
-            yEnd = (yDist/yMax) + (1/3)*Math.pow(yMax, 2)*k_y;
+        if (yDist > (2/3.0)*Math.pow(yMax, 3)*k_y) {
+            yEnd = (yDist/yMax) + (1/3.0)*Math.pow(yMax, 2)*k_y;
         } else {
-            yEnd = Math.pow(3*yDist/2, (2/3))*Math.pow(k_y, (1/3));
+            yEnd = Math.pow(3*yDist/2.0, (2/3.0))*Math.pow(k_y, (1/3.0));
         }
         yEnd += yStart;
-        if (turnDist > (2/3)*Math.pow(turnMax, 3)*k_turn) {
-            turnEnd = (turnDist/turnMax) + (1/3)*Math.pow(turnMax, 2)*k_turn;
+        if (turnDist > (2/3.0)*Math.pow(turnMax, 3)*k_turn) {
+            turnEnd = (turnDist/turnMax) + (1/3.0)*Math.pow(turnMax, 2)*k_turn;
         } else {
-            turnEnd = Math.pow(3*turnDist/2, (2/3))*Math.pow(k_turn, (1/3));
+            turnEnd = Math.pow(3*turnDist/2.0, (2/3.0))*Math.pow(k_turn, (1/3.0));
         }
         turnEnd += turnStart;
         double maxTime = Math.max(Math.max(xEnd, yEnd), turnEnd);
         ElapsedTime runtime = new ElapsedTime();
-        int time = 0;
-        while (time - 0.5 <= maxTime) {
-            time = runtime.seconds();
-            drive(celerate(runtime.seconds() - 0.5, xStart, xMax, xEnd, xAccel, xDecel)*xDir,
-                  celerate(runtime.seconds() - 0.5, yStart, yMax, yEnd, yAccel, yDecel)*(-yDir),
-                  celerate(runtime.seconds() - 0.5, turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
+        double time = 0;
+        while (time <= maxTime) {
+            time = runtime.seconds() - 0.2;
+            drive(celerate(time, xStart, xMax, xEnd, xAccel, xDecel)*xDir,
+                  celerate(time, yStart, yMax, yEnd, yAccel, yDecel)*(-yDir),
+                  celerate(time, turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
         }
     }
 
@@ -318,31 +319,33 @@ public abstract class HolonomicDrive extends BaseHardware {
                                       double xDist, double xStart, double xMax, double xAccel, double xDecel, int xDir,
                                       double yDist, double yStart, double yMax, double yAccel, double yDecel, int yDir,
                                       double turnDist, double turnStart, double turnMax, double turnAccel, double turnDecel, int turnDir) {
+
         xDist = xDist / inchesPerSecAtMax;
         yDist = yDist / inchesPerSecAtMax;
-        turnDist = turnDist / inchesPerSecAtMax;
+        turnDist = turnDist;
+
         double xEnd = 0;
         double yEnd = 0;
         double turnEnd = 0;
         double k_x = Math.pow(xAccel, 2) + Math.pow(xDecel, 2);
         double k_y = Math.pow(yAccel, 2) + Math.pow(yDecel, 2);
         double k_turn = Math.pow(turnAccel, 2) + Math.pow(turnDecel, 2);
-        if (xDist > (2/3)*Math.pow(xMax, 3)*k_x) {
-            xEnd = (xDist/xMax) + (1/3)*Math.pow(xMax, 2)*k_x;
+        if (xDist > (2/3.0)*Math.pow(xMax, 3)*k_x) {
+            xEnd = (xDist/xMax) + (1/3.0)*Math.pow(xMax, 2)*k_x;
         } else {
-            xEnd = Math.pow(3*xDist/2, (2/3))*Math.pow(k_x, (1/3));
+            xEnd = Math.pow(3*xDist/2.0, (2/3.0))*Math.pow(k_x, (1/3.0));
         }
         xEnd += xStart;
-        if (yDist > (2/3)*Math.pow(yMax, 3)*k_y) {
-            yEnd = (yDist/yMax) + (1/3)*Math.pow(yMax, 2)*k_y;
+        if (yDist > (2/3.0)*Math.pow(yMax, 3)*k_y) {
+            yEnd = (yDist/yMax) + (1/3.0)*Math.pow(yMax, 2)*k_y;
         } else {
-            yEnd = Math.pow(3*yDist/2, (2/3))*Math.pow(k_y, (1/3));
+            yEnd = Math.pow(3*yDist/2.0, (2/3.0))*Math.pow(k_y, (1/3.0));
         }
         yEnd += yStart;
-        if (turnDist > (2/3)*Math.pow(turnMax, 3)*k_turn) {
-            turnEnd = (turnDist/turnMax) + (1/3)*Math.pow(turnMax, 2)*k_turn;
+        if (turnDist > (2/3.0)*Math.pow(turnMax, 3)*k_turn) {
+            turnEnd = (turnDist/turnMax) + (1/3.0)*Math.pow(turnMax, 2)*k_turn;
         } else {
-            turnEnd = Math.pow(3*turnDist/2, (2/3))*Math.pow(k_turn, (1/3));
+            turnEnd = Math.pow(3*turnDist/2.0, (2/3.0))*Math.pow(k_turn, (1/3.0));
         }
         turnEnd += turnStart;
         double maxTime = Math.max(Math.max(xEnd, yEnd), turnEnd);
@@ -351,6 +354,14 @@ public abstract class HolonomicDrive extends BaseHardware {
               celerate(currentTime, yStart, yMax, yEnd, yAccel, yDecel)*(-yDir),
               celerate(currentTime, turnStart, turnMax, turnEnd, turnAccel, turnDecel)*turnDir);
         return true;
+    }
+
+    public boolean frrNormieLoop(double currentTime, double xDist, double xStart, int xDir,
+                              double yDist, double yStart, int yDir,
+                              double turnDist, double turnStart, int turnDir) {
+        return frrToBeUsedInALoop(currentTime, xDist, xStart, 1, 1, 1, xDir,
+                                  yDist, yStart, 1, 1, 1, yDir,
+                                  turnDist, turnStart, 1, 1, 1, turnDir);
     }
 
     // what was this for again?
@@ -392,6 +403,8 @@ public abstract class HolonomicDrive extends BaseHardware {
         if (reduceTurn) {
             // Reduce joystick turn
             turn = turn / 1.8;
+        } else {
+            turn = turn / 1.4;
         }
 
         // PID calculation

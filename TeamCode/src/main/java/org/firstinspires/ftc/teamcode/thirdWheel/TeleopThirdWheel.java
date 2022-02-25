@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.thirdWheel;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
 import org.firstinspires.ftc.teamcode.Controller;
 
@@ -18,9 +20,10 @@ public class TeleopThirdWheel extends OpMode {
     private Lift lift;
     private Gyro gyro;
     private Controller controller;
+    private DistanceSensor distanceSensor;
     private double desiredTicks = 0.0;
 
-    private static final int STORE_NUM = 8;
+    private static final int STORE_NUM = 4;
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
     private ArrayList<Double> turn = new ArrayList<>();
@@ -31,8 +34,11 @@ public class TeleopThirdWheel extends OpMode {
         lift = new Lift(this, hardwareMap);
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         drive.togglePOV(true);
+        drive.enableSquaredInputs();
         gyro.reset();
+        drive.thirdWheel = false;
     }
 
     @Override
@@ -40,8 +46,9 @@ public class TeleopThirdWheel extends OpMode {
         telemetry.addData("gyro", gyro.getAngleDegrees());
         telemetry.addData("ticks", lift.getCurrentTicks());
         telemetry.addData("level", lift.getLevel());
-        telemetry.addData("picked", lift.picked());
+//        telemetry.addData("picked", lift.picked());
         telemetry.addData("state", lift.state());
+        telemetry.addData("dist", distanceSensor.getDistance(DistanceUnit.INCH));
         telemetry.update();
         controller.update();
         // invert right trigger so that unpressed is 1 and fully pressed is 0
@@ -49,9 +56,9 @@ public class TeleopThirdWheel extends OpMode {
         // this is kinda weird ngl, a pain to use
         // double slow = (-1)*controller.right_trigger + 1;
 
-        x.add(controller1.left_stick_x);
-        y.add(controller1.left_stick_y);
-        turn.add(controller1.right_stick_x);
+        x.add(controller.left_stick_x);
+        y.add(controller.left_stick_y);
+        turn.add(controller.right_stick_x);
 
         // Remove
         if (x.size() > STORE_NUM) x.remove(0);
@@ -70,7 +77,8 @@ public class TeleopThirdWheel extends OpMode {
         for (int i = 0; i < turn.size(); i++) avgTurn += turn.get(i);
         avgTurn /= turn.size();
 
-        drive.drive(avgX*0.75, avgY*0.75, avgTurn*0.75);
+        // drive.drive(avgX*0.75, avgY*0.75, avgTurn*0.75);
+        drive.drive(avgX, avgY, avgTurn);
         // drive.togglePOV(controller.leftStickButtonOnce());
         if (controller.dpadUp()) {
             lift.override(3, -1);

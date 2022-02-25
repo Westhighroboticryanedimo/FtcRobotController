@@ -15,7 +15,7 @@ public class LinearSlide {
 
     private final double LEV_ZERO_TICKS     = 0.0;
     private final double LEV_ONE_TICKS      = 1000.0;
-    private final double LEV_TWO_TICKS      = 2100.0;
+    private final double LEV_TWO_TICKS      = 2200.0;
     private final double LEV_THREE_TICKS    = 3500.0;
     private final double LEV_FOUR_TICKS     = 3600.0;
 

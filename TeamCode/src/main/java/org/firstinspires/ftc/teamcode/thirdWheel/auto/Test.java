@@ -21,7 +21,11 @@ public class Test extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
-        barcode.setup(1);
+        //drive.frrNormie(0, 0, 0, 8, 0, 1, 0.2, 0, 1);
         barcode.put();
+//        drive.frrNormie(0, 0, 0, 16, 0, 1, 0.2, 0.25, 1);
+        //drive.stop();
+//        sleep(5000);
+//        drive.frrNormie(0, 0, 0, 16, 0, -1, 0.2,  0, -1);
     }
 }

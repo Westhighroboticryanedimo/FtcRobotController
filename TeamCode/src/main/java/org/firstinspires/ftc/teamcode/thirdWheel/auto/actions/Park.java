@@ -28,24 +28,43 @@ public class Park extends BaseHardware {
         lift = l;
     }
 
-    // Assumes in line with center of alliance shipping hub
     public void warehouse(int color) {
-        lift.override(2, -1);
+        lift.override(1, -1);
         lift.assist();
-        while (!lift.arrived()) {
-            lift.assist();
-        }
+        ElapsedTime time = new ElapsedTime();
         if (color == 1) {
+            while (drive.frrNormieLoop(time.seconds()-0.2, 44, 0, -1, 7, 0.5, -1, 0, 0, 0)) {
+                lift.assist();
+            }
             // drive.frrNormie(2.5, 0, -1, 0.5, 1, -1, 0, 0, 0);
-            drive.frrNormie(2.5, 0, -1, 0, 0, 0, 0, 0, 0);
+//            if (side == 1) {
+//                while (drive.frrNormieLoop(time.seconds()-0.5, 40, 0, -1, 8, 0, -1, 0, 0, 0)) {
+//                    lift.assist();
+//                }
+//            } else if (side == 2) {
+//                while (drive.frrNormieLoop(time.seconds()-0.5,80, 0, -1, 8, 0, -1, 0, 0, 0)) {
+//                    lift.assist();
+//                }
+//            }
             // drive.frrNormieByTime(2.5, 2.5, -1, 0.5, 1, 0, 0);
         } else if (color == 2) {
-            drive.frrNormie(2.5, 0, -1, 0.5, 1, -1, 0, 0, 0);
+            while (drive.frrNormieLoop(time.seconds()-0.2, 44, 0, 1, 7, 0.5, -1, 0, 0, 0)) {
+                lift.assist();
+            }
+//            if (side == 1) {
+//                while (drive.frrNormieLoop(time.seconds()-0.5, 40, 0, 1, 8, 0, -1, 0, 0, 0)) {
+//                    lift.assist();
+//                }
+//            } else if (side == 2) {
+//                while (drive.frrNormieLoop(time.seconds()-0.5,80, 0, 1, 8, 0, -1, 0, 0, 0)) {
+//                    lift.assist();
+//                }
+//            }
         }
-        // drive.frrNormie(0, 0, 0, 1, 0, 1, 0, 0, 0);
+        drive.frrNormie(0, 0, 0, 10, 0, 1, 0, 0, 0);
         lift.override(0, -1);
         ElapsedTime runtime = new ElapsedTime();
-        while (runtime.seconds() < 3)  {
+        while (runtime.seconds() < 2)  {
             lift.assist();
         }
     }

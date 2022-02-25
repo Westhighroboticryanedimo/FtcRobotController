@@ -29,7 +29,7 @@ public class OuterRedBarcode extends LinearOpMode {
         barcode.setup(1);
         barcode.detect();
         barcode.put();
-        park.warehouse(1);
+        park.warehouse(2);
     }
 
 }
