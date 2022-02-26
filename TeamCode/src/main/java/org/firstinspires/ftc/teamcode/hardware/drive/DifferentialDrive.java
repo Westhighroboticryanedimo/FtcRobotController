@@ -14,6 +14,8 @@ public class DifferentialDrive extends BaseHardware {
     private DcMotor rightDrive;
 
     private boolean isArcade = true;
+    private boolean isSlow = false;
+    private static final double SLOW_MULTIPLIER = 1.5;
 
     public DifferentialDrive(OpMode opMode, HardwareMap hwMap) {
 
@@ -47,8 +49,14 @@ public class DifferentialDrive extends BaseHardware {
     // Toggle arcade and tank drive
     public void toggleArcade(boolean button) {
 
-        if (button)
-            isArcade = !isArcade;
+        if (button) isArcade = !isArcade;
+
+    }
+
+    // Toggle slow mode
+    public void toggleSlow(boolean button) {
+
+        if (button) isSlow = !isSlow;
 
     }
 
@@ -78,8 +86,8 @@ public class DifferentialDrive extends BaseHardware {
 
         }
 
-        leftDrive.setPower(left);
-        rightDrive.setPower(right);
+        leftDrive.setPower(isSlow ? left / SLOW_MULTIPLIER : left);
+        rightDrive.setPower(isSlow ? right / SLOW_MULTIPLIER : right);
 
         print("Left: ", getEncoderValues()[0]);
         print("Right: ", getEncoderValues()[1]);

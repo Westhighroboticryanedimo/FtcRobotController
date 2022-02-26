@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.slowBolon;
 
 public class Bolodometry {
-    double cos45 = Math.cos((45*Math.PI/180));
-    double sin45 = cos45;
     double x,y, angle;
     double last_x, last_y, last_angle;
     double fl, fr, bl, br;
     double lfl, lfr, lbl, lbr;
+    double[] wheelmove;
+    double[][] blwheelmove, brwheelmove, flwheelmove, frwheelmove;
     public void resetposition() {
         x = 0; y = 0; angle = 0;
     }
@@ -19,20 +19,19 @@ public class Bolodometry {
 
         y += forward;
         x += side;*/
-        double rotateangle = inangle * (Math.PI/180);
-        double[][] rotation_matrix = getRotationMatrixForAngle(rotateangle);
 
-        double[] wheelmove = new double[] {0,1};
-        double[][] blwheelmove = multiplyMatrices(wheelmove,getRotationMatrixForAngle(315));
-        double[][] brwheelmove = multiplyMatrices(wheelmove,getRotationMatrixForAngle(45));
-        double[][] flwheelmove = multiplyMatrices(wheelmove,getRotationMatrixForAngle(45));
-        double[][] frwheelmove = multiplyMatrices(wheelmove,getRotationMatrixForAngle(315));
-        double[][] allwheelmove = new double[][] {};
+        // "c" -- change in encoder value
+        double blc = (bl-lbl), brc = br-lbr, flc = fl-lfl, frc = fr-lfr;
+
+        // total vector of motion should equal the sum of the wheels
+        double[][] allwheelmove = new double[2][2];
         for(int x = 0; x < blwheelmove.length; x++) {
             for(int y = 0; y < blwheelmove[0].length; y++) {
-                allwheelmove[x][y] = blwheelmove[x][y] + brwheelmove[x][y] + flwheelmove[x][y] + frwheelmove[x][y];
+                allwheelmove[x][y] = (blwheelmove[x][y]*blc) + (brwheelmove[x][y]*brc) + (flwheelmove[x][y]*flc) + (frwheelmove[x][y]*frc);
             }
         }
+
+        // adjust for the angle the robot is facing and log changes
         allwheelmove = multiplyMatrices(allwheelmove,getRotationMatrixForAngle(inangle));
         x += allwheelmove[0][0];
         y += allwheelmove[0][1];
@@ -42,9 +41,6 @@ public class Bolodometry {
         lfr = fr; lfl = fl;
     }
 
-    public double diff(double a, double b) {
-        return Math.abs(a-b);
-    }
     double[][] multiplyMatrices(double[] firstMatrix, double[][] secondMatrix) {
         double[][] result = new double[firstMatrix.length][secondMatrix[0].length];
 
@@ -97,7 +93,12 @@ public class Bolodometry {
 
     public void init() {
         resetposition();
-        cos45 = Math.cos((45*Math.PI/180));
-        sin45 = cos45;
+
+        // get base vector of motion for each wheel
+        wheelmove = new double[] {0,1};
+        blwheelmove = multiplyMatrices(wheelmove,getRotationMatrixForAngle(315));
+        brwheelmove = multiplyMatrices(wheelmove,getRotationMatrixForAngle(45));
+        flwheelmove = multiplyMatrices(wheelmove,getRotationMatrixForAngle(45));
+        frwheelmove = multiplyMatrices(wheelmove,getRotationMatrixForAngle(315));
     }
 }

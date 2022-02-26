@@ -16,6 +16,9 @@ public class TerrenceSource extends OpMode {
 
     private DifferentialDrive drive;
     private Gyro gyro;
+    private Servo servo;
+    private static final double HIGH_POS = 1;
+    private static final double LOW_POS = 0.6;
 
     private Controller controller;
 
@@ -25,7 +28,7 @@ public class TerrenceSource extends OpMode {
         drive = new DifferentialDrive(this, hardwareMap);
         drive.debug();
         gyro = new Gyro(hardwareMap);
-
+        servo = hardwareMap.get(Servo.class, "servo");
         controller = new Controller(gamepad1);
 
     }
@@ -37,6 +40,8 @@ public class TerrenceSource extends OpMode {
         telemetry.addData("Gyro", gyro.getAngleRadians());
         drive.toggleArcade(controller.backOnce());
         drive.drive(controller.left_stick_y, controller.right_stick_y, controller.right_stick_x);
+        if (controller.X()) servo.setPosition(HIGH_POS);
+        else servo.setPosition(LOW_POS);
 
         telemetry.update();
 
