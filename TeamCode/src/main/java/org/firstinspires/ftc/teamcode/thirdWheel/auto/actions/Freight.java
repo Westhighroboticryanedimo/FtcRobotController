@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.thirdWheel.auto.actions;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.thirdWheel.hardware.DriveThirdWheel;
 import org.firstinspires.ftc.teamcode.thirdWheel.hardware.lift.Lift;
@@ -41,25 +42,37 @@ public class Freight extends BaseHardware {
     }
 
     public void pick() {
-        lift.override(0, 0);
+        lift.override(0, -1);
+        lift.assist();
+        if (color == 1) {
+            drive.turn(0.5, -90);
+        } else if (color == 2) {
+            drive.turn(0.5, 90);
+        }
+        lift.override(-1, 0);
         lift.assist();
         while (!lift.arrived()) {
             lift.assist();
         }
-        if (color == 1) {
-            drive.frrNormie(0, 0, 0, 0, 0, 0, 0.5, 0, -1);
-        } else if (color == 2) {
-            drive.frrNormie(0, 0, 0, 0, 0, 0, 0.5, 0, 1);
-        }
-        drive.move(0.25, 6, 0);
+//        drive.move(0.25, 20, -45);
+        drive.frrNormie(12, 0, -1, 0, 0, 0, 0, 0, 0);
         lift.override(-1, 2);
         lift.assist();
-        drive.move(0.25, 6, 180);
-        if (color == 1) {
-            drive.frrNormie(0, 0, 0, 0, 0, 0, 0.5, 0, 1);
-        } else if (color == 2) {
-            drive.frrNormie(0, 0, 0, 0, 0, 0, 0.5, 0, -1);
+        while (!lift.arrived()) {
+            lift.assist();
         }
+        drive.frrNormie(12, 0, 1, 0, 0, 0, 0, 0, 0);
+        if (color == 1) {
+            drive.turn(0.5, 90);
+        } else if (color == 2) {
+            drive.turn(0.5, -90);
+        }
+//        drive.move(0.25, 6, 180);
+//        if (color == 1) {
+//            drive.frrNormie(0, 0, 0, 0, 0, 0, 0.5, 0, -1);
+//        } else if (color == 2) {
+//            drive.frrNormie(0, 0, 0, 0, 0, 0, 0.5, 0, 1);
+//        }
     }
 
     public void place() {
