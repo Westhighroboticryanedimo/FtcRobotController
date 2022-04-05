@@ -17,7 +17,7 @@ public class reeeTele extends OpMode {
     private Controller controller;
     private static double TURN_TICKS = 25.95;
 
-    boolean dir= false;
+    boolean dir = false;
 
     @Override
     public void init() {
