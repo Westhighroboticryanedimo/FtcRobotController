@@ -154,11 +154,11 @@ public class PointMapLoc {
     //     }
     // }
 
-    public Vector2d update() {
-        scan();
-        process();
-        getPos();
-    }
+    // public Vector2d update() {
+    //     scan();
+    //     process();
+    //     return getPos();
+    // }
 
     private double ticksToRadians(double ticks) {
         return 2*Math.PI/ticksPerRev;
