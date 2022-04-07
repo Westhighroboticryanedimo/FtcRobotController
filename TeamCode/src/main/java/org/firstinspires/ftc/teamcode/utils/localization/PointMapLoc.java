@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware.localization;
+package org.firstinspires.ftc.teamcode.utils.localization;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
 import com.acmerobotics.roadrunner.drive.Drive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -21,7 +22,11 @@ final class Point {
     Pose2d poseAtCapture = new Pose2d();
 }
 
-public class PointMapLoc {
+enum State {
+    SEARCH, HORIZ, VERT, DONE
+}
+
+public class PointMapLoc extends BaseHardware {
     public Drive drive;
     private DistanceSensor f;
     private DistanceSensor l;
@@ -47,7 +52,7 @@ public class PointMapLoc {
         init(hwMap, d);
     }
 
-    private void init(HardwareMap hwMap) {
+    private void init(HardwareMap hwMap, Drive d) {
         drive = d;
         f = hwMap.get(DistanceSensor.class, "f");
         r = hwMap.get(DistanceSensor.class, "r");
@@ -110,21 +115,24 @@ public class PointMapLoc {
             q4.add(point);
         }
         rotator.setPower(0);
-        pointMap.addAll(q1.addAll(q2.addAll(q3.addAll(q4))));
+        pointMap.addAll(q1);
+        pointMap.addAll(q2);
+        pointMap.addAll(q3);
+        pointMap.addAll(q4);
         mapSize = pointMap.size();
     }
 
     public void correctDists() {
         for (int i = 0; i < pointMap.size(); ++i) {
-            pointMap[i].x = distFromCenter*Math.cos(theta);
-            pointMap[i].y = distFromCenter*Math.sin(theta);
+            pointMap.get(i).x = distFromCenter*Math.cos(pointMap.get(i).theta);
+            pointMap.get(i).y = distFromCenter*Math.sin(pointMap.get(i).theta);
         }
     }
 
     public void undistort() {
         for (int i = 0; i < mapSize; ++i) {
-            pointMap[i].x = pointMap[i].x - (pointMap.get(pointMap.size()-1).poseAtCapture.x - pointMap[i].x);
-            pointMap[i].y = pointMap[i].y - (pointMap.get(pointMap.size()-1).poseAtCapture.y - pointMap[i].y);
+            pointMap.get(i).x = pointMap.get(i).x - (pointMap.get(pointMap.size()-1).poseAtCapture.getX() - pointMap.get(i).x);
+            pointMap.get(i).y = pointMap.get(i).y - (pointMap.get(pointMap.size()-1).poseAtCapture.getY() - pointMap.get(i).y);
         }
     }
 
@@ -139,26 +147,68 @@ public class PointMapLoc {
     public void process() {
         correctDists();
         undistort();
-        filter()
+        filter();
     }
 
-    // public Vector2d getPos() {
-    //     ArrayList<Point> points = new ArrayList<>();
-    //     boolean vert = true;
-    //     int i = 1;
-    //     points.add(pointMap[0]);
-    //     while (i < mapSize) {
-    //         if (pointMap[i].x == pointMap[i-1].x) {
+    public Vector2d getPos() {
+        double x = 0;
+        double y = 0;
+        State state = State.SEARCH;
+        int i = 1;
+        boolean wall = true;
+        while (state != State.DONE) {
+            switch (state) {
+                case SEARCH:
+                    if (Math.abs(pointMap.get(i).x - pointMap.get(i-1).x) < 0.5) {
+                        state = State.HORIZ;
+                        i += 1;
+                        break;
+                    }
+                    if (Math.abs(pointMap.get(i).y - pointMap.get(i-1).y) < 0.5) {
+                        state = State.VERT;
+                        i += 1;
+                        break;
+                    }
+                    i += 1;
+                    break;
+                case HORIZ:
+                    wall = true;
+                    for (int count = 2; count < 4; ++count) {
+                        if (!(Math.abs(pointMap.get(i).x - pointMap.get(i-1).x) < 0.5)) {
+                            wall = false;
+                            count = 0;
+                            break;
+                        }
+                        i += 1;
+                    }
+                    if (wall) {
+                        x = pointMap.get(i).x;
+                    }
+                    break;
+                case VERT:
+                    wall = true;
+                    for (int count = 2; count < 4; ++count) {
+                        if (!(Math.abs(pointMap.get(i).y - pointMap.get(i-1).y) < 0.5)) {
+                            wall = false;
+                            count = 0;
+                            break;
+                        }
+                        i += 1;
+                    }
+                    if (wall) {
+                        y = pointMap.get(i).y;
+                    }
+                    break;
+            }
+        }
+        return new Vector2d(x, y);
+    }
 
-    //         }
-    //     }
-    // }
-
-    // public Vector2d update() {
-    //     scan();
-    //     process();
-    //     return getPos();
-    // }
+    public Vector2d update() {
+        scan();
+        process();
+        return getPos();
+    }
 
     private double ticksToRadians(double ticks) {
         return 2*Math.PI/ticksPerRev;
