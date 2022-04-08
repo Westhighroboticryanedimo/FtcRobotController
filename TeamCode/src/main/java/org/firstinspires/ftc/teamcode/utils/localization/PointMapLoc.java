@@ -15,11 +15,18 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import java.util.ArrayList;
 import java.lang.Math;
 
-final class Point {
+class Point {
     double x = 0;
     double y = 0;
     double theta = 0;
     Pose2d poseAtCapture = new Pose2d();
+
+    public Point (double a, double b, double c, Pose2d p) {
+        x = a;
+        y = b;
+        theta = c;
+        poseAtCapture = p;
+    }
 }
 
 enum State {
@@ -55,9 +62,9 @@ public class PointMapLoc extends BaseHardware {
     private void init(HardwareMap hwMap, Drive d) {
         drive = d;
         f = hwMap.get(DistanceSensor.class, "f");
-        r = hwMap.get(DistanceSensor.class, "r");
-        b = hwMap.get(DistanceSensor.class, "b");
         l = hwMap.get(DistanceSensor.class, "l");
+        b = hwMap.get(DistanceSensor.class, "b");
+        r = hwMap.get(DistanceSensor.class, "r");
         rotator = hwMap.get(DcMotor.class, "rotator");
     }
 
@@ -70,7 +77,8 @@ public class PointMapLoc extends BaseHardware {
         double d2 = 0;
         double d3 = 0;
         double d4 = 0;
-        Point point = new Point();
+        double x = 0;
+        double y = 0;
         double theta = 0;
         Pose2d poseAtCapture = new Pose2d();
         double target = 0;
@@ -85,34 +93,26 @@ public class PointMapLoc extends BaseHardware {
         dir = !dir;
         while (Math.abs(target - rotator.getCurrentPosition()) < quarterTicks) {
             d1 = f.getDistance(DistanceUnit.INCH);
-            d2 = r.getDistance(DistanceUnit.INCH);
+            d2 = l.getDistance(DistanceUnit.INCH);
             d3 = b.getDistance(DistanceUnit.INCH);
-            d4 = l.getDistance(DistanceUnit.INCH);
+            d4 = r.getDistance(DistanceUnit.INCH);
             theta = drive.getExternalHeading() + ticksToRadians(rotator.getCurrentPosition());
             poseAtCapture = drive.getPoseEstimate();
 
             // TODO: add rolling shutter undistortion
             // roadrunner-style coords are used
-            point.x = d1 * Math.cos(theta);
-            point.y = d1 * Math.sin(theta);
-            point.theta = theta;
-            point.poseAtCapture = poseAtCapture;
-            q1.add(point);
-            point.x = d2 * Math.cos(theta + Math.PI/2);
-            point.y = d2 * Math.sin(theta + Math.PI/2);
-            point.theta = theta;
-            point.poseAtCapture = poseAtCapture;
-            q2.add(point);
-            point.x = d3 * Math.cos(theta + Math.PI);
-            point.y = d3 * Math.sin(theta + Math.PI);
-            point.theta = theta;
-            point.poseAtCapture = poseAtCapture;
-            q3.add(point);
-            point.x = d4 * Math.cos(theta + 3*Math.PI/2);
-            point.y = d4 * Math.sin(theta + 3*Math.PI/2);
-            point.theta = theta;
-            point.poseAtCapture = poseAtCapture;
-            q4.add(point);
+            x = d1 * Math.cos(theta);
+            y = d1 * Math.sin(theta);
+            q1.add(new Point(x, y, theta, poseAtCapture));
+            x = d2 * Math.cos(theta + Math.PI/2);
+            y = d2 * Math.sin(theta + Math.PI/2);
+            q2.add(new Point(x, y, theta + Math.PI/2, poseAtCapture));
+            x = d3 * Math.cos(theta + Math.PI);
+            y = d3 * Math.sin(theta + Math.PI);
+            q3.add(new Point(x, y, theta + Math.PI, poseAtCapture));
+            x = d4 * Math.cos(theta + 3*Math.PI/2);
+            y = d4 * Math.sin(theta + 3*Math.PI/2);
+            q4.add(new Point(x, y, theta + 3*Math.PI/2, poseAtCapture));
         }
         rotator.setPower(0);
         pointMap.addAll(q1);
@@ -156,9 +156,14 @@ public class PointMapLoc extends BaseHardware {
         State state = State.SEARCH;
         int i = 1;
         boolean wall = true;
+        boolean horiz = false;
+        boolean vert = false;
         while (state != State.DONE) {
             switch (state) {
                 case SEARCH:
+                    if (horiz && vert) {
+                        state = State.DONE;
+                    }
                     if (Math.abs(pointMap.get(i).x - pointMap.get(i-1).x) < 0.5) {
                         state = State.HORIZ;
                         i += 1;
@@ -183,6 +188,7 @@ public class PointMapLoc extends BaseHardware {
                     }
                     if (wall) {
                         x = pointMap.get(i).x;
+                        horiz = true;
                     }
                     break;
                 case VERT:
@@ -197,6 +203,7 @@ public class PointMapLoc extends BaseHardware {
                     }
                     if (wall) {
                         y = pointMap.get(i).y;
+                        vert = true;
                     }
                     break;
             }
