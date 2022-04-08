@@ -9,7 +9,8 @@ import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 public class DriveBolon extends HolonomicDrive {
 
 
-    // For autonomous test
+    // For autonomous wtf test
+
     public DriveBolon(LinearOpMode opMode, HardwareMap hwMap) {
 
         super(opMode, hwMap);
