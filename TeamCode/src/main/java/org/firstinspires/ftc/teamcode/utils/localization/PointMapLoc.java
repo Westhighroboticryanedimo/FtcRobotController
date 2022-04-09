@@ -115,6 +115,12 @@ public class PointMapLoc extends BaseHardware {
             q4.add(new Point(x, y, theta + 3*Math.PI/2, poseAtCapture));
         }
         rotator.setPower(0);
+        if (!dir) {
+            q1.reverse();
+            q2.reverse();
+            q3.reverse();
+            q4.reverse();
+        }
         pointMap.addAll(q1);
         pointMap.addAll(q2);
         pointMap.addAll(q3);
