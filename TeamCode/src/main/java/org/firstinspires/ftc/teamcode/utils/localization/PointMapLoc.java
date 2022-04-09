@@ -14,12 +14,13 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import java.util.ArrayList;
 import java.lang.Math;
+import java.util.Collections;
 
 class Point {
-    double x = 0;
-    double y = 0;
-    double theta = 0;
-    Pose2d poseAtCapture = new Pose2d();
+    double x;
+    double y;
+    double theta;
+    Pose2d poseAtCapture;
 
     public Point (double a, double b, double c, Pose2d p) {
         x = a;
@@ -69,19 +70,19 @@ public class PointMapLoc extends BaseHardware {
     }
 
     public void scan() {
-        ArrayList<Point> q1 = new ArrayList<Point>();
-        ArrayList<Point> q2 = new ArrayList<Point>();
-        ArrayList<Point> q3 = new ArrayList<Point>();
-        ArrayList<Point> q4 = new ArrayList<Point>();
-        double d1 = 0;
-        double d2 = 0;
-        double d3 = 0;
-        double d4 = 0;
-        double x = 0;
-        double y = 0;
-        double theta = 0;
-        Pose2d poseAtCapture = new Pose2d();
-        double target = 0;
+        ArrayList<Point> q1 = new ArrayList<>();
+        ArrayList<Point> q2 = new ArrayList<>();
+        ArrayList<Point> q3 = new ArrayList<>();
+        ArrayList<Point> q4 = new ArrayList<>();
+        double d1;
+        double d2;
+        double d3;
+        double d4;
+        double x;
+        double y;
+        double theta;
+        Pose2d poseAtCapture;
+        double target;
 
         if (dir) {
             rotator.setPower(1);
@@ -116,10 +117,10 @@ public class PointMapLoc extends BaseHardware {
         }
         rotator.setPower(0);
         if (!dir) {
-            q1.reverse();
-            q2.reverse();
-            q3.reverse();
-            q4.reverse();
+            Collections.reverse(q1);
+            Collections.reverse(q2);
+            Collections.reverse(q3);
+            Collections.reverse(q4);
         }
         pointMap.addAll(q1);
         pointMap.addAll(q2);
@@ -160,22 +161,23 @@ public class PointMapLoc extends BaseHardware {
         double x = 0;
         double y = 0;
         State state = State.SEARCH;
-        int i = 1;
+        int i = 0;
         boolean wall = true;
         boolean horiz = false;
         boolean vert = false;
         while (state != State.DONE) {
             switch (state) {
                 case SEARCH:
-                    if (horiz && vert) {
+                    if ((horiz && vert) || (i >= pointMap.size()-1)) {
                         state = State.DONE;
+                        break;
                     }
-                    if (Math.abs(pointMap.get(i).y - pointMap.get(i-1).y) < 0.5) {
+                    if (Math.abs(pointMap.get(i).y - pointMap.get(i+1).y) < 0.5) {
                         state = State.HORIZ;
                         i += 1;
                         break;
                     }
-                    if (Math.abs(pointMap.get(i).x - pointMap.get(i-1).x) < 0.5) {
+                    if (Math.abs(pointMap.get(i).x - pointMap.get(i+1).x) < 0.5) {
                         state = State.VERT;
                         i += 1;
                         break;
@@ -185,7 +187,7 @@ public class PointMapLoc extends BaseHardware {
                 case HORIZ:
                     wall = true;
                     for (int count = 2; count < 4; ++count) {
-                        if (!(Math.abs(pointMap.get(i).y - pointMap.get(i-1).y) < 0.5)) {
+                        if (!(Math.abs(pointMap.get(i).y - pointMap.get(i+1).y) < 0.5)) {
                             wall = false;
                             count = 0;
                             break;
@@ -200,7 +202,7 @@ public class PointMapLoc extends BaseHardware {
                 case VERT:
                     wall = true;
                     for (int count = 2; count < 4; ++count) {
-                        if (!(Math.abs(pointMap.get(i).x - pointMap.get(i-1).x) < 0.5)) {
+                        if (!(Math.abs(pointMap.get(i).x - pointMap.get(i+1).x) < 0.5)) {
                             wall = false;
                             count = 0;
                             break;
