@@ -99,8 +99,8 @@ public class PointMapLoc extends BaseHardware {
             theta = drive.getExternalHeading() + ticksToRadians(rotator.getCurrentPosition());
             poseAtCapture = drive.getPoseEstimate();
 
-            // TODO: add rolling shutter undistortion
-            // roadrunner-style coords are used
+            // roadrunner-style coords are used:
+            // theta at 0 is on the positive x-axis
             x = d1 * Math.cos(theta);
             y = d1 * Math.sin(theta);
             q1.add(new Point(x, y, theta, poseAtCapture));
@@ -170,12 +170,12 @@ public class PointMapLoc extends BaseHardware {
                     if (horiz && vert) {
                         state = State.DONE;
                     }
-                    if (Math.abs(pointMap.get(i).x - pointMap.get(i-1).x) < 0.5) {
+                    if (Math.abs(pointMap.get(i).y - pointMap.get(i-1).y) < 0.5) {
                         state = State.HORIZ;
                         i += 1;
                         break;
                     }
-                    if (Math.abs(pointMap.get(i).y - pointMap.get(i-1).y) < 0.5) {
+                    if (Math.abs(pointMap.get(i).x - pointMap.get(i-1).x) < 0.5) {
                         state = State.VERT;
                         i += 1;
                         break;
@@ -183,21 +183,6 @@ public class PointMapLoc extends BaseHardware {
                     i += 1;
                     break;
                 case HORIZ:
-                    wall = true;
-                    for (int count = 2; count < 4; ++count) {
-                        if (!(Math.abs(pointMap.get(i).x - pointMap.get(i-1).x) < 0.5)) {
-                            wall = false;
-                            count = 0;
-                            break;
-                        }
-                        i += 1;
-                    }
-                    if (wall) {
-                        x = pointMap.get(i).x;
-                        horiz = true;
-                    }
-                    break;
-                case VERT:
                     wall = true;
                     for (int count = 2; count < 4; ++count) {
                         if (!(Math.abs(pointMap.get(i).y - pointMap.get(i-1).y) < 0.5)) {
@@ -209,6 +194,21 @@ public class PointMapLoc extends BaseHardware {
                     }
                     if (wall) {
                         y = pointMap.get(i).y;
+                        horiz = true;
+                    }
+                    break;
+                case VERT:
+                    wall = true;
+                    for (int count = 2; count < 4; ++count) {
+                        if (!(Math.abs(pointMap.get(i).x - pointMap.get(i-1).x) < 0.5)) {
+                            wall = false;
+                            count = 0;
+                            break;
+                        }
+                        i += 1;
+                    }
+                    if (wall) {
+                        x = pointMap.get(i).x;
                         vert = true;
                     }
                     break;
