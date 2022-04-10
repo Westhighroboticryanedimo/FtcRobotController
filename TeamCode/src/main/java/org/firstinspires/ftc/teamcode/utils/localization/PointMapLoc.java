@@ -13,8 +13,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import java.util.ArrayList;
-import java.lang.Math;
 import java.util.Collections;
+import java.lang.Math;
 
 class Point {
     double x;
