@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.utils.localization;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
@@ -36,19 +36,19 @@ enum State {
 
 public class PointMapLoc extends BaseHardware {
     public Drive drive;
-    private DistanceSensor f;
-    private DistanceSensor l;
-    private DistanceSensor b;
-    private DistanceSensor r;
-    private DcMotor rotator;
+    protected ModernRoboticsI2cRangeSensor f;
+    protected ModernRoboticsI2cRangeSensor l;
+    protected ModernRoboticsI2cRangeSensor b;
+    protected ModernRoboticsI2cRangeSensor r;
+    protected DcMotor rotator;
 
-    private ArrayList<Point> pointMap = new ArrayList<Point>();
+    protected ArrayList<Point> pointMap = new ArrayList<Point>();
     int mapSize = 0;
 
     boolean dir = true;
-    private double ticksPerRev = 100;
-    private double quarterTicks = ticksPerRev /4;
-    private double distFromCenter = 2;
+    protected double ticksPerRev = 100;
+    protected double quarterTicks = ticksPerRev /4;
+    protected double distFromCenter = 2;
 
     public PointMapLoc(LinearOpMode opMode, HardwareMap hwMap, Drive d) {
         super(opMode);
@@ -60,12 +60,12 @@ public class PointMapLoc extends BaseHardware {
         init(hwMap, d);
     }
 
-    private void init(HardwareMap hwMap, Drive d) {
+    protected void init(HardwareMap hwMap, Drive d) {
         drive = d;
-        f = hwMap.get(DistanceSensor.class, "f");
-        l = hwMap.get(DistanceSensor.class, "l");
-        b = hwMap.get(DistanceSensor.class, "b");
-        r = hwMap.get(DistanceSensor.class, "r");
+        f = hwMap.get(ModernRoboticsI2cRangeSensor.class, "f");
+        l = hwMap.get(ModernRoboticsI2cRangeSensor.class, "l");
+        b = hwMap.get(ModernRoboticsI2cRangeSensor.class, "b");
+        r = hwMap.get(ModernRoboticsI2cRangeSensor.class, "r");
         rotator = hwMap.get(DcMotor.class, "rotator");
     }
 
@@ -225,7 +225,11 @@ public class PointMapLoc extends BaseHardware {
         return getPos();
     }
 
-    private double ticksToRadians(double ticks) {
+    protected double ticksToRadians(double ticks) {
         return 2*Math.PI/ticksPerRev;
+    }
+
+    public ArrayList<Point> getMap() {
+        return pointMap;
     }
 }
