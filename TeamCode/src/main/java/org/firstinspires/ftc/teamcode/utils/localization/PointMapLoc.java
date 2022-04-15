@@ -130,23 +130,40 @@ public class PointMapLoc extends BaseHardware {
         }
     }
 
-    // TODO: use an actual filter instead of rounding, probably kalman or something
-    public void filter() {
+    // // TODO: use an actual filter instead of rounding, probably kalman or something
+    // public void filter() {
+    //     for (int i = 0; i < mapSize; ++i) {
+    //         pointMap.get(i).x = Math.round(pointMap.get(i).x);
+    //         pointMap.get(i).y = Math.round(pointMap.get(i).y);
+    //     }
+    // }
+
+    public void correctToField() {
         for (int i = 0; i < mapSize; ++i) {
-            pointMap.get(i).x = Math.round(pointMap.get(i).x);
-            pointMap.get(i).y = Math.round(pointMap.get(i).y);
+            if (pointMap.get(i).x > 0) {
+                pointMap.get(i).x = 144 - pointMap.get(i).x;
+            } else if (pointMap.get(i).x < 0) {
+                pointMap.get(i).x = -pointMap.get(i).x;
+            }
+            if (pointMap.get(i).y > 0) {
+                pointMap.get(i).y = 144 - pointMap.get(i).y;
+            } else if (pointMap.get(i).y < 0) {
+                pointMap.get(i).y = -pointMap.get(i).y;
+            }
         }
     }
 
     public void process() {
         correctDists();
         undistort();
-        filter();
+        // filter();
+        correctToField();
     }
 
     public Vector2d getPos() {
         double x = 0;
         double y = 0;
+        Point first = new Point(0, 0, 0, new Pose2d());
         State state = State.SEARCH;
         int i = 0;
         boolean wall = true;
@@ -162,11 +179,13 @@ public class PointMapLoc extends BaseHardware {
                     if (Math.abs(pointMap.get(i).y - pointMap.get(i+1).y) < 0.5) {
                         state = State.HORIZ;
                         i += 1;
+                        first = pointMap.get(i);
                         break;
                     }
                     if (Math.abs(pointMap.get(i).x - pointMap.get(i+1).x) < 0.5) {
                         state = State.VERT;
                         i += 1;
+                        first = pointMap.get(i);
                         break;
                     }
                     i += 1;
@@ -174,7 +193,7 @@ public class PointMapLoc extends BaseHardware {
                 case HORIZ:
                     wall = true;
                     for (int count = 2; count < 4; ++count) {
-                        if (!(Math.abs(pointMap.get(i).y - pointMap.get(i+1).y) < 0.5)) {
+                        if (!(Math.abs(first.y - pointMap.get(i).y) < 0.5)) {
                             wall = false;
                             count = 0;
                             break;
@@ -189,7 +208,7 @@ public class PointMapLoc extends BaseHardware {
                 case VERT:
                     wall = true;
                     for (int count = 2; count < 4; ++count) {
-                        if (!(Math.abs(pointMap.get(i).x - pointMap.get(i+1).x) < 0.5)) {
+                        if (!(Math.abs(first.x - pointMap.get(i).x) < 0.5)) {
                             wall = false;
                             count = 0;
                             break;
