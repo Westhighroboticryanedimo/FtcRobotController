@@ -7,6 +7,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
+import org.firstinspires.ftc.teamcode.utils.localization.Point;
 
 import com.acmerobotics.roadrunner.drive.Drive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -15,20 +16,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.lang.Math;
-
-class Point {
-    double x;
-    double y;
-    double theta;
-    Pose2d poseAtCapture;
-
-    public Point (double a, double b, double c, Pose2d p) {
-        x = a;
-        y = b;
-        theta = c;
-        poseAtCapture = p;
-    }
-}
 
 enum State {
     SEARCH, HORIZ, VERT, DONE
