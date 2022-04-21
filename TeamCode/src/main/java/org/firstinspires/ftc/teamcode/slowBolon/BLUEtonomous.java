@@ -34,7 +34,7 @@ public class BLUEtonomous extends LinearOpMode {
         d = new DriveBolon(this,hardwareMap);
         //DONDEESTAELDUCKY = Cam.getspot();
         ElapsedTime runtime = new ElapsedTime();
-// tobias = looser looosers =elijha
+// tobias = looser looosers =elijha hah
         //telemetry.addData("where",DONDEESTAELDUCKY);
         /*telemetry.addData("leastduckydiff", Cam.pipeline.leastduckydiff);
         telemetry.addData("leasttapediff", Cam.pipeline.leasttapediff);
