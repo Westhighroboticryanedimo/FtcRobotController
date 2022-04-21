@@ -44,7 +44,7 @@ public class BLUEtonomous extends LinearOpMode {
         telemetry.addData("distance",o.distance);
         telemetry.addData("HELLOW",1);
         telemetry.update();
-
+        //ff
         int dx = Cam.pipeline.gx;
         int wthird = (int)(Math.floor(Cam.pipeline.w/3));
 
