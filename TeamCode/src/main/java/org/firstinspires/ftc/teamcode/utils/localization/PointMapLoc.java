@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 import org.firstinspires.ftc.teamcode.utils.localization.Point;
@@ -27,14 +27,17 @@ public class PointMapLoc extends BaseHardware {
     protected ModernRoboticsI2cRangeSensor l;
     protected ModernRoboticsI2cRangeSensor b;
     protected ModernRoboticsI2cRangeSensor r;
-    protected DcMotor rotator;
+    protected Servo rotator;
 
     protected ArrayList<Point> pointMap = new ArrayList<Point>();
     int mapSize = 0;
 
-    boolean dir = true;
-    protected double ticksPerRev = 100;
-    protected double quarterTicks = ticksPerRev /4;
+    // boolean dir = true;
+    int dir = 1;
+    double pos = 0.00;
+    double step = 0.05;
+    // protected double ticksPerRev = 100;
+    // protected double quarterTicks = ticksPerRev / 4;
     protected double distFromCenter = 2;
 
     public PointMapLoc(LinearOpMode opMode, HardwareMap hwMap, Drive d) {
@@ -53,7 +56,7 @@ public class PointMapLoc extends BaseHardware {
         l = hwMap.get(ModernRoboticsI2cRangeSensor.class, "l");
         b = hwMap.get(ModernRoboticsI2cRangeSensor.class, "b");
         r = hwMap.get(ModernRoboticsI2cRangeSensor.class, "r");
-        rotator = hwMap.get(DcMotor.class, "rotator");
+        rotator = hwMap.get(Servo.class, "rotator");
     }
 
     public void scan() {
@@ -72,19 +75,17 @@ public class PointMapLoc extends BaseHardware {
         double target;
 
         if (dir) {
-            rotator.setPower(1);
-            target = quarterTicks;
+            target = 0.5;
         } else {
-            rotator.setPower(-1);
             target = 0;
         }
-        dir = !dir;
-        while (Math.abs(target - rotator.getCurrentPosition()) < quarterTicks) {
+        dir = -dir;
+        while (pos != target) {
             d1 = f.getDistance(DistanceUnit.INCH);
             d2 = l.getDistance(DistanceUnit.INCH);
             d3 = b.getDistance(DistanceUnit.INCH);
             d4 = r.getDistance(DistanceUnit.INCH);
-            theta = drive.getExternalHeading() + ticksToRadians(rotator.getCurrentPosition());
+            theta = drive.getExternalHeading() + posToRadians(pos);
             poseAtCapture = drive.getPoseEstimate();
 
             // roadrunner-style coords are used:
@@ -101,9 +102,10 @@ public class PointMapLoc extends BaseHardware {
             x = d4 * Math.cos(theta + 3*Math.PI/2);
             y = d4 * Math.sin(theta + 3*Math.PI/2);
             q4.add(new Point(x, y, theta + 3*Math.PI/2, poseAtCapture));
+            pos += step*dir;
         }
         rotator.setPower(0);
-        if (!dir) {
+        if (dir < 0) {
             Collections.reverse(q1);
             Collections.reverse(q2);
             Collections.reverse(q3);
@@ -141,7 +143,7 @@ public class PointMapLoc extends BaseHardware {
     public void correctToField() {
         for (int i = 0; i < mapSize; ++i) {
             if (pointMap.get(i).x > 0) {
-                pointMap.get(i).x = 144 - pointMap.get(i).x;
+                pointMap.get(i).x = 144 - pointMap.get(i).x; // field is 144x144 inches
             } else if (pointMap.get(i).x < 0) {
                 pointMap.get(i).x = -pointMap.get(i).x;
             }
@@ -231,8 +233,8 @@ public class PointMapLoc extends BaseHardware {
         return getPos();
     }
 
-    protected double ticksToRadians(double ticks) {
-        return 2*Math.PI/ticksPerRev;
+    protected double posToRadians(double p) {
+        return Math.PI*p;
     }
 
     public ArrayList<Point> getMap() {
