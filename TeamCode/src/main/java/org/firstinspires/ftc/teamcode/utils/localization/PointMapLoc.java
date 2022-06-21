@@ -74,13 +74,13 @@ public class PointMapLoc extends BaseHardware {
         Pose2d poseAtCapture;
         double target;
 
-        if (dir) {
+        if (dir == 1) {
             target = 0.5;
         } else {
             target = 0;
         }
-        dir = -dir;
         while (pos != target) {
+            rotator.setPosition(pos);
             d1 = f.getDistance(DistanceUnit.INCH);
             d2 = l.getDistance(DistanceUnit.INCH);
             d3 = b.getDistance(DistanceUnit.INCH);
@@ -104,13 +104,13 @@ public class PointMapLoc extends BaseHardware {
             q4.add(new Point(x, y, theta + 3*Math.PI/2, poseAtCapture));
             pos += step*dir;
         }
-        rotator.setPower(0);
         if (dir < 0) {
             Collections.reverse(q1);
             Collections.reverse(q2);
             Collections.reverse(q3);
             Collections.reverse(q4);
         }
+        dir = -dir;
         pointMap.addAll(q1);
         pointMap.addAll(q2);
         pointMap.addAll(q3);
