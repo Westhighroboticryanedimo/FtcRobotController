@@ -75,12 +75,11 @@ public class PointMapLoc extends BaseHardware {
         double target;
 
         if (dir == 1) {
-            target = 0.5;
+            target = 0.3;
         } else {
             target = 0;
         }
         while (pos != target) {
-            rotator.setPosition(pos);
             d1 = f.getDistance(DistanceUnit.INCH);
             d2 = l.getDistance(DistanceUnit.INCH);
             d3 = b.getDistance(DistanceUnit.INCH);

@@ -29,13 +29,13 @@
 //         if (controller.AOnce()) {
 //             localizer.scan();
 //             localizer.process();
-//             TelemetryPacket packet = new TelemetryPacket();
-//             for (int i = 0; i < localizer.getMap().size(); ++i) {
-//                 packet.fieldOverlay()
-//                         .setFill("blue")
-//                         .fillRect(localizer.getMap().get(i).x, localizer.getMap().get(i).y, 2, 2);
-//                 dash.sendTelemetryPacket(packet);
-//             }
+//         }
+//         TelemetryPacket packet = new TelemetryPacket();
+//         for (int i = 0; i < localizer.getMap().size(); ++i) {
+//             packet.fieldOverlay()
+//                     .setFill("blue")
+//                     .fillRect(localizer.getMap().get(i).x, localizer.getMap().get(i).y, 2, 2);
+//             dash.sendTelemetryPacket(packet);
 //         }
 //     }
 //
