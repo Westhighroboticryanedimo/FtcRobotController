@@ -104,7 +104,7 @@ public class PointMapLoc extends BaseHardware {
             q4.add(new Point(x, y, theta + 3*Math.PI/2, poseAtCapture));
             pos += step*dir;
         }
-        rotator.setPower(0);
+        // rotator.setPower(0);
         if (dir < 0) {
             Collections.reverse(q1);
             Collections.reverse(q2);
