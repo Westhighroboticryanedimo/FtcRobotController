@@ -74,7 +74,7 @@ public class PointMapLoc extends BaseHardware {
         Pose2d poseAtCapture;
         double target;
 
-        if (dir) {
+        if (dir > 0) {
             target = 0.5;
         } else {
             target = 0;
