@@ -6,17 +6,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
-public class DriveThirdWheel extends HolonomicDrive {
+public class DriveFifthWheel extends HolonomicDrive {
 
 
     // Autonomous
-    public DriveThirdWheel(LinearOpMode opMode, HardwareMap hwMap) {
+    public DriveFifthWheel(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
         setup();
     }
 
     // Teleop
-    public DriveThirdWheel(OpMode opMode, HardwareMap hwMap) {
+    public DriveFifthWheel(OpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
         setup();
     }

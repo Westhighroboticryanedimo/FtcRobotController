@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
 import org.firstinspires.ftc.teamcode.Controller;
 
+import org.firstinspires.ftc.teamcode.fifthWheel.hardware.DriveFifthWheel;
+
 import java.util.ArrayList;
 
 @TeleOp(name = "FifthWheel TeleOp")
@@ -14,7 +16,6 @@ public class TeleopFifthWheel extends OpMode {
     private DriveFifthWheel drive;
     private Gyro gyro;
     private Controller controller;
-    private DistanceSensor distanceSensor;
     private double desiredTicks = 0.0;
 
     private static final int STORE_NUM = 4;
