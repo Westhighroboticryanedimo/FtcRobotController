@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.thirdWheel.auto.actions;
 
-import com.qualcomm.ftccommon.configuration.EditLegacyServoControllerActivity;
+//import com.qualcomm.ftccommon.configuration.EditLegacyServoControllerActivity;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
