@@ -24,29 +24,31 @@ public class IntakeCam {
     private OpenCvCamera camera;
     private SignalDeterminationPipeline signalPipeline;
 
-    // Autonomous
-    public IntakeCam(LinearOpMode opMode, HardwareMap hwMap) {
-//        super(opMode);
+    public IntakeCam(HardwareMap hwMap) {
         setupOpenCV(hwMap);
     }
-
-    // Teleop
-    public IntakeCam(OpMode opMode, HardwareMap hwMap) {
-//        super(opMode);
-        setupOpenCV(hwMap);
-    }
+//     // Autonomous
+//     public IntakeCam(LinearOpMode opMode, HardwareMap hwMap) {
+// //        super(opMode);
+//         setupOpenCV(hwMap);
+//     }
+//
+//     // Teleop
+//     public IntakeCam(OpMode opMode, HardwareMap hwMap) {
+// //        super(opMode);
+//         setupOpenCV(hwMap);
+//     }
 
     private void setupOpenCV(HardwareMap hwMap) {
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         WebcamName camName = hwMap.get(WebcamName.class, "intakeCam");
         camera = OpenCvCameraFactory.getInstance().createWebcam(camName, cameraMonitorViewId);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        signalPipeline = new SignalDeterminationPipeline();
+        camera.setPipeline(signalPipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-                signalPipeline = new SignalDeterminationPipeline();
-                camera.setPipeline(signalPipeline);
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
             }
             @Override
             public void onError(int errorCode)
@@ -59,40 +61,45 @@ public class IntakeCam {
     public int getSignalFace() {
         return signalPipeline.getFace();
     }
+    public int getAvgHue() {
+        return signalPipeline.getAvgHue();
+    }
 
     class SignalDeterminationPipeline extends OpenCvPipeline {
         private volatile int face = 1;
 
-        final Point REGION_TOPLEFT = new Point(140, 100);
-        static final int REGION_WIDTH = 40;
-        static final int REGION_HEIGHT = 40;
+        final Point REGION_TOPLEFT = new Point(270, 200);
+        static final int REGION_WIDTH = 100;
+        static final int REGION_HEIGHT = 150;
         final Scalar RED = new Scalar(255, 0, 0);
 
         Point region_pointA = new Point(REGION_TOPLEFT.x, REGION_TOPLEFT.y);
         Point region_pointB = new Point(REGION_TOPLEFT.x + REGION_WIDTH,
                                         REGION_TOPLEFT.y + REGION_HEIGHT);
 
-        int avgHue = 0;
+        private volatile int avgHue = 0;
         // yellow, cyan, magenta
-        int[] hues = new int[]{60, 180, 300};
+        int[] hues = new int[]{35, 75, 110 };
 
         private Mat center;
         Mat hsv = new Mat();
+        Mat hue = new Mat();
 
         private void inputToHSV(Mat input) {
             Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
+            Core.extractChannel(hsv, hue, 0);
         }
 
         @Override
         public void init(Mat firstFrame) {
             inputToHSV(firstFrame);
-            center = firstFrame.submat(new Rect(region_pointA, region_pointB));
+            center = hue.submat(new Rect(region_pointA, region_pointB));
         }
 
         @Override
         public Mat processFrame(Mat input) {
             inputToHSV(input);
-            Imgproc.rectangle( input, region_pointA, region_pointB, RED, 2);
+            Imgproc.rectangle(input, region_pointA, region_pointB, RED, 2);
             avgHue = (int) Core.mean(center).val[0];
             face = closestHue(avgHue);
             return input;
@@ -112,6 +119,9 @@ public class IntakeCam {
 
         public int getFace() {
             return face;
+        }
+        public int getAvgHue() {
+            return avgHue;
         }
     }
 }
