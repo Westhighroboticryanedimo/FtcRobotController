@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="autohug")
 @Disabled
 public class AutoHug extends LinearOpMode {
+    //save me pls save me
     //o_d_o_m_e_t_r_y odometry;
     Freehugdrive drive;
     static double SHOOTER_CALIBRATION = 0.375;

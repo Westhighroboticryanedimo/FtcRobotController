@@ -20,7 +20,6 @@ public class LocalizerReee extends PointMapLoc {
     }
 
     private void setup() {
-        ticksPerRev = 103.8;
-        distFromCenter = 4;
+        distFromCenter = 3;
     }
 }
