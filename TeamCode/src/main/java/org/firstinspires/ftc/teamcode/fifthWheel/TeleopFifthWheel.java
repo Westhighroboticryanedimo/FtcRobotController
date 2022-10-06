@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.hardware.Gyro;
 import org.firstinspires.ftc.teamcode.Controller;
 
 import org.firstinspires.ftc.teamcode.fifthWheel.hardware.DriveFifthWheel;
+import org.firstinspires.ftc.teamcode.fifthWheel.hardware.intake.Intake;
+import org.firstinspires.ftc.teamcode.fifthWheel.hardware.outtake.DRCB;
 
 import java.util.ArrayList;
 
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 public class TeleopFifthWheel extends OpMode {
 
     private DriveFifthWheel drive;
+    private Intake intake;
+    private DRCB drcb;
     private Gyro gyro;
     private Controller controller;
     private double desiredTicks = 0.0;
@@ -26,6 +30,8 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
+        intake = new Intake(hardwareMap);
+        drcb = new DRCB(hardwareMap);
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
         drive.togglePOV(true);
@@ -36,6 +42,9 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("gyro", gyro.getAngleDegrees());
+        telemetry.addData("flipPos", intake.flipPos());
+        telemetry.addData("gripPos", intake.gripPos());
+        telemetry.addData("drcb", drcb.getCurrentTicks());
         telemetry.update();
         controller.update();
         // invert right trigger so that unpressed is 1 and fully pressed is 0
@@ -65,5 +74,24 @@ public class TeleopFifthWheel extends OpMode {
         avgTurn /= turn.size();
 
         drive.drive(avgX, avgY, avgTurn);
+
+        if (controller.dpadDownOnce()) {
+            drcb.decreaseHeight();
+        }
+        if (controller.dpadUpOnce()) {
+            drcb.increaseHeight();
+        }
+        if (controller.dpadLeftOnce()) {
+            intake.gripDecrease();
+        }
+        if (controller.dpadRightOnce()) {
+            intake.gripIncrease();
+        }
+        if (controller.leftBumperOnce()) {
+            intake.flipDecrease();
+        }
+        if (controller.rightBumperOnce()) {
+            intake.flipIncrease();
+        }
     }
 }
