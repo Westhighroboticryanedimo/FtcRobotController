@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoController;
 
 import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
@@ -21,13 +23,15 @@ public class BoogerBoyTeleop extends OpMode {
     private Servo grabby;
     private Gyro gyro;
     private int maxliftdistance;
+    private boolean slowmode;
 
     @Override
     public void init() {
+        slowmode = false;
         drive = new BoogerBoyDrive(this,hardwareMap);
         drive.setup();
-        gyro = new Gyro(hardwareMap, false);
-        gyro.reset();
+        //gyro = new Gyro(hardwareMap, false);
+        //gyro.reset();
         controller = new Controller(gamepad1);
 
         lift = hardwareMap.get(DcMotor.class, "lift");
@@ -36,7 +40,7 @@ public class BoogerBoyTeleop extends OpMode {
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         grabby = hardwareMap.get(Servo.class, "grabby");
         //grabby = hardwareMap.get(CRServo.class, "grabby");
-        maxliftdistance = -8100;
+        maxliftdistance = -8854;
     }
 
     @Override
@@ -44,8 +48,11 @@ public class BoogerBoyTeleop extends OpMode {
         controller.update();
         telemetry.addData(" ", "booger boy activate");
 
-        drive.drive(controller.left_stick_x,controller.left_stick_y,controller.right_stick_x);
-
+        if(slowmode) {
+            drive.drive(0.5*controller.left_stick_x,0.5*controller.left_stick_y,0.5*controller.right_stick_x);
+        } else {
+            drive.drive(controller.left_stick_x,controller.left_stick_y,controller.right_stick_x);
+        }
         if(controller.dpadUp() && lift.getCurrentPosition() > maxliftdistance) { // direction: up
             //lift.setDirection(DcMotor.Direction.FORWARD);
             telemetry.addData("","dpadup");
@@ -58,15 +65,18 @@ public class BoogerBoyTeleop extends OpMode {
             lift.setPower(0);
         }
 
-        if(controller.X()) {
+        if(controller.BOnce()) {
             grabby.setPosition(0.2);
             //grabby.setDirection(CRServo.Direction.REVERSE);
             //grabby.setPower(0.5);
         }
-        if(controller.Y()) {
+        if(controller.AOnce()) {
             grabby.setPosition(1);
             //grabby.setDirection(CRServo.Direction.FORWARD);
             //grabby.setPower(0.5);
+        }
+        if(controller.XOnce()) {
+            slowmode = !slowmode;
         }
         telemetry.addData("lift value:",lift.getCurrentPosition());
         telemetry.update();
