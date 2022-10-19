@@ -17,9 +17,6 @@ public class BoogerBoyAuto extends LinearOpMode{
         waitForStart();
         drive = new BoogerBoyDrive(this,hardwareMap);
         ElapsedTime runtime = new ElapsedTime();
-        drive.move(10,10,10);
-
-
-
+        drive.move(1,10,10);
     }
 }
