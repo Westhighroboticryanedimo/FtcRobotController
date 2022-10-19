@@ -45,7 +45,7 @@ public class BoogerCam {
     public int getAvgHue() {
         return pipeline.getAvgHue();
     }
-    public int getDarkness() {return pipeline.darkness();}
+    public double getDarkness() {return pipeline.darkness();}
 
     class SignalPipeline extends OpenCvPipeline {
         private volatile int face = 1;
@@ -60,14 +60,15 @@ public class BoogerCam {
                 REGION_TOPLEFT.y + REGION_HEIGHT);
 
         private volatile int avgHue = 0;
-        private int darkness = 0;
+        private double darkness = 0;
         // yellow, cyan, magenta
         int[] hues = new int[]{150, 100};
-        int black = 0;
+        int black = 15;
 
         private Mat center;
         Mat hsv = new Mat();
         Mat hue = new Mat();
+        Mat darkmat = new Mat();
 
         @Override
         public void init(Mat firstFrame) {
@@ -78,6 +79,7 @@ public class BoogerCam {
         private void inputToHSV(Mat input) {
             Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
             Core.extractChannel(hsv, hue, 0);
+            Core.extractChannel(hsv, darkmat, 2);
         }
 
         @Override
@@ -86,7 +88,7 @@ public class BoogerCam {
             Imgproc.rectangle(in, region_pointA, region_pointB, RED, 2);
             avgHue = (int) Core.mean(center).val[0];
             face = colorMatch(avgHue);
-            darkness = (int) Core.mean(center).val[2];
+            darkness = darkmat.get(0,2)[0];
             return in;
         }
 
@@ -99,10 +101,10 @@ public class BoogerCam {
                     closest = i + 1;
                 }
             }
-            int darkness = (int) Core.mean(center).val[2];
-            if(Math.abs(darkness - black) < min) {
-                min = Math.abs(darkness - black);
-                closest = 123456;
+            double thisdarkness = darkness;
+            if(Math.abs(thisdarkness - black) < min) {
+                min = (int)Math.abs(thisdarkness - black);
+                closest = 3;
             }
             return closest;
         }
@@ -111,6 +113,6 @@ public class BoogerCam {
         public int getAvgHue() {
             return avgHue;
         }
-        public int darkness() {return darkness;}
+        public double darkness() {return darkness;}
     }
 }
