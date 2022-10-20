@@ -6,13 +6,33 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.slowBolon.DriveBolon;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvPipeline;
+import org.openftc.easyopencv.OpenCvWebcam;
+
+
+
+
+
+
 
 @Autonomous(name = "minicat")
 public class BoogerBoyAuto extends LinearOpMode{
     private BoogerBoyDrive drive;
+
+    // makeing a webcam for open cv
+    OpenCvWebcam webcam;
+
     private int AI_resualt;
     // This is for when the cone is in the first case
+
     private void uno()
     {
         drive.move(1,60,0);
@@ -32,12 +52,18 @@ public class BoogerBoyAuto extends LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
-        waitForStart();
-        drive = new BoogerBoyDrive(this,hardwareMap);
-        ElapsedTime runtime = new ElapsedTime();
 
-        // AI Goes Here and it makes a decision between the options for thr cone
-        // Some vision recognition detects one of three options and resualts 1,2,3
+        // Start the pipeline for OpenCV
+
+
+
+
+
+
+
+
+            // AI Goes Here ^ ^ ^ ^
+
         AI_resualt = 1;
 
         // Theese detect what the AI Detected and run the corasponding code
