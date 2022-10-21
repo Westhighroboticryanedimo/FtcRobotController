@@ -21,8 +21,8 @@ package org.firstinspires.ftc.teamcode.booger;
     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠁
         eres muy sospechoso, mi amigo.
          */
-        double botx, boty, botrotation; // rotation acts like a unit circle. start out pointing 'up' which would be 90 degrees.
-        double fieldwidth, fieldheight;
+        public double botx, boty, botrotation; // rotation acts like a unit circle. start out pointing 'up' which would be 90 degrees.
+        public double fieldwidth, fieldheight;
         double leftdist, rightdist, frontdist, backdist;
         double leftdistrotation, rightdistrotation, frontdistrotation, backdistrotation; // the directions the sensors are facing
         String side; // which side of the field do we start on

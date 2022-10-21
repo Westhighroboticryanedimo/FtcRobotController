@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.BoogerBoy.hardware.BoogerCam;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -23,7 +24,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 
 
-@Autonomous(name = "minicat")
+@Autonomous(name = "Cone Reader Booger Boy")
 public class BoogerBoyAuto extends LinearOpMode{
     private BoogerBoyDrive drive;
 
@@ -37,7 +38,7 @@ public class BoogerBoyAuto extends LinearOpMode{
     {
         drive.move(1,60,0);
     }
-    // This is for when the cone is in the seconds case
+    // This is for when the cone is in the second case
     private void dos()
     {
         drive.move(1,60,0);
@@ -64,7 +65,20 @@ public class BoogerBoyAuto extends LinearOpMode{
 
             // AI Goes Here ^ ^ ^ ^
 
-        AI_resualt = 1;
+        AI_resualt = 1; // resualt is not a word.
+        BoogerCam cam = new BoogerCam(hardwareMap);
+
+
+        while (!isStarted() && !isStopRequested()) {
+            telemetry.addData("Signal face", cam.getFaceFace());
+            AI_resualt = cam.getFaceFace();
+            telemetry.addData("color being seen", cam.getAvgHue());
+            telemetry.addData("darkness",cam.getDarkness());
+            telemetry.update();
+
+            // Don't burn CPU cycles busy-looping in this sample
+            sleep(200);
+        }
 
         // Theese detect what the AI Detected and run the corasponding code
         if(AI_resualt == 1)
