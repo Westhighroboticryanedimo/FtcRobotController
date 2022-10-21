@@ -11,7 +11,7 @@ public class Intake {
     private Servo flipLeft;
     // private Servo flipRight;
 
-    private double gripPos = 0;
+    private double gripPos = 1;
     private double flipPos = 0;
 
     public Intake(HardwareMap hwMap) {
@@ -29,13 +29,13 @@ public class Intake {
     }
 
     public void lower() {
-        flipPos = 1;
+        flipPos = 0.5;
         flipLeft.setPosition(flipPos);
     //     flipRight.setPosition(1);
     }
 
     public void raise() {
-        flipPos = 0;
+        flipPos = 1;
         flipLeft.setPosition(flipPos);
         // flipRight.setPosition(0);
     }
@@ -55,22 +55,22 @@ public class Intake {
     }
 
     public void open() {
-        gripPos = 0;
+        gripPos = 1;
         grip.setPosition(gripPos);
     }
 
     public void close() {
-        gripPos = 0.5;
+        gripPos = 0.74;
         grip.setPosition(gripPos);
     }
 
     public void gripIncrease() {
-        gripPos += 0.05;
+        gripPos -= 0.05;
         grip.setPosition(gripPos);
     }
 
     public void gripDecrease() {
-        gripPos -= 0.05;
+        gripPos += 0.05;
         grip.setPosition(gripPos);
     }
 

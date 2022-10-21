@@ -75,23 +75,36 @@ public class TeleopFifthWheel extends OpMode {
 
         drive.drive(avgX, avgY, avgTurn);
 
-        if (controller.dpadDownOnce()) {
-            drcb.decreaseHeight();
+        if (controller.dpadDown()) {
+            drcb.leftMotor.setPower(-0.75);
+        } else if (controller.dpadUp()) {
+            drcb.leftMotor.setPower(0.75);
+        } else {
+            drcb.leftMotor.setPower(0);
         }
-        if (controller.dpadUpOnce()) {
-            drcb.increaseHeight();
+        if (controller.A()) {
+            intake.open();
         }
-        if (controller.dpadLeftOnce()) {
-            intake.gripDecrease();
-        }
-        if (controller.dpadRightOnce()) {
-            intake.gripIncrease();
+        if (controller.B()) {
+            intake.close();
         }
         if (controller.leftBumperOnce()) {
-            intake.flipDecrease();
+            intake.lower();
         }
         if (controller.rightBumperOnce()) {
-            intake.flipIncrease();
+            intake.raise();
         }
+//        if (controller.dpadLeftOnce()) {
+//            intake.gripDecrease();
+//        }
+//        if (controller.dpadRightOnce()) {
+//            intake.gripIncrease();
+//        }
+//        if (controller.leftBumperOnce()) {
+//            intake.flipDecrease();
+//        }
+//        if (controller.rightBumperOnce()) {
+//            intake.flipIncrease();
+//        }
     }
 }
