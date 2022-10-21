@@ -58,6 +58,38 @@ public class IntakeCam {
         });
     }
 
+    public void changeRegionWidth(int w) {
+        signalPipeline.REGION_WIDTH += w;
+    }
+
+    public void changeRegionHeight(int h) {
+        signalPipeline.REGION_HEIGHT += h;
+    }
+
+    public void changeCornerX(int x) {
+        signalPipeline.REGION_TOPLEFT.x += x;
+    }
+
+    public void changeCornerY(int y) {
+        signalPipeline.REGION_TOPLEFT.y += y;
+    }
+
+    public int getRegionWidth() {
+        return signalPipeline.REGION_WIDTH;
+    }
+
+    public int getRegionHeight() {
+        return signalPipeline.REGION_HEIGHT;
+    }
+
+    public double getCornerX() {
+        return signalPipeline.REGION_TOPLEFT.x;
+    }
+
+    public double getCornerY() {
+        return signalPipeline.REGION_TOPLEFT.y;
+    }
+
     public int getSignalFace() {
         return signalPipeline.getFace();
     }
@@ -68,9 +100,9 @@ public class IntakeCam {
     class SignalDeterminationPipeline extends OpenCvPipeline {
         private volatile int face = 1;
 
-        final Point REGION_TOPLEFT = new Point(270, 200);
-        static final int REGION_WIDTH = 100;
-        static final int REGION_HEIGHT = 150;
+        Point REGION_TOPLEFT = new Point(255, 210);
+        int REGION_WIDTH = 75;
+        int REGION_HEIGHT = 115;
         final Scalar RED = new Scalar(255, 0, 0);
 
         Point region_pointA = new Point(REGION_TOPLEFT.x, REGION_TOPLEFT.y);
@@ -79,7 +111,7 @@ public class IntakeCam {
 
         private volatile int avgHue = 0;
         // yellow, cyan, magenta
-        int[] hues = new int[]{35, 75, 110 };
+        int[] hues = new int[]{30, 100, 150 };
 
         private Mat center;
         Mat hsv = new Mat();
@@ -98,6 +130,10 @@ public class IntakeCam {
 
         @Override
         public Mat processFrame(Mat input) {
+            region_pointA = new Point(REGION_TOPLEFT.x, REGION_TOPLEFT.y);
+            region_pointB = new Point(REGION_TOPLEFT.x + REGION_WIDTH,
+                    REGION_TOPLEFT.y + REGION_HEIGHT);
+            center = hue.submat(new Rect(region_pointA, region_pointB));
             inputToHSV(input);
             Imgproc.rectangle(input, region_pointA, region_pointB, RED, 2);
             avgHue = (int) Core.mean(center).val[0];
