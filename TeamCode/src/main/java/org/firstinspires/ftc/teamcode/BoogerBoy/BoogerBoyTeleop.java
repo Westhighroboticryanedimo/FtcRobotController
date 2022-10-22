@@ -58,7 +58,7 @@ public class BoogerBoyTeleop extends OpMode {
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         grabby = hardwareMap.get(Servo.class, "grabby");
         //grabby = hardwareMap.get(CRServo.class, "grabby");
-        maxliftdistance = -8854;
+        maxliftdistance = 8854; // oct 21: changed from neg to pos
 
         bebe = new SussySonar();
         bebe.setup();
@@ -96,14 +96,14 @@ public class BoogerBoyTeleop extends OpMode {
         } else {
             drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         }
-        if (controller.dpadUp() && lift.getCurrentPosition() > maxliftdistance) { // direction: up
+        if (controller.dpadUp() && lift.getCurrentPosition() < maxliftdistance) { // direction: up
             //lift.setDirection(DcMotor.Direction.FORWARD);
             telemetry.addData("", "dpadup");
-            lift.setPower(-1);
-        } else if (controller.dpadDown() && lift.getCurrentPosition() < 0) { // direction: down
+            lift.setPower(1);
+        } else if (controller.dpadDown() && lift.getCurrentPosition() > 0) { // direction: down
             //lift.setDirection(DcMotor.Direction.REVERSE);
             telemetry.addData("", "dpaddown");
-            lift.setPower(1);
+            lift.setPower(-1);
         } else {
             lift.setPower(0);
         }
