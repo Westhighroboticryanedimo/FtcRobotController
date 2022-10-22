@@ -22,7 +22,7 @@ public class TeleopFifthWheel extends OpMode {
     private Controller controller;
     private double desiredTicks = 0.0;
 
-    private static final int STORE_NUM = 4;
+    private static final int STORE_NUM = 8;
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
     private ArrayList<Double> turn = new ArrayList<>();
