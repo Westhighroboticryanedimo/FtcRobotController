@@ -69,6 +69,8 @@ public class Auto extends LinearOpMode {
             sleep(200);
         }
 
+        signal = inCam.getSignalFace();
+
 //        waitForStart();
 //        if (isStopRequested()) return;
         switch (signal) {
