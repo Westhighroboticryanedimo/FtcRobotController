@@ -27,7 +27,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode.BoogerBoy;
+
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -49,8 +50,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@TeleOp(name = "Concept: TensorFlow Object Detection Webcam", group = "Concept")
-@Disabled
+@TeleOp(name = "TF Booger Boy")
+//@Disabled
 public class BoogerBoyTF extends LinearOpMode {
 
     /*
@@ -83,7 +84,7 @@ public class BoogerBoyTF extends LinearOpMode {
      * and paste it in to your code on the next line, between the double quotes.
      */
     private static final String VUFORIA_KEY =
-            " -- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+            "Ad5o3uP/////AAABmZiHw0ExfEhJiGOj+a+euvV6cr7YdCbHAhFHDHW1effZUyKZ6QqwBvhDfgeu+flW5W6/uLkd5H2LYVeFlDHPdhbSwRx5mzj/IcQPSFKkhS6JkBM8DwnKa7B/c/jNykBPOXPG7RGpMRtqnq/A6jq5dZqqGgHGIkuN6TvED2ofqSsQD1F+QcBA9y8GHfenkdNlMIwzc+KAEtHwhFqXzG7K6PY9Yad/c/MV5U+aVZ0fcd9zKexVbj19mTJ7UwHCmkWKZvR7u3UHzF07/eWUO9KfqyGYtoYuX6hgfDw3/XTg5rLFMqvLpSCZK6jbLADHTkYMReDqu8wi4oPG4XlG8tCfLduGNLVXIm1NpYN/59Pg5ptq";
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -164,7 +165,7 @@ public class BoogerBoyTF extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "coneCam");
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
