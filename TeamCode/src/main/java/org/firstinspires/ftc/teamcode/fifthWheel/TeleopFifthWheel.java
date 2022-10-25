@@ -20,9 +20,10 @@ public class TeleopFifthWheel extends OpMode {
     private DRCB drcb;
     private Gyro gyro;
     private Controller controller;
-    private double desiredTicks = 0.0;
 
-    private static final int STORE_NUM = 4;
+    private int level = 0;
+
+    private static final int STORE_NUM = 8;
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
     private ArrayList<Double> turn = new ArrayList<>();
@@ -44,13 +45,10 @@ public class TeleopFifthWheel extends OpMode {
         telemetry.addData("gyro", gyro.getAngleDegrees());
         telemetry.addData("flipPos", intake.flipPos());
         telemetry.addData("gripPos", intake.gripPos());
-        telemetry.addData("drcb", drcb.getCurrentTicks());
+        telemetry.addData("left drcb", drcb.getCurrentLeftTicks());
+        telemetry.addData("right drcb", drcb.getCurrentRightTicks());
         telemetry.update();
         controller.update();
-        // invert right trigger so that unpressed is 1 and fully pressed is 0
-        // math is gud
-        // this is kinda weird ngl, a pain to use
-        // double slow = (-1)*controller.right_trigger + 1;
 
         x.add(controller.left_stick_x);
         y.add(controller.left_stick_y);
@@ -73,20 +71,47 @@ public class TeleopFifthWheel extends OpMode {
         for (int i = 0; i < turn.size(); i++) avgTurn += turn.get(i);
         avgTurn /= turn.size();
 
-        drive.drive(avgX, avgY, avgTurn);
+        // drive.drive(avgX, avgY, avgTurn);
 
-        if (controller.dpadDownOnce()) {
-            drcb.decreaseHeight();
+        if (controller.dpadDown()) {
+            level = 0;
+            drcb.setLevel(level);
+        } else if (controller.dpadUp()) {
+            level = 4;
+            drcb.setLevel(level);
+        } else if (controller.dpadLeft()) {
+            level -= 1;
+            drcb.setLevel(level);
+        } else if (controller.dpadRight()) {
+            level += 1;
+            drcb.setLevel(level);
         }
-        if (controller.dpadUpOnce()) {
-            drcb.increaseHeight();
-        }
-        if (controller.dpadLeftOnce()) {
-            intake.gripDecrease();
-        }
-        if (controller.dpadRightOnce()) {
-            intake.gripIncrease();
-        }
+
+        // if (controller.dpadDown()) {
+        //     drcb.leftMotor.setPower(-0.2);
+        // } else if (controller.dpadUp()) {
+        //     drcb.leftMotor.setPower(0.75);
+        // } else {
+        //     drcb.leftMotor.setPower(0);
+        // }
+        // if (controller.A()) {
+        //     intake.open();
+        // }
+        // if (controller.B()) {
+        //     intake.close();
+        // }
+        // if (controller.leftBumperOnce()) {
+        //     intake.lower();
+        // }
+        // if (controller.rightBumperOnce()) {
+        //     intake.raise();
+        // }
+        // if (controller.dpadLeftOnce()) {
+        //     intake.gripDecrease();
+        // }
+        // if (controller.dpadRightOnce()) {
+        //     intake.gripIncrease();
+        // }
         if (controller.leftBumperOnce()) {
             intake.flipDecrease();
         }
