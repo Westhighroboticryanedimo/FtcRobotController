@@ -24,7 +24,7 @@ public class DriveFifthWheel extends HolonomicDrive {
     // PID setup
     private void setup() {
         reduceTurn = true;
-        isDrivePOV = true;
+        isDrivePOV = false;
 
 
         setPidDrive(0.05, 0, 0.01);

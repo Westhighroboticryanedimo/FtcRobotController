@@ -16,11 +16,11 @@ public class DRCB {
     private int level = 0;
     private int ticks = 0;
 
-    private static final double LEVELS[] = {0, 60, 120, 180, 360};
-    private static final double LIFT_POWER = 0.5;
+    private static final double LEVELS[] = {0, 80, 100, 160, 320};
+    private static final double LIFT_POWER = 0.57;
     private static final double LOWER_POWER = -0.05;
 
-    private PIDController pidArm = new PIDController(0.001, 0, 0.002);
+    private PIDController pidArm = new PIDController(1, 0, 0);
 
     public DRCB(HardwareMap hwMap) {
         init(hwMap);
@@ -33,14 +33,14 @@ public class DRCB {
         pidArm.setTolerance(10);
 
         leftMotor = hwMap.get(DcMotor.class, "leftMotor");
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftMotor.setDirection(DcMotor.Direction.FORWARD);
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftMotor.setPower(0);
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rightMotor = hwMap.get(DcMotor.class, "rightMotor");
-        rightMotor.setDirection(DcMotor.Direction.FORWARD);
+        rightMotor.setDirection(DcMotor.Direction.REVERSE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setPower(0);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -51,15 +51,26 @@ public class DRCB {
         new Thread() {
             @Override
             public void run() {
-                pidArm.enable();
-                pidArm.setSetpoint(LEVELS[l]);
-                pidArm.setTolerance(10);
-                while (!pidArm.onTarget()) {
-                    leftMotor.setPower(pidArm.performPID(leftMotor.getCurrentPosition()));
-                    rightMotor.setPower(pidArm.performPID(rightMotor.getCurrentPosition()));
+//                pidArm.enable();
+//                pidArm.setSetpoint(LEVELS[l]);
+//                pidArm.setTolerance(5);
+//                double power = 0;
+//                while (!pidArm.onTarget()) {
+//                    power = pidArm.performPID(rightMotor.getCurrentPosition());
+//                    if (power < 0) {
+//                        power = power / 10;
+//                    }
+//                    leftMotor.setPower(power);
+//                    rightMotor.setPower(power);
+//                }
+//                leftMotor.setPower(0.16);
+//                rightMotor.setPower(0.16);
+                while (DcMotorUtils.arrived(rightMotor, LEVELS[l], 10)) {
+                    DcMotorUtils.moveByTicks(leftMotor, LEVELS[l], 50, 10);
+                    DcMotorUtils.moveByTicks(rightMotor, LEVELS[l], 50, 10);
                 }
-                leftMotor.setPower(Math.sin(leftMotor.getCurrentPosition()/4));
-                rightMotor.setPower(Math.sin(rightMotor.getCurrentPosition()/4));
+                leftMotor.setPower(0.16);
+                rightMotor.setPower(0.16);
             }
         }.start();
     }

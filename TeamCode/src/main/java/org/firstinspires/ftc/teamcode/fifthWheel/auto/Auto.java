@@ -16,9 +16,7 @@ public class Auto extends LinearOpMode {
         IntakeCam inCam = new IntakeCam(hardwareMap);
         Controller controller = new Controller(gamepad1);
         int mode = 0;
-
-        sleep(1000);
-        int signal = inCam.getSignalFace();
+        int signal = 1;
 
         while (!isStarted() && !isStopRequested()) {
             controller.update();
@@ -75,15 +73,15 @@ public class Auto extends LinearOpMode {
 //        if (isStopRequested()) return;
         switch (signal) {
             case 1:
-                drive.move(0.5, 40, 90);
-                drive.move(0.5, 40, 180);
+                drive.move(0.5, 40, -90);
+                drive.move(0.5, 40, 0);
                 break;
             case 2:
-                drive.move(0.5, 40, 180);
+                drive.move(0.5, 40, 0);
                 break;
             case 3:
-                drive.move(0.5, 40, -90);
-                drive.move(0.5, 40, 180);
+                drive.move(0.5, 40, 90);
+                drive.move(0.5, 40, 0);
                 break;
         }
     }

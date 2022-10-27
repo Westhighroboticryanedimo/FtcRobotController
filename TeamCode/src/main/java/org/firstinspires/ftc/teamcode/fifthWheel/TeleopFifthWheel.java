@@ -32,6 +32,7 @@ public class TeleopFifthWheel extends OpMode {
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
         intake = new Intake(hardwareMap);
+        intake.setLevel(0);
         drcb = new DRCB(hardwareMap);
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
@@ -43,8 +44,8 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("gyro", gyro.getAngleDegrees());
-        telemetry.addData("flipPos", intake.flipPos());
-        telemetry.addData("gripPos", intake.gripPos());
+        telemetry.addData("leftPos", intake.leftPos());
+        telemetry.addData("rightPos", intake.rightPos());
         telemetry.addData("left drcb", drcb.getCurrentLeftTicks());
         telemetry.addData("right drcb", drcb.getCurrentRightTicks());
         telemetry.update();
@@ -71,21 +72,67 @@ public class TeleopFifthWheel extends OpMode {
         for (int i = 0; i < turn.size(); i++) avgTurn += turn.get(i);
         avgTurn /= turn.size();
 
-        // drive.drive(avgX, avgY, avgTurn);
+        if (controller.right_trigger > 0) {
+            drive.drive(avgX/2, avgY/2, avgTurn/2);
+        } else {
+            drive.drive(avgX, avgY, avgTurn);
+        }
+
+        if (controller.AOnce()) {
+            intake.open();
+        } else if (controller.BOnce()) {
+            intake.close();
+        }
 
         if (controller.dpadDown()) {
-            level = 0;
-            drcb.setLevel(level);
+//            level = 0;
+            drcb.leftMotor.setPower(-0.01);
+            drcb.rightMotor.setPower(-0.01);
+            // drcb.setLevel(level);
+            // intake.setLevel();
         } else if (controller.dpadUp()) {
-            level = 4;
-            drcb.setLevel(level);
-        } else if (controller.dpadLeft()) {
-            level -= 1;
-            drcb.setLevel(level);
-        } else if (controller.dpadRight()) {
-            level += 1;
-            drcb.setLevel(level);
+//            level = 4;
+            drcb.leftMotor.setPower(0.57);
+            drcb.rightMotor.setPower(0.57);
+            // drcb.setLevel(level);
+            // intake.setLevel(level);
+        } else if (controller.X()) {
+            drcb.leftMotor.setPower(-0.3);
+            drcb.rightMotor.setPower(-0.3);
+        } else {
+            drcb.leftMotor.setPower(0.17);
+            drcb.rightMotor.setPower(0.17);
         }
+
+        if (controller.dpadRightOnce()) {
+//            intake.lower();
+            if (level > 0) {
+                level -= 1;
+                intake.setLevel(level);
+            }
+            // drcb.setLevel(level);
+            // intake.setLevel();
+        } else if (controller.dpadLeftOnce()) {
+//            intake.raise();
+            if (level < 3) {
+                level += 1;
+                intake.setLevel(level);
+            }
+            // drcb.setLevel(level);
+            // intake.setLevel();
+        }
+
+//        if (controller.YOnce()) {
+//            drcb.setLevel(2);
+//        } else if (controller.XOnce()) {
+//            drcb.setLevel(0);
+//        }
+
+//        if (controller.leftBumperOnce()) {
+//            intake.rightDecrease();
+//        } else if (controller.rightBumperOnce()) {
+//            intake.rightIncrease();
+//        }
 
         // if (controller.dpadDown()) {
         //     drcb.leftMotor.setPower(-0.2);
@@ -112,11 +159,11 @@ public class TeleopFifthWheel extends OpMode {
         // if (controller.dpadRightOnce()) {
         //     intake.gripIncrease();
         // }
-        if (controller.leftBumperOnce()) {
-            intake.flipDecrease();
-        }
-        if (controller.rightBumperOnce()) {
-            intake.flipIncrease();
-        }
+        // if (controller.leftBumperOnce()) {
+        //     intake.flipDecrease();
+        // }
+        // if (controller.rightBumperOnce()) {
+        //     intake.flipIncrease();
+        // }
     }
 }

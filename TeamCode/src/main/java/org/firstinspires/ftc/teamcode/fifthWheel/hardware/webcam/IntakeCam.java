@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.fifthWheel.hardware.webcam;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -111,7 +109,7 @@ public class IntakeCam {
 
         private volatile int avgHue = 0;
         // yellow, cyan, magenta
-        int[] hues = new int[]{30, 100, 150 };
+        int[] hues = new int[]{30, 90, 130};
 
         private Mat center;
         Mat hsv = new Mat();
