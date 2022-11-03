@@ -72,98 +72,10 @@ public class TeleopFifthWheel extends OpMode {
         for (int i = 0; i < turn.size(); i++) avgTurn += turn.get(i);
         avgTurn /= turn.size();
 
-        if (controller.right_trigger > 0) {
-            drive.drive(avgX/2, avgY/2, avgTurn/2);
+        if (controller.left_trigger > 0) {
+            drive.drive(avgX/2.5, avgY/2.5, avgTurn/2.5);
         } else {
             drive.drive(avgX, avgY, avgTurn);
         }
-
-        if (controller.AOnce()) {
-            intake.open();
-        } else if (controller.BOnce()) {
-            intake.close();
-        }
-
-        if (controller.dpadDown()) {
-//            level = 0;
-            drcb.leftMotor.setPower(-0.01);
-            drcb.rightMotor.setPower(-0.01);
-            // drcb.setLevel(level);
-            // intake.setLevel();
-        } else if (controller.dpadUp()) {
-//            level = 4;
-            drcb.leftMotor.setPower(0.57);
-            drcb.rightMotor.setPower(0.57);
-            // drcb.setLevel(level);
-            // intake.setLevel(level);
-        } else if (controller.X()) {
-            drcb.leftMotor.setPower(-0.3);
-            drcb.rightMotor.setPower(-0.3);
-        } else {
-            drcb.leftMotor.setPower(0.17);
-            drcb.rightMotor.setPower(0.17);
-        }
-
-        if (controller.dpadRightOnce()) {
-//            intake.lower();
-            if (level > 0) {
-                level -= 1;
-                intake.setLevel(level);
-            }
-            // drcb.setLevel(level);
-            // intake.setLevel();
-        } else if (controller.dpadLeftOnce()) {
-//            intake.raise();
-            if (level < 3) {
-                level += 1;
-                intake.setLevel(level);
-            }
-            // drcb.setLevel(level);
-            // intake.setLevel();
-        }
-
-//        if (controller.YOnce()) {
-//            drcb.setLevel(2);
-//        } else if (controller.XOnce()) {
-//            drcb.setLevel(0);
-//        }
-
-//        if (controller.leftBumperOnce()) {
-//            intake.rightDecrease();
-//        } else if (controller.rightBumperOnce()) {
-//            intake.rightIncrease();
-//        }
-
-        // if (controller.dpadDown()) {
-        //     drcb.leftMotor.setPower(-0.2);
-        // } else if (controller.dpadUp()) {
-        //     drcb.leftMotor.setPower(0.75);
-        // } else {
-        //     drcb.leftMotor.setPower(0);
-        // }
-        // if (controller.A()) {
-        //     intake.open();
-        // }
-        // if (controller.B()) {
-        //     intake.close();
-        // }
-        // if (controller.leftBumperOnce()) {
-        //     intake.lower();
-        // }
-        // if (controller.rightBumperOnce()) {
-        //     intake.raise();
-        // }
-        // if (controller.dpadLeftOnce()) {
-        //     intake.gripDecrease();
-        // }
-        // if (controller.dpadRightOnce()) {
-        //     intake.gripIncrease();
-        // }
-        // if (controller.leftBumperOnce()) {
-        //     intake.flipDecrease();
-        // }
-        // if (controller.rightBumperOnce()) {
-        //     intake.flipIncrease();
-        // }
     }
 }
