@@ -25,7 +25,7 @@ public class DRCB {
     private static final double L_B = 3.75; // top linkage
     private static final double L_OFFSET = 2.4; // linkage attachment dist
     private static final double THETA_0 = 114; // angle between horizontal and L_0
-    private static final double kP_ff = 0.01; // gain for torque feedforward
+    private static final double kTau_ff = 0.01; // gain for torque feedforward
 
     private PIDController pidArm = new PIDController(1, 0, 0);
 
@@ -62,7 +62,7 @@ public class DRCB {
         double theta_bc = lawOfCos(l_1, L_B, L_OFFSET);
         double theta = 180 - (theta_ab - angle) - theta_bc;
 
-        return kP_ff*Math.cos(theta)/(Math.sin(theta_ab)*Math.sin(theta_bc));
+        return kTau_ff*Math.cos(theta)/(Math.sin(theta_ab)*Math.sin(theta_bc));
     }
 
     // calculate angle of an SSS triangle
