@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fifthWheel.hardware;
+package org.firstinspires.ftc.teamcode.fifthWheel.subsystem;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -24,7 +24,8 @@ public class DriveFifthWheel extends HolonomicDrive {
     // PID setup
     private void setup() {
         reduceTurn = true;
-        isDrivePOV = false;
+        isDrivePOV = true;
+        isSquaredInputs = true;
 
 
         setPidDrive(0.05, 0, 0.01);

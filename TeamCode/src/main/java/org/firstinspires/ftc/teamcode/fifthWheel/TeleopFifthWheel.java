@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.fifthWheel;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DRCB;
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
 import org.firstinspires.ftc.teamcode.Controller;
 
-import org.firstinspires.ftc.teamcode.fifthWheel.hardware.DriveFifthWheel;
-import org.firstinspires.ftc.teamcode.fifthWheel.hardware.intake.Intake;
-import org.firstinspires.ftc.teamcode.fifthWheel.hardware.outtake.DRCB;
 
 import java.util.ArrayList;
 
@@ -31,7 +31,7 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
-        intake = new Intake(hardwareMap);
+        intake = new Intake(hardwareMap, "flipLeft", "flipRight", "grip");
         intake.setLevel(0);
         drcb = new DRCB(hardwareMap);
         gyro = new Gyro(hardwareMap, false);
@@ -44,8 +44,8 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("gyro", gyro.getAngleDegrees());
-        telemetry.addData("leftPos", intake.leftPos());
-        telemetry.addData("rightPos", intake.rightPos());
+//        telemetry.addData("leftPos", intake.leftPos());
+//        telemetry.addData("rightPos", intake.rightPos());
         telemetry.addData("left drcb", drcb.getCurrentLeftTicks());
         telemetry.addData("right drcb", drcb.getCurrentRightTicks());
         telemetry.update();

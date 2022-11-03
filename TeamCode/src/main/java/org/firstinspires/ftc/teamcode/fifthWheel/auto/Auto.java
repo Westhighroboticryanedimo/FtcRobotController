@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Controller;
-import org.firstinspires.ftc.teamcode.fifthWheel.hardware.DriveFifthWheel;
-import org.firstinspires.ftc.teamcode.fifthWheel.hardware.webcam.IntakeCam;
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.IntakeCam;
 
 @Autonomous(name="FifthWheel Auto", group="FifthWheel")
 public class Auto extends LinearOpMode {
