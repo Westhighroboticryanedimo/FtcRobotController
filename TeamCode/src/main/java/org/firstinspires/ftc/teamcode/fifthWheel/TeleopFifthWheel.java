@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DRCB;
 import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
-import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.Intake;
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.Gripper;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
 import org.firstinspires.ftc.teamcode.Controller;
 
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class TeleopFifthWheel extends OpMode {
 
     private DriveFifthWheel drive;
-    private Intake intake;
+    private Gripper gripper;
     private DRCB drcb;
     private Gyro gyro;
     private Controller controller;
@@ -31,8 +31,8 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
-        intake = new Intake(hardwareMap, "flipLeft", "flipRight", "grip");
-        intake.setLevel(0);
+        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
+        gripper.setLevel(0);
         drcb = new DRCB(hardwareMap);
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
@@ -44,8 +44,8 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("gyro", gyro.getAngleDegrees());
-//        telemetry.addData("leftPos", intake.leftPos());
-//        telemetry.addData("rightPos", intake.rightPos());
+//        telemetry.addData("leftPos", gripper.leftPos());
+//        telemetry.addData("rightPos", gripper.rightPos());
         telemetry.addData("left drcb", drcb.getCurrentLeftTicks());
         telemetry.addData("right drcb", drcb.getCurrentRightTicks());
         telemetry.update();

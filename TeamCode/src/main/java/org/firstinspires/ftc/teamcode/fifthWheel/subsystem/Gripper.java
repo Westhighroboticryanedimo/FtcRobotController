@@ -4,7 +4,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Intake {
+public class Gripper {
     // private Servo grip;
     private ServoEx flipLeft;
     private ServoEx flipRight;
@@ -16,7 +16,7 @@ public class Intake {
     private static final double OPEN = -90;
     private static final double CLOSE = 0;
 
-    public Intake(HardwareMap hwMap, String fl, String fr, String g) {
+    public Gripper(HardwareMap hwMap, String fl, String fr, String g) {
         flipLeft = new SimpleServo(hwMap, fl, -90, 90);
         flipRight = new SimpleServo(hwMap, fr, -90, 90);
         grip = new SimpleServo(hwMap, g, -90, 0);
