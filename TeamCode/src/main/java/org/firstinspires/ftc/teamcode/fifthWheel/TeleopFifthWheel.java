@@ -33,7 +33,7 @@ public class TeleopFifthWheel extends OpMode {
         drive = new DriveFifthWheel(this, hardwareMap);
         gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
         gripper.setLevel(0);
-        drcb = new DRCB(hardwareMap);
+        drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor");
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
         drive.togglePOV(true);
@@ -48,6 +48,9 @@ public class TeleopFifthWheel extends OpMode {
 //        telemetry.addData("rightPos", gripper.rightPos());
         telemetry.addData("left drcb", drcb.getCurrentLeftTicks());
         telemetry.addData("right drcb", drcb.getCurrentRightTicks());
+        telemetry.addData("ff", drcb.ff);
+        telemetry.addData("output", drcb.output);
+        telemetry.addData("total", drcb.total);
         telemetry.update();
         controller.update();
 
@@ -77,5 +80,16 @@ public class TeleopFifthWheel extends OpMode {
         } else {
             drive.drive(avgX, avgY, avgTurn);
         }
+
+        // if (controller.dpadUpOnce()) {
+        //     drcb.setLevel(3);
+        // } else if (controller.dpadRightOnce()) {
+        //     drcb.setLevel(2);
+        // } else if (controller.dpadLeftOnce()) {
+        //     drcb.setLevel(1);
+        // } else if (controller.dpadDownOnce()) {
+        //     drcb.setLevel(0);
+        // }
+        // drcb.run();
     }
 }

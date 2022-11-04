@@ -1,22 +1,21 @@
 package org.firstinspires.ftc.teamcode.fifthWheel.subsystem;
 
 import java.lang.Math;
-// import java.lang.Thread;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.utils.control.DcMotorUtils;
 import org.firstinspires.ftc.teamcode.PIDController;
 
 public class DRCB {
     public DcMotor leftMotor;
     public DcMotor rightMotor;
+
     private int level = 0;
     private int ticks = 0;
 
-    private static final double LEVELS[] = {0, 80, 100, 160, 320};
-    private static final double LIFT_POWER = 0.57;
+    private static final double LEVELS[] = {0, 100, 160, 320};
+    private static final double LIFT_POWER = 0.6;
     private static final double LOWER_POWER = -0.05;
 
     private static final double TICKS_PER_REV = 1120;
@@ -25,28 +24,28 @@ public class DRCB {
     private static final double L_B = 3.75; // top linkage
     private static final double L_OFFSET = 2.4; // linkage attachment dist
     private static final double THETA_0 = 114; // angle between horizontal and L_0
-    private static final double kTau_ff = 0.01; // gain for torque feedforward
+    private static final double kTau_ff = 0.1; // gain for torque feedforward
 
-    private PIDController pidArm = new PIDController(1, 0, 0);
+    private PIDController pid = new PIDController(0.1, 0, 0.01);
 
-    public DRCB(HardwareMap hwMap) {
-        init(hwMap);
-    }
+    public double ff = 0.0;
+    public double output = 0.0;
+    public double total = 0.0;
 
-    private void init(HardwareMap hwMap) {
-        pidArm.reset();
-        pidArm.setInputRange(0, LEVELS[4]);
-        pidArm.setOutputRange(0, LIFT_POWER);
-        pidArm.setTolerance(10);
+    public DRCB(HardwareMap hwMap, String lm, String rm) {
+        pid.reset();
+        pid.setInputRange(0, LEVELS[4]);
+        pid.setOutputRange(LOWER_POWER, LIFT_POWER);
+        pid.setTolerance(10);
 
-        leftMotor = hwMap.get(DcMotor.class, "leftMotor");
+        leftMotor = hwMap.get(DcMotor.class, lm);
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftMotor.setPower(0);
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        rightMotor = hwMap.get(DcMotor.class, "rightMotor");
+        rightMotor = hwMap.get(DcMotor.class, rm);
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setPower(0);
@@ -54,7 +53,20 @@ public class DRCB {
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public double calculateFeedforward(double angle) {
+    public void setLevel(int l) {
+        level = l;
+    }
+
+    public void run() {
+        ff = calculateFeedforward(LEVELS[level]);
+        output = pid.performPID(LEVELS[level]);
+        total = ff + output;
+        // leftMotor.setPower(total);
+        // rightMotor.setPower(total);
+    }
+
+    public double calculateFeedforward(double ticks) {
+        double angle = 2*Math.PI*ticks/TICKS_PER_REV;
         double l_1 = Math.sqrt(Math.pow(L_A, 2)
                                + Math.pow(L_0, 2)
                                - 2*L_A*L_0*Math.cos(THETA_0 - angle));
