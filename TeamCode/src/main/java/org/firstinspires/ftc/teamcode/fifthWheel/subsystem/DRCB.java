@@ -19,14 +19,14 @@ public class DRCB {
     private static final double LOWER_POWER = -0.05;
 
     private static final double TICKS_PER_REV = 1120;
-    private static final double L_0 = 3; // motor to pivot dist
-    private static final double L_A = 2; // bottom linkage
-    private static final double L_B = 3.75; // top linkage
-    private static final double L_OFFSET = 2.4; // linkage attachment dist
-    private static final double THETA_0 = 114; // angle between horizontal and L_0
-    private static final double kTau_ff = 0.1; // gain for torque feedforward
+    private static final double L_0 = 9.4; // motor to pivot dist
+    private static final double L_A = 6.35; // bottom linkage
+    private static final double L_B = 10.16; // top linkage
+    private static final double L_OFFSET = 6.9; // linkage attachment dist
+    private static final double THETA_0 = 2.1468; // angle between horizontal and L_0 in rad
+    private static final double kTau_ff = 0.12; // gain for torque feedforward
 
-    private PIDController pid = new PIDController(0.1, 0, 0.01);
+    private PIDController pid = new PIDController(1, 0, 0);
 
     public double ff = 0.0;
     public double output = 0.0;
@@ -34,7 +34,7 @@ public class DRCB {
 
     public DRCB(HardwareMap hwMap, String lm, String rm) {
         pid.reset();
-        pid.setInputRange(0, LEVELS[4]);
+        pid.setInputRange(0, LEVELS[3]);
         pid.setOutputRange(LOWER_POWER, LIFT_POWER);
         pid.setTolerance(10);
 
@@ -55,13 +55,14 @@ public class DRCB {
 
     public void setLevel(int l) {
         level = l;
+        pid.setSetpoint(LEVELS[level]);
     }
 
     public void run() {
-        ff = calculateFeedforward(LEVELS[level]);
-        output = pid.performPID(LEVELS[level]);
+        ff = calculateFeedforward(leftMotor.getCurrentPosition());
+        output = pid.performPID(leftMotor.getCurrentPosition());
         total = ff + output;
-        // leftMotor.setPower(total);
+        leftMotor.setPower(total);
         // rightMotor.setPower(total);
     }
 
@@ -72,7 +73,7 @@ public class DRCB {
                                - 2*L_A*L_0*Math.cos(THETA_0 - angle));
         double theta_ab = lawOfCos(L_0, l_1, L_A) + lawOfCos(L_OFFSET, l_1, L_B);
         double theta_bc = lawOfCos(l_1, L_B, L_OFFSET);
-        double theta = 180 - (theta_ab - angle) - theta_bc;
+        double theta = Math.PI - (theta_ab - angle) - theta_bc;
 
         return kTau_ff*Math.cos(theta)/(Math.sin(theta_ab)*Math.sin(theta_bc));
     }

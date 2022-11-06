@@ -21,8 +21,6 @@ public class TeleopFifthWheel extends OpMode {
     private Gyro gyro;
     private Controller controller;
 
-    private int level = 0;
-
     private static final int STORE_NUM = 8;
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
@@ -32,12 +30,11 @@ public class TeleopFifthWheel extends OpMode {
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
         gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
-        gripper.setLevel(0);
+//        gripper.setLevel(0);
         drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor");
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
-        drive.togglePOV(true);
-        drive.enableSquaredInputs();
+        drcb.setLevel(0);
         gyro.reset();
     }
 
@@ -53,6 +50,7 @@ public class TeleopFifthWheel extends OpMode {
         telemetry.addData("total", drcb.total);
         telemetry.update();
         controller.update();
+        drcb.run();
 
         x.add(controller.left_stick_x);
         y.add(controller.left_stick_y);
