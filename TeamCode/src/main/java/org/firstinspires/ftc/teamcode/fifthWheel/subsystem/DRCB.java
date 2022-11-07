@@ -14,7 +14,7 @@ public class DRCB {
     private int level = 0;
     private int ticks = 0;
 
-    private static final double LEVELS[] = {0, 100, 160, 320};
+    private static final double LEVELS[] = {0, 140, 260, 390};
     private static final double LIFT_POWER = 0.6;
     private static final double LOWER_POWER = -0.05;
 
@@ -26,7 +26,10 @@ public class DRCB {
     private static final double THETA_0 = 2.1468; // angle between horizontal and L_0 in rad
     private static final double kTau_ff = 0.12; // gain for torque feedforward
 
-    private PIDController pid = new PIDController(1, 0, 0);
+    public double p = 0.008;
+    public double i = 0.0;
+    public double d = 0.008;
+    private PIDController pid = new PIDController(p, i, d);
 
     public double ff = 0.0;
     public double output = 0.0;
@@ -35,8 +38,9 @@ public class DRCB {
     public DRCB(HardwareMap hwMap, String lm, String rm) {
         pid.reset();
         pid.setInputRange(0, LEVELS[3]);
-        pid.setOutputRange(LOWER_POWER, LIFT_POWER);
-        pid.setTolerance(10);
+        pid.setOutputRange(0, LIFT_POWER);
+        pid.setTolerance(5);
+        pid.enable();
 
         leftMotor = hwMap.get(DcMotor.class, lm);
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -59,9 +63,13 @@ public class DRCB {
     }
 
     public void run() {
-        ff = calculateFeedforward(leftMotor.getCurrentPosition());
+        pid.setPID(p, i, d);
+        ff = calculateFeedforward(leftMotor.getCurrentPosition() - 100);
         output = pid.performPID(leftMotor.getCurrentPosition());
         total = ff + output;
+        if (total < 0) {
+            total = total / 3;
+        }
         leftMotor.setPower(total);
         // rightMotor.setPower(total);
     }

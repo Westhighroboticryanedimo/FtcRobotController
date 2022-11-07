@@ -45,12 +45,13 @@ public class TeleopFifthWheel extends OpMode {
 //        telemetry.addData("rightPos", gripper.rightPos());
         telemetry.addData("left drcb", drcb.getCurrentLeftTicks());
         telemetry.addData("right drcb", drcb.getCurrentRightTicks());
+        telemetry.addData("p", drcb.p);
+        telemetry.addData("d", drcb.d);
         telemetry.addData("ff", drcb.ff);
         telemetry.addData("output", drcb.output);
         telemetry.addData("total", drcb.total);
         telemetry.update();
         controller.update();
-        drcb.run();
 
         x.add(controller.left_stick_x);
         y.add(controller.left_stick_y);
@@ -79,15 +80,25 @@ public class TeleopFifthWheel extends OpMode {
             drive.drive(avgX, avgY, avgTurn);
         }
 
-        // if (controller.dpadUpOnce()) {
-        //     drcb.setLevel(3);
-        // } else if (controller.dpadRightOnce()) {
-        //     drcb.setLevel(2);
-        // } else if (controller.dpadLeftOnce()) {
-        //     drcb.setLevel(1);
-        // } else if (controller.dpadDownOnce()) {
-        //     drcb.setLevel(0);
-        // }
-        // drcb.run();
+        if (controller.leftBumperOnce()) {
+            drcb.d -= 0.001;
+        } else if (controller.rightBumperOnce()) {
+            drcb.d += 0.001;
+        }
+        if (controller.XOnce()) {
+            drcb.p -= 0.001;
+        } else if (controller.BOnce()) {
+            drcb.p += 0.001;
+        }
+        if (controller.dpadUpOnce()) {
+            drcb.setLevel(3);
+        } else if (controller.dpadRightOnce()) {
+            drcb.setLevel(2);
+        } else if (controller.dpadLeftOnce()) {
+            drcb.setLevel(1);
+        } else if (controller.dpadDownOnce()) {
+            drcb.setLevel(0);
+        }
+        drcb.run();
     }
 }
