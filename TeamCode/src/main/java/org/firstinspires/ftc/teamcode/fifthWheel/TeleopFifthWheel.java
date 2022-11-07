@@ -3,12 +3,9 @@ package org.firstinspires.ftc.teamcode.fifthWheel;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DRCB;
+import org.firstinspires.ftc.teamcode.fifthWheel.command.Place;
 import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
-import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.Gripper;
-import org.firstinspires.ftc.teamcode.hardware.Gyro;
 import org.firstinspires.ftc.teamcode.Controller;
-
 
 import java.util.ArrayList;
 
@@ -16,9 +13,7 @@ import java.util.ArrayList;
 public class TeleopFifthWheel extends OpMode {
 
     private DriveFifthWheel drive;
-    private Gripper gripper;
-    private DRCB drcb;
-    private Gyro gyro;
+    private Place place;
     private Controller controller;
 
     private static final int STORE_NUM = 8;
@@ -29,27 +24,12 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
-        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
-//        gripper.setLevel(0);
-        drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor");
-        gyro = new Gyro(hardwareMap, false);
+        place = new Place(hardwareMap, "leftMotor", "rightMotor", "flipLeft", "flipRight", "grip");
         controller = new Controller(gamepad1);
-        drcb.setLevel(0);
-        gyro.reset();
     }
 
     @Override
     public void loop() {
-        telemetry.addData("gyro", gyro.getAngleDegrees());
-//        telemetry.addData("leftPos", gripper.leftPos());
-//        telemetry.addData("rightPos", gripper.rightPos());
-        telemetry.addData("left drcb", drcb.getCurrentLeftTicks());
-        telemetry.addData("right drcb", drcb.getCurrentRightTicks());
-        telemetry.addData("p", drcb.p);
-        telemetry.addData("d", drcb.d);
-        telemetry.addData("ff", drcb.ff);
-        telemetry.addData("output", drcb.output);
-        telemetry.addData("total", drcb.total);
         telemetry.update();
         controller.update();
 
@@ -80,25 +60,21 @@ public class TeleopFifthWheel extends OpMode {
             drive.drive(avgX, avgY, avgTurn);
         }
 
-        if (controller.leftBumperOnce()) {
-            drcb.d -= 0.001;
-        } else if (controller.rightBumperOnce()) {
-            drcb.d += 0.001;
-        }
-        if (controller.XOnce()) {
-            drcb.p -= 0.001;
+        if (controller.AOnce()) {
+            place.intake();
         } else if (controller.BOnce()) {
-            drcb.p += 0.001;
+            place.pickup();
+        } else if (controller.dpadUp()) {
+            place.raise(3);
+        } else if (controller.dpadRight()) {
+            place.raise(2);
+        } else if (controller.dpadLeft()) {
+            place.raise(1);
+        } else if (controller.dpadDown()) {
+            place.raise(0);
+        } else if (controller.XOnce()) {
+            place.dropAndLower();
         }
-        if (controller.dpadUpOnce()) {
-            drcb.setLevel(3);
-        } else if (controller.dpadRightOnce()) {
-            drcb.setLevel(2);
-        } else if (controller.dpadLeftOnce()) {
-            drcb.setLevel(1);
-        } else if (controller.dpadDownOnce()) {
-            drcb.setLevel(0);
-        }
-        drcb.run();
+        place.run();
     }
 }
