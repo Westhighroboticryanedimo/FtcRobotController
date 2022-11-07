@@ -146,7 +146,7 @@ package org.firstinspires.ftc.teamcode.booger;
                     }
                 }
                 steps++;
-                if(steps > 2000) {break;}
+                if(steps > 444) {break;}
                 System.out.println(ix + " , " + iy);
                 //SonarTester.print(spoints[0][0] + " , " + spoints[0][1] + " | " + spoints[1][0] + " , " + spoints[1][1] + " | " + spoints[2][0] + " , " + spoints[2][1] + " | " + spoints[3][0] + " , " + spoints[3][1] + " | " + " :: " + ix + " , " + iy);
             }
@@ -162,7 +162,7 @@ package org.firstinspires.ftc.teamcode.booger;
                     //System.out.println("moving x: " + ix);
                 } else {break;}
                 steps++;
-                if(steps > 2000) {break;}
+                if(steps > 444) {break;}
             }
             while(!closeEnoughToWall(spoints[0][0],spoints[0][1],10) || !closeEnoughToWall(spoints[1][0],spoints[1][1],10) || !closeEnoughToWall(spoints[2][0],spoints[2][1],10) || !closeEnoughToWall(spoints[3][0],spoints[3][1],10)) {
                 // shifting up until top wall is reached

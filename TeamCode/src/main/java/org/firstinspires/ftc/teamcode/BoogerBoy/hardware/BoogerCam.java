@@ -50,7 +50,7 @@ public class BoogerCam {
     class SignalPipeline extends OpenCvPipeline {
         private volatile int face = 1;
 
-        final Point REGION_TOPLEFT = new Point(270, 200);
+        final Point REGION_TOPLEFT = new Point(500, 250); // move right by 2.3 rectangle widths, down by 0.35 rectangle widths
         static final int REGION_WIDTH = 100;
         static final int REGION_HEIGHT = 150;
         final Scalar RED = new Scalar(255, 0, 0);
@@ -62,7 +62,7 @@ public class BoogerCam {
         private volatile int avgHue = 0;
         private double darkness = 0;
         // yellow, cyan, magenta
-        int[] hues = new int[]{150, 100};
+        int[] hues = new int[]{155, 100};
         int black = 15;
 
         private Mat center;
@@ -105,6 +105,23 @@ public class BoogerCam {
             if(Math.abs(thisdarkness - black) < min) {
                 min = (int)Math.abs(thisdarkness - black);
                 closest = 3;
+            }
+            if(closest == 3) {
+                closest = 1;
+            } else if(closest == 1) {
+                closest = 3;
+
+
+
+
+
+
+
+
+
+
+
+
             }
             return closest;
         }

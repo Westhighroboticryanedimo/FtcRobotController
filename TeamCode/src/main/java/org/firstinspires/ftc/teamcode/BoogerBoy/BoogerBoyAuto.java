@@ -24,7 +24,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 
 
-@Autonomous(name = "Cone Reader Booger Boy")
+@Autonomous(name = "田ロ田 Booger Boy Auto ロ田ロ")
 public class BoogerBoyAuto extends LinearOpMode{
     private BoogerBoyDrive drive;
 
@@ -36,19 +36,20 @@ public class BoogerBoyAuto extends LinearOpMode{
 
     private void uno()
     {
+        drive.move(1,52,270);
         drive.move(1,60,0);
+
     }
     // This is for when the cone is in the second case
     private void dos()
     {
-        drive.move(1,60,0);
-        drive.move(1,60,90);
+        drive.move(1,52,270);
     }
     // This is for when the cone is in the third case
     private void tres()
     {
-        drive.move(1,60,0);
-        drive.move(1,60,-90);
+        drive.move(1,52,270);
+        drive.move(1,60,180);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class BoogerBoyAuto extends LinearOpMode{
 
         AI_resualt = 1; // resualt is not a word.
         BoogerCam cam = new BoogerCam(hardwareMap);
-
+        drive = new BoogerBoyDrive(this,hardwareMap);
 
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Signal face", cam.getFaceFace());

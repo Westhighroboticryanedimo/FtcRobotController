@@ -22,9 +22,9 @@ public class BoogerBoyTeleop extends OpMode {
 
     private BoogerBoyDrive drive;
     private Controller controller;
-    private DcMotor lift;
     private Servo grabby;
     private Gyro gyro;
+    private DcMotor lift;
     private int maxliftdistance;
     private boolean slowmode;
 
@@ -34,8 +34,7 @@ public class BoogerBoyTeleop extends OpMode {
     private ModernRoboticsI2cRangeSensor f;
     private ModernRoboticsI2cRangeSensor r;
     private ModernRoboticsI2cRangeSensor b;
-    private ModernRoboticsI2cRangeSensor l;
-    //private Gyro gyro;
+    //private ModernRoboticsI2cRangeSensor l;
     private static double inchestosensoredge;
     private static double gyrooffset;
     private boolean cantrustsonar; // can you trust the sonar readings? if not, use boogerdometry　（太股） readings.
@@ -48,8 +47,8 @@ public class BoogerBoyTeleop extends OpMode {
         slowmode = false;
         drive = new BoogerBoyDrive(this,hardwareMap);
         drive.setup();
-        //gyro = new Gyro(hardwareMap, false);
-        //gyro.reset();
+        gyro = new Gyro(hardwareMap, false);
+        gyro.reset();
         controller = new Controller(gamepad1);
 
         lift = hardwareMap.get(DcMotor.class, "lift");
@@ -58,20 +57,20 @@ public class BoogerBoyTeleop extends OpMode {
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         grabby = hardwareMap.get(Servo.class, "grabby");
         //grabby = hardwareMap.get(CRServo.class, "grabby");
-        maxliftdistance = 8854; // oct 21: changed from neg to pos
+        maxliftdistance = 8964; // oct 21: changed from neg to pos nov 2: reverted
 
         bebe = new SussySonar();
         bebe.setup();
-        bebe.denoteFieldDimensions(720,720);
+        bebe.denoteFieldDimensions(740,750);
         inchestosensoredge = 2; // distance between edge of sensor and midpoint, to be subtracted from measurement
-        gyrooffset = 0; // make sure 90 degrees means 'forwards'
+        gyrooffset = 90; // make sure 90 degrees means 'forwards'
         f = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "frontsensor");
         r = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rightsensor");
         b = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "backsensor");
-        l = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "leftsensor");
+        //l = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "leftsensor");
 
-        //gyro = new Gyro(hardwareMap,false);
-        //gyro.reset();
+        gyro = new Gyro(hardwareMap,false);
+        gyro.reset();
 
         太股 = new Boogerdometry();
         太股.init();
@@ -88,14 +87,17 @@ public class BoogerBoyTeleop extends OpMode {
 
     @Override
     public void loop() {
+
         controller.update();
+        telemetry.addData("rotation: ", gyro.getAngleDegrees());
         telemetry.addData(" ", "booger boy activate");
 
         if (slowmode) {
-            drive.drive(0.5 * controller.left_stick_x, 0.5 * controller.left_stick_y, 0.5 * controller.right_stick_x);
+            drive.drive(0.5 * controller.left_stick_y, 0.5 * controller.left_stick_x, 0.5 * controller.right_stick_x);
         } else {
-            drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+            drive.drive(controller.left_stick_y, controller.left_stick_x, controller.right_stick_x);
         }
+
         if (controller.dpadUp() && lift.getCurrentPosition() < maxliftdistance) { // direction: up
             //lift.setDirection(DcMotor.Direction.FORWARD);
             telemetry.addData("", "dpadup");
@@ -109,7 +111,7 @@ public class BoogerBoyTeleop extends OpMode {
         }
 
         if (controller.BOnce()) {
-            grabby.setPosition(0.2);
+            grabby.setPosition(0);
             //grabby.setDirection(CRServo.Direction.REVERSE);
             //grabby.setPower(0.5);
         }
@@ -121,20 +123,21 @@ public class BoogerBoyTeleop extends OpMode {
         if (controller.XOnce()) {
             slowmode = !slowmode;
         }
+        telemetry.addData("servo value:", grabby.getPosition());
         telemetry.addData("lift value:", lift.getCurrentPosition());
-        telemetry.update();
 
 
         // las cosas del bebe sónar
 
         double frontdist = f.getDistance(DistanceUnit.INCH) + inchestosensoredge;
         double rightdist = r.getDistance(DistanceUnit.INCH) + inchestosensoredge;
-        double leftdist = l.getDistance(DistanceUnit.INCH) + inchestosensoredge;
         double backdist = b.getDistance(DistanceUnit.INCH) + inchestosensoredge;
-        bebe.update(bebe.rotateAngle(gyro.getAngleDegrees(), gyrooffset), frontdist * 10, rightdist * 10, bebe.fieldheight - (frontdist * 10), bebe.fieldwidth - (rightdist * 10));
+        double leftdist = bebe.fieldwidth-rightdist;
+        //double leftdist = l.getDistance(DistanceUnit.INCH) + inchestosensoredge;
+        bebe.update(bebe.rotateAngle(gyro.getAngleDegrees(), gyrooffset), frontdist * 10, rightdist * 10, (backdist * 10), bebe.fieldwidth - (rightdist * 10));
 
-        //char[][] mapImage = sonar.getMapImage(sonar.botx,sonar.boty,gyro.getAngleDegrees(),14); // minimap
-        char[][] mapImage = bebe.getMapImage(bebe.botx, bebe.boty, 90, 14); // minimap
+        //char[][] mapImage = bebe.getMapImage(bebe.botx, bebe.boty, gyro.getAngleDegrees()+gyrooffset, 14); // minimap
+        char[][] mapImage = bebe.getMapImage(x, y, bebe.rotateAngle(gyro.getAngleDegrees(),gyrooffset), 14); // minimap
 
         for (int my = 0; my < mapImage[0].length; my++) { // add minimap to telemetry
             String mapLine = "";
@@ -146,12 +149,13 @@ public class BoogerBoyTeleop extends OpMode {
         telemetry.addData("sonar x: ", bebe.x());
         telemetry.addData("sonar y: ", bebe.y());
         telemetry.addData("front: ", f.getDistance(DistanceUnit.INCH));
+        telemetry.addData("right: ", r.getDistance(DistanceUnit.INCH));
+        telemetry.addData("back: ", b.getDistance(DistanceUnit.INCH));
         telemetry.addData("bot x: ", x);
         telemetry.addData("bot y: ", y);
         //telemetry.addData("dometry x:", 太股.x);
         //telemetry.addData("dometry y:", 太股.y);
         telemetry.addData("sonar trust?: ", cantrustsonar);
-        telemetry.update();
 
         // fin
 
@@ -160,8 +164,8 @@ public class BoogerBoyTeleop extends OpMode {
         太股.updateposition(fr.getCurrentPosition(),fl.getCurrentPosition(),br.getCurrentPosition(),bl.getCurrentPosition(),gyro.getAngleDegrees());
 
         // 終わり
-
-        if(bebe.distance(太股.x,太股.y,bebe.botx,bebe.boty) > maximumpermissibleerror) { // if the readings of bebe and 太股 are too far apart, rely on 太股. else, adjust 太股 to match bebe.
+        /*
+        if(bebe.distance(太股.x*10,太股.y*10,bebe.botx,bebe.boty) > maximumpermissibleerror) { // if the readings of bebe and 太股 are too far apart, rely on 太股. else, adjust 太股 to match bebe.
             cantrustsonar = false;
             x = 太股.x;
             y = 太股.y;
@@ -172,5 +176,7 @@ public class BoogerBoyTeleop extends OpMode {
             x = bebe.botx;
             y = bebe.boty;
         }
+        */
+        telemetry.update();
     }
 }
