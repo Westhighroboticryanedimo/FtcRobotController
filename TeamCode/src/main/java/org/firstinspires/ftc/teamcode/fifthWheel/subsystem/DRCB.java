@@ -67,6 +67,8 @@ public class DRCB {
         ff = calculateFeedforward(leftMotor.getCurrentPosition() - 100);
         output = pid.performPID(leftMotor.getCurrentPosition());
         total = ff + output;
+        // if going down, reduce output cause gravity
+        // TODO:  take care of this in the model
         if (total < 0) {
             total = total / 3;
         }
@@ -91,6 +93,10 @@ public class DRCB {
     private double lawOfCos(double a, double b, double c) {
         return Math.acos((Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2))
                          / (2*b*c));
+    }
+
+    public Boolean arrived() {
+        return pid.onTarget();
     }
 
     public int getCurrentLeftTicks() {
