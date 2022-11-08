@@ -29,11 +29,11 @@ public class BoogerBoyTeleop extends OpMode {
     private boolean slowmode;
 
     private double x, y;
-
+/*
     public SussySonar bebe;
     private ModernRoboticsI2cRangeSensor f;
     private ModernRoboticsI2cRangeSensor r;
-    private ModernRoboticsI2cRangeSensor b;
+    private ModernRoboticsI2cRangeSensor b;*/
     //private ModernRoboticsI2cRangeSensor l;
     private static double inchestosensoredge;
     private static double gyrooffset;
@@ -58,7 +58,7 @@ public class BoogerBoyTeleop extends OpMode {
         grabby = hardwareMap.get(Servo.class, "grabby");
         //grabby = hardwareMap.get(CRServo.class, "grabby");
         maxliftdistance = 8964; // oct 21: changed from neg to pos nov 2: reverted
-
+/*
         bebe = new SussySonar();
         bebe.setup();
         bebe.denoteFieldDimensions(740,750);
@@ -67,7 +67,7 @@ public class BoogerBoyTeleop extends OpMode {
         f = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "frontsensor");
         r = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rightsensor");
         b = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "backsensor");
-        //l = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "leftsensor");
+        //l = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "leftsensor");*/
 
         gyro = new Gyro(hardwareMap,false);
         gyro.reset();
@@ -82,7 +82,7 @@ public class BoogerBoyTeleop extends OpMode {
         maximumpermissibleerror = 99999; // :)
 
         // init position :
-        x = bebe.fieldwidth/2; y = bebe.fieldheight/2;
+        //x = bebe.fieldwidth/2; y = bebe.fieldheight/2;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class BoogerBoyTeleop extends OpMode {
 
 
         // las cosas del bebe sónar
-
+/*
         double frontdist = f.getDistance(DistanceUnit.INCH) + inchestosensoredge;
         double rightdist = r.getDistance(DistanceUnit.INCH) + inchestosensoredge;
         double backdist = b.getDistance(DistanceUnit.INCH) + inchestosensoredge;
