@@ -11,19 +11,17 @@ public class DRCB {
     public DcMotor leftMotor;
     public DcMotor rightMotor;
 
-    private int level = 0;
-    private int ticks = 0;
+    public int level = 0;
 
-    private static final double LEVELS[] = {0, 140, 260, 390};
+    private static final double LEVELS[] = {0, 140, 300, 380};
     private static final double LIFT_POWER = 0.6;
-    private static final double LOWER_POWER = -0.05;
 
     private static final double TICKS_PER_REV = 1120;
-    private static final double L_0 = 9.4; // motor to pivot dist
-    private static final double L_A = 6.35; // bottom linkage
-    private static final double L_B = 10.16; // top linkage
-    private static final double L_OFFSET = 6.9; // linkage attachment dist
-    private static final double THETA_0 = 2.1468; // angle between horizontal and L_0 in rad
+    private static final double L_0 = 4.2; // motor to pivot dist
+    private static final double L_A = 1.5; // bottom linkage
+    private static final double L_B = 4.5; // top linkage
+    private static final double L_OFFSET = 1.9; // linkage attachment dist
+    private static final double THETA_0 = 2; // angle between horizontal and L_0 in rad
     private static final double kTau_ff = 0.12; // gain for torque feedforward
 
     public double p = 0.008;
@@ -68,12 +66,12 @@ public class DRCB {
         output = pid.performPID(leftMotor.getCurrentPosition());
         total = ff + output;
         // if going down, reduce output cause gravity
-        // TODO:  take care of this in the model
+        // TODO: take care of this in the model
         if (total < 0) {
-            total = total / 3;
+            total = total / 10;
         }
         leftMotor.setPower(total);
-        // rightMotor.setPower(total);
+        rightMotor.setPower(total);
     }
 
     public double calculateFeedforward(double ticks) {

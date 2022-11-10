@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Gripper {
     // private Servo grip;
-    private ServoEx flipLeft;
-    private ServoEx flipRight;
-    private ServoEx grip;
+    public ServoEx flipLeft;
+    public ServoEx flipRight;
+    public ServoEx grip;
 
     private static final double RIGHT_LEVELS[] = {0.31, 0.54, 0.65, 0.85};
     // intake, ground, low, medium, high, up
@@ -17,10 +17,10 @@ public class Gripper {
     private static final double CLOSE = 0;
 
     public Gripper(HardwareMap hwMap, String fl, String fr, String g) {
-        flipLeft = new SimpleServo(hwMap, fl, -90, 90);
-        flipRight = new SimpleServo(hwMap, fr, -90, 90);
-        grip = new SimpleServo(hwMap, g, -90, 0);
-        flipRight.setInverted(true);
+        flipLeft = new SimpleServo(hwMap, fl, -200, 200);
+        flipRight = new SimpleServo(hwMap, fr, -200, 200);
+        grip = new SimpleServo(hwMap, g, -200, 200);
+        flipLeft.setInverted(true);
     }
 
     public void setLevel(int i) {
@@ -42,5 +42,23 @@ public class Gripper {
 
     public void close() {
         grip.turnToAngle(CLOSE);
+    }
+
+    public void moveUp() {
+        flipLeft.rotateByAngle(5);
+        flipRight.rotateByAngle(5);
+    }
+
+    public void moveDown() {
+        flipLeft.rotateByAngle(-5);
+        flipRight.rotateByAngle(-5);
+    }
+
+    public void moveOpen() {
+        grip.rotateByAngle(5);
+    }
+
+    public void moveClose() {
+        grip.rotateByAngle(-5);
     }
 }
