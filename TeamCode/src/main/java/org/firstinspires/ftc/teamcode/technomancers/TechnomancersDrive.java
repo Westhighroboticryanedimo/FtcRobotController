@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 public class TechnomancersDrive extends HolonomicDrive {
 
 
-    //Autonomous code
+    //Autonomous code yes
     public TechnomancersDrive(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
         setup();
