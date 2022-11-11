@@ -1,29 +1,36 @@
-package org.firstinspires.ftc.teamcode.workshop;
+package org.firstinspires.ftc.teamcode.amogus;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
-@TeleOp(name = "")
-public class Teleop extends OpMode {
+@TeleOp(name = "Amogus TeleOp")
+public class AmogusTeleop extends OpMode {
     private Controller controller;
     private Servo servo;
-    private DcMotor motor;
 
     @Override
     public void init() {
         controller = new Controller(gamepad1);
-        servo = hardwareMap.get(Servo.class,  "servo");
-        motor = hardwareMap.get(DcMotor.class,  "motor");
     }
 
     @Override
     public void loop() {
-        controller.update();
         if (controller.A()) {
+            servo.setPosition(0);
+        }
+        if (controller.B()) {
+            servo.setPosition(1);
+        }
+        if (controller.A()) {
+            servo.setPosition(0);
+        }
+        // later
+        if (controller.right_trigger > 0) {
+            servo.setPosition(1);
+        } else {
             servo.setPosition(0);
         }
     }
