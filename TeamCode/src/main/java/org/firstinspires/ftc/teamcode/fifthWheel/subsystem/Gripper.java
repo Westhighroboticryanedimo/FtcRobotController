@@ -12,9 +12,9 @@ public class Gripper {
 
     private static final double RIGHT_LEVELS[] = {0.31, 0.54, 0.65, 0.85};
     // intake, ground, low, medium, high, up
-    private static final double LEVELS[] = { 0, -5, -20, -60, -90, 90 };
-    private static final double OPEN = -90;
-    private static final double CLOSE = 0;
+    private static final double LEVELS[] = { 15, -15, -45, -90, 90 };
+    private static final double OPEN = 75;
+    private static final double CLOSE = -20;
 
     public Gripper(HardwareMap hwMap, String fl, String fr, String g) {
         flipLeft = new SimpleServo(hwMap, fl, -200, 200);
@@ -26,8 +26,8 @@ public class Gripper {
     public void setLevel(int i) {
         switch (i) {
             case -1: // up
-                flipLeft.turnToAngle(LEVELS[5]);
-                flipRight.turnToAngle(LEVELS[5]);
+                flipLeft.turnToAngle(LEVELS[4]);
+                flipRight.turnToAngle(LEVELS[4]);
                 break;
             default:
                 flipLeft.turnToAngle(LEVELS[i]);

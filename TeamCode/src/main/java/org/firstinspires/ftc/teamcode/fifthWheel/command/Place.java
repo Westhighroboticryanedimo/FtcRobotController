@@ -14,14 +14,15 @@ public class Place {
         WAITING_FOR_CLOSE,
         RAISING,
         LOWERING
-    } State state = State.INTAKING;
+    } public State state = State.INTAKING;
 
     private DRCB drcb;
     private Gripper gripper;
 
     private int level = 0;
+    public Boolean helpme = false;
 
-    ElapsedTime timer = new ElapsedTime();
+    public ElapsedTime timer = new ElapsedTime();
 
     public Place(HardwareMap hwMap, String lm, String rm, String fl, String fr, String g) {
         drcb = new DRCB(hwMap, lm, rm);
@@ -45,16 +46,14 @@ public class Place {
     public void raise(int l) {
         state = State.RAISING;
         level = l;
-        drcb.setLevel(level);
+        gripper.setLevel(level);
         timer.reset();
     }
 
     public void dropAndLower() {
         state = State.LOWERING;
         gripper.open();
-        gripper.setLevel(0);
-        level = 0;
-        drcb.setLevel(level);
+//        timer.reset();
     }
 
     public void run() {
@@ -62,24 +61,32 @@ public class Place {
             case INTAKING:
                 break;
             case WAITING_FOR_CLOSE:
-                if (timer.milliseconds() > 200) {
+                if (timer.milliseconds() > 400) {
+                    helpme = true;
                     gripper.setLevel(-1);
                     timer.reset();
+                    state = State.PICKED;
                 }
-                state = State.PICKED;
                 break;
             case PICKED:
                 break;
             case RAISING:
-                if (timer.milliseconds() > 200) {
-                    gripper.setLevel(level);
+                if (timer.milliseconds() > 300) {
+                    drcb.setLevel(level);
                     timer.reset();
                 }
                 break;
             case LOWERING:
-                if (drcb.arrived()) {
-                    state = State.INTAKING;
+                if (timer.milliseconds() > 300) {
+                    gripper.setLevel(-1);
                 }
+//                if (timer.milliseconds() > 500 ) {
+//                    level = 0;
+//                    drcb.setLevel(level);
+//                }
+//                if (drcb.arrived()) {
+//                    state = State.INTAKING;
+//                }
                 break;
         }
         drcb.run();

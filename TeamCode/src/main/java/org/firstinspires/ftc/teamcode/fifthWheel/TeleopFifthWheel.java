@@ -21,20 +21,27 @@ public class TeleopFifthWheel extends OpMode {
     private ArrayList<Double> y = new ArrayList<>();
     private ArrayList<Double> turn = new ArrayList<>();
 
+    private int level = 0;
+
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
         place = new Place(hardwareMap, "leftMotor", "rightMotor", "flipLeft", "flipRight", "grip");
         controller = new Controller(gamepad1);
+        place.intake();
     }
 
     @Override
     public void loop() {
+        telemetry.addData("timer", place.timer.milliseconds());
+        telemetry.addData("helpme", place.helpme);
+        telemetry.addData("state", place.state);
+        telemetry.addData("level", level);
         telemetry.update();
         controller.update();
 
         x.add(controller.left_stick_x);
-        y.add(controller.left_stick_y);
+        y.add(-controller.left_stick_y);
         turn.add(controller.right_stick_x);
 
         // Remove
@@ -55,7 +62,7 @@ public class TeleopFifthWheel extends OpMode {
         avgTurn /= turn.size();
 
         if (controller.left_trigger > 0) {
-            drive.drive(avgX/2.5, avgY/2.5, avgTurn/2.5);
+            drive.drive(avgX/2, avgY/2, avgTurn/2);
         } else {
             drive.drive(avgX, avgY, avgTurn);
         }
@@ -65,13 +72,19 @@ public class TeleopFifthWheel extends OpMode {
         } else if (controller.BOnce()) {
             place.pickup();
         } else if (controller.dpadUp()) {
-            place.raise(3);
+            level = 3;
+            place.raise(level);
         } else if (controller.dpadRight()) {
-            place.raise(2);
+            level = 2;
+            place.raise(level);
         } else if (controller.dpadLeft()) {
-            place.raise(1);
-        } else if (controller.dpadDown()) {
-            place.raise(0);
+            level = 1;
+            place.raise(level);
+        } else if (controller.dpadDownOnce()) {
+            if (level > 0) {
+                level -= 1;
+                place.raise(level);
+            }
         } else if (controller.XOnce()) {
             place.dropAndLower();
         }

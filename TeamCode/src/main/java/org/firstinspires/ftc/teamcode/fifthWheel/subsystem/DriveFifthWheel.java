@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
 public class DriveFifthWheel extends HolonomicDrive {
+    public double p = 0.055;
+    private double i = 0;
+    public double d = 0.015;
 
 
     // Autonomous
@@ -27,8 +30,7 @@ public class DriveFifthWheel extends HolonomicDrive {
         isDrivePOV = true;
         isSquaredInputs = true;
 
-
-        setPidDrive(0.05, 0, 0.01);
+        setPidDrive(p, i, d);
         setPidSpeed(0.05, 0.001, 0);
         setPidTurn(0.05 , 0.001, 0);
 
@@ -36,4 +38,10 @@ public class DriveFifthWheel extends HolonomicDrive {
         setWheelDiameter(3.7795);
         setTicksPerRev(537.7);
     }
+
+    public void updatePID() {
+        setPidDrive(p, i, d);
+    }
+
+
 }

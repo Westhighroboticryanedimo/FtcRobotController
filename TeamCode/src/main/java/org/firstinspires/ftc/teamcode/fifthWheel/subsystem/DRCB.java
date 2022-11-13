@@ -13,7 +13,7 @@ public class DRCB {
 
     public int level = 0;
 
-    private static final double LEVELS[] = {0, 140, 300, 380};
+    private static final double LEVELS[] = {0, 175, 270, 370};
     private static final double LIFT_POWER = 0.6;
 
     private static final double TICKS_PER_REV = 1120;
@@ -22,7 +22,7 @@ public class DRCB {
     private static final double L_B = 4.5; // top linkage
     private static final double L_OFFSET = 1.9; // linkage attachment dist
     private static final double THETA_0 = 2; // angle between horizontal and L_0 in rad
-    private static final double kTau_ff = 0.12; // gain for torque feedforward
+    private static final double kTau_ff = 0.10; // gain for torque feedforward
 
     public double p = 0.008;
     public double i = 0.0;
@@ -37,7 +37,7 @@ public class DRCB {
         pid.reset();
         pid.setInputRange(0, LEVELS[3]);
         pid.setOutputRange(0, LIFT_POWER);
-        pid.setTolerance(5);
+        pid.setTolerance(2);
         pid.enable();
 
         leftMotor = hwMap.get(DcMotor.class, lm);
@@ -68,7 +68,7 @@ public class DRCB {
         // if going down, reduce output cause gravity
         // TODO: take care of this in the model
         if (total < 0) {
-            total = total / 10;
+            total = total / 5;
         }
         leftMotor.setPower(total);
         rightMotor.setPower(total);
