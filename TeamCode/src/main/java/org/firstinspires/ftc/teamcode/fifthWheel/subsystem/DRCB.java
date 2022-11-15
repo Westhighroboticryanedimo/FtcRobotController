@@ -4,14 +4,17 @@ import java.lang.Math;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.PIDController;
+import org.firstinspires.ftc.teamcode.util.control.Control;
 
 public class DRCB {
     public DcMotor leftMotor;
     public DcMotor rightMotor;
 
     public int level = 0;
+    public int oldLevel = 0;
 
     private static final double LEVELS[] = {0, 175, 270, 370};
     private static final double LIFT_POWER = 0.6;
@@ -32,6 +35,9 @@ public class DRCB {
     public double ff = 0.0;
     public double output = 0.0;
     public double total = 0.0;
+
+    public double setpoint = 0.0;
+    public ElapsedTime timer = new ElapsedTime();
 
     public DRCB(HardwareMap hwMap, String lm, String rm) {
         pid.reset();
@@ -56,12 +62,15 @@ public class DRCB {
     }
 
     public void setLevel(int l) {
+        oldLevel = level;
         level = l;
         pid.setSetpoint(LEVELS[level]);
+        timer.reset();
     }
 
     public void run() {
         pid.setPID(p, i, d);
+        setpoint = Control.trapMotion(100, 100, LEVELS[oldLevel], LEVELS[level], timer.seconds());
         ff = calculateFeedforward(leftMotor.getCurrentPosition() - 100);
         output = pid.performPID(leftMotor.getCurrentPosition());
         total = ff + output;
