@@ -23,7 +23,7 @@ public class MFTeleop extends OpMode {
         controller = new Controller(gamepad1);
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
     }
-"ohnfdklsfjsafjo"
+
     @Override
     public void loop() {
         controller.update();
