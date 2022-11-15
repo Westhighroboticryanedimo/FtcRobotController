@@ -6,7 +6,7 @@ import java.lang.Math;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.utils.control.DcMotorUtils;
+import org.firstinspires.ftc.teamcode.util.control.DcMotorUtils;
 
 public class LinearSlide {
     private DcMotor slideMotor;
