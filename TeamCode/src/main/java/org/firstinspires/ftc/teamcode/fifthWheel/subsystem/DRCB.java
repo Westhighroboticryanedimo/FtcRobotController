@@ -16,7 +16,7 @@ public class DRCB {
     public int level = 0;
     public int oldLevel = 0;
 
-    private static final double LEVELS[] = {0, 175, 270, 370};
+    private static final double LEVELS[] = {0, 175, 270, 360};
     private static final double LIFT_POWER = 0.6;
 
     private static final double TICKS_PER_REV = 1120;
@@ -70,7 +70,7 @@ public class DRCB {
 
     public void run() {
         pid.setPID(p, i, d);
-        setpoint = Control.trapMotion(100, 100, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+        setpoint = Control.trapMotion(500, 800, LEVELS[oldLevel], LEVELS[level], timer.seconds());
         ff = calculateFeedforward(leftMotor.getCurrentPosition() - 100);
         output = pid.performPID(leftMotor.getCurrentPosition());
         total = ff + output;

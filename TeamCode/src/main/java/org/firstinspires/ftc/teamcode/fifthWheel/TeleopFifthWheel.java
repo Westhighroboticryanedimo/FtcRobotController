@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.fifthWheel.command.Place;
 import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
 import org.firstinspires.ftc.teamcode.Controller;
+import org.firstinspires.ftc.teamcode.hardware.Gyro;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class TeleopFifthWheel extends OpMode {
     private DriveFifthWheel drive;
     private Place place;
     private Controller controller;
+    private Gyro gyro;
 
     private static final int STORE_NUM = 8;
     private ArrayList<Double> x = new ArrayList<>();
@@ -28,6 +30,7 @@ public class TeleopFifthWheel extends OpMode {
         drive = new DriveFifthWheel(this, hardwareMap);
         place = new Place(hardwareMap, "leftMotor", "rightMotor", "flipLeft", "flipRight", "grip");
         controller = new Controller(gamepad1);
+        gyro = new Gyro(hardwareMap);
         place.intake();
     }
 
@@ -37,6 +40,8 @@ public class TeleopFifthWheel extends OpMode {
         telemetry.addData("helpme", place.helpme);
         telemetry.addData("state", place.state);
         telemetry.addData("level", level);
+        telemetry.addData("setpoint", place.drcb.setpoint);
+        telemetry.addData("gyro", gyro.getAngleDegrees());
         telemetry.update();
         controller.update();
 

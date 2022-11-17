@@ -104,10 +104,10 @@ public class TestTele extends OpMode {
             drcb.setLevel(0);
         }
         if (controller.AOnce()) {
-            gripper.moveOpen();
+            gripper.moveDown();
 //            drive.updatePID();
         } else if (controller.YOnce()) {
-            gripper.moveClose();
+            gripper.moveUp();
         }
         drcb.run();
     }

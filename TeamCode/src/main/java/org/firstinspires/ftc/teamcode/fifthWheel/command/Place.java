@@ -16,7 +16,7 @@ public class Place {
         LOWERING
     } public State state = State.INTAKING;
 
-    private DRCB drcb;
+    public DRCB drcb;
     private Gripper gripper;
 
     private int level = 0;
@@ -77,7 +77,7 @@ public class Place {
                 }
                 break;
             case LOWERING:
-                if (timer.milliseconds() > 300) {
+                if (timer.milliseconds() > 400) {
                     gripper.setLevel(-1);
                 }
 //                if (timer.milliseconds() > 500 ) {
