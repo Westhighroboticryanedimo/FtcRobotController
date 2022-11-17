@@ -35,7 +35,7 @@ public class TechnomancersTeleop extends OpMode {
             servo.setPosition(0.7);
         }
         if (controller.B()) {
-            servo.setPosition(0.3);
+            servo.setPosition(0);
         }
         if (controller.leftBumper()){
             dcMotor.setPower(0.5);
