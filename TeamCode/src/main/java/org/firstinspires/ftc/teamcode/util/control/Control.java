@@ -15,7 +15,7 @@ public class Control {
 
         if (d_accel > d_half) {
             t_accel = Math.sqrt(d_half / (0.5*maxA));
-            d_accel = (1/2)*maxA*Math.pow(t_accel, 2);
+            d_accel = (1/2.0)*maxA*Math.pow(t_accel, 2);
         }
 
 
@@ -28,13 +28,13 @@ public class Control {
         if (currentT > t_entire) {
             return endD;
         } else if (currentT < t_accel) {
-            return startD + direction*(1/2)*maxA*Math.pow(currentT, 2);
+            return startD + direction*(1/2.0)*maxA*Math.pow(currentT, 2);
         } else if (currentT < t_accel + t_cruise) {
             double t_current_cruise = currentT - t_accel;
             return d_accel + maxV*t_current_cruise;
         } else {
             double t_current_decel = currentT - (t_accel + t_cruise);
-            return d_accel + d_cruise + maxV*t_current_decel - (1/2)*maxA*Math.pow(t_current_decel, 2);
+            return d_accel + d_cruise + maxV*t_current_decel - (1/2.0)*maxA*Math.pow(t_current_decel, 2);
         }
     }
 }
