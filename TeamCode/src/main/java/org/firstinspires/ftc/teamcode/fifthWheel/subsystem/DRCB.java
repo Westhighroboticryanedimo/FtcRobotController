@@ -78,9 +78,9 @@ public class DRCB {
         total = ff + output;
         // if going down, reduce output cause gravity
         // TODO: take care of this in the model
-        if (total < 0) {
-            total = total / 10;
-        }
+        // if (total < 0) {
+        //     total = total / 10;
+        // }
         leftMotor.setPower(total);
         rightMotor.setPower(total);
     }
