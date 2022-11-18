@@ -20,6 +20,7 @@ public class Place {
     private Gripper gripper;
 
     private int level = 0;
+    private int oldLevel = 0;
     public Boolean helpme = false;
 
     public ElapsedTime timer = new ElapsedTime();
@@ -45,15 +46,22 @@ public class Place {
 
     public void raise(int l) {
         state = State.RAISING;
+        oldLevel = level;
         level = l;
-        gripper.setLevel(level);
+        // if raising, raise lift then move wrist
+        // if lowering, move wrist then lower lift
+        if (oldLevel < level) {
+            drcb.setLevel(level);
+        } else {
+            gripper.setLevel(level);
+        }
         timer.reset();
     }
 
     public void dropAndLower() {
         state = State.LOWERING;
         gripper.open();
-//        timer.reset();
+        timer.reset();
     }
 
     public void run() {
@@ -72,7 +80,11 @@ public class Place {
                 break;
             case RAISING:
                 if (timer.milliseconds() > 300) {
-                    drcb.setLevel(level);
+                    if (oldLevel < level) {
+                        gripper.setLevel(level);
+                    } else {
+                        drcb.setLevel(level);
+                    }
                     timer.reset();
                 }
                 break;
@@ -90,5 +102,12 @@ public class Place {
                 break;
         }
         drcb.run();
+    }
+
+    public int getLeftPos() {
+        return drcb.getCurrentLeftTicks();
+    }
+    public int getRightPos() {
+        return drcb.getCurrentRightTicks();
     }
 }

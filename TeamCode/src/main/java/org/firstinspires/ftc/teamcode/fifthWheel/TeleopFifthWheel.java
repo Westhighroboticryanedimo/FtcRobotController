@@ -36,7 +36,9 @@ public class TeleopFifthWheel extends OpMode {
 
     @Override
     public void loop() {
-        telemetry.addData("timer", place.timer.milliseconds());
+        telemetry.addData("left ticks", place.getLeftPos());
+        telemetry.addData("right ticks", place.getRightPos());
+//        telemetry.addData("timer", place.timer.milliseconds());
         telemetry.addData("helpme", place.helpme);
         telemetry.addData("state", place.state);
         telemetry.addData("level", level);
@@ -86,10 +88,8 @@ public class TeleopFifthWheel extends OpMode {
             level = 1;
             place.raise(level);
         } else if (controller.dpadDownOnce()) {
-            if (level > 0) {
-                level -= 1;
-                place.raise(level);
-            }
+            level = 0;
+            place.raise(level);
         } else if (controller.XOnce()) {
             place.dropAndLower();
         }

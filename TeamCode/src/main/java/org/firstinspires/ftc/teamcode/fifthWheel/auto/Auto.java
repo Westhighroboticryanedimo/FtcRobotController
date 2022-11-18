@@ -73,14 +73,14 @@ public class Auto extends LinearOpMode {
 //        if (isStopRequested()) return;
         switch (signal) {
             case 1:
-                drive.move(0.5, 55, -90);
+                drive.move(0.5, 40, -90);
                 drive.move(0.5, 40, 180);
                 break;
             case 2:
                 drive.move(0.5, 40, 180);
                 break;
             case 3:
-                drive.move(0.5, 55, 90);
+                drive.move(0.5, 40, 90);
                 drive.move(0.5, 40, 180);
                 break;
         }
