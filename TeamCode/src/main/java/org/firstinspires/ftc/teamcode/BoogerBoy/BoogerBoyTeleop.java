@@ -42,8 +42,11 @@ public class BoogerBoyTeleop extends OpMode {
     public Boogerdometry 太股;
     public DcMotor fl, fr, br, bl;
 
+    private double liftheightset; // 0.5 means 'automatic lift adjustment disabled'
+
     @Override
     public void init() {
+        liftheightset = 0.5;
         slowmode = false;
         drive = new BoogerBoyDrive(this,hardwareMap);
         drive.setup();
@@ -92,23 +95,50 @@ public class BoogerBoyTeleop extends OpMode {
         telemetry.addData("rotation: ", gyro.getAngleDegrees());
         telemetry.addData(" ", "booger boy activate");
 
-        if (slowmode) {
-            drive.drive(0.5 * controller.left_stick_y, 0.5 * controller.left_stick_x, 0.5 * controller.right_stick_x);
+        //if (slowmode) {
+        if(controller.leftBumper()) { // slowmode
+            drive.drive(0.3 * controller.left_stick_y, 0.3 * controller.left_stick_x, 0.3 * controller.right_stick_x);
         } else {
             drive.drive(controller.left_stick_y, controller.left_stick_x, controller.right_stick_x);
         }
 
-        if (controller.dpadUp() && lift.getCurrentPosition() < maxliftdistance) { // direction: up
-            //lift.setDirection(DcMotor.Direction.FORWARD);
-            telemetry.addData("", "dpadup");
-            lift.setPower(1);
-        } else if (controller.dpadDown() && lift.getCurrentPosition() > 0) { // direction: down
-            //lift.setDirection(DcMotor.Direction.REVERSE);
-            telemetry.addData("", "dpaddown");
-            lift.setPower(-1);
-        } else {
-            lift.setPower(0);
+        if(liftheightset == 0.5) {
+            if (controller.dpadUp() && lift.getCurrentPosition() < maxliftdistance) { // direction: up
+                //lift.setDirection(DcMotor.Direction.FORWARD);
+                telemetry.addData("", "dpadup");
+                lift.setPower(1);
+            } else if (controller.dpadDown() && lift.getCurrentPosition() > 0) { // direction: down
+                //lift.setDirection(DcMotor.Direction.REVERSE);
+                telemetry.addData("", "dpaddown");
+                lift.setPower(-1);
+            } else {
+                lift.setPower(0);
+            }
         }
+        else {
+            if (lift.getCurrentPosition() < liftheightset) { // direction: up
+                //lift.setDirection(DcMotor.Direction.FORWARD);
+                lift.setPower(1);
+            } else if (lift.getCurrentPosition() > liftheightset) { // direction: down
+                //lift.setDirection(DcMotor.Direction.REVERSE);
+                lift.setPower(-1);
+            } else {
+                lift.setPower(0);
+                liftheightset = 0.5;
+            }
+        }
+
+        if(controller.rightBumperOnce()) { // set liftheightset
+            if(liftheightset == 0.5) {
+                liftheightset = 8964;
+            } else if(liftheightset == 8964) {
+                liftheightset = 0;
+            } else if(liftheightset == 0) {
+                liftheightset = 0.5;
+            }
+        }
+
+
 
         if (controller.BOnce()) {
             grabby.setPosition(0);
@@ -116,7 +146,7 @@ public class BoogerBoyTeleop extends OpMode {
             //grabby.setPower(0.5);
         }
         if (controller.AOnce()) {
-            grabby.setPosition(1);
+            grabby.setPosition(0.45);
             //grabby.setDirection(CRServo.Direction.FORWARD);
             //grabby.setPower(0.5);
         }

@@ -3,30 +3,19 @@ package org.firstinspires.ftc.teamcode.BoogerBoy;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.teamcode.BoogerBoy.hardware.BoogerCam;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
+import org.firstinspires.ftc.teamcode.hardware.Gyro;
+import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 
-
-
-
-
-
-@Autonomous(name = "田ロ田 Booger Boy Auto [NO PRELOAD] ロ田ロ")
-public class BoogerBoyAuto extends LinearOpMode{
+@Autonomous(name = "田ロ田 Booger Boy Auto [RIGHT PRELOAD] ロ田ロ")
+public class BoogerBoyAutoRight extends LinearOpMode{
     private BoogerBoyDrive drive;
+    private Servo grabby;
+    private DcMotor lift;
 
     // makeing a webcam for open cv
     OpenCvWebcam webcam;
@@ -64,12 +53,18 @@ public class BoogerBoyAuto extends LinearOpMode{
         AI_resualt = 999; // resualt is not a word.
         BoogerCam cam = new BoogerCam(hardwareMap);
         drive = new BoogerBoyDrive(this,hardwareMap);
+        grabby = hardwareMap.get(Servo.class,"grabby");
+        lift = hardwareMap.get(DcMotor.class,"lift");
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Signal face", cam.getFaceFace());
             AI_resualt = cam.getFaceFace();
             telemetry.addData("color being seen", cam.getAvgHue());
             telemetry.addData("face: ",AI_resualt);
+
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
@@ -77,7 +72,17 @@ public class BoogerBoyAuto extends LinearOpMode{
         }
         telemetry.addData("face: ",AI_resualt);
         telemetry.update();
-        // Theese detect what the AI Detected and run the corasponding code
+        // These detect what the AI Detected and run the corresponding code
+
+        grabby.setPosition(0.5);
+        sleep(555);
+        drive.move(0.7,13,90);
+        while(lift.getCurrentPosition()<3000) {lift.setPower(1);sleep(10);}
+        lift.setPower(0);
+        drive.move(0.7,31,270);
+        drive.turn(0.6,-90);
+        drive.move(0.7,6,270);
+        grabby.setPosition(1);
 
         if(AI_resualt == 1)
         {
