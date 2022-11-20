@@ -14,7 +14,7 @@ public class MFTeleop extends OpMode {
 
     private MFDrive drive;
     private Controller controller;
-    private Servo servo;
+    private Servo clawServo;
     private DcMotor liftMotor;
 
     @Override
@@ -22,6 +22,10 @@ public class MFTeleop extends OpMode {
         drive = new MFDrive(this, hardwareMap);
         controller = new Controller(gamepad1);
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
+        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
     @Override
@@ -30,12 +34,20 @@ public class MFTeleop extends OpMode {
         drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
 //        telemetry.addData("gyro", gyrog)
         controller.update();
-        if (controller.dpadUp()){
+        if (controller.dpadDown() && liftMotor.getCurrentPosition() > 0) {
+            liftMotor.setPower(0);
+        } else if (controller.dpadUp()){
             liftMotor.setPower(-0.5);
         } else if (controller.dpadDown()){
             liftMotor.setPower(0.5);
         } else {
             liftMotor.setPower(0);
+        }
+        if (controller.BOnce()){
+            clawServo.setPosition(0.65);
+        }
+        if (controller.AOnce()){
+            clawServo.setPosition(0);
         }
     }
 }
