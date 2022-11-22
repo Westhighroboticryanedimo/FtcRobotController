@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.IF;
+package org.firstinspires.ftc.teamcode.MF;
+
+import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,8 +8,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Controller;
-
-import org.firstinspires.ftc.teamcode.IF.MFDrive;
 
 @TeleOp(name = "MF TeleOp")
 public class MFTeleop extends OpMode {
@@ -25,7 +25,10 @@ public class MFTeleop extends OpMode {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        Log.d("MFers_LiftEncdr",
+                String.format("Initial Encoder pos: %d",
+                        liftMotor.getCurrentPosition()
+                ) );
     }
 
     @Override
@@ -34,12 +37,24 @@ public class MFTeleop extends OpMode {
         drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
 //        telemetry.addData("gyro", gyrog)
         controller.update();
-        if (controller.dpadDown() && liftMotor.getCurrentPosition() > 0) {
+        if (controller.dpadDown() && liftMotor.getCurrentPosition() < 0) {
             liftMotor.setPower(0);
+            Log.d("MFers_LiftEncdr",
+                    String.format("dpadDown and below 0 pos: %d",
+                            liftMotor.getCurrentPosition()
+                    ) );
         } else if (controller.dpadUp()){
             liftMotor.setPower(-0.5);
+            Log.d("MFers_LiftEncdr",
+                    String.format("dpadUp pos: %d",
+                            liftMotor.getCurrentPosition()
+                    ) );
         } else if (controller.dpadDown()){
             liftMotor.setPower(0.5);
+            Log.d("MFers_LiftEncdr",
+                    String.format("dpadDown pos: %d",
+                            liftMotor.getCurrentPosition()
+                    ) );
         } else {
             liftMotor.setPower(0);
         }
