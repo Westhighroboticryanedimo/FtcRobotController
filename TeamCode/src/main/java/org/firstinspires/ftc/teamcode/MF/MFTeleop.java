@@ -59,14 +59,14 @@ public class MFTeleop extends OpMode {
 //        telemetry.addData("gyro", gyrog)
 
         controller.update();
-        if (controller.dpadDown() && liftMotor.getCurrentPosition() > 0) {
+        if (controller.dpadDown() && liftMotor.getCurrentPosition() < 220) {
             liftMotor.setPower(0);
             telemetry.update();
         } else if (controller.dpadUp()) {
-            liftMotor.setPower(-0.5);
+            liftMotor.setPower(0.5);
             telemetry.update();
         } else if (controller.dpadDown()) {
-            liftMotor.setPower(0.5);
+            liftMotor.setPower(-0.5);
             telemetry.update();
         } else {
             liftMotor.setPower(0);
