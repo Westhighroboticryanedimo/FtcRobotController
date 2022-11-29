@@ -18,12 +18,11 @@ public class ColorCam {
     private OpenCvCamera camera;
     private ColorPipeline colorPipeline = new ColorPipeline();
 
-//    public ColorCam (HardwareMap hardwareMap) {cameraInit(hardwareMap);}
-
-    private void cameraInit(HardwareMap hardwareMap) {
+    public void cameraInit(HardwareMap hardwareMap) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "ColorCam");
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+
         camera.setPipeline(colorPipeline);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {

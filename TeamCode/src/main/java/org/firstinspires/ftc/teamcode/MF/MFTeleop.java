@@ -21,6 +21,8 @@ public class MFTeleop extends OpMode {
     private DcMotor backLeft;
     private DcMotor backRight;
 
+    private ColorCam colorCam;
+
     public MFTeleop() {
     }
 
@@ -33,8 +35,8 @@ public class MFTeleop extends OpMode {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        backRight = hardwareMap.get(DcMotor.class, "frontLeft");
+        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        backRight = hardwareMap.get(DcMotor.class, "backRight");
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -45,6 +47,9 @@ public class MFTeleop extends OpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        colorCam = new ColorCam();
+        colorCam.cameraInit(hardwareMap);
     }
 
     @Override
@@ -54,35 +59,29 @@ public class MFTeleop extends OpMode {
         telemetry.addData("DriveEncdrFR", frontRight.getCurrentPosition());
         telemetry.addData("DriveEncdrBL", backLeft.getCurrentPosition());
         telemetry.addData("DriveEncdrBR", backRight.getCurrentPosition());
+        telemetry.addData("color", colorCam.getColor());
+        telemetry.update();
         controller.update();
         drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
 //        telemetry.addData("gyro", gyrog)
 
         controller.update();
-        if (controller.dpadDown() && liftMotor.getCurrentPosition() < 220) {
+        if (controller.dpadDown() && liftMotor.getCurrentPosition() < 300) {
             liftMotor.setPower(0);
-            telemetry.update();
-        } else if (controller.dpadUp()) {
+        }
+        if (controller.dpadUp()) {
             liftMotor.setPower(0.5);
-            telemetry.update();
         } else if (controller.dpadDown()) {
             liftMotor.setPower(-0.5);
-            telemetry.update();
         } else {
             liftMotor.setPower(0);
         }
+
         if (controller.BOnce()) {
             clawServo.setPosition(0.65);
         }
         if (controller.AOnce()) {
             clawServo.setPosition(0);
-        }
-        if (controller.left_stick_x < 0 || controller.left_stick_x > 0 || controller.left_stick_y < 0 || controller.left_stick_y > 0 || controller.right_stick_x < 0 || controller.right_stick_x > 0){
-            telemetry.update();
-            Log.d("DriveEncdrFL", Integer.toString(frontLeft.getCurrentPosition()));
-            Log.d("DriveEncdrFR", Integer.toString(frontRight.getCurrentPosition()));
-            Log.d("DriveEncdrBL", Integer.toString(backLeft.getCurrentPosition()));
-            Log.d("DriveEncdrBR", Integer.toString(backRight.getCurrentPosition()));
         }
     }
 }
