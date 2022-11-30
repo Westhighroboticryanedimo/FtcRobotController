@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.MF;
 
-import android.util.Log;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -16,12 +14,11 @@ public class MFTeleop extends OpMode {
     private Controller controller;
     private Servo clawServo;
     private DcMotor liftMotor;
+    private DcMotor liftMotor2;
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
     private DcMotor backRight;
-
-    private ColorCam colorCam;
 
     public MFTeleop() {
     }
@@ -32,6 +29,7 @@ public class MFTeleop extends OpMode {
         drive = new MFDrive(this, hardwareMap);
         controller = new Controller(gamepad1);
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
+        liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
@@ -47,9 +45,6 @@ public class MFTeleop extends OpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        colorCam = new ColorCam();
-        colorCam.cameraInit(hardwareMap);
     }
 
     @Override
@@ -59,30 +54,56 @@ public class MFTeleop extends OpMode {
         telemetry.addData("DriveEncdrFR", frontRight.getCurrentPosition());
         telemetry.addData("DriveEncdrBL", backLeft.getCurrentPosition());
         telemetry.addData("DriveEncdrBR", backRight.getCurrentPosition());
-        telemetry.addData("color", colorCam.getColor());
         telemetry.update();
         controller.update();
         drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
 //        telemetry.addData("gyro", gyrog)
 
         controller.update();
-        if (controller.dpadDown() && liftMotor.getCurrentPosition() < 300) {
-            liftMotor.setPower(0);
-        }
         if (controller.dpadUp()) {
-            liftMotor.setPower(0.5);
+            if (liftMotor.getCurrentPosition() > 3000) {
+                liftMotor.setPower(0.5);
+                liftMotor2.setPower(-0.5);
+            } else {
+                liftMotor.setPower(1);
+                liftMotor2.setPower(-1);
+            }
         } else if (controller.dpadDown()) {
-            liftMotor.setPower(-0.5);
+            if (liftMotor.getCurrentPosition() < 300) {
+                liftMotor.setPower(0);
+                liftMotor2.setPower(0);
+            } else if (liftMotor.getCurrentPosition() < 1200) {
+                liftMotor.setPower(-0.5);
+                liftMotor2.setPower(0.5);
+            } else {
+                liftMotor.setPower(-1);
+                liftMotor2.setPower(1);
+            }
         } else {
             liftMotor.setPower(0);
+            liftMotor2.setPower(0);
         }
+//        if (controller.dpadDown() && liftMotor.getCurrentPosition() < 300) {
+//            liftMotor.setPower(0);
+//            liftMotor2.setPower(0);
+//        }
+//        if (controller.dpadUp()) {
+//            liftMotor.setPower(0.5);
+//            liftMotor2.setPower(0.5);
+//        } else if (controller.dpadDown()) {
+//            liftMotor.setPower(-0.5);
+//            liftMotor2.setPower(-0.5);
+//        } else {
+//            liftMotor.setPower(0);
+//            liftMotor2.setPower(0);
+//        }
 
-        if (controller.BOnce()) {
-            clawServo.setPosition(0.65);
-        }
-        if (controller.AOnce()) {
-            clawServo.setPosition(0);
-        }
+//        if (controller.BOnce()) {
+//            clawServo.setPosition(0.65);
+//        }
+//        if (controller.AOnce()) {
+//            clawServo.setPosition(0);
+//        }
     }
 }
 
