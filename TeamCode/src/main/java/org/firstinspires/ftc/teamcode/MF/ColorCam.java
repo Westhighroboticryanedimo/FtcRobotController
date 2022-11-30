@@ -39,6 +39,7 @@ public class ColorCam {
     public int getColor() {
         return colorPipeline.getColor();
     }
+    public int getHue() { return colorPipeline.getHueInt();}
 
     class ColorPipeline extends OpenCvPipeline {
 //        0, 60, 120
@@ -68,5 +69,6 @@ public class ColorCam {
         public int getColor() {
             return(color);
         }
+        public int getHueInt() {return(hueInt);}
     }
 }
