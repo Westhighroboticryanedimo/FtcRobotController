@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.BoogerBoy.hardware.BoogerCam;
 
-@Autonomous(name="Cone Reader Autonomous")
+@Autonomous(name="Nuclear Detonation Autonomous")
 public class BoogerBoyCameraAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -15,7 +15,6 @@ public class BoogerBoyCameraAuto extends LinearOpMode {
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Signal face", cam.getFaceFace());
             telemetry.addData("color being seen", cam.getAvgHue());
-            telemetry.addData("darkness",cam.getDarkness());
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample

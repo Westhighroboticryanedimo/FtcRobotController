@@ -45,12 +45,14 @@ public class TestTele extends OpMode {
 //        telemetry.addData("rightPos", gripper.rightPos());
         telemetry.addData("left drcb", drcb.getCurrentLeftTicks());
         telemetry.addData("right drcb", drcb.getCurrentRightTicks());
-        telemetry.addData("p", drive.p);
-        telemetry.addData("d", drive.d);
+        telemetry.addData("p", drcb.p);
+        telemetry.addData("d", drcb.d);
         telemetry.addData("ff", drcb.ff);
         telemetry.addData("output", drcb.output);
         telemetry.addData("total", drcb.total);
         telemetry.addData("level", drcb.level);
+        telemetry.addData("setpoint", drcb.setpoint);
+        telemetry.addData("drcb i gain", drcb.i);
         telemetry.addData("flipLeft angle", gripper.flipLeft.getAngle());
         telemetry.addData("flipRight angle", gripper.flipRight.getAngle());
         telemetry.addData("grip angle", gripper.grip.getAngle());
@@ -85,14 +87,14 @@ public class TestTele extends OpMode {
         }
 
         if (controller.leftBumperOnce()) {
-            drive.p -= 0.001;
+            drcb.p -= 0.001;
         } else if (controller.rightBumperOnce()) {
-            drive.p += 0.001;
+            drcb.p += 0.001;
         }
         if (controller.XOnce()) {
-            drive.d -= 0.001;
+            drcb.d -= 0.001;
         } else if (controller.BOnce()) {
-            drive.d += 0.001;
+            drcb.d += 0.001;
         }
         if (controller.dpadUpOnce()) {
             drcb.setLevel(3);
@@ -104,10 +106,12 @@ public class TestTele extends OpMode {
             drcb.setLevel(0);
         }
         if (controller.AOnce()) {
-            gripper.moveOpen();
+            drcb.i -= 0.0001;
+            drcb.updatePID();
 //            drive.updatePID();
         } else if (controller.YOnce()) {
-            gripper.moveClose();
+            drcb.i += 0.0001;
+            drcb.updatePID();
         }
         drcb.run();
     }

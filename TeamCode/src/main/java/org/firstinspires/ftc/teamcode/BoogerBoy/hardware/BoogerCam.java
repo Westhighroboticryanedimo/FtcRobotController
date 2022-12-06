@@ -45,7 +45,6 @@ public class BoogerCam {
     public int getAvgHue() {
         return pipeline.getAvgHue();
     }
-    public double getDarkness() {return pipeline.darkness();}
 
     class SignalPipeline extends OpenCvPipeline {
         private volatile int face = 1;
@@ -60,15 +59,12 @@ public class BoogerCam {
                 REGION_TOPLEFT.y + REGION_HEIGHT);
 
         private volatile int avgHue = 0;
-        private double darkness = 0;
         // yellow, cyan, magenta
-        int[] hues = new int[]{155, 100};
-        int black = 15;
+        int[] hues = new int[]{70, 110,137}; // the colors: green, blue, red
 
         private Mat center;
         Mat hsv = new Mat();
         Mat hue = new Mat();
-        Mat darkmat = new Mat();
 
         @Override
         public void init(Mat firstFrame) {
@@ -79,7 +75,6 @@ public class BoogerCam {
         private void inputToHSV(Mat input) {
             Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
             Core.extractChannel(hsv, hue, 0);
-            Core.extractChannel(hsv, darkmat, 2);
         }
 
         @Override
@@ -88,40 +83,17 @@ public class BoogerCam {
             Imgproc.rectangle(in, region_pointA, region_pointB, RED, 2);
             avgHue = (int) Core.mean(center).val[0];
             face = colorMatch(avgHue);
-            darkness = darkmat.get(0,2)[0];
             return in;
         }
 
         private int colorMatch(int hue) { // returns 1 for pink, 2 for blue, 123456 for black
             int closest = 1;
             int min = 361;
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < hues.length; i++) {
                 if (Math.abs(hue - hues[i]) < min) {
                     min = Math.abs(hue - hues[i]);
                     closest = i + 1;
                 }
-            }
-            double thisdarkness = darkness;
-            if(Math.abs(thisdarkness - black) < min) {
-                min = (int)Math.abs(thisdarkness - black);
-                closest = 3;
-            }
-            if(closest == 3) {
-                closest = 1;
-            } else if(closest == 1) {
-                closest = 3;
-
-
-
-
-
-
-
-
-
-
-
-
             }
             return closest;
         }
@@ -130,6 +102,5 @@ public class BoogerCam {
         public int getAvgHue() {
             return avgHue;
         }
-        public double darkness() {return darkness;}
     }
 }

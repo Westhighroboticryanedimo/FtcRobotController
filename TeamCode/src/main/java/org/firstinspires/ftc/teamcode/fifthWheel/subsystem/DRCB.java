@@ -16,8 +16,8 @@ public class DRCB {
     public int level = 0;
     public int oldLevel = 0;
 
-    private static final double LEVELS[] = {0, 175, 270, 370};
-    private static final double LIFT_POWER = 0.6;
+    private static final double LEVELS[] = {0, 160, 260, 360};
+    private static final double LIFT_POWER = 1.0;
 
     private static final double TICKS_PER_REV = 1120;
     private static final double L_0 = 4.2; // motor to pivot dist
@@ -27,9 +27,9 @@ public class DRCB {
     private static final double THETA_0 = 2; // angle between horizontal and L_0 in rad
     private static final double kTau_ff = 0.10; // gain for torque feedforward
 
-    public double p = 0.008;
+    public double p = 0.032;
     public double i = 0.0;
-    public double d = 0.008;
+    public double d = 0.010;
     private PIDController pid = new PIDController(p, i, d);
 
     public double ff = 0.0;
@@ -69,18 +69,24 @@ public class DRCB {
     }
 
     public void run() {
-        pid.setPID(p, i, d);
-        setpoint = Control.trapMotion(100, 100, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+        setpoint = Control.trapMotion(1000.0, 1500.0, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+        pid.setSetpoint(setpoint);
+        // TODO: find feedforward offset value
+        // angle of motor between lift rest and lift horizontal
         ff = calculateFeedforward(leftMotor.getCurrentPosition() - 100);
         output = pid.performPID(leftMotor.getCurrentPosition());
         total = ff + output;
         // if going down, reduce output cause gravity
         // TODO: take care of this in the model
-        if (total < 0) {
-            total = total / 5;
-        }
+        // if (total < 0) {
+        //     total = total / 10;
+        // }
         leftMotor.setPower(total);
         rightMotor.setPower(total);
+    }
+
+    public void updatePID() {
+        pid.setPID(p, i, d);
     }
 
     public double calculateFeedforward(double ticks) {

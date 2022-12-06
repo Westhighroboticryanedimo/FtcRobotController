@@ -2,30 +2,13 @@ package org.firstinspires.ftc.teamcode.BoogerBoy;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 import org.firstinspires.ftc.teamcode.BoogerBoy.hardware.BoogerCam;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 
-
-
-
-
-
-@Autonomous(name = "田ロ田 Booger Boy Auto [NO PRELOAD] ロ田ロ")
-public class BoogerBoyAuto extends LinearOpMode{
+@Autonomous(name = "田ロ田 Booger Boy Auto [LEFT PRELOAD] 田ロ")
+public class BoogerBoyAutoLeft extends LinearOpMode{
     private BoogerBoyDrive drive;
 
     // makeing a webcam for open cv
@@ -78,6 +61,9 @@ public class BoogerBoyAuto extends LinearOpMode{
         telemetry.addData("face: ",AI_resualt);
         telemetry.update();
         // Theese detect what the AI Detected and run the corasponding code
+
+        drive.move(0.7,52,0);
+        drive.move(0.7,52,180);
 
         if(AI_resualt == 1)
         {
