@@ -29,7 +29,7 @@ public class TechnomancersTeleop extends OpMode {
     @Override
     public void loop() {
         controller.update();
-        drive.drive(-controller.left_stick_x/2, -controller.left_stick_y/2, -controller.right_stick_x/2);
+        drive.drive(-controller.left_stick_x/2.5, -controller.left_stick_y/2.5, -controller.right_stick_x/2.5);
         controller.update();
         if (controller.A()) {
             servo.setPosition(0.4);
