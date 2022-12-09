@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.BoogerBoy;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.Build;
+
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,13 +13,20 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.BoogerBoy.hardware.BoogerCam;
 import org.firstinspires.ftc.teamcode.Controller;
+import org.firstinspires.ftc.teamcode.booger.ColorChunkAnalyzer;
 import org.firstinspires.ftc.teamcode.booger.SussySonar;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
+import org.firstinspires.ftc.teamcode.booger.ChunkData;
 
 import org.firstinspires.ftc.teamcode.Controller;
+
+import java.util.concurrent.TimeUnit;
 
 @TeleOp(name = "Booger Boy Teleop")
 public class BoogerBoyTeleop extends OpMode {
@@ -27,6 +38,12 @@ public class BoogerBoyTeleop extends OpMode {
     private DcMotor lift;
     private int maxliftdistance;
     private boolean slowmode;
+
+    private boolean trackingmode;
+    private String totrack;
+
+    private BoogerCam cam;
+    private ColorChunkAnalyzer chunky;
 
     private double x, y;
 /*
@@ -46,6 +63,9 @@ public class BoogerBoyTeleop extends OpMode {
 
     @Override
     public void init() {
+        trackingmode = false;
+        totrack = "redcone"; // redcome, bluecond, pole
+        msStuckDetectLoop = 20000;
         liftheightset = 0.5;
         slowmode = false;
         drive = new BoogerBoyDrive(this,hardwareMap);
@@ -61,6 +81,9 @@ public class BoogerBoyTeleop extends OpMode {
         grabby = hardwareMap.get(Servo.class, "grabby");
         //grabby = hardwareMap.get(CRServo.class, "grabby");
         maxliftdistance = 8964; // oct 21: changed from neg to pos nov 2: reverted
+
+        //cam = new BoogerCam(hardwareMap);
+        //chunky = new ColorChunkAnalyzer();
 /*
         bebe = new SussySonar();
         bebe.setup();
@@ -155,6 +178,90 @@ public class BoogerBoyTeleop extends OpMode {
         }
         telemetry.addData("servo value:", grabby.getPosition());
         telemetry.addData("lift value:", lift.getCurrentPosition());
+/*
+        if(controller.YOnce() && !controller.leftBumper()) {
+            telemetry.addData("start","start");
+            telemetry.update();
+            Bitmap img = cam.getImage();
+            if(img != null) {
+                chunky.setImageStep1(img);
+                chunky.setImageStep2();
+                chunky.getColorChunks(-12962601);
+                //chunky.getColorChunks(Color.BLUE);
+                //telemetry.addData("chunk w: ", chunky.mainChunk().width);
+                telemetry.addData("c2,",cam.getImage().getPixel(0,0));
+                telemetry.addData("w",chunky.toanalyze.getWidth());
+                telemetry.addData("c",chunky.toanalyze.getPixel(0,0));
+                telemetry.addData("chunks",chunky.chunks.size());
+            } else {
+                telemetry.addData("no image", "very sad");
+            }
+            telemetry.addData("done","done");
+            if(chunky.chunks.size()>0) {
+                ChunkData mainc = chunky.mainChunk();
+                telemetry.addData("main w",mainc.width);
+                telemetry.addData("main h", mainc.height);
+                telemetry.addData("main x",mainc.middlex);
+                telemetry.addData("main y",mainc.middley);
+            }
+
+            telemetry.update();
+        } else if(controller.YOnce() && controller.leftBumper()) { // calibrate for position of colored object -- left bumper and y
+            chunky.calibrate();
+            telemetry.addData("calibrated","!!!!");
+        } else if(controller.leftBumper() && controller.AOnce()) { // activate tracking mode -- left bumper and a
+            telemetry.addData("track plz","thx");
+            trackingmode = !trackingmode;
+        }
+        telemetry.addData("tracking?",trackingmode);
+
+        if(trackingmode) {
+            // reexamine the image
+            Bitmap img = cam.getImage();
+            if(img != null) {
+                chunky.setImageStep1(img);
+                chunky.setImageStep2();
+                //chunky.getColorChunks(Color.BLUE);
+                //telemetry.addData("chunk w: ", chunky.mainChunk().width);
+                chunky.getColorChunks(-12962601);
+            } else {
+                telemetry.addData("no image", "very sad");
+            }
+            if(chunky.chunks.size()>0) {
+            telemetry.addData("calibrated x",chunky.calibrate.middlex);
+            telemetry.addData("current x",chunky.mainChunk().middlex);
+            telemetry.addData("calibrated size",chunky.calibrate.width*chunky.calibrate.height);
+            telemetry.addData("current size",chunky.mainChunk().width*chunky.mainChunk().height);
+            telemetry.update();
+                double[] off = chunky.getOffset();
+                double xmove, ymove;
+                xmove = 0; //ymove = 0;
+                if (off[0] < 0) {
+                    xmove = -0.9;
+                } else {
+                    xmove = 0.9;
+                }
+                */ /*
+                if (off[2] < 0) {
+                    ymove = 0.6;
+                } else if (off[1] > 0) {
+                    ymove = -0.6;
+                }
+                ElapsedTime e = new ElapsedTime();
+                e.reset();
+                e.startTime();
+                double tiempo = 800*(Math.abs(off[0])/(chunky.toanalyze.getWidth()*0.5));
+                if(tiempo < 50) {tiempo = 0;}
+                while(e.time(TimeUnit.MILLISECONDS) < tiempo) {
+                    //drive.drive(ymove,xmove,0);
+                    drive.drive(0,xmove,0);
+                }
+                if(Math.abs(off[0]) < 20) {trackingmode = false;}
+                trackingmode = false;
+            }
+        }
+        */
+
 
 
         // las cosas del bebe sónar
