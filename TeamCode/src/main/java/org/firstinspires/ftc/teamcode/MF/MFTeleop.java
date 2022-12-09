@@ -68,12 +68,12 @@ public class MFTeleop extends OpMode {
         telemetry.addData("DriveEncdrBR", backRight.getCurrentPosition());
         telemetry.update();
         controller.update();
-//        if (controller.leftBumper()) {
-//            drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
-//        } else {
-//            drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
-//        }
-        drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
+        if (controller.rightStickButton()) {
+            drive.drive(-controller.left_stick_x*1/2, -controller.left_stick_y*1/2, -controller.right_stick_x);
+        } else {
+            drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
+        }
+//        drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
 
 //        telemetry.addData("gyro", gyrog)
 
