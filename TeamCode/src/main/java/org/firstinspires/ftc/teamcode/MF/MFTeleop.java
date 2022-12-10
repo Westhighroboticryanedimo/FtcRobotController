@@ -13,7 +13,7 @@ public class MFTeleop extends OpMode {
 
     private MFDrive drive;
     private Controller controller;
-    private Controller controller2;
+//    private Controller controller2;
     private TouchSensor liftLimit;
     private Servo clawServo;
     private DcMotor liftMotor;
@@ -31,7 +31,7 @@ public class MFTeleop extends OpMode {
     public void init() {
         drive = new MFDrive(this, hardwareMap);
         controller = new Controller(gamepad1);
-        controller2 = new Controller(gamepad2);
+//        controller2 = new Controller(gamepad2);
         liftLimit = hardwareMap.get(TouchSensor.class, "liftLimit");
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
         liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
@@ -78,7 +78,7 @@ public class MFTeleop extends OpMode {
 //        telemetry.addData("gyro", gyrog)
 
         controller.update();
-        controller2.update();
+//        controller2.update();
         if (controller.dpadUp()) {
             if (liftMotor.getCurrentPosition() < -3862) {
                 liftMotor.setPower(0);
@@ -101,32 +101,34 @@ public class MFTeleop extends OpMode {
             liftMotor.setPower(0);
             liftMotor2.setPower(0);
         }
-
-        if (controller2.dpadUp()) {
-            if (liftMotor.getCurrentPosition() < -3862) {
-                liftMotor.setPower(0);
-                liftMotor2.setPower(0);
-            } else {
-                liftMotor.setPower(-1);
-                liftMotor2.setPower(1);
-            }
-        } else if (controller2.dpadDown()) {
-            if (liftLimit.isPressed()) {
-                liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                liftMotor.setPower(0);
-                liftMotor2.setPower(0);
-            } else {
-                liftMotor.setPower(0.5);
-                liftMotor2.setPower(-0.5);
-            }
-        } else {
-            liftMotor.setPower(0);
-            liftMotor2.setPower(0);
-        }
-//        if (controller.AOnce()) {
-//            clawServo.setPosition(0);
+//
+//        if (controller2.dpadUp()) {
+//            if (liftMotor.getCurrentPosition() < -3862) {
+//                liftMotor.setPower(0);
+//                liftMotor2.setPower(0);
+//            } else {
+//                liftMotor.setPower(-1);
+//                liftMotor2.setPower(1);
+//            }
+//        } else if (controller2.dpadDown()) {
+//            if (liftLimit.isPressed()) {
+//                liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                liftMotor.setPower(0);
+//                liftMotor2.setPower(0);
+//            } else {
+//                liftMotor.setPower(0.5);
+//                liftMotor2.setPower(-0.5);
+//            }
+//        } else {
+//            liftMotor.setPower(0);
+//            liftMotor2.setPower(0);
 //        }
+        if (controller.AOnce()) {
+            clawServo.setPosition(0);
+        } else if (controller.BOnce()) {
+            clawServo.setPosition(0.65);
+        }
     }
 }
 
