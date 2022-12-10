@@ -80,7 +80,8 @@ public class BoogerBoyTeleop extends OpMode {
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         grabby = hardwareMap.get(Servo.class, "grabby");
         //grabby = hardwareMap.get(CRServo.class, "grabby");
-        maxliftdistance = 8964; // oct 21: changed from neg to pos nov 2: reverted
+        maxliftdistance = 3100; // oct 21: changed from neg to pos nov 2: reverted
+        //new motor chnages from 8964 to 3100
 
         //cam = new BoogerCam(hardwareMap);
         //chunky = new ColorChunkAnalyzer();
@@ -117,6 +118,7 @@ public class BoogerBoyTeleop extends OpMode {
         controller.update();
         telemetry.addData("rotation: ", gyro.getAngleDegrees());
         telemetry.addData(" ", "booger boy activate");
+        telemetry.addData("noo", liftheightset);
 
         //if (slowmode) {
         if(controller.leftBumper()) { // slowmode
@@ -135,7 +137,8 @@ public class BoogerBoyTeleop extends OpMode {
                 telemetry.addData("", "dpaddown");
                 lift.setPower(-1);
             } else {
-                lift.setPower(0);
+                lift.setPower(lift.getCurrentPosition()*0.0000001);
+                //mayhbe 0.000001
             }
         }
         else {
