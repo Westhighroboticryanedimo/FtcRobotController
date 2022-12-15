@@ -1,0 +1,97 @@
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+deleted file mode 100644
+--- a/.idea/modules.xml	
++++ /dev/null	
+@@ -1,8 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ProjectModuleManager">
+-    <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController.iml" />
+-    </modules>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: ../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/MFTonomous.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.firstinspires.ftc.teamcode.MF;\r\n\r\nimport com.qualcomm.robotcore.eventloop.opmode.Autonomous;\r\nimport com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;\r\n\r\n@Autonomous(name = \"Read/Park\")\r\n\r\npublic class MFTonomous extends LinearOpMode {\r\n\r\n    MFDrive drive;\r\n\r\n    @Override public void runOpMode() throws InterruptedException {\r\n        waitForStart();\r\n        drive.move(0.4, 60, 0);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/MFTonomous.java b/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/MFTonomous.java
+--- a/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/MFTonomous.java	
++++ b/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/MFTonomous.java	
+@@ -1,5 +1,5 @@
+ package org.firstinspires.ftc.teamcode.MF;
+-
++compile group: 'com.github.sarxos', name: 'webcam-capture', version:'0.3.12';
+ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+ 
+Index: ../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/slowBolon/AutoBolon.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.firstinspires.ftc.teamcode.slowBolon;\r\n\r\nimport com.qualcomm.robotcore.eventloop.opmode.Autonomous;\r\nimport com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;\r\nimport com.qualcomm.robotcore.hardware.DcMotor;\r\nimport com.qualcomm.robotcore.util.ElapsedTime;\r\n\r\nimport org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;\r\nimport org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;\r\n\r\n@Autonomous(name = \"Balloon Mode\")\r\npublic class AutoBolon extends LinearOpMode{\r\n\r\n    private org.firstinspires.ftc.teamcode.slowBolon.CamBolon Cam;\r\n    private int DONDEESTAELDUCKY;\r\n    private DriveBolon d;\r\n\r\n    double distance;\r\n\r\n    @Override\r\n    public void runOpMode() throws InterruptedException {\r\n        waitForStart();\r\n\r\n        Cam = new org.firstinspires.ftc.teamcode.slowBolon.CamBolon();\r\n        Cam.init(hardwareMap);\r\n\r\n        hardwareMap.get(DcMotor.class,\"frontRight\").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n        hardwareMap.get(DcMotor.class,\"frontRight\").setMode(DcMotor.RunMode.RUN_USING_ENCODER);\r\n        d = new DriveBolon(this,hardwareMap);\r\n        DONDEESTAELDUCKY = Cam.getspot();\r\n        ElapsedTime runtime = new ElapsedTime();\r\n\r\n        //telemetry.addData(\"where\",DONDEESTAELDUCKY);\r\n        telemetry.addData(\"leastduckydiff\", Cam.pipeline.leastduckydiff);\r\n        telemetry.addData(\"leasttapediff\", Cam.pipeline.leasttapediff);\r\n        telemetry.addData(\"x\", Cam.pipeline.gx);\r\n        telemetry.addData(\"y\", Cam.pipeline.gy);\r\n        telemetry.addData(\"gYELLOW\", Cam.pipeline.greatestyellow);\r\n        telemetry.update();\r\n\r\n        int dx = Cam.pipeline.gx;\r\n        int wthird = (int)(Math.floor(Cam.pipeline.w/3));\r\n\r\n        while(runtime.seconds() < 5) {\r\n\r\n        }\r\n\r\n        /*\r\n        if(dx <= wthird) {\r\n            while(distance < 400) {\r\n                d.drive(-0.4,0,0);\r\n                o.updatedistance();\r\n                distance=o.distance;\r\n                telemetry.addData(\"WHERE\",\"LEFT\");\r\n                telemetry.update();\r\n            }\r\n        }\r\n\r\n        else if(dx <= 2*wthird) {\r\n            while(distance < 400) {\r\n                d.drive(0,0.4,0);\r\n                o.updatedistance();\r\n                distance=o.distance;\r\n                telemetry.addData(\"WHERE\",\"MIDDLE\");\r\n                telemetry.update();\r\n            }\r\n        }\r\n\r\n        else {\r\n            while(distance < 400) {\r\n                d.drive(0.4,0,0);\r\n                o.updatedistance();\r\n                distance=o.distance;\r\n                telemetry.addData(\"WHERE\",\"RIGHT\");\r\n                telemetry.update();\r\n            }\r\n        }*/\r\n        /*\r\n        while(distance < 1184) {\r\n            d.drive(0,-0.4,0);\r\n            o.updatedistance();\r\n            distance=o.distance;\r\n            telemetry.addData(\"distancee\",o.distance);\r\n            telemetry.update();\r\n        }\r\n        o.resetdistance(); distance=o.distance;\r\n        while(distance < 1900) {\r\n            d.drive(-0.4,0,0);\r\n            o.updatedistance();\r\n            distance=o.distance;\r\n            telemetry.addData(\"dostance\",o.distance);\r\n            telemetry.update();\r\n        }*/\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/slowBolon/AutoBolon.java b/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/slowBolon/AutoBolon.java
+--- a/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/slowBolon/AutoBolon.java	
++++ b/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/slowBolon/AutoBolon.java	
+@@ -1,5 +1,4 @@
+ package org.firstinspires.ftc.teamcode.slowBolon;
+-
+ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+ import com.qualcomm.robotcore.hardware.DcMotor;
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"PLATFORM\" />\r\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"11\" />\r\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	
++++ b/.idea/gradle.xml	
+@@ -1,13 +1,13 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+-        <option name="testRunner" value="PLATFORM" />
++        <option name="testRunner" value="GRADLE" />
+         <option name="distributionType" value="DEFAULT_WRAPPED" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+         <option name="gradleJvm" value="11" />
+-        <option name="resolveModulePerSourceSet" value="false" />
+       </GradleProjectSettings>
+     </option>
+   </component>
+Index: ../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/IF/MFDrive.java
+===================================================================
+diff --git a/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/IF/MFDrive.java b/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/MFDrive.java
+rename from ../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/IF/MFDrive.java
+rename to ../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/MFDrive.java
+--- a/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/IF/MFDrive.java	
++++ b/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/MFDrive.java	
+@@ -1,4 +1,4 @@
+-package org.firstinspires.ftc.teamcode.IF;
++package org.firstinspires.ftc.teamcode.MF;
+ 
+ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+diff --git a/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/IF/.idea/workspace.xml b/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/.idea/workspace.xml
+rename from ../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/IF/.idea/workspace.xml
+rename to ../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/.idea/workspace.xml
+diff --git a/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/IF/.idea/shelf/Uncommitted_changes_before_Update_at_11_9_2022_3_06_PM__Changes_.xml b/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/.idea/shelf/Uncommitted_changes_before_Update_at_11_9_2022_3_06_PM__Changes_.xml
+rename from ../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/IF/.idea/shelf/Uncommitted_changes_before_Update_at_11_9_2022_3_06_PM__Changes_.xml
+rename to ../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MF/.idea/shelf/Uncommitted_changes_before_Update_at_11_9_2022_3_06_PM__Changes_.xml

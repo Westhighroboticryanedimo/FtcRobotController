@@ -73,7 +73,9 @@ public class BoogerBoyAutoRight extends LinearOpMode{
         telemetry.addData("face: ",AI_resualt);
         telemetry.update();
         // These detect what the AI Detected and run the corresponding code
-
+        drive.move(0.7,52,180);
+        drive.move(0.7,52,0); // right
+/*
         grabby.setPosition(0.5);
         sleep(555);
         drive.move(0.7,13,90);
@@ -81,8 +83,15 @@ public class BoogerBoyAutoRight extends LinearOpMode{
         lift.setPower(0);
         drive.move(0.7,31,270);
         drive.turn(0.6,-90);
+        while(lift.getCurrentPosition()<3000) {lift.setPower(1);sleep(10);}
+        lift.setPower(0);
         drive.move(0.7,6,270);
         grabby.setPosition(1);
+        drive.move(0.7,10,90);
+        drive.turn(0.6,90);
+        drive.move(0.7,63,270);
+*/
+        // back to starting position
 
         if(AI_resualt == 1)
         {

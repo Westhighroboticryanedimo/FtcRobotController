@@ -63,7 +63,7 @@ public class BoogerBoyAutoLeft extends LinearOpMode{
         // Theese detect what the AI Detected and run the corasponding code
 
         drive.move(0.7,52,0);
-        drive.move(0.7,52,180);
+        drive.move(0.7,52,180); // left
 
         if(AI_resualt == 1)
         {

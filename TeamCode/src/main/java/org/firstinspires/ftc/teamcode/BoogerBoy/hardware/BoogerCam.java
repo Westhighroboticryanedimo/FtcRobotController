@@ -1,10 +1,16 @@
 package org.firstinspires.ftc.teamcode.BoogerBoy.hardware;
 
+import android.graphics.Bitmap;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.android.Utils;
+import org.opencv.core.CvType;
+import org.opencv.core.Size;
+import org.opencv.osgi.OpenCVInterface;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -20,6 +26,8 @@ import org.opencv.core.Core;
 public class BoogerCam {
     private OpenCvCamera camera;
     private SignalPipeline pipeline;
+
+    private Bitmap image;
 
     public BoogerCam(HardwareMap hwMap) {setupOpenCV(hwMap);}
 
@@ -79,6 +87,24 @@ public class BoogerCam {
 
         @Override
         public Mat processFrame(Mat in) {
+            //Bitmap bmp = null;
+            //Mat tmp = new Mat (height, width, CvType.CV_8U, new Scalar(4));
+            try {
+                //Imgproc.cvtColor(seedsImage, in, Imgproc.COLOR_RGB2BGRA);
+                //Imgproc.cvtColor(seedsImage, tmp, Imgproc.COLOR_GRAY2RGBA, 4);
+
+                image = Bitmap.createBitmap(in.cols(), in.rows(), Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(in, image);
+                Bitmap smol = Bitmap.createScaledBitmap(image,in.cols()/3,in.rows()/3,false);
+                image = smol;
+                /*image = Bitmap.createBitmap(in.cols(), in.rows(), Bitmap.Config.ARGB_8888);
+                Mat resized = new Mat();
+                Imgproc.resize(in,resized,new Size(in.cols(),in.rows()));
+                Utils.matToBitmap(resized, image);
+                boolean cool = (resized.width()==in.width() && image.getWidth()==resized.width() && resized.get(20,20).equals(in.get(20,20)));
+                if(cool) {image.setPixel(0,0,16777215);}*/
+            }
+            catch (Exception e) {}
             inputToHSV(in);
             Imgproc.rectangle(in, region_pointA, region_pointB, RED, 2);
             avgHue = (int) Core.mean(center).val[0];
@@ -103,4 +129,6 @@ public class BoogerCam {
             return avgHue;
         }
     }
+
+    public Bitmap getImage() {if(image == null) {return null;} else {return image;}}
 }
