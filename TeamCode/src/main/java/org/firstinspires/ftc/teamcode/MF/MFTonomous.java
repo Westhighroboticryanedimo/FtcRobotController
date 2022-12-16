@@ -58,7 +58,7 @@ public class MFTonomous extends LinearOpMode {
         FRDrive.setPower(0);
         BLDrive.setPower(0);
         BRDrive.setPower(0);
-
+        colorCam.getColor();
 
     }
 }
