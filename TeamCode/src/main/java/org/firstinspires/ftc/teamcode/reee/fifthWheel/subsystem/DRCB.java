@@ -90,19 +90,31 @@ public class DRCB {
         }
         // TODO: find feedforward offset value
         // angle of motor between lift rest and lift horizontal
-        ff = calculateFeedforward(leftMotor.getCurrentPosition() - 130);
-        output = pid.performPID(leftMotor.getCurrentPosition());
+        ff = calculateFeedforward(getPosition() - 130);
+        output = pid.performPID(getPosition());
         total = ff + output;
         if (justFeedforward) {
             total = ff;
         }
         // if going down, reduce output cause gravity
         // TODO: take care of this in the model
-         if (total < 0) {
-             total = 0.01;
-         }
+        // TODO: change this to scale
+        if (total < 0) {
+            total = 0.01;
+        }
         leftMotor.setPower(total);
         rightMotor.setPower(total);
+    }
+
+    public double getPosition() {
+        return rightMotor.getCurrentPosition();
+    }
+
+    private void reset() {
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void updatePID() {
