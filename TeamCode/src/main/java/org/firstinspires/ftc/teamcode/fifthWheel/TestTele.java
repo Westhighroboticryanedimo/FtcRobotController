@@ -28,14 +28,18 @@ public class TestTele extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
-        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
+        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "gripLeft", "gripRight");
 //        gripper.setLevel(0);
         drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor", "touch");
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
         drcb.setLevel(0);
-        gripper.setLevel(0);
+        // gripper.setLevel(0);
         gyro.reset();
+        gripper.flipLeft.turnToAngle(20);
+        gripper.flipRight.turnToAngle(20);
+        gripper.gripLeft.turnToAngle(20);
+        gripper.gripRight.turnToAngle(20);
     }
 
     @Override
@@ -55,7 +59,8 @@ public class TestTele extends OpMode {
         telemetry.addData("drcb i gain", drcb.i);
         telemetry.addData("flipLeft angle", gripper.flipLeft.getAngle());
         telemetry.addData("flipRight angle", gripper.flipRight.getAngle());
-        telemetry.addData("grip angle", gripper.grip.getAngle());
+        telemetry.addData("gripLeft angle", gripper.gripLeft.getAngle());
+        telemetry.addData("gripRight angle", gripper.gripRight.getAngle());
         telemetry.update();
         controller.update();
 
@@ -81,19 +86,21 @@ public class TestTele extends OpMode {
         avgTurn /= turn.size();
 
         if (controller.left_trigger > 0) {
-            drive.drive(avgX/2.5, avgY/2.5, avgTurn/2.5);
+            // drive.drive(avgX/2.5, avgY/2.5, avgTurn/2.5);
         } else {
-            drive.drive(avgX, avgY, avgTurn);
+            // drive.drive(avgX, avgY, avgTurn);
         }
 
         if (controller.leftBumperOnce()) {
-            drcb.p -= 0.001;
-            drcb.updatePID();
+            // drcb.p -= 0.001;
+            // drcb.updatePID();
 //            drcb.justFeedforward = true;
+            gripper.moveDown();
         } else if (controller.rightBumperOnce()) {
-            drcb.p += 0.001;
-            drcb.updatePID();
+            // drcb.p += 0.001;
+            // drcb.updatePID();
 //            drcb.justFeedforward = false;
+            gripper.moveUp();
         }
         if (controller.XOnce()) {
             drcb.d -= 0.001;
@@ -112,11 +119,13 @@ public class TestTele extends OpMode {
             drcb.setLevel(0);
         }
         if (controller.AOnce()) {
-            drcb.useMotionProfile = false;
+            // drcb.useMotionProfile = false;
 //            drive.updatePID();
+            gripper.moveClose();
         } else if (controller.YOnce()) {
-            drcb.useMotionProfile = true;
+            // drcb.useMotionProfile = true;
+            gripper.moveOpen();
         }
-        drcb.run();
+        // drcb.run();
     }
 }

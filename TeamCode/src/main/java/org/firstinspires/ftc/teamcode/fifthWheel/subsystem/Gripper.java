@@ -8,19 +8,21 @@ public class Gripper {
     // private Servo grip;
     public ServoEx flipLeft;
     public ServoEx flipRight;
-    public ServoEx grip;
+    public ServoEx gripLeft;
+    public ServoEx gripRight;
 
-    private static final double RIGHT_LEVELS[] = {0.31, 0.54, 0.65, 0.85};
     // intake, ground, low, medium, high, up
-    private static final double LEVELS[] = { 17, -20, -55, -90, 90 };
-    private static final double OPEN = 125;
-    private static final double CLOSE = 30;
+    private static final double LEVELS[] = { -35, -20, -55, -90, 125 };
+    private static final double OPEN = -20;
+    private static final double CLOSE = -85;
 
-    public Gripper(HardwareMap hwMap, String fl, String fr, String g) {
+    public Gripper(HardwareMap hwMap, String fl, String fr, String gl, String gr) {
         flipLeft = new SimpleServo(hwMap, fl, -200, 200);
         flipRight = new SimpleServo(hwMap, fr, -200, 200);
-        grip = new SimpleServo(hwMap, g, -200, 200);
+        gripLeft = new SimpleServo(hwMap, gl, -200, 200);
+        gripRight = new SimpleServo(hwMap, gr, -200, 200);
         flipLeft.setInverted(true);
+        gripLeft.setInverted(true);
     }
 
     public void setLevel(int i) {
@@ -37,11 +39,13 @@ public class Gripper {
     }
 
     public void open() {
-        grip.turnToAngle(OPEN);
+        gripLeft.turnToAngle(OPEN);
+        gripRight.turnToAngle(OPEN);
     }
 
     public void close() {
-        grip.turnToAngle(CLOSE);
+        gripLeft.turnToAngle(CLOSE);
+        gripRight.turnToAngle(CLOSE);
     }
 
     public void moveUp() {
@@ -55,10 +59,12 @@ public class Gripper {
     }
 
     public void moveOpen() {
-        grip.rotateByAngle(5);
+        gripLeft.rotateByAngle(5);
+        gripRight.rotateByAngle(5);
     }
 
     public void moveClose() {
-        grip.rotateByAngle(-5);
+        gripLeft.rotateByAngle(-5);
+        gripRight.rotateByAngle(-5);
     }
 }

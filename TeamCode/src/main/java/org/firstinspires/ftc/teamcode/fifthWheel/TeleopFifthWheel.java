@@ -34,7 +34,7 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
-        place = new Place(hardwareMap, "leftMotor", "rightMotor", "touch", "flipLeft", "flipRight", "grip");
+        place = new Place(hardwareMap, "leftMotor", "rightMotor", "touch", "flipLeft", "flipRight", "gripLeft", "gripRight");
         controller = new Controller(gamepad1);
         gyro = new Gyro(hardwareMap);
     }
@@ -88,9 +88,9 @@ public class TeleopFifthWheel extends OpMode {
         avgTurn /= turn.size();
 
         if (controller.left_trigger > 0) {
-            drive.drive(avgX/2, avgY/2, avgTurn/2);
+            // drive.drive(avgX/2, avgY/2, avgTurn/2);
         } else {
-            drive.drive(avgX, avgY, avgTurn);
+            // drive.drive(avgX, avgY, avgTurn);
         }
 
         if (controller.AOnce()) {

@@ -25,17 +25,17 @@ public class Place {
 
     public ElapsedTime timer = new ElapsedTime();
 
-    public Place(HardwareMap hwMap, String lm, String rm, String ts, String fl, String fr, String g) {
+    public Place(HardwareMap hwMap, String lm, String rm, String ts, String fl, String fr, String gl, String gr) {
         drcb = new DRCB(hwMap, lm, rm, ts);
-        gripper = new Gripper(hwMap, fl, fr, g);
+        gripper = new Gripper(hwMap, fl, fr, gl, gr);
     }
 
     public void intake() {
         state = State.INTAKING;
         level = 0;
         gripper.setLevel(level);
-        gripper.open();
         drcb.setLevel(level);
+        timer.reset();
     }
 
     public void pickup() {
@@ -67,9 +67,13 @@ public class Place {
     public void run() {
         switch(state) {
             case INTAKING:
+                if (timer.milliseconds() > 275) {
+                    gripper.open();
+                    timer.reset();
+                }
                 break;
             case WAITING_FOR_CLOSE:
-                if (timer.milliseconds() > 400) {
+                if (timer.milliseconds() > 275) {
                     helpme = true;
                     gripper.setLevel(-1);
                     timer.reset();
