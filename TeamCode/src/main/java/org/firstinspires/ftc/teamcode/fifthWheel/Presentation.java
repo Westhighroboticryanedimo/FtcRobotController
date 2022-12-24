@@ -21,7 +21,7 @@ public class Presentation extends OpMode {
 
     @Override
     public void init() {
-        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
+        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "gripLeft", "gripRight");
         drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor", "touch");
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
@@ -45,7 +45,7 @@ public class Presentation extends OpMode {
         telemetry.addData("drcb i gain", drcb.i);
         telemetry.addData("flipLeft angle", gripper.flipLeft.getAngle());
         telemetry.addData("flipRight angle", gripper.flipRight.getAngle());
-        telemetry.addData("grip angle", gripper.grip.getAngle());
+        telemetry.addData("grip angle", gripper.gripLeft.getAngle());
         telemetry.update();
         controller.update();
 
