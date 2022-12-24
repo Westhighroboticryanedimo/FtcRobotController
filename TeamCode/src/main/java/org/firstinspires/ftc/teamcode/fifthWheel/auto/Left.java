@@ -1,19 +1,21 @@
-package org.firstinspires.ftc.teamcode.reee.fifthWheel.auto;
+package org.firstinspires.ftc.teamcode.fifthWheel.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Controller;
-import org.firstinspires.ftc.teamcode.reee.fifthWheel.subsystem.DriveFifthWheel;
-import org.firstinspires.ftc.teamcode.reee.fifthWheel.subsystem.IntakeCam;
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.IntakeCam;
+import org.firstinspires.ftc.teamcode.fifthWheel.command.Place;
 
-@Autonomous(name="FifthWheel Auto", group="FifthWheel")
-public class Auto extends LinearOpMode {
+@Autonomous(name="FifthWheel Left", group="FifthWheel")
+public class Left extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
         DriveFifthWheel drive = new DriveFifthWheel(this, hardwareMap);
         IntakeCam inCam = new IntakeCam(hardwareMap);
+        Place place = new Place(hardwareMap, "leftMotor", "rightMotor", "touch", "flipLeft", "flipRight", "grip");
         Controller controller = new Controller(gamepad1);
         int mode = 0;
         int signal = 1;
@@ -58,9 +60,7 @@ public class Auto extends LinearOpMode {
             telemetry.addData("cornerX", inCam.getCornerX());
             telemetry.addData("cornerY", inCam.getCornerY());
             telemetry.addData("Signal face", inCam.getSignalFace());
-            telemetry.addData("actual", signal);
             telemetry.addData("Avg hue", inCam.getAvgHue());
-//            telemetry.addData("sussus", "awogu");
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
@@ -69,22 +69,50 @@ public class Auto extends LinearOpMode {
 
         signal = inCam.getSignalFace();
 
-//        waitForStart();
-//        if (isStopRequested()) return;
-        switch (signal) {
-            case 1:
-                drive.move(0.25, 4, 180);
-                drive.move(0.50, 40, -90);
-                drive.move(0.50, 40, 180);
-                break;
-            case 2:
-                drive.move(0.50, 40, 180);
-                break;
-            case 3:
-                drive.move(0.25, 4, 180);
-                drive.move(0.50, 35, 90);
-                drive.move(0.50, 40, 180);
-                break;
-        }
+        drive.move(0.1, 4, 0);
+        drive.move(0.2, 6, 0);
+        drive.move(0.5, 20, 0);
+        drive.move(0.2, 6, 0);
+        drive.move(0.1, 4, 0);
+        drive.stop();
+        sleep(100);
+
+        drive.turn(0.1, -10);
+        drive.turn(0.2, -20);
+        drive.turn(0.5, -30);
+        drive.turn(0.2, -20);
+        drive.turn(0.1, -10);
+        drive.stop();
+        sleep(100);
+
+        drive.move(0.1, 4, 180);
+        drive.move(0.2, 6, 180);
+        drive.move(0.5, 20, 180);
+        drive.move(0.2, 6, 180);
+        drive.move(0.1, 4, 180);
+        drive.stop();
+        sleep(100);
+
+        drive.turn(0.1, -5);
+        drive.turn(0.2, -10);
+        drive.turn(0.5, -15);
+        drive.turn(0.2, -10);
+        drive.turn(0.1, -5);
+        drive.stop();
+        sleep(100);
+
+        // switch (signal) {
+        //     case 1:
+        //         drive.move(0.5, 40, -90);
+        //         drive.move(0.5, 40, 0);
+        //         break;
+        //     case 2:
+        //         drive.move(0.5, 40, 0);
+        //         break;
+        //     case 3:
+        //         drive.move(0.5, 40, 90);
+        //         drive.move(0.5, 40, 0);
+        //         break;
+        // }
     }
 }

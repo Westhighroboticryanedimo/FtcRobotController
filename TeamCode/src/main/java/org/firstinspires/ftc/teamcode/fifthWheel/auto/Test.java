@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.reee.fifthWheel.auto;
+package org.firstinspires.ftc.teamcode.fifthWheel.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.reee.fifthWheel.subsystem.IntakeCam;
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.IntakeCam;
 
 @Autonomous(name="FifthWheel Weegus", group="FifthWheel")
 public class Test extends LinearOpMode {
