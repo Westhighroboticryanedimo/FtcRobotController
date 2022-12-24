@@ -81,7 +81,7 @@ public class DRCB {
             reset();
         }
         // TODO: make this faster
-        setpoint = Control.trapMotion(1000.0, 600.0, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+        setpoint = Control.trapMotionP(1000.0, 600.0, LEVELS[oldLevel], LEVELS[level], timer.seconds());
         if (useMotionProfile) {
             pid.setSetpoint(setpoint);
         }
