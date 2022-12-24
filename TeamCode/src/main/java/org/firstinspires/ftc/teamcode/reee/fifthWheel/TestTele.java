@@ -30,7 +30,7 @@ public class TestTele extends OpMode {
         drive = new DriveFifthWheel(this, hardwareMap);
         gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
 //        gripper.setLevel(0);
-        drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor");
+        drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor", "touch");
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
         drcb.setLevel(0);

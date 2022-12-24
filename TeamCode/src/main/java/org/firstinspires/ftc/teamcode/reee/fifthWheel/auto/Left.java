@@ -15,7 +15,7 @@ public class Left extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         DriveFifthWheel drive = new DriveFifthWheel(this, hardwareMap);
         IntakeCam inCam = new IntakeCam(hardwareMap);
-        Place place = new Place(hardwareMap, "leftMotor", "rightMotor", "flipLeft", "flipRight", "grip");
+        Place place = new Place(hardwareMap, "leftMotor", "rightMotor", "touch", "flipLeft", "flipRight", "grip");
         Controller controller = new Controller(gamepad1);
         int mode = 0;
         int signal = 1;

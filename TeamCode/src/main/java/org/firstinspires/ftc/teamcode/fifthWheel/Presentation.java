@@ -22,7 +22,7 @@ public class Presentation extends OpMode {
     @Override
     public void init() {
         gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
-        drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor");
+        drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor", "touch");
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
         drcb.setLevel(0);

@@ -4,6 +4,7 @@ import java.lang.Math;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.PIDController;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.util.control.Control;
 public class DRCB {
     public DcMotor leftMotor;
     public DcMotor rightMotor;
+    public TouchSensor touch;
 
     public int level = 0;
     public int oldLevel = 0;
@@ -19,6 +21,7 @@ public class DRCB {
     private static final double LEVELS[] = {0, 170, 254, 345};
     private static final double LIFT_POWER = 1.0;
 
+    // TODO: find the right values for this
     private static final double TICKS_PER_REV = 1120;
     private static final double L_0 = 4.2; // motor to pivot dist
     private static final double L_A = 1.5; // bottom linkage
@@ -42,7 +45,7 @@ public class DRCB {
     public Boolean useMotionProfile = true;
     public Boolean justFeedforward = false;
 
-    public DRCB(HardwareMap hwMap, String lm, String rm) {
+    public DRCB(HardwareMap hwMap, String lm, String rm, String ts) {
         pid.reset();
         pid.setInputRange(0, LEVELS[3]);
         pid.setOutputRange(0, LIFT_POWER);
@@ -62,6 +65,8 @@ public class DRCB {
         rightMotor.setPower(0);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        touch = hwMap.get(TouchSensor.class, ts);
     }
 
     public void setLevel(int l) {
@@ -72,9 +77,16 @@ public class DRCB {
     }
 
     public void run() {
+        if (touch.isPressed()) {
+            reset();
+        }
+        // TODO: make this faster
         setpoint = Control.trapMotion(1000.0, 600.0, LEVELS[oldLevel], LEVELS[level], timer.seconds());
         if (useMotionProfile) {
             pid.setSetpoint(setpoint);
+        }
+        if (touch.isPressed()) {
+            reset();
         }
         // TODO: find feedforward offset value
         // angle of motor between lift rest and lift horizontal

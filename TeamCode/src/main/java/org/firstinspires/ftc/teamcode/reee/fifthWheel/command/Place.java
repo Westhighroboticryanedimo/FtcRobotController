@@ -25,8 +25,8 @@ public class Place {
 
     public ElapsedTime timer = new ElapsedTime();
 
-    public Place(HardwareMap hwMap, String lm, String rm, String fl, String fr, String g) {
-        drcb = new DRCB(hwMap, lm, rm);
+    public Place(HardwareMap hwMap, String lm, String rm, String ts, String fl, String fr, String g) {
+        drcb = new DRCB(hwMap, lm, rm, ts);
         gripper = new Gripper(hwMap, fl, fr, g);
     }
 

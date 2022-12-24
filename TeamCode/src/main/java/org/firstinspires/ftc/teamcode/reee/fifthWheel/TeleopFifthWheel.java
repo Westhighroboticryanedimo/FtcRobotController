@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 @TeleOp(name = "FifthWheel TeleOp")
 public class TeleopFifthWheel extends OpMode {
- df
     private DriveFifthWheel drive;
     private Place place;
     private Controller controller;
@@ -35,7 +34,7 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
-        place = new Place(hardwareMap, "leftMotor", "rightMotor", "flipLeft", "flipRight", "grip");
+        place = new Place(hardwareMap, "leftMotor", "rightMotor", "touch", "flipLeft", "flipRight", "grip");
         controller = new Controller(gamepad1);
         gyro = new Gyro(hardwareMap);
     }
