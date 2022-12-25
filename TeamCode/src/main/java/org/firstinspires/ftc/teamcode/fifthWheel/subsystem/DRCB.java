@@ -23,12 +23,14 @@ public class DRCB {
 
     // TODO: find the right values for this
     private static final double TICKS_PER_REV = 1120;
-    private static final double L_0 = 4.2; // motor to pivot dist
-    private static final double L_A = 1.5; // bottom linkage
-    private static final double L_B = 4.5; // top linkage
-    private static final double L_OFFSET = 1.9; // linkage attachment dist
-    private static final double THETA_0 = 2; // angle between horizontal and L_0 in rad
-    private static final double kTau_ff = 0.16; // gain for torque feedforward
+    private static final double L_0 = 3.5; // motor to pivot dist
+    private static final double L_A = 2.0; // bottom linkage
+    private static final double L_B = 3.75; // top linkage
+    private static final double L_OFFSET = 2.362; // linkage attachment dist
+    private static final double THETA_0 = 2.094; // angle between horizontal and L_0 in rad
+    public static double kTau_ff = 0.16; // gain for torque feedforward
+    public static double kV = 0.0;
+    public static double kA = 0.0;
 
     public double p = 0.02;
     public double i = 0.0;
