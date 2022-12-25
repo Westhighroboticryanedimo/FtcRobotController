@@ -46,6 +46,7 @@ public class Presentation extends OpMode {
         telemetry.addData("flipLeft angle", gripper.flipLeft.getAngle());
         telemetry.addData("flipRight angle", gripper.flipRight.getAngle());
         telemetry.addData("grip angle", gripper.gripLeft.getAngle());
+        telemetry.addData("isPressed", drcb.touch.isPressed());
         telemetry.update();
         controller.update();
 

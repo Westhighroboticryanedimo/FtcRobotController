@@ -45,6 +45,8 @@ public class DRCB {
     public Boolean useMotionProfile = true;
     public Boolean justFeedforward = false;
 
+    private HardwareMap hardwareMap;
+
     public DRCB(HardwareMap hwMap, String lm, String rm, String ts) {
         pid.reset();
         pid.setInputRange(0, LEVELS[3]);
@@ -67,6 +69,8 @@ public class DRCB {
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         touch = hwMap.get(TouchSensor.class, ts);
+
+        hardwareMap = hwMap;
     }
 
     public void setLevel(int l) {
@@ -84,9 +88,6 @@ public class DRCB {
         setpoint = Control.trapMotionP(1000.0, 600.0, LEVELS[oldLevel], LEVELS[level], timer.seconds());
         if (useMotionProfile) {
             pid.setSetpoint(setpoint);
-        }
-        if (touch.isPressed()) {
-            reset();
         }
         // TODO: find feedforward offset value
         // angle of motor between lift rest and lift horizontal

@@ -61,6 +61,7 @@ public class TestTele extends OpMode {
         telemetry.addData("flipRight angle", gripper.flipRight.getAngle());
         telemetry.addData("gripLeft angle", gripper.gripLeft.getAngle());
         telemetry.addData("gripRight angle", gripper.gripRight.getAngle());
+        telemetry.addData("isPressed", drcb.touch.isPressed());
         telemetry.update();
         controller.update();
 
@@ -126,6 +127,6 @@ public class TestTele extends OpMode {
             // drcb.useMotionProfile = true;
             gripper.moveOpen();
         }
-        // drcb.run();
+         drcb.run();
     }
 }
