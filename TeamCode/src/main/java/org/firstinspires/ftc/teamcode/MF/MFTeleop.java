@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Controller;
+import org.firstinspires.ftc.teamcode.MF.subsystems.MFDrive;
+import org.firstinspires.ftc.teamcode.MF.subsystems.Lift;
 
 @TeleOp(name = "MF TeleOp")
 public class MFTeleop extends OpMode {
@@ -31,6 +33,7 @@ public class MFTeleop extends OpMode {
     public void init() {
         drive = new MFDrive(this, hardwareMap);
         controller = new Controller(gamepad1);
+        Lift lift = new Lift();
 //        controller2 = new Controller(gamepad2);
         liftLimit = hardwareMap.get(TouchSensor.class, "liftLimit");
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
@@ -87,6 +90,7 @@ public class MFTeleop extends OpMode {
                 liftMotor.setPower(-1);
                 liftMotor2.setPower(1);
             }
+
         } else if (controller.dpadDown()) {
             if (liftLimit.isPressed()) {
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

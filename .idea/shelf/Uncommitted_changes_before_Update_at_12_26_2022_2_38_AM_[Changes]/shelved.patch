@@ -1,0 +1,176 @@
+Index: TeamCode/src/main/java/org/firstinspires/ftc/teamcode/fifthWheel/Presentation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.firstinspires.ftc.teamcode.fifthWheel;\r\n\r\nimport com.qualcomm.robotcore.eventloop.opmode.OpMode;\r\nimport com.qualcomm.robotcore.eventloop.opmode.TeleOp;\r\n\r\nimport org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DRCB;\r\nimport org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;\r\nimport org.firstinspires.ftc.teamcode.fifthWheel.subsystem.Gripper;\r\nimport org.firstinspires.ftc.teamcode.hardware.Gyro;\r\nimport org.firstinspires.ftc.teamcode.Controller;\r\n\r\nimport java.util.ArrayList;\r\n\r\n@TeleOp(name = \"FifthWheel Presentation\")\r\npublic class Presentation extends OpMode {\r\n\r\n    private Gripper gripper;\r\n    private DRCB drcb;\r\n    private Gyro gyro;\r\n    private Controller controller;\r\n\r\n    @Override\r\n    public void init() {\r\n        gripper = new Gripper(hardwareMap, \"flipLeft\", \"flipRight\", \"grip\");\r\n        drcb = new DRCB(hardwareMap, \"leftMotor\", \"rightMotor\");\r\n        gyro = new Gyro(hardwareMap, false);\r\n        controller = new Controller(gamepad1);\r\n        drcb.setLevel(0);\r\n        gripper.setLevel(0);\r\n        gyro.reset();\r\n    }\r\n\r\n    @Override\r\n    public void loop() {\r\n        telemetry.addData(\"gyro\", gyro.getAngleDegrees());\r\n        telemetry.addData(\"left drcb\", drcb.getCurrentLeftTicks());\r\n        telemetry.addData(\"right drcb\", drcb.getCurrentRightTicks());\r\n        telemetry.addData(\"p\", drcb.p);\r\n        telemetry.addData(\"d\", drcb.d);\r\n        telemetry.addData(\"ff\", drcb.ff);\r\n        telemetry.addData(\"output\", drcb.output);\r\n        telemetry.addData(\"total\", drcb.total);\r\n        telemetry.addData(\"level\", drcb.level);\r\n        telemetry.addData(\"setpoint\", drcb.setpoint);\r\n        telemetry.addData(\"drcb i gain\", drcb.i);\r\n        telemetry.addData(\"flipLeft angle\", gripper.flipLeft.getAngle());\r\n        telemetry.addData(\"flipRight angle\", gripper.flipRight.getAngle());\r\n        telemetry.addData(\"grip angle\", gripper.grip.getAngle());\r\n        telemetry.update();\r\n        controller.update();\r\n\r\n        if (controller.leftBumperOnce()) {\r\n           drcb.justFeedforward = true;\r\n        } else if (controller.rightBumperOnce()) {\r\n           drcb.justFeedforward = false;\r\n        }\r\n        if (controller.dpadUpOnce()) {\r\n            drcb.setLevel(3);\r\n        } else if (controller.dpadRightOnce()) {\r\n            drcb.setLevel(2);\r\n        } else if (controller.dpadLeftOnce()) {\r\n            drcb.setLevel(1);\r\n        } else if (controller.dpadDownOnce()) {\r\n            drcb.setLevel(0);\r\n        }\r\n        if (controller.AOnce()) {\r\n            drcb.useMotionProfile = false;\r\n        } else if (controller.YOnce()) {\r\n            drcb.useMotionProfile = true;\r\n        }\r\n        drcb.run();\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/fifthWheel/Presentation.java b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/fifthWheel/Presentation.java
+--- a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/fifthWheel/Presentation.java	
++++ b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/fifthWheel/Presentation.java	
+@@ -1,74 +1,74 @@
+-package org.firstinspires.ftc.teamcode.fifthWheel;
+-
+-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+-
+-import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DRCB;
+-import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
+-import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.Gripper;
+-import org.firstinspires.ftc.teamcode.hardware.Gyro;
+-import org.firstinspires.ftc.teamcode.Controller;
+-
+-import java.util.ArrayList;
+-
+-@TeleOp(name = "FifthWheel Presentation")
+-public class Presentation extends OpMode {
+-
+-    private Gripper gripper;
+-    private DRCB drcb;
+-    private Gyro gyro;
+-    private Controller controller;
+-
+-    @Override
+-    public void init() {
+-        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
+-        drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor");
+-        gyro = new Gyro(hardwareMap, false);
+-        controller = new Controller(gamepad1);
+-        drcb.setLevel(0);
+-        gripper.setLevel(0);
+-        gyro.reset();
+-    }
+-
+-    @Override
+-    public void loop() {
+-        telemetry.addData("gyro", gyro.getAngleDegrees());
+-        telemetry.addData("left drcb", drcb.getCurrentLeftTicks());
+-        telemetry.addData("right drcb", drcb.getCurrentRightTicks());
+-        telemetry.addData("p", drcb.p);
+-        telemetry.addData("d", drcb.d);
+-        telemetry.addData("ff", drcb.ff);
+-        telemetry.addData("output", drcb.output);
+-        telemetry.addData("total", drcb.total);
+-        telemetry.addData("level", drcb.level);
+-        telemetry.addData("setpoint", drcb.setpoint);
+-        telemetry.addData("drcb i gain", drcb.i);
+-        telemetry.addData("flipLeft angle", gripper.flipLeft.getAngle());
+-        telemetry.addData("flipRight angle", gripper.flipRight.getAngle());
+-        telemetry.addData("grip angle", gripper.grip.getAngle());
+-        telemetry.update();
+-        controller.update();
+-
+-        if (controller.leftBumperOnce()) {
+-           drcb.justFeedforward = true;
+-        } else if (controller.rightBumperOnce()) {
+-           drcb.justFeedforward = false;
+-        }
+-        if (controller.dpadUpOnce()) {
+-            drcb.setLevel(3);
+-        } else if (controller.dpadRightOnce()) {
+-            drcb.setLevel(2);
+-        } else if (controller.dpadLeftOnce()) {
+-            drcb.setLevel(1);
+-        } else if (controller.dpadDownOnce()) {
+-            drcb.setLevel(0);
+-        }
+-        if (controller.AOnce()) {
+-            drcb.useMotionProfile = false;
+-        } else if (controller.YOnce()) {
+-            drcb.useMotionProfile = true;
+-        }
+-        drcb.run();
+-    }
+-}
+-
++//package org.firstinspires.ftc.teamcode.fifthWheel;
++//
++//import com.qualcomm.robotcore.eventloop.opmode.OpMode;
++//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
++//
++//import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DRCB;
++//import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
++//import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.Gripper;
++//import org.firstinspires.ftc.teamcode.hardware.Gyro;
++//import org.firstinspires.ftc.teamcode.Controller;
++//
++//import java.util.ArrayList;
++//
++//@TeleOp(name = "FifthWheel Presentation")
++//public class Presentation extends OpMode {
++//
++//    private Gripper gripper;
++//    private DRCB drcb;
++//    private Gyro gyro;
++//    private Controller controller;
++//
++//    @Override
++//    public void init() {
++//        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
++//        drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor");
++//        gyro = new Gyro(hardwareMap, false);
++//        controller = new Controller(gamepad1);
++//        drcb.setLevel(0);
++//        gripper.setLevel(0);
++//        gyro.reset();
++//    }
++//
++//    @Override
++//    public void loop() {
++//        telemetry.addData("gyro", gyro.getAngleDegrees());
++//        telemetry.addData("left drcb", drcb.getCurrentLeftTicks());
++//        telemetry.addData("right drcb", drcb.getCurrentRightTicks());
++//        telemetry.addData("p", drcb.p);
++//        telemetry.addData("d", drcb.d);
++//        telemetry.addData("ff", drcb.ff);
++//        telemetry.addData("output", drcb.output);
++//        telemetry.addData("total", drcb.total);
++//        telemetry.addData("level", drcb.level);
++//        telemetry.addData("setpoint", drcb.setpoint);
++//        telemetry.addData("drcb i gain", drcb.i);
++//        telemetry.addData("flipLeft angle", gripper.flipLeft.getAngle());
++//        telemetry.addData("flipRight angle", gripper.flipRight.getAngle());
++//        telemetry.addData("grip angle", gripper.grip.getAngle());
++//        telemetry.update();
++//        controller.update();
++//
++//        if (controller.leftBumperOnce()) {
++//           drcb.justFeedforward = true;
++//        } else if (controller.rightBumperOnce()) {
++//           drcb.justFeedforward = false;
++//        }
++//        if (controller.dpadUpOnce()) {
++//            drcb.setLevel(3);
++//        } else if (controller.dpadRightOnce()) {
++//            drcb.setLevel(2);
++//        } else if (controller.dpadLeftOnce()) {
++//            drcb.setLevel(1);
++//        } else if (controller.dpadDownOnce()) {
++//            drcb.setLevel(0);
++//        }
++//        if (controller.AOnce()) {
++//            drcb.useMotionProfile = false;
++//        } else if (controller.YOnce()) {
++//            drcb.useMotionProfile = true;
++//        }
++//        drcb.run();
++//    }
++//}
++//
+Index: TeamCode/src/main/java/org/firstinspires/ftc/teamcode/reee/fifthWheel/TeleopFifthWheel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.firstinspires.ftc.teamcode.reee.fifthWheel;\r\n\r\nimport com.qualcomm.robotcore.eventloop.opmode.OpMode;\r\nimport com.qualcomm.robotcore.eventloop.opmode.TeleOp;\r\nimport com.qualcomm.robotcore.hardware.DcMotor;\r\n\r\nimport org.firstinspires.ftc.teamcode.reee.fifthWheel.command.Place;\r\nimport org.firstinspires.ftc.teamcode.reee.fifthWheel.subsystem.DriveFifthWheel;\r\nimport org.firstinspires.ftc.teamcode.Controller;\r\nimport org.firstinspires.ftc.teamcode.hardware.Gyro;\r\n\r\nimport com.qualcomm.robotcore.util.ElapsedTime;\r\n\r\nimport java.util.ArrayList;\r\n\r\n@TeleOp(name = \"FifthWheel TeleOp\")\r\npublic class TeleopFifthWheel extends OpMode {\r\n df\r\n    private DriveFifthWheel drive;\r\n    private Place place;\r\n    private Controller controller;\r\n    private Gyro gyro;\r\n\r\n    private static final int STORE_NUM = 8;\r\n    private ArrayList<Double> x = new ArrayList<>();\r\n    private ArrayList<Double> y = new ArrayList<>();\r\n    private ArrayList<Double> turn = new ArrayList<>();\r\n\r\n    private int level = 0;\r\n\r\n    ElapsedTime timer = new ElapsedTime();\r\n\r\n    private boolean start = true;\r\n\r\n    @Override\r\n    public void init() {\r\n        drive = new DriveFifthWheel(this, hardwareMap);\r\n        place = new Place(hardwareMap, \"leftMotor\", \"rightMotor\", \"flipLeft\", \"flipRight\", \"grip\");\r\n        controller = new Controller(gamepad1);\r\n        gyro = new Gyro(hardwareMap);\r\n    }\r\n\r\n    @Override\r\n    public void loop() {\r\n        if (start) {\r\n            place.intake();\r\n            start = false;\r\n        }\r\n        telemetry.addData(\"timer\", timer.milliseconds());\r\n        timer.reset();\r\n        telemetry.addData(\"left ticks\", place.getLeftPos());\r\n        telemetry.addData(\"right ticks\", place.getRightPos());\r\n//        telemetry.addData(\"timer\", place.timer.milliseconds());\r\n        telemetry.addData(\"helpme\", place.helpme);\r\n        telemetry.addData(\"state\", place.state);\r\n        telemetry.addData(\"level\", level);\r\n        telemetry.addData(\"gyro\", gyro.getAngleDegrees());\r\n        telemetry.addData(\"left drcb\", place.drcb.getCurrentLeftTicks());\r\n        telemetry.addData(\"right drcb\", place.drcb.getCurrentRightTicks());\r\n        telemetry.addData(\"p\", place.drcb.p);\r\n        telemetry.addData(\"d\", place.drcb.d);\r\n        telemetry.addData(\"ff\", place.drcb.ff);\r\n        telemetry.addData(\"output\", place.drcb.output);\r\n        telemetry.addData(\"total\", place.drcb.total);\r\n        telemetry.addData(\"level\", place.drcb.level);\r\n        telemetry.addData(\"setpoint\", place.drcb.setpoint);\r\n        telemetry.update();\r\n        controller.update();\r\n\r\n        x.add(controller.left_stick_x);\r\n        y.add(-controller.left_stick_y);\r\n        turn.add(controller.right_stick_x);\r\n\r\n        // Remove\r\n        if (x.size() > STORE_NUM) x.remove(0);\r\n        if (y.size() > STORE_NUM) y.remove(0);\r\n        if (turn.size() > STORE_NUM) turn.remove(0);\r\n\r\n        double avgX = 0;\r\n        for (int i = 0; i < x.size(); i++) avgX += x.get(i);\r\n        avgX /= x.size();\r\n\r\n        double avgY = 0;\r\n        for (int i = 0; i < y.size(); i++) avgY += y.get(i);\r\n        avgY /= y.size();\r\n\r\n        double avgTurn = 0;\r\n        for (int i = 0; i < turn.size(); i++) avgTurn += turn.get(i);\r\n        avgTurn /= turn.size();\r\n\r\n        if (controller.left_trigger > 0) {\r\n            drive.drive(avgX/2, avgY/2, avgTurn/2);\r\n        } else {\r\n            drive.drive(avgX, avgY, avgTurn);\r\n        }\r\n\r\n        if (controller.AOnce()) {\r\n            place.intake();\r\n        } else if (controller.BOnce()) {\r\n            place.pickup();\r\n        } else if (controller.dpadUpOnce()) {\r\n            level = 3;\r\n            place.raise(level);\r\n        } else if (controller.dpadRightOnce()) {\r\n            level = 2;\r\n            place.raise(level);\r\n        } else if (controller.dpadLeftOnce()) {\r\n            level = 1;\r\n            place.raise(level);\r\n        } else if (controller.dpadDownOnce()) {\r\n            level = 0;\r\n            place.raise(level);\r\n        } else if (controller.XOnce()) {\r\n            place.dropAndLower();\r\n        } else if (controller.right_trigger > 0.8) {\r\n            place.drcb.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n            place.drcb.leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);\r\n            place.drcb.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\r\n            place.drcb.rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);\r\n        }\r\n        if (controller.rightBumper()) {\r\n            place.drcb.leftMotor.setPower(-0.01);\r\n            place.drcb.rightMotor.setPower(-0.01);\r\n        } else {\r\n            place.run();\r\n        }\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/reee/fifthWheel/TeleopFifthWheel.java b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/reee/fifthWheel/TeleopFifthWheel.java
+--- a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/reee/fifthWheel/TeleopFifthWheel.java	
++++ b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/reee/fifthWheel/TeleopFifthWheel.java	
+@@ -15,7 +15,7 @@
+ 
+ @TeleOp(name = "FifthWheel TeleOp")
+ public class TeleopFifthWheel extends OpMode {
+- df
++
+     private DriveFifthWheel drive;
+     private Place place;
+     private Controller controller;

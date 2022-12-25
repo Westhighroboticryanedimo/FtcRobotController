@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import static java.lang.Math.abs;
 
+import org.firstinspires.ftc.teamcode.MF.subsystems.ColorCam;
+
 @Autonomous(name = "Read/Park")
 
 public class MFTonomous extends LinearOpMode {
