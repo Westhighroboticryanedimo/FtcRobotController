@@ -40,9 +40,4 @@ public class Lift {
             liftMotor2.setPower(-0.5);
         }
     }
-
-    public void stop() {
-        liftMotor.setPower(0);
-        liftMotor2.setPower(0);
-    }
 }
