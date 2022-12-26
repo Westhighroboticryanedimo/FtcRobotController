@@ -11,6 +11,8 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Scalar;
 import org.opencv.core.Core;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
 
 
 
@@ -49,12 +51,19 @@ public class ColorCam {
         int hueInt = 0;
         int color = 0;
 
+        int TLX = 0; //*****************************************************************************
+        int TLY = 0; //*****************************************************************************
+        int BRX = 0; //*****************************************************************************
+        int BRY = 0; //*****************************************************************************
+
         @Override
         public Mat processFrame(Mat input) {
             Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
-            Core.extractChannel(hsv, hue, 0);
+            Mat focus = hsv.submat(new Rect(new Point(TLX, TLY), new Point(BRX, BRY))); //**********
+            Core.extractChannel(focus, hue, 0); //Change "focus" to hsv
             hueScalar = Core.mean(hue);
             hueInt = (int)Math.round(hueScalar.val[0]);
+            Imgproc.rectangle(input, new Point(TLX, TLY), new Point(BRX, BRY), new Scalar(255, 0, 0), 2); //************
             if ((hueInt < 30) || (150 <= hueInt)) {
                 color = 1;
             } else if (30 <= hueInt && hueInt < 90) {
