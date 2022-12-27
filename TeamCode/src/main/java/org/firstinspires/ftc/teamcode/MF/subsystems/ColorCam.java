@@ -20,6 +20,27 @@ public class ColorCam {
     private OpenCvCamera camera;
     private ColorPipeline colorPipeline = new ColorPipeline();
 
+    int p1X = 0;
+    int p1Y = 0;
+    int p2X = 0;
+    int p2Y = 0;
+
+    public void change_p1X(int change) {
+        p1X = p1X + change;
+    }
+
+    public void change_p2X(int change) {
+        p2X = p2X + change;
+    }
+
+    public void change_p1Y(int change) {
+        p1Y = p1Y + change;
+    }
+
+    public void change_p2Y(int change) {
+        p2Y = p2Y + change;
+    }
+
     public void cameraInit(HardwareMap hardwareMap) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "ColorCam");
@@ -51,19 +72,15 @@ public class ColorCam {
         int hueInt = 0;
         int color = 0;
 
-        int TLX = 0; //*****************************************************************************
-        int TLY = 0; //*****************************************************************************
-        int BRX = 0; //*****************************************************************************
-        int BRY = 0; //*****************************************************************************
 
         @Override
         public Mat processFrame(Mat input) {
             Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
-            Mat focus = hsv.submat(new Rect(new Point(TLX, TLY), new Point(BRX, BRY))); //**********
+            Mat focus = hsv.submat(new Rect(new Point(p1X, p1Y), new Point(p2X, p2Y))); //**********
             Core.extractChannel(focus, hue, 0); //Change "focus" to hsv
             hueScalar = Core.mean(hue);
             hueInt = (int)Math.round(hueScalar.val[0]);
-            Imgproc.rectangle(input, new Point(TLX, TLY), new Point(BRX, BRY), new Scalar(255, 0, 0), 2); //************
+            Imgproc.rectangle(input, new Point(p1X, p1Y), new Point(p2X, p2Y), new Scalar(255, 0, 0), 2); //************
             if ((hueInt < 30) || (150 <= hueInt)) {
                 color = 1;
             } else if (30 <= hueInt && hueInt < 90) {
