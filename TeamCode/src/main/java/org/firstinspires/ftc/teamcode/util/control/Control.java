@@ -71,7 +71,8 @@ public class Control {
         } else if (currentT < t_accel + t_cruise) {
             return dir*maxV;
         } else {
-            return dir*(maxV-maxA*currentT);
+            double t_current_decel = currentT - (t_accel + t_cruise);
+            return dir*(maxV-maxA*t_current_decel);
         }
     }
     static public double trapMotionA(double maxV, double maxA, double startD, double endD, double currentT) {
