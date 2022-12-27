@@ -115,6 +115,7 @@ public class DRCB {
         }
         // if going down, reduce output cause gravity
         // TODO: take care of this in the model
+        // HACK: this sucks
         if (total < 0.02) {
             total = total + (0.02 - total)/downMultiplier;
         }
@@ -169,6 +170,7 @@ public class DRCB {
         double theta = Math.PI - (theta_ab - angle) - theta_bc;
 
         double result = Math.cos(theta)/(Math.sin(theta_ab)*Math.sin(theta_bc));
+        // HACK: cause my feedforward model sucks
         if ((-30 <= ticks) && (ticks < 175)) {
             result += 0.45;
         } else if (ticks > 180) {

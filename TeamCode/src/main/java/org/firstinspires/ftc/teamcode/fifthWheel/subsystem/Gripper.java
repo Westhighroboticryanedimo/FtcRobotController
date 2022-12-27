@@ -11,10 +11,10 @@ public class Gripper {
     public ServoEx gripLeft;
     public ServoEx gripRight;
 
-    // intake, ground, low, medium, high, up
-    private static final double LEVELS[] = { -35, -20, -55, -90, 125 };
+    // intake, low, medium, high, up
+    private static final double LEVELS[] = { -35, -25, -50, -100, 125 };
     private static final double OPEN = -20;
-    private static final double CLOSE = -85;
+    private static final double CLOSE = -87;
 
     public Gripper(HardwareMap hwMap, String fl, String fr, String gl, String gr) {
         flipLeft = new SimpleServo(hwMap, fl, -200, 200);

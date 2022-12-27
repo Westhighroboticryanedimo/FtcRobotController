@@ -34,7 +34,6 @@ public class Place {
         state = State.INTAKING;
         level = 0;
         gripper.setLevel(level);
-        drcb.setLevel(level);
         timer.reset();
     }
 
@@ -46,20 +45,14 @@ public class Place {
 
     public void raise(int l) {
         state = State.RAISING;
-        oldLevel = level;
         level = l;
-        // if raising, raise lift then move wrist
-        // if lowering, move wrist then lower lift
-        if (oldLevel < level) {
-            drcb.setLevel(level);
-        } else {
-            gripper.setLevel(level);
-        }
+        drcb.setLevel(level);
         timer.reset();
     }
 
     public void dropAndLower() {
         state = State.LOWERING;
+        level = 0;
         gripper.open();
         timer.reset();
     }
@@ -73,7 +66,7 @@ public class Place {
                 }
                 break;
             case WAITING_FOR_CLOSE:
-                if (timer.milliseconds() > 275) {
+                if (timer.milliseconds() > 300) {
                     helpme = true;
                     gripper.setLevel(-1);
                     timer.reset();
@@ -84,25 +77,18 @@ public class Place {
                 break;
             case RAISING:
                 if (timer.milliseconds() > 300) {
-                    if (oldLevel < level) {
-                        gripper.setLevel(level);
-                    } else {
-                        drcb.setLevel(level);
-                    }
+                    gripper.setLevel(level);
                     timer.reset();
                 }
                 break;
             case LOWERING:
+                if (timer.milliseconds() > 200) {
+                    gripper.close();
+                }
                 if (timer.milliseconds() > 400) {
                     gripper.setLevel(-1);
+                    drcb.setLevel(level);
                 }
-//                if (timer.milliseconds() > 500 ) {
-//                    level = 0;
-//                    drcb.setLevel(level);
-//                }
-//                if (drcb.arrived()) {
-//                    state = State.INTAKING;
-//                }
                 break;
         }
         drcb.run();

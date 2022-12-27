@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
 public class DriveFifthWheel extends HolonomicDrive {
-    public double p = 0.055;
+    public double p = 0.04;
     private double i = 0;
     public double d = 0.015;
 
