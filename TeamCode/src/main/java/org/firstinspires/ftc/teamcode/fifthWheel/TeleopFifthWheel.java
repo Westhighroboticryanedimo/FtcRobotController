@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.hardware.Gyro;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.ArrayList;
+import java.lang.Math;
 
 @TeleOp(name = "FifthWheel TeleOp")
 public class TeleopFifthWheel extends OpMode {
@@ -20,14 +20,17 @@ public class TeleopFifthWheel extends OpMode {
     private Controller controller;
     private Gyro gyro;
 
-    private static final int STORE_NUM = 8;
-    private ArrayList<Double> x = new ArrayList<>();
-    private ArrayList<Double> y = new ArrayList<>();
-    private ArrayList<Double> turn = new ArrayList<>();
+    private static final double MAX_ACCEL = 2.75;
+    private double x = 0.0;
+    private double y = 0.0;
+    private double turn = 0.0;
 
     private int level = 0;
 
     ElapsedTime timer = new ElapsedTime();
+    ElapsedTime runtime = new ElapsedTime();
+    double previousTime = 0.0;
+    double elapsedTime = 0.0;
 
     private boolean start = true;
 
@@ -45,7 +48,7 @@ public class TeleopFifthWheel extends OpMode {
             place.intake();
             start = false;
         }
-        telemetry.addData("timer", timer.milliseconds());
+        telemetry.addData("loop timer", timer.milliseconds());
         timer.reset();
         telemetry.addData("left ticks", place.getLeftPos());
         telemetry.addData("right ticks", place.getRightPos());
@@ -63,35 +66,18 @@ public class TeleopFifthWheel extends OpMode {
         telemetry.addData("total", place.drcb.total);
         telemetry.addData("level", place.drcb.level);
         telemetry.addData("setpoint", place.drcb.setpoint);
+        telemetry.addData("x", x);
+        telemetry.addData("y", y);
+        telemetry.addData("turn", turn);
         telemetry.update();
         controller.update();
 
-        x.add(controller.left_stick_x);
-        y.add(-controller.left_stick_y);
-        turn.add(controller.right_stick_x);
-
-        // Remove
-        if (x.size() > STORE_NUM) x.remove(0);
-        if (y.size() > STORE_NUM) y.remove(0);
-        if (turn.size() > STORE_NUM) turn.remove(0);
-
-        double avgX = 0;
-        for (int i = 0; i < x.size(); i++) avgX += x.get(i);
-        avgX /= x.size();
-
-        double avgY = 0;
-        for (int i = 0; i < y.size(); i++) avgY += y.get(i);
-        avgY /= y.size();
-
-        double avgTurn = 0;
-        for (int i = 0; i < turn.size(); i++) avgTurn += turn.get(i);
-        avgTurn /= turn.size();
-
-        if (controller.left_trigger > 0) {
-            // drive.drive(avgX/2, avgY/2, avgTurn/2);
-        } else {
-            // drive.drive(avgX, avgY, avgTurn);
-        }
+        elapsedTime = runtime.seconds() - previousTime;
+        previousTime = runtime.seconds();
+        x += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller.left_stick_x - x, MAX_ACCEL*elapsedTime));
+        y += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller.left_stick_y - y, MAX_ACCEL*elapsedTime));
+        turn += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller.right_stick_x - turn, MAX_ACCEL*elapsedTime));
+        drive.drive(x, y, turn);
 
         if (controller.AOnce()) {
             place.intake();
