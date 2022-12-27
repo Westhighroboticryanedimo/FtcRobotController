@@ -97,17 +97,7 @@ public class TeleopFifthWheel extends OpMode {
             place.raise(level);
         } else if (controller.XOnce()) {
             place.dropAndLower();
-        } else if (controller.right_trigger > 0.8) {
-            place.drcb.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            place.drcb.leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            place.drcb.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            place.drcb.rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        if (controller.rightBumper()) {
-            place.drcb.leftMotor.setPower(-0.01);
-            place.drcb.rightMotor.setPower(-0.01);
-        } else {
-            place.run();
-        }
+        place.run();
     }
 }
