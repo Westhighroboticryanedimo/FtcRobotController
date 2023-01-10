@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Controller;
 
 import org.firstinspires.ftc.teamcode.MF.subsystems.ColorCam;
 
-@Autonomous(name = "Read/Park")
+@Autonomous(name = "MFTonomous Left")
 
 public class MFTonomous extends LinearOpMode {
 
@@ -19,7 +19,6 @@ public class MFTonomous extends LinearOpMode {
     private DcMotor FRDrive;
     private DcMotor BLDrive;
     private DcMotor BRDrive;
-    private Controller controller;
 
     private class MotorFns {
 
@@ -52,7 +51,7 @@ public class MFTonomous extends LinearOpMode {
     @Override public void runOpMode() throws InterruptedException {
         colorCam.cameraInit(hardwareMap);
         motorFns = new MotorFns();
-        controller = new Controller(gamepad1);
+        Controller controller = new Controller(gamepad1);
         FLDrive = hardwareMap.get(DcMotor.class, "frontLeft");
         FRDrive = hardwareMap.get(DcMotor.class, "frontRight");
         BLDrive = hardwareMap.get(DcMotor.class, "backLeft");
@@ -65,37 +64,46 @@ public class MFTonomous extends LinearOpMode {
         motorFns.resetEncoders();
 
         while (!isStarted() && !isStopRequested()) {
-            if (controller.dpadUp()) {
+            controller.update();
+            if (controller.dpadUpOnce()) {
                 colorCam.change_p1Y(-5);
-            } else if (controller.dpadDown()) {
+            } else if (controller.dpadDownOnce()) {
                 colorCam.change_p1Y(5);
-            } else if (controller.dpadRight()) {
+            } else if (controller.dpadRightOnce()) {
                 colorCam.change_p1X(5);
-            } else if (controller.dpadLeft()) {
+            } else if (controller.dpadLeftOnce()) {
                 colorCam.change_p1X(-5);
-            } else if (controller.Y()) {
+            } else if (controller.YOnce()) {
                 colorCam.change_p2Y(-5);
-            } else if (controller.A()) {
-                colorCam.change_p1Y(5);
-            } else if (controller.B()) {
+            } else if (controller.AOnce()) {
+                colorCam.change_p2Y(5);
+            } else if (controller.BOnce()) {
                 colorCam.change_p2X(5);
-            } else if (controller.X()) {
+            } else if (controller.XOnce()) {
                 colorCam.change_p2X(-5);
             }
+
+            telemetry.addData("color", colorCam.getColor());
+            telemetry.addData("hue", colorCam.getHue());
+            telemetry.addData("p1X", colorCam.getp1X());
+            telemetry.addData("p2X", colorCam.getp2X());
+            telemetry.addData("p1Y", colorCam.getp1Y());
+            telemetry.addData("p2Y", colorCam.getp2Y());
+            telemetry.update();
         }
 
         waitForStart();
-        while (motorFns.getEncoders() < 2000) {
-            motorFns.runMotors(0.25, 0.25, -0.3, -0.25);
-            telemetry.update();
-        }
-        motorFns.stopMotors();
-        motorFns.resetEncoders();
-        while (motorFns.getEncoders() < 2000) {
-            motorFns.runMotors(-0.25, -0.25, 0.3, 0.25);
-            telemetry.update();
-        }
-        motorFns.stopMotors();
+//        while (motorFns.getEncoders() < 2000) {
+//            motorFns.runMotors(0.25, 0.25, -0.3, -0.25);
+//            telemetry.update();
+//        }
+//        motorFns.stopMotors();
+//        motorFns.resetEncoders();
+//        while (motorFns.getEncoders() < 2000) {
+//            motorFns.runMotors(-0.25, -0.25, 0.3, 0.25);
+//            telemetry.update();
+//        }
+//        motorFns.stopMotors();
 
     }
 }

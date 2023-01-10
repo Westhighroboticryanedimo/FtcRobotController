@@ -63,6 +63,10 @@ public class ColorCam {
         return colorPipeline.getColor();
     }
     public int getHue() { return colorPipeline.getHueInt();}
+    public int getp1X() {return colorPipeline.getp1X();}
+    public int getp2X() {return colorPipeline.getp2X();}
+    public int getp1Y() {return colorPipeline.getp1Y();}
+    public int getp2Y() {return colorPipeline.getp2Y();}
 
     class ColorPipeline extends OpenCvPipeline {
 //        0, 60, 120
@@ -96,5 +100,9 @@ public class ColorCam {
             return(color);
         }
         public int getHueInt() {return(hueInt);}
+        public int getp1X() {return(p1X);}
+        public int getp2X() {return(p2X);}
+        public int getp1Y() {return(p1Y);}
+        public int getp2Y() {return(p2Y);}
     }
 }

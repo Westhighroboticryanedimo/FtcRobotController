@@ -76,7 +76,6 @@ public class MFTeleop extends OpMode {
         } else {
             drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
         }
-//        drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
 
 //        telemetry.addData("gyro", gyrog)
 
