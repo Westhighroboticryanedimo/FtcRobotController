@@ -20,10 +20,10 @@ public class ColorCam {
     private OpenCvCamera camera;
     private ColorPipeline colorPipeline = new ColorPipeline();
 
-    int p1X = 0;
-    int p1Y = 0;
-    int p2X = 0;
-    int p2Y = 0;
+    int p1X = 290;
+    int p1Y = 155;
+    int p2X = 350;
+    int p2Y = 280;
 
     public void change_p1X(int change) {
         p1X = p1X + change;
@@ -51,7 +51,7 @@ public class ColorCam {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPSIDE_DOWN);
             }
             @Override
             public void onError(int errorCode) {

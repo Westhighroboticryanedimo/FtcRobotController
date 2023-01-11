@@ -53,7 +53,7 @@ public class MFTeleop extends OpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        clawServo.setPosition(0.52);
+        clawServo.setPosition(0.5);
     }
 
     @Override
