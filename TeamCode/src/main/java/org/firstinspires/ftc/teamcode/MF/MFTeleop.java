@@ -53,10 +53,14 @@ public class MFTeleop extends OpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        clawServo.setPosition(0.52);
     }
 
     @Override
     public void loop() {
+        controller.update();
+//        controller2.update();
+
         int limit;
         if (liftLimit.isPressed()) {
             limit = 1;
@@ -70,7 +74,6 @@ public class MFTeleop extends OpMode {
         telemetry.addData("DriveEncdrBL", backLeft.getCurrentPosition());
         telemetry.addData("DriveEncdrBR", backRight.getCurrentPosition());
         telemetry.update();
-        controller.update();
         if (controller.rightStickButton()) {
             drive.drive(-controller.left_stick_x*1/2, -controller.left_stick_y*1/2, -controller.right_stick_x);
         } else {
@@ -79,10 +82,8 @@ public class MFTeleop extends OpMode {
 
 //        telemetry.addData("gyro", gyrog)
 
-        controller.update();
-//        controller2.update();
         if (controller.dpadUp()) {
-            if (liftMotor.getCurrentPosition() < -3862) {
+            if (liftMotor.getCurrentPosition() < -3650) {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
@@ -105,10 +106,11 @@ public class MFTeleop extends OpMode {
             liftMotor2.setPower(0);
         }
 
-        if (controller.AOnce()) {
-            clawServo.setPosition(0);
-        } else if (controller.BOnce()) {
-            clawServo.setPosition(0.65);
+        if (controller.A()) {
+            clawServo.setPosition(0.52);
+        }
+        if (controller.B()) {
+            clawServo.setPosition(0.51);
         }
     }
 }

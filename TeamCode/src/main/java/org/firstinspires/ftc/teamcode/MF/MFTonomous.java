@@ -23,9 +23,11 @@ public class MFTonomous extends LinearOpMode {
     private class MotorFns {
 
         private int getEncoders() {
-            return((abs(FRDrive.getCurrentPosition()*2)+abs(BLDrive.getCurrentPosition()))/2);
+            return((abs(FLDrive.getCurrentPosition())+abs(FRDrive.getCurrentPosition())+abs(BLDrive.getCurrentPosition()))/2);
         }
         private void resetEncoders() {
+            FLDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            FLDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             FRDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             FRDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             BLDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
