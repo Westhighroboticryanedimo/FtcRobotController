@@ -53,7 +53,6 @@ public class MFTeleop extends OpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        clawServo.setPosition(0.5);
     }
 
     @Override
@@ -75,22 +74,40 @@ public class MFTeleop extends OpMode {
         telemetry.addData("DriveEncdrBR", backRight.getCurrentPosition());
         telemetry.update();
         if (controller.rightStickButton()) {
-            drive.drive(-controller.left_stick_x*1/2, -controller.left_stick_y*1/2, -controller.right_stick_x);
+            drive.drive(-controller.left_stick_x*1/4, -controller.left_stick_y*1/4, -controller.right_stick_x*1/3);
         } else {
-            drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
+            drive.drive(-controller.left_stick_x*2/3, -controller.left_stick_y*2/3, -controller.right_stick_x*2/3);
         }
 
 //        telemetry.addData("gyro", gyrog)
 
-        if (controller.dpadUp()) {
+        if (controller.dpadRight()) {
             if (liftMotor.getCurrentPosition() < -3650) {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
                 liftMotor.setPower(-1);
                 liftMotor2.setPower(1);
+                telemetry.addData("Lift Up", 1);
             }
-
+        }else if (controller.dpadLeft()) {
+            if (liftMotor.getCurrentPosition() < -1750) {
+                liftMotor.setPower(0);
+                liftMotor2.setPower(0);
+            } else {
+                liftMotor.setPower(-1);
+                liftMotor2.setPower(1);
+                telemetry.addData("Lift Up", 1);
+            }
+        }else if (controller.dpadUp()) {
+            if (liftMotor.getCurrentPosition() < -2700) {
+                liftMotor.setPower(0);
+                liftMotor2.setPower(0);
+            } else {
+                liftMotor.setPower(-1);
+                liftMotor2.setPower(1);
+                telemetry.addData("Lift Up", 1);
+            }
         } else if (controller.dpadDown()) {
             if (liftLimit.isPressed()) {
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -106,11 +123,13 @@ public class MFTeleop extends OpMode {
             liftMotor2.setPower(0);
         }
 
-        if (controller.A()) {
-            clawServo.setPosition(0.52);
+        if (controller.AOnce()) {
+            clawServo.setPosition(1.5);
+            telemetry.addData("Controller A", 1);
         }
-        if (controller.B()) {
-            clawServo.setPosition(0.51);
+        if (controller.BOnce()) {
+            telemetry.addData("Controller B", 1);
+            clawServo.setPosition(0);
         }
     }
 }

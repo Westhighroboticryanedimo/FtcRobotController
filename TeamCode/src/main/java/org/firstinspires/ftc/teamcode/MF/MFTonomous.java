@@ -83,6 +83,12 @@ public class MFTonomous extends LinearOpMode {
                 colorCam.change_p2X(5);
             } else if (controller.XOnce()) {
                 colorCam.change_p2X(-5);
+            } else if (controller.leftStickButtonOnce()) {
+                colorCam.change_p1X(-5);
+                colorCam.change_p2X(-5);
+            } else if (controller.rightStickButtonOnce()) {
+                colorCam.change_p1X(5);
+                colorCam.change_p2X(5);
             }
 
             telemetry.addData("color", colorCam.getColor());
