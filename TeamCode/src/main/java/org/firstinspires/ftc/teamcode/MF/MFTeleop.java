@@ -15,7 +15,7 @@ public class MFTeleop extends OpMode {
 
     private MFDrive drive;
     private Controller controller;
-//    private Controller controller2;
+    private Controller controller2;
     private TouchSensor liftLimit;
     private Servo clawServo;
     private DcMotor liftMotor;
@@ -34,7 +34,7 @@ public class MFTeleop extends OpMode {
         drive = new MFDrive(this, hardwareMap);
         controller = new Controller(gamepad1);
         Lift lift = new Lift();
-//        controller2 = new Controller(gamepad2);
+        controller2 = new Controller(gamepad2);
         liftLimit = hardwareMap.get(TouchSensor.class, "liftLimit");
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
         liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
@@ -58,7 +58,7 @@ public class MFTeleop extends OpMode {
     @Override
     public void loop() {
         controller.update();
-//        controller2.update();
+        controller2.update();
 
         int limit;
         if (liftLimit.isPressed()) {
@@ -73,7 +73,7 @@ public class MFTeleop extends OpMode {
         telemetry.addData("DriveEncdrBL", backLeft.getCurrentPosition());
         telemetry.addData("DriveEncdrBR", backRight.getCurrentPosition());
         telemetry.update();
-        if (controller.rightStickButton()) {
+        if (controller.left_trigger == 1) {
             drive.drive(-controller.left_stick_x*1/4, -controller.left_stick_y*1/4, -controller.right_stick_x*1/3);
         } else {
             drive.drive(-controller.left_stick_x*2/3, -controller.left_stick_y*2/3, -controller.right_stick_x*2/3);
@@ -81,7 +81,7 @@ public class MFTeleop extends OpMode {
 
 //        telemetry.addData("gyro", gyrog)
 
-        if (controller.dpadRight()) {
+        if (controller2.dpadRight() || controller.dpadRight()) {
             if (liftMotor.getCurrentPosition() < -3650) {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
@@ -90,7 +90,7 @@ public class MFTeleop extends OpMode {
                 liftMotor2.setPower(1);
                 telemetry.addData("Lift Up", 1);
             }
-        }else if (controller.dpadLeft()) {
+        }else if (controller2.dpadLeft() || controller.dpadLeft()) {
             if (liftMotor.getCurrentPosition() < -1750) {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
@@ -99,7 +99,7 @@ public class MFTeleop extends OpMode {
                 liftMotor2.setPower(1);
                 telemetry.addData("Lift Up", 1);
             }
-        }else if (controller.dpadUp()) {
+        }else if (controller2.dpadUp() || controller.dpadUp()) {
             if (liftMotor.getCurrentPosition() < -2700) {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
@@ -108,10 +108,11 @@ public class MFTeleop extends OpMode {
                 liftMotor2.setPower(1);
                 telemetry.addData("Lift Up", 1);
             }
-        } else if (controller.dpadDown()) {
+        } else if (controller2.dpadDown() || controller.dpadDown()) {
             if (liftLimit.isPressed()) {
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                clawServo.setPosition(0);
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
@@ -124,10 +125,9 @@ public class MFTeleop extends OpMode {
         }
 
         if (controller.AOnce()) {
-            clawServo.setPosition(1.5);
+            clawServo.setPosition(1.8);
             telemetry.addData("Controller A", 1);
-        }
-        if (controller.BOnce()) {
+        } else if (controller.BOnce()) {
             telemetry.addData("Controller B", 1);
             clawServo.setPosition(0);
         }
