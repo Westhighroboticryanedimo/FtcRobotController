@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.MF.subsystems.ColorCam;
 
 @Autonomous(name = "MFTonomous Left")
 
-public class MFTonomous extends LinearOpMode {
+public class MFTonomousLeft extends LinearOpMode {
 
     ColorCam colorCam = new ColorCam();
     private DcMotor FLDrive;
