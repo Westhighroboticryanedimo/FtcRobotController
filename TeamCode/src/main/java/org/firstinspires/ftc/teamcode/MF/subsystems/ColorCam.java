@@ -24,6 +24,8 @@ public class ColorCam {
     int p1Y = 315;
     int p2X = 245;
     int p2Y = 405;
+    int sleeveType = 0;
+// 0 = red green blue 1 = yellow cyan magenta
 
     public void change_p1X(int change) {
         p1X = p1X + change;
@@ -48,6 +50,8 @@ public class ColorCam {
     public void set_p1Y(int set) {p1Y = set;}
 
     public void set_p2Y(int set) {p2Y = set;}
+
+    public void set_sleeveType (int set) {sleeveType = set;}
 
     public void cameraInit(HardwareMap hardwareMap) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -93,12 +97,22 @@ public class ColorCam {
             hueScalar = Core.mean(hue);
             hueInt = (int)Math.round(hueScalar.val[0]);
             Imgproc.rectangle(input, new Point(p1X, p1Y), new Point(p2X, p2Y), new Scalar(255, 0, 0), 2); //************
-            if ((hueInt < 30) || (130 <= hueInt)) {
-                color = 1;
-            } else if (30 <= hueInt && hueInt < 90) {
-                color = 2;
-            } else if (90 <= hueInt && hueInt < 130) {
-                color = 3;
+            if (sleeveType == 0) {
+                if ((hueInt < 30) || (150 <= hueInt)) {
+                    color = 1;
+                } else if (30 <= hueInt && hueInt < 90) {
+                    color = 2;
+                } else if (90 <= hueInt && hueInt < 150) {
+                    color = 3;
+                }
+            } else if (sleeveType == 1) {
+                if ((hueInt < 60) && (0 <= hueInt)) {
+                    color = 1;
+                } else if (60 <= hueInt && hueInt < 120) {
+                    color = 2;
+                } else if (120 <= hueInt && hueInt < 180) {
+                    color = 3;
+                }
             }
 
             return input;

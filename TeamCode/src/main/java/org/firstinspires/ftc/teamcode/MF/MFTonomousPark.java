@@ -104,6 +104,10 @@ public class MFTonomousPark extends LinearOpMode {
             } else if (controller.rightStickButtonOnce()) {
                 colorCam.change_p1X(5);
                 colorCam.change_p2X(5);
+            } else if (controller.left_trigger == 1) {
+                colorCam.set_sleeveType(0);
+            } else if (controller.right_trigger == 1) {
+                colorCam.set_sleeveType(1);
             }
 
             telemetry.addData("color", colorCam.getColor());
@@ -129,7 +133,7 @@ public class MFTonomousPark extends LinearOpMode {
         motorFns.resetEncoders();
         telemetry.addData("Motor Encoders", motorFns.getEncoders());
         sleep(1000);
-        while (motorFns.getEncoders() < 300) {
+        while (motorFns.getEncoders() < 200) {
             motorFns.runMotors(0.27, 0.27, -0.25, -0.25);
             telemetry.update();
         }
@@ -138,7 +142,7 @@ public class MFTonomousPark extends LinearOpMode {
         telemetry.addData("Motor Encoders", motorFns.getEncoders());
         sleep(1000);
         if (realColor == 1) {
-            while (motorFns.getEncoders() < 2975) {
+            while (motorFns.getEncoders() < 3000) {
                 motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
                 telemetry.update();
             }

@@ -91,7 +91,7 @@ public class MFTeleop extends OpMode {
                 liftMotor2.setPower(1);
             }
         } else if (controller2.dpadLeft() || controller.dpadLeft()) {
-            if (liftMotor.getCurrentPosition() < -1750) {
+            if (liftMotor.getCurrentPosition() < -2000) {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
@@ -100,7 +100,7 @@ public class MFTeleop extends OpMode {
                 liftMotor2.setPower(1);
             }
         } else if (controller2.dpadUp() || controller.dpadUp()) {
-            if (liftMotor.getCurrentPosition() < -2700) {
+            if (liftMotor.getCurrentPosition() < -2920) {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
