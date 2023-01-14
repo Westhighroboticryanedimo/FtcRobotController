@@ -80,7 +80,7 @@ public class BoogerBoyTeleop extends OpMode {
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         grabby = hardwareMap.get(Servo.class, "grabby");
         //grabby = hardwareMap.get(CRServo.class, "grabby");
-        maxliftdistance = 2241; // oct 21: changed from neg to pos nov 2: reverted
+        maxliftdistance = 9850; // oct 21: changed from neg to pos nov 2: reverted
         //new motor chnages from 8964 to 3100
 
         //cam = new BoogerCam(hardwareMap);
@@ -167,12 +167,12 @@ public class BoogerBoyTeleop extends OpMode {
 
 
         if (controller.BOnce()) {
-            grabby.setPosition(0);
+            grabby.setPosition(0.5);
             //grabby.setDirection(CRServo.Direction.REVERSE);
             //grabby.setPower(0.5);
         }
         if (controller.AOnce()) {
-            grabby.setPosition(0.45);
+            grabby.setPosition(1);
             //grabby.setDirection(CRServo.Direction.FORWARD);
             //grabby.setPower(0.5);
         }
