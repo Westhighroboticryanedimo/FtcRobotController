@@ -77,6 +77,9 @@ public class MFTonomousPark extends LinearOpMode {
         telemetry.update();
         motorFns.resetEncoders();
 
+        colorCam.set_p1Y(380);
+        colorCam.set_p2Y(475);
+
         while (!isStarted() && !isStopRequested()) {
             controller.update();
             if (controller.dpadUpOnce()) {
@@ -115,18 +118,41 @@ public class MFTonomousPark extends LinearOpMode {
         waitForStart();
         int realColor = colorCam.getColor();
         telemetry.addData("Sleeve Color", realColor);
+        telemetry.update();
         clawServo.setPosition(0.3);
-        while (liftMotor.getCurrentPosition() < -600) {
-            liftMotor.setPower(-1);
-            liftMotor2.setPower(1);
-        }
-        liftMotor.setPower(0);
-        liftMotor2.setPower(0);
-        while (motorFns.getEncoders() < 2300) {
-            motorFns.runMotors(0.25, 0.25, -0.25, -0.25);
+        sleep(1000);
+        while (motorFns.getEncoders() < 3675) {
+            motorFns.runMotors(-0.27, -0.27, 0.25, 0.25);
             telemetry.update();
         }
         motorFns.stopMotors();
-//        motorFns.resetEncoders();
+        motorFns.resetEncoders();
+        telemetry.addData("Motor Encoders", motorFns.getEncoders());
+        sleep(1000);
+        while (motorFns.getEncoders() < 300) {
+            motorFns.runMotors(0.27, 0.27, -0.25, -0.25);
+            telemetry.update();
+        }
+        motorFns.stopMotors();
+        motorFns.resetEncoders();
+        telemetry.addData("Motor Encoders", motorFns.getEncoders());
+        sleep(1000);
+        if (realColor == 1) {
+            while (motorFns.getEncoders() < 2975) {
+                motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
+                telemetry.update();
+            }
+            motorFns.stopMotors();
+            motorFns.resetEncoders();
+        } else if (realColor == 2) {
+
+        } else if (realColor == 3) {
+            while (motorFns.getEncoders() < 3000) {
+                motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
+                telemetry.update();
+            }
+            motorFns.stopMotors();
+            motorFns.resetEncoders();
+        }
     }
 }

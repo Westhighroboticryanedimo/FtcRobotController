@@ -41,6 +41,14 @@ public class ColorCam {
         p2Y = p2Y + change;
     }
 
+    public void set_p1X(int set) {p1X = set;}
+
+    public void set_p2X(int set) {p2X = set;}
+
+    public void set_p1Y(int set) {p1Y = set;}
+
+    public void set_p2Y(int set) {p2Y = set;}
+
     public void cameraInit(HardwareMap hardwareMap) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "ColorCam");
@@ -85,11 +93,11 @@ public class ColorCam {
             hueScalar = Core.mean(hue);
             hueInt = (int)Math.round(hueScalar.val[0]);
             Imgproc.rectangle(input, new Point(p1X, p1Y), new Point(p2X, p2Y), new Scalar(255, 0, 0), 2); //************
-            if ((hueInt < 30) || (150 <= hueInt)) {
+            if ((hueInt < 30) || (130 <= hueInt)) {
                 color = 1;
             } else if (30 <= hueInt && hueInt < 90) {
                 color = 2;
-            } else if (90 <= hueInt && hueInt < 150) {
+            } else if (90 <= hueInt && hueInt < 130) {
                 color = 3;
             }
 
