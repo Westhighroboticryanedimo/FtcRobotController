@@ -12,9 +12,9 @@ import org.firstinspires.ftc.teamcode.Controller;
 
 import org.firstinspires.ftc.teamcode.MF.subsystems.ColorCam;
 
-@Autonomous(name = "MFTonomous Parking")
+@Autonomous(name = "MFTonomous Right Low")
 
-public class MFTonomousPark extends LinearOpMode {
+public class MFTonomousRightLow extends LinearOpMode {
 
     ColorCam colorCam = new ColorCam();
     private DcMotor FLDrive;
@@ -77,8 +77,10 @@ public class MFTonomousPark extends LinearOpMode {
         telemetry.update();
         motorFns.resetEncoders();
 
-        colorCam.set_p1Y(380);
-        colorCam.set_p2Y(475);
+        colorCam.set_p1Y(305);
+        colorCam.set_p2Y(385);
+        colorCam.set_p1X(125);
+        colorCam.set_p2X(155);
 
         while (!isStarted() && !isStopRequested()) {
             controller.update();
@@ -127,11 +129,21 @@ public class MFTonomousPark extends LinearOpMode {
         clawServo.setPosition(0.3);
         sleep(1000);
 
-        while (motorFns.getEncoders() < 3675) {
+        while (liftMotor.getCurrentPosition() > -2200) {
+            liftMotor.setPower(-1);
+            liftMotor2.setPower(1);
+        }
+        liftMotor.setPower(0);
+        liftMotor2.setPower(0);
+
+        while (motorFns.getEncoders() < 830) {
             motorFns.runMotors(-0.27, -0.27, 0.25, 0.25);
         }
         motorFns.stopMotors();
         motorFns.resetEncoders();
+        sleep(1000);
+
+        clawServo.setPosition(0.15);
         sleep(1000);
 
         while (motorFns.getEncoders() < 200) {
@@ -141,8 +153,33 @@ public class MFTonomousPark extends LinearOpMode {
         motorFns.resetEncoders();
         sleep(1000);
 
+        while (!liftLimit.isPressed()) {
+            liftMotor.setPower(1);
+            liftMotor2.setPower(-1);
+        }
+        liftMotor.setPower(0);
+        liftMotor2.setPower(0);
+        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        clawServo.setPosition(0);
+        sleep(1000);
+
+        while (motorFns.getEncoders() < 1300) {
+                motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
+            }
+            motorFns.stopMotors();
+            motorFns.resetEncoders();
+            sleep(1000);
+
+        while (motorFns.getEncoders() < 2700) {
+            motorFns.runMotors(-0.258, -0.258, 0.25, 0.25);
+        }
+        motorFns.stopMotors();
+        motorFns.resetEncoders();
+        sleep(1000);
+
         if (realColor == 1) {
-            while (motorFns.getEncoders() < 3000) {
+            while (motorFns.getEncoders() < 3100) {
                 motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
             }
             motorFns.stopMotors();
@@ -150,7 +187,7 @@ public class MFTonomousPark extends LinearOpMode {
         } else if (realColor == 2) {
 
         } else if (realColor == 3) {
-            while (motorFns.getEncoders() < 3000) {
+            while (motorFns.getEncoders() < 2900) {
                 motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
             }
             motorFns.stopMotors();

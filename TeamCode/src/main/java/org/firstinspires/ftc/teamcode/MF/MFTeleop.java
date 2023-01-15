@@ -111,12 +111,14 @@ public class MFTeleop extends OpMode {
         } else if (controller2.dpadDown() || controller.dpadDown()) {
             if (liftLimit.isPressed()) {
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                 liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 clawServo.setPosition(0);
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
-                clawServo.setPosition(0.3);
+                if (clawServo.getPosition() != 0.3) {
+                    clawServo.setPosition(0.3);
+                }
                 liftMotor.setPower(1);
                 liftMotor2.setPower(-1);
             }
