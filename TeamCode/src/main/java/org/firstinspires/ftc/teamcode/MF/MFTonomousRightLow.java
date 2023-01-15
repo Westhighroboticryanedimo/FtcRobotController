@@ -146,7 +146,7 @@ public class MFTonomousRightLow extends LinearOpMode {
         clawServo.setPosition(0.15);
         sleep(1000);
 
-        while (motorFns.getEncoders() < 200) {
+        while (motorFns.getEncoders() < 400) {
             motorFns.runMotors(0.27, 0.27, -0.25, -0.25);
         }
         motorFns.stopMotors();
@@ -179,7 +179,7 @@ public class MFTonomousRightLow extends LinearOpMode {
         sleep(1000);
 
         if (realColor == 1) {
-            while (motorFns.getEncoders() < 3100) {
+            while (motorFns.getEncoders() < 3150) {
                 motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
             }
             motorFns.stopMotors();
