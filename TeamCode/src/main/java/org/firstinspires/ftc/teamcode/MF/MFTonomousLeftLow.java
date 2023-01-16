@@ -136,7 +136,7 @@ public class MFTonomousLeftLow extends LinearOpMode {
         liftMotor.setPower(0);
         liftMotor2.setPower(0);
 
-        while (motorFns.getEncoders() < 830) {
+        while (motorFns.getEncoders() < 800) {
             motorFns.runMotors(-0.27, -0.27, 0.25, 0.25);
         }
         motorFns.stopMotors();
@@ -144,8 +144,9 @@ public class MFTonomousLeftLow extends LinearOpMode {
         sleep(1000);
 
         clawServo.setPosition(0.15);
-        sleep(1000);
+        sleep(2000);
 
+        motorFns.resetEncoders();
         while (motorFns.getEncoders() < 200) {
             motorFns.runMotors(0.27, 0.27, -0.25, -0.25);
         }
@@ -171,7 +172,7 @@ public class MFTonomousLeftLow extends LinearOpMode {
         motorFns.resetEncoders();
         sleep(1000);
 
-        while (motorFns.getEncoders() < 2700) {
+        while (motorFns.getEncoders() < 2400) {
             motorFns.runMotors(-0.258, -0.258, 0.25, 0.25);
         }
         motorFns.stopMotors();
@@ -179,7 +180,7 @@ public class MFTonomousLeftLow extends LinearOpMode {
         sleep(1000);
 
         if (realColor == 1) {
-            while (motorFns.getEncoders() < 3000) {
+            while (motorFns.getEncoders() < 3400) {
                 motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
             }
             motorFns.stopMotors();
@@ -187,7 +188,7 @@ public class MFTonomousLeftLow extends LinearOpMode {
         } else if (realColor == 2) {
 
         } else if (realColor == 3) {
-            while (motorFns.getEncoders() < 3000) {
+            while (motorFns.getEncoders() < 3200) {
                 motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
             }
             motorFns.stopMotors();

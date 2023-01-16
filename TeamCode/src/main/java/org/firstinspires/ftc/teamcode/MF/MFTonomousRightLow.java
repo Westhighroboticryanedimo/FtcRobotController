@@ -79,8 +79,8 @@ public class MFTonomousRightLow extends LinearOpMode {
 
         colorCam.set_p1Y(305);
         colorCam.set_p2Y(385);
-        colorCam.set_p1X(125);
-        colorCam.set_p2X(155);
+        colorCam.set_p1X(85);
+        colorCam.set_p2X(105);
 
         while (!isStarted() && !isStopRequested()) {
             controller.update();
@@ -136,7 +136,7 @@ public class MFTonomousRightLow extends LinearOpMode {
         liftMotor.setPower(0);
         liftMotor2.setPower(0);
 
-        while (motorFns.getEncoders() < 830) {
+        while (motorFns.getEncoders() < 800) {
             motorFns.runMotors(-0.27, -0.27, 0.25, 0.25);
         }
         motorFns.stopMotors();
@@ -146,7 +146,8 @@ public class MFTonomousRightLow extends LinearOpMode {
         clawServo.setPosition(0.15);
         sleep(1000);
 
-        while (motorFns.getEncoders() < 400) {
+        motorFns.resetEncoders();
+        while (motorFns.getEncoders() < 200) {
             motorFns.runMotors(0.27, 0.27, -0.25, -0.25);
         }
         motorFns.stopMotors();
@@ -171,7 +172,7 @@ public class MFTonomousRightLow extends LinearOpMode {
             motorFns.resetEncoders();
             sleep(1000);
 
-        while (motorFns.getEncoders() < 2700) {
+        while (motorFns.getEncoders() < 2400) {
             motorFns.runMotors(-0.258, -0.258, 0.25, 0.25);
         }
         motorFns.stopMotors();
@@ -179,7 +180,7 @@ public class MFTonomousRightLow extends LinearOpMode {
         sleep(1000);
 
         if (realColor == 1) {
-            while (motorFns.getEncoders() < 3150) {
+            while (motorFns.getEncoders() < 3200) {
                 motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
             }
             motorFns.stopMotors();
@@ -187,7 +188,7 @@ public class MFTonomousRightLow extends LinearOpMode {
         } else if (realColor == 2) {
 
         } else if (realColor == 3) {
-            while (motorFns.getEncoders() < 2900) {
+            while (motorFns.getEncoders() < 3400) {
                 motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
             }
             motorFns.stopMotors();

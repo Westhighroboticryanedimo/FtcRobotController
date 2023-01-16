@@ -24,7 +24,7 @@ public class ColorCam {
     int p1Y = 315;
     int p2X = 245;
     int p2Y = 405;
-    int sleeveType = 0;
+    int sleeveType = 1;
 // 0 = red green blue 1 = yellow cyan magenta
 
     public void change_p1X(int change) {
