@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.IntakeCam;
 public class Test extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        IntakeCam inCam = new IntakeCam(hardwareMap);
+        IntakeCam inCam = new IntakeCam(hardwareMap, true);
 
         while (!isStarted() && !isStopRequested()) {
              telemetry.addData("Signal face", inCam.getSignalFace());

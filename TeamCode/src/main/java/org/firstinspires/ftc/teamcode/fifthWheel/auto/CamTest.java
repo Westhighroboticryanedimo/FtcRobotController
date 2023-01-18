@@ -1,22 +1,27 @@
 package org.firstinspires.ftc.teamcode.fifthWheel.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.hardware.Gyro;
 import org.firstinspires.ftc.teamcode.Controller;
-import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
 import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.IntakeCam;
 
-@Autonomous(name="FifthWheel Auto", group="FifthWheel")
-public class Auto extends LinearOpMode {
+import java.lang.Math;
+
+@Autonomous(name="CamTest", group="FifthWheel")
+public class CamTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        DriveFifthWheel drive = new DriveFifthWheel(this, hardwareMap);
-        IntakeCam inCam = new IntakeCam(hardwareMap, true);
+        IntakeCam inCam = new IntakeCam(hardwareMap, false);
         Controller controller = new Controller(gamepad1);
+        Gyro gyro = new Gyro(hardwareMap);
+
         int mode = 0;
-        int signal = 1;
+
+        FtcDashboard.getInstance().startCameraStream(IntakeCam.camera, 0);
 
         while (!isStarted() && !isStopRequested()) {
             controller.update();
@@ -24,6 +29,11 @@ public class Auto extends LinearOpMode {
                 mode = 0;
             } else if (controller.B()) {
                 mode = 1;
+            }
+            if (controller.Y()) {
+                inCam.beginConeStack();
+            } else if (controller.X()) {
+                inCam.beginSignalDetection();
             }
             if (mode == 0) {
                 if (controller.dpadUp()) {
@@ -58,33 +68,15 @@ public class Auto extends LinearOpMode {
             telemetry.addData("cornerX", inCam.getCornerX());
             telemetry.addData("cornerY", inCam.getCornerY());
             telemetry.addData("Signal face", inCam.getSignalFace());
-            telemetry.addData("actual", signal);
             telemetry.addData("Avg hue", inCam.getAvgHue());
-//            telemetry.addData("sussus", "awogu");
+            telemetry.addData("pixelWidth", inCam.getPixelWidth());
+            telemetry.addData("midWidth", inCam.getMidWidth());
+            telemetry.addData("y distance", inCam.getYDistance());
+            telemetry.addData("x distance", inCam.getXDistance(gyro.getAngleRadians()));
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
             sleep(200);
-        }
-
-        signal = inCam.getSignalFace();
-
-//        waitForStart();
-//        if (isStopRequested()) return;
-        switch (signal) {
-            case 1:
-                drive.move(0.25, 4, 180);
-                drive.move(0.50, 40, -90);
-                drive.move(0.50, 40, 180);
-                break;
-            case 2:
-                drive.move(0.50, 40, 180);
-                break;
-            case 3:
-                drive.move(0.25, 4, 180);
-                drive.move(0.50, 35, 90);
-                drive.move(0.50, 40, 180);
-                break;
         }
     }
 }

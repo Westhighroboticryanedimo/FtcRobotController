@@ -33,6 +33,7 @@ public class TeleopFifthWheel extends OpMode {
     double elapsedTime = 0.0;
 
     private boolean start = true;
+    private boolean stacking = false;
 
     @Override
     public void init() {
@@ -45,20 +46,17 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void loop() {
         if (start) {
-            place.intake();
+            place.pickup();
             start = false;
         }
         telemetry.addData("loop timer", timer.milliseconds());
         timer.reset();
         telemetry.addData("left ticks", place.getLeftPos());
         telemetry.addData("right ticks", place.getRightPos());
-//        telemetry.addData("timer", place.timer.milliseconds());
-        telemetry.addData("helpme", place.helpme);
+        // telemetry.addData("timer", place.timer.milliseconds());
         telemetry.addData("state", place.state);
         telemetry.addData("level", level);
         telemetry.addData("gyro", gyro.getAngleDegrees());
-        telemetry.addData("left drcb", place.drcb.getCurrentLeftTicks());
-        telemetry.addData("right drcb", place.drcb.getCurrentRightTicks());
         telemetry.addData("p", place.drcb.p);
         telemetry.addData("d", place.drcb.d);
         telemetry.addData("ff", place.drcb.ff);
@@ -66,9 +64,7 @@ public class TeleopFifthWheel extends OpMode {
         telemetry.addData("total", place.drcb.total);
         telemetry.addData("level", place.drcb.level);
         telemetry.addData("setpoint", place.drcb.setpoint);
-        telemetry.addData("x", x);
-        telemetry.addData("y", y);
-        telemetry.addData("turn", turn);
+        telemetry.addData("motor power", place.drcb.rightMotor.getPower());
         telemetry.update();
         controller.update();
 
@@ -77,12 +73,16 @@ public class TeleopFifthWheel extends OpMode {
         x += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller.left_stick_x - x, MAX_ACCEL*elapsedTime));
         y += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller.left_stick_y - y, MAX_ACCEL*elapsedTime));
         turn += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller.right_stick_x - turn, MAX_ACCEL*elapsedTime));
-        drive.drive(x, y, turn);
+        if (controller.right_trigger > 0.9) {
+            drive.drive(x/2, y/2, turn/2);
+        } else {
+            drive.drive(x, y, turn);
+        }
 
         if (controller.AOnce()) {
             place.intake();
-        } else if (controller.BOnce()) {
-            place.pickup();
+        } else if (controller.XOnce()) {
+            place.dropAndLower();
         } else if (controller.dpadUpOnce()) {
             level = 3;
             place.raise(level);
@@ -95,9 +95,20 @@ public class TeleopFifthWheel extends OpMode {
         } else if (controller.dpadDownOnce()) {
             level = 0;
             place.raise(level);
-        } else if (controller.XOnce()) {
-            place.dropAndLower();
+        } else if (controller.leftBumperOnce()) {
+            place.goToStack();
+            stacking = true;
+        } else if (controller.rightBumperOnce()) {
+            place.decrementStack();
+        } else if (controller.BOnce()) {
+            if (stacking) {
+                place.liftOffStack();
+                stacking = false;
+            } else {
+                place.pickup();
+            }
         }
+
         place.run();
     }
 }

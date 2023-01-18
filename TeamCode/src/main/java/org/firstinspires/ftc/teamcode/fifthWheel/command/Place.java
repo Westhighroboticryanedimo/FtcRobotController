@@ -13,7 +13,8 @@ public class Place {
         PICKED,
         WAITING_FOR_CLOSE,
         RAISING,
-        LOWERING
+        LOWERING,
+        STACK_UP
     } public State state = State.INTAKING;
 
     public DRCB drcb;
@@ -24,6 +25,8 @@ public class Place {
     public Boolean helpme = false;
 
     public ElapsedTime timer = new ElapsedTime();
+
+    private int stackCount = 0;
 
     public Place(HardwareMap hwMap, String lm, String rm, String ts, String fl, String fr, String gl, String gr) {
         drcb = new DRCB(hwMap, lm, rm, ts);
@@ -57,10 +60,33 @@ public class Place {
         timer.reset();
     }
 
+    public void goToStack() {
+        if (stackCount > 3) {
+            return;
+        }
+        state = State.RAISING;
+        level = 4 + stackCount;
+        stackCount++;
+        drcb.setLevel(level);
+        timer.reset();
+    }
+
+    // for when you make an oopsie
+    public void decrementStack() {
+        stackCount--;
+    }
+
+    public void liftOffStack() {
+        state = State.STACK_UP;
+        level = 1;
+        gripper.close();
+        timer.reset();
+    }
+
     public void run() {
         switch(state) {
             case INTAKING:
-                if (timer.milliseconds() > 275) {
+                if (timer.milliseconds() > 50) {
                     gripper.open();
                     timer.reset();
                 }
@@ -76,18 +102,28 @@ public class Place {
             case PICKED:
                 break;
             case RAISING:
-                if (timer.milliseconds() > 300) {
+                int waitTime = 300+(100*level);
+                if (level >= 4) {
+                    waitTime = 150;
+                }
+                if (timer.milliseconds() > waitTime) {
                     gripper.setLevel(level);
                     timer.reset();
                 }
                 break;
             case LOWERING:
-                if (timer.milliseconds() > 200) {
+                if (timer.milliseconds() > 150) {
                     gripper.close();
                 }
-                if (timer.milliseconds() > 400) {
+                if (timer.milliseconds() > 300) {
                     gripper.setLevel(-1);
                     drcb.setLevel(level);
+                }
+                break;
+            case STACK_UP:
+                if (timer.milliseconds() > 300) {
+                    drcb.setLevel(level);
+                    timer.reset();
                 }
                 break;
         }

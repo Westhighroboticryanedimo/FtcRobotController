@@ -26,25 +26,26 @@ public class DRCB {
     // top cone, top-1 cone, top-2 cone, top-3 cone
     // fifth cone is just intake level
     // lift up to low for picking them off the stack
-    public static double LEVELS[] = {0, 105, 180, 285, 70, 50, 35, 20};
+    public static double LEVELS[] = {-10, 212, 350, 570, 140, 110, 80, 60};
     private static final double LIFT_POWER = 1.0;
 
-    private static final double TICKS_PER_REV = 1120;
-    private static final double L_0 = 3.5; // motor to pivot dist
-    private static final double L_A = 2.0; // bottom linkage
-    private static final double L_B = 3.75; // top linkage
-    private static final double L_OFFSET = 2.362; // linkage attachment dist
-    private static final double THETA_0 = 2.094; // angle between horizontal and L_0 in rad
-    public static double kTau_ff = 0.17; // gain for torque feedforward
-    public static double kV = 0.002;
+    private static final double TICKS_PER_REV = 1680;
+    private static final double L_0 = 2.9; // motor to pivot dist
+    private static final double L_A = 2.25; // bottom linkage
+    private static final double L_B = 3.0; // top linkage
+    private static final double L_OFFSET = 3.55; // linkage attachment dist
+    private static final double THETA_0 = 2.1815; // angle between horizontal and L_0 in rad
+    public static double kTau_ff = 0.07; // gain for torque feedforward
+    public static double kV = 0.00122;
     public static double kA = 0.0;
-    public static double downMultiplier = 0.93;
+    public static double downMultiplier = 1.021;
     public static double maxV = 1000;
     public static double maxA = 1000;
 
-    public static double p = 0.03;
-    public static double i = 0.0003;
-    public static double d = 0.025;
+    public static double p = 0.01;
+    public static double i = 0.0;
+    // public static double i = 0.0003;
+    public static double d = 0.005;
     public PIDController pid = new PIDController(p, i, d);
 
     public double ff = 0.0;
@@ -67,14 +68,14 @@ public class DRCB {
         pid.enable();
 
         leftMotor = hwMap.get(DcMotorEx.class, lm);
-        leftMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftMotor.setPower(0);
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rightMotor = hwMap.get(DcMotorEx.class, rm);
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightMotor.setDirection(DcMotor.Direction.FORWARD);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setPower(0);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -95,16 +96,13 @@ public class DRCB {
     }
 
     public void run() {
-        if (touch.isPressed() && getPosition() != 0) {
-            reset();
-        }
         setpoint = Control.trapMotionP(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds());
         updatePID();
         if (useMotionProfile) {
             pid.setSetpoint(setpoint);
         }
         // angle of motor between lift rest and lift horizontal in ticks
-        ff = kTau_ff*calculateFeedforward(getPosition() - 100)
+        ff = kTau_ff*calculateFeedforward(getPosition() - 212)
             + kV*Control.trapMotionV(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds())
             + kA*Control.trapMotionA(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds());
 
@@ -116,12 +114,27 @@ public class DRCB {
         // if going down, reduce output cause gravity
         // TODO: take care of this in the model
         // HACK: this sucks
-        if (total < 0.02) {
-            total = total + (0.02 - total)/downMultiplier;
+        if (total < 0.01) {
+            total = total + (0.01 - total)/downMultiplier;
         }
         // set motor power and compensate for different battery voltages
-        leftMotor.setPower(total*12/hardwareMap.voltageSensor.iterator().next().getVoltage());
-        rightMotor.setPower(total*12/hardwareMap.voltageSensor.iterator().next().getVoltage());
+        total = total*12/hardwareMap.voltageSensor.iterator().next().getVoltage();
+        if (total > 1) {
+            total = 1;
+        }
+        // if (getPosition() > 350) {
+        //     total = -0.1;
+        // }
+        if (touch.isPressed() && level == 0) {
+            if (getPosition() != 0) {
+                reset();
+            }
+            leftMotor.setPower(0);
+            rightMotor.setPower(0);
+        } else {
+            leftMotor.setPower(total);
+            rightMotor.setPower(total);
+        }
     }
 
     public int getPosition() {
@@ -171,10 +184,12 @@ public class DRCB {
 
         double result = Math.cos(theta)/(Math.sin(theta_ab)*Math.sin(theta_bc));
         // HACK: cause my feedforward model sucks
-        if ((-30 <= ticks) && (ticks < 175)) {
+        if ((-212 <= ticks) && (ticks < -160)) {
+            result -= 2;
+        } else if ((-160 <= ticks) && (ticks < 350)) {
             result += 0.45;
-        } else if (ticks > 180) {
-            result -= 0.75;
+        } else if ((560 - 212) < ticks) {
+            result -= 3;
         }
         return result;
     }
