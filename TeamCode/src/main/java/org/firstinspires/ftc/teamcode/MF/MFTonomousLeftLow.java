@@ -129,15 +129,15 @@ public class MFTonomousLeftLow extends LinearOpMode {
         clawServo.setPosition(0.3);
         sleep(1000);
 
-        while (liftMotor.getCurrentPosition() > -2200) {
-            liftMotor.setPower(-1);
-            liftMotor2.setPower(1);
-        }
-        liftMotor.setPower(0);
-        liftMotor2.setPower(0);
+//        while (liftMotor.getCurrentPosition() > -1000) {
+//            liftMotor.setPower(-1);
+//            liftMotor2.setPower(1);
+//        }
+//        liftMotor.setPower(0);
+//        liftMotor2.setPower(0);
 
-        while (motorFns.getEncoders() < 800) {
-            motorFns.runMotors(-0.27, -0.27, 0.25, 0.25);
+        while (motorFns.getEncoders() < 750) {
+            motorFns.runMotors(-0.25, -0.25, 0.25, 0.25);
         }
         motorFns.stopMotors();
         motorFns.resetEncoders();
@@ -148,48 +148,48 @@ public class MFTonomousLeftLow extends LinearOpMode {
 
         motorFns.resetEncoders();
         while (motorFns.getEncoders() < 200) {
-            motorFns.runMotors(0.27, 0.27, -0.25, -0.25);
+            motorFns.runMotors(0.25, 0.25, -0.25, -0.25);
         }
         motorFns.stopMotors();
         motorFns.resetEncoders();
         sleep(1000);
 
-        while (!liftLimit.isPressed()) {
-            liftMotor.setPower(1);
-            liftMotor2.setPower(-1);
-        }
-        liftMotor.setPower(0);
-        liftMotor2.setPower(0);
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        clawServo.setPosition(0);
-        sleep(1000);
+//        while (!liftLimit.isPressed()) {
+//            liftMotor.setPower(1);
+//            liftMotor2.setPower(-1);
+//        }
+//        liftMotor.setPower(0);
+//        liftMotor2.setPower(0);
+//        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        clawServo.setPosition(0);
+//        sleep(1000);
 
         while (motorFns.getEncoders() < 1600) {
-            motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
+            motorFns.runMotors(0.5, -0.5, 0.5, -0.5);
         }
         motorFns.stopMotors();
         motorFns.resetEncoders();
         sleep(1000);
 
-        while (motorFns.getEncoders() < 2400) {
-            motorFns.runMotors(-0.258, -0.258, 0.25, 0.25);
+        while (motorFns.getEncoders() < 2800) {
+            motorFns.runMotors(-0.25, -0.25, 0.25, 0.25);
         }
         motorFns.stopMotors();
         motorFns.resetEncoders();
         sleep(1000);
 
         if (realColor == 1) {
-            while (motorFns.getEncoders() < 3400) {
-                motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
+            while (motorFns.getEncoders() < 2800) {
+                motorFns.runMotors(0.5, -0.5, 0.5, -0.5);
             }
             motorFns.stopMotors();
             motorFns.resetEncoders();
         } else if (realColor == 2) {
 
         } else if (realColor == 3) {
-            while (motorFns.getEncoders() < 3200) {
-                motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
+            while (motorFns.getEncoders() < 2800) {
+                motorFns.runMotors(-0.5, 0.5, -0.5, 0.5);
             }
             motorFns.stopMotors();
             motorFns.resetEncoders();

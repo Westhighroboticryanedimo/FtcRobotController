@@ -82,7 +82,7 @@ public class MFTeleop extends OpMode {
 //        telemetry.addData("gyro", gyrog)
 
         if (controller2.dpadRight() || controller.dpadRight()) {
-            if (liftMotor.getCurrentPosition() < -3870) {
+            if (liftMotor.getCurrentPosition() < -3000) {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
@@ -91,7 +91,7 @@ public class MFTeleop extends OpMode {
                 liftMotor2.setPower(1);
             }
         } else if (controller2.dpadLeft() || controller.dpadLeft()) {
-            if (liftMotor.getCurrentPosition() < -2000) {
+            if (liftMotor.getCurrentPosition() < -1600) {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
@@ -100,7 +100,7 @@ public class MFTeleop extends OpMode {
                 liftMotor2.setPower(1);
             }
         } else if (controller2.dpadUp() || controller.dpadUp()) {
-            if (liftMotor.getCurrentPosition() < -3000) {
+            if (liftMotor.getCurrentPosition() < -2400) {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
@@ -115,12 +115,12 @@ public class MFTeleop extends OpMode {
                 clawServo.setPosition(0);
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
-            } else if (liftMotor.getCurrentPosition() > -2500) {
-                if (clawServo.getPosition() != 0.3) {
-                    clawServo.setPosition(0.3);
-                }
-                liftMotor.setPower(0.25);
-                liftMotor2.setPower(-0.25);
+//            } else if (liftMotor.getCurrentPosition() > -1500) {
+//                if (clawServo.getPosition() != 0.1) {
+//                    clawServo.setPosition(0.1);
+//                }
+//                liftMotor.setPower(0.25);
+//                liftMotor2.setPower(-0.25);
             } else {
                 if (clawServo.getPosition() != 0.3) {
                     clawServo.setPosition(0.3);
