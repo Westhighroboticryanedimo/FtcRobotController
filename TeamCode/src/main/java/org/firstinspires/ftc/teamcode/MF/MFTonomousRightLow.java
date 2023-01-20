@@ -126,7 +126,7 @@ public class MFTonomousRightLow extends LinearOpMode {
         telemetry.addData("Sleeve Color", realColor);
         telemetry.update();
 
-        clawServo.setPosition(0.3);
+        clawServo.setPosition(0.45);
         sleep(1000);
 
         while (liftMotor.getCurrentPosition() > -1800) {
@@ -143,7 +143,7 @@ public class MFTonomousRightLow extends LinearOpMode {
         motorFns.resetEncoders();
         sleep(1000);
 
-        clawServo.setPosition(0.15);
+        clawServo.setPosition(0.3);
         sleep(1000);
 
         motorFns.resetEncoders();

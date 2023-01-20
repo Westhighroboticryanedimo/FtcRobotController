@@ -86,7 +86,7 @@ public class MFTeleop extends OpMode {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
-                clawServo.setPosition(0.3);
+                clawServo.setPosition(0.45);
                 liftMotor.setPower(-1);
                 liftMotor2.setPower(1);
             }
@@ -95,7 +95,7 @@ public class MFTeleop extends OpMode {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
-                clawServo.setPosition(0.3);
+                clawServo.setPosition(0.45);
                 liftMotor.setPower(-1);
                 liftMotor2.setPower(1);
             }
@@ -104,7 +104,7 @@ public class MFTeleop extends OpMode {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
-                clawServo.setPosition(0.3);
+                clawServo.setPosition(0.45);
                 liftMotor.setPower(-1);
                 liftMotor2.setPower(1);
             }
@@ -116,8 +116,8 @@ public class MFTeleop extends OpMode {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
-                if (clawServo.getPosition() != 0.3) {
-                    clawServo.setPosition(0.3);
+                if (clawServo.getPosition() != 0.45) {
+                    clawServo.setPosition(0.45);
                 }
                 liftMotor.setPower(1);
                 liftMotor2.setPower(-1);
@@ -141,7 +141,7 @@ public class MFTeleop extends OpMode {
                 liftMotor.setPower(0);
                 liftMotor2.setPower(0);
             } else {
-                clawServo.setPosition(0.3);
+                clawServo.setPosition(0.45);
                 liftMotor.setPower(-1);
                 liftMotor2.setPower(1);
             }
@@ -150,9 +150,9 @@ public class MFTeleop extends OpMode {
             liftMotor2.setPower(0);
 
             if (controller.AOnce()) {
-                clawServo.setPosition(0.3);
+                clawServo.setPosition(0.45);
             } else if (controller.BOnce() || controller2.BOnce()) {
-                clawServo.setPosition(0.15);
+                clawServo.setPosition(0.3);
             }
         }
     }
