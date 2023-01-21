@@ -26,6 +26,7 @@ public class TeleopFifthWheel extends OpMode {
     private double turn = 0.0;
 
     private int level = 0;
+    private double input = 0.0;
 
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime runtime = new ElapsedTime();
@@ -109,6 +110,11 @@ public class TeleopFifthWheel extends OpMode {
             }
         }
 
-        place.run();
+        if (controller.left_trigger > 0) {
+            input = controller.left_trigger*(-0.4);
+        } else if (controller.right_trigger > 0) {
+            input = controller.right_trigger*0.4;
+        }
+        place.run(input);
     }
 }

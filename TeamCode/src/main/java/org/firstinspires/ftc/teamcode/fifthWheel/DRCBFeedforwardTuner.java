@@ -61,7 +61,7 @@ public class DRCBFeedforwardTuner extends LinearOpMode {
 
             if (clock.seconds() - lastTime > 4) {
                 if (up) {
-                    drcb.setLevel(2);
+                    drcb.setLevel(3);
                     up = false;
                 } else {
                     drcb.setLevel(0);
@@ -70,7 +70,7 @@ public class DRCBFeedforwardTuner extends LinearOpMode {
                 lastTime = clock.seconds();
             }
 
-            drcb.run();
+            drcb.run(0);
 
             double velocity = drcb.getVelocity();
 

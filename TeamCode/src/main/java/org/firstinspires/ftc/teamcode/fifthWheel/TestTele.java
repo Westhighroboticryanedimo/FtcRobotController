@@ -127,6 +127,6 @@ public class TestTele extends OpMode {
             // drcb.useMotionProfile = true;
             gripper.moveOpen();
         }
-         drcb.run();
+         drcb.run(0);
     }
 }

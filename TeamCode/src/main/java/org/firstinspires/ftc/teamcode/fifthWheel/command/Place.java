@@ -14,7 +14,8 @@ public class Place {
         WAITING_FOR_CLOSE,
         RAISING,
         LOWERING,
-        STACK_UP
+        STACK_UP,
+        WAVE
     } public State state = State.INTAKING;
 
     public DRCB drcb;
@@ -83,7 +84,15 @@ public class Place {
         timer.reset();
     }
 
-    public void run() {
+    public void wave() {
+        state = State.WAVE;
+        level = 3;
+        drcb.setLevel(level);
+        gripper.close();
+        timer.reset();
+    }
+
+    public void run(double input) {
         switch(state) {
             case INTAKING:
                 if (timer.milliseconds() > 50) {
@@ -102,7 +111,7 @@ public class Place {
             case PICKED:
                 break;
             case RAISING:
-                int waitTime = 300+(100*level);
+                int waitTime = 300+(150*level);
                 if (level >= 4) {
                     waitTime = 150;
                 }
@@ -126,8 +135,22 @@ public class Place {
                     timer.reset();
                 }
                 break;
+            case WAVE:
+                if (timer.milliseconds() > 750) {
+                    gripper.open();
+                } else if (timer.milliseconds() > 1000) {
+                    gripper.close();
+                } else if (timer.milliseconds() > 1250) {
+                    gripper.open();
+                } else if (timer.milliseconds() > 1500) {
+                    gripper.close();
+                } else if (timer.milliseconds() > 1750) {
+                    level = 0;
+                    drcb.setLevel(0);
+                }
+                break;
         }
-        drcb.run();
+        drcb.run(input);
     }
 
     public int getLeftPos() {
