@@ -129,14 +129,14 @@ public class MFTonomousRightLow extends LinearOpMode {
         clawServo.setPosition(0.45);
         sleep(1000);
 
-        while (liftMotor.getCurrentPosition() > -1800) {
+        while (liftMotor.getCurrentPosition() > -1700) {
             liftMotor.setPower(-1);
             liftMotor2.setPower(1);
         }
         liftMotor.setPower(0);
         liftMotor2.setPower(0);
 
-        while (motorFns.getEncoders() < 700) {
+        while (motorFns.getEncoders() < 780) {
             motorFns.runMotors(-0.27, -0.27, 0.25, 0.25);
         }
         motorFns.stopMotors();
@@ -172,7 +172,7 @@ public class MFTonomousRightLow extends LinearOpMode {
             motorFns.resetEncoders();
             sleep(1000);
 
-        while (motorFns.getEncoders() < 2200) {
+        while (motorFns.getEncoders() < 2400) {
             motorFns.runMotors(-0.25, -0.25, 0.25, 0.25);
         }
         motorFns.stopMotors();
