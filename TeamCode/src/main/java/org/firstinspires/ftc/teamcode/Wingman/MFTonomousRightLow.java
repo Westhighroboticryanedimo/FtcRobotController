@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.MF;
+package org.firstinspires.ftc.teamcode.Wingman;
 
 import static java.lang.Math.abs;
 
@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
-import org.firstinspires.ftc.teamcode.MF.subsystems.ColorCam;
+import org.firstinspires.ftc.teamcode.Wingman.subsystems.ColorCam;
 
-@Autonomous(name = "MFTonomous Right Mid")
+@Autonomous(name = "MFTonomous Right Low")
 
-public class MFTonomousRightMid extends LinearOpMode {
+public class MFTonomousRightLow extends LinearOpMode {
 
     ColorCam colorCam = new ColorCam();
     private DcMotor FLDrive;
@@ -79,8 +79,8 @@ public class MFTonomousRightMid extends LinearOpMode {
 
         colorCam.set_p1Y(305);
         colorCam.set_p2Y(385);
-        colorCam.set_p1X(125);
-        colorCam.set_p2X(155);
+        colorCam.set_p1X(85);
+        colorCam.set_p2X(105);
 
         while (!isStarted() && !isStopRequested()) {
             controller.update();
@@ -126,56 +126,27 @@ public class MFTonomousRightMid extends LinearOpMode {
         telemetry.addData("Sleeve Color", realColor);
         telemetry.update();
 
-        clawServo.setPosition(0.3);
+        clawServo.setPosition(0.45);
         sleep(1000);
 
-        while (liftMotor.getCurrentPosition() > -600) {
+        while (liftMotor.getCurrentPosition() > -1700) {
             liftMotor.setPower(-1);
             liftMotor2.setPower(1);
         }
         liftMotor.setPower(0);
         liftMotor2.setPower(0);
-        sleep(1000);
 
-        while (motorFns.getEncoders() < 400) {
+        while (motorFns.getEncoders() < 780) {
             motorFns.runMotors(-0.27, -0.27, 0.25, 0.25);
         }
         motorFns.stopMotors();
         motorFns.resetEncoders();
         sleep(1000);
 
-        while (motorFns.getEncoders() < 1300) {
-            motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
-        }
-        motorFns.stopMotors();
+        clawServo.setPosition(0.3);
+        sleep(1000);
+
         motorFns.resetEncoders();
-        sleep(1000);
-
-        while (motorFns.getEncoders() < 3200) {
-            motorFns.runMotors(-0.258, -0.258, 0.25, 0.25);
-        }
-        motorFns.stopMotors();
-        motorFns.resetEncoders();
-        sleep(1000);
-
-        while (liftMotor.getCurrentPosition() > -3100) {
-            liftMotor.setPower(-1);
-            liftMotor2.setPower(1);
-        }
-        liftMotor.setPower(0);
-        liftMotor2.setPower(0);
-        sleep(1000);
-
-        while (motorFns.getEncoders() < 1480) {
-            motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
-        }
-        motorFns.stopMotors();
-        motorFns.resetEncoders();
-        sleep(1000);
-
-        clawServo.setPosition(0.15);
-        sleep(1000);
-
         while (motorFns.getEncoders() < 200) {
             motorFns.runMotors(0.27, 0.27, -0.25, -0.25);
         }
@@ -194,22 +165,31 @@ public class MFTonomousRightMid extends LinearOpMode {
         clawServo.setPosition(0);
         sleep(1000);
 
+        while (motorFns.getEncoders() < 1300) {
+                motorFns.runMotors(-0.5, 0.5, -0.5, 0.5);
+            }
+            motorFns.stopMotors();
+            motorFns.resetEncoders();
+            sleep(1000);
+
+        while (motorFns.getEncoders() < 2400) {
+            motorFns.runMotors(-0.25, -0.25, 0.25, 0.25);
+        }
+        motorFns.stopMotors();
+        motorFns.resetEncoders();
+        sleep(1000);
 
         if (realColor == 1) {
-            while (motorFns.getEncoders() < 1500) {
-                motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
+            while (motorFns.getEncoders() < 2800) {
+                motorFns.runMotors(0.5,-0.5, 0.5, -0.5);
             }
             motorFns.stopMotors();
             motorFns.resetEncoders();
         } else if (realColor == 2) {
-            while (motorFns.getEncoders() < 1500) {
-                motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
-            }
-            motorFns.stopMotors();
-            motorFns.resetEncoders();
+
         } else if (realColor == 3) {
-            while (motorFns.getEncoders() < 4500) {
-                motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
+            while (motorFns.getEncoders() < 2800) {
+                motorFns.runMotors(-0.5, 0.5, -0.5, 0.5);
             }
             motorFns.stopMotors();
             motorFns.resetEncoders();

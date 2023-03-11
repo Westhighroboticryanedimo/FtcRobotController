@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.MF;
+package org.firstinspires.ftc.teamcode.Wingman;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Controller;
-import org.firstinspires.ftc.teamcode.MF.subsystems.MFDrive;
-import org.firstinspires.ftc.teamcode.MF.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.Wingman.subsystems.MFDrive;
+import org.firstinspires.ftc.teamcode.Wingman.subsystems.Lift;
 
 @TeleOp(name = "MF TeleOp")
 public class MFTeleop extends OpMode {

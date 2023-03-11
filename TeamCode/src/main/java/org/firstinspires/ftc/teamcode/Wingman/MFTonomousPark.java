@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.MF;
+package org.firstinspires.ftc.teamcode.Wingman;
 
 import static java.lang.Math.abs;
 
@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
-import org.firstinspires.ftc.teamcode.MF.subsystems.ColorCam;
+import org.firstinspires.ftc.teamcode.Wingman.subsystems.ColorCam;
 
-@Autonomous(name = "MFTonomous Right Low")
+@Autonomous(name = "MFTonomous Parking")
 
-public class MFTonomousRightLow extends LinearOpMode {
+public class MFTonomousPark extends LinearOpMode {
 
     ColorCam colorCam = new ColorCam();
     private DcMotor FLDrive;
@@ -77,10 +77,8 @@ public class MFTonomousRightLow extends LinearOpMode {
         telemetry.update();
         motorFns.resetEncoders();
 
-        colorCam.set_p1Y(305);
-        colorCam.set_p2Y(385);
-        colorCam.set_p1X(85);
-        colorCam.set_p2X(105);
+        colorCam.set_p1Y(380);
+        colorCam.set_p2Y(475);
 
         while (!isStarted() && !isStopRequested()) {
             controller.update();
@@ -126,27 +124,16 @@ public class MFTonomousRightLow extends LinearOpMode {
         telemetry.addData("Sleeve Color", realColor);
         telemetry.update();
 
-        clawServo.setPosition(0.45);
+        clawServo.setPosition(0.3);
         sleep(1000);
 
-        while (liftMotor.getCurrentPosition() > -1700) {
-            liftMotor.setPower(-1);
-            liftMotor2.setPower(1);
-        }
-        liftMotor.setPower(0);
-        liftMotor2.setPower(0);
-
-        while (motorFns.getEncoders() < 780) {
+        while (motorFns.getEncoders() < 3675) {
             motorFns.runMotors(-0.27, -0.27, 0.25, 0.25);
         }
         motorFns.stopMotors();
         motorFns.resetEncoders();
         sleep(1000);
 
-        clawServo.setPosition(0.3);
-        sleep(1000);
-
-        motorFns.resetEncoders();
         while (motorFns.getEncoders() < 200) {
             motorFns.runMotors(0.27, 0.27, -0.25, -0.25);
         }
@@ -154,42 +141,17 @@ public class MFTonomousRightLow extends LinearOpMode {
         motorFns.resetEncoders();
         sleep(1000);
 
-        while (!liftLimit.isPressed()) {
-            liftMotor.setPower(1);
-            liftMotor2.setPower(-1);
-        }
-        liftMotor.setPower(0);
-        liftMotor2.setPower(0);
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        clawServo.setPosition(0);
-        sleep(1000);
-
-        while (motorFns.getEncoders() < 1300) {
-                motorFns.runMotors(-0.5, 0.5, -0.5, 0.5);
-            }
-            motorFns.stopMotors();
-            motorFns.resetEncoders();
-            sleep(1000);
-
-        while (motorFns.getEncoders() < 2400) {
-            motorFns.runMotors(-0.25, -0.25, 0.25, 0.25);
-        }
-        motorFns.stopMotors();
-        motorFns.resetEncoders();
-        sleep(1000);
-
         if (realColor == 1) {
-            while (motorFns.getEncoders() < 2800) {
-                motorFns.runMotors(0.5,-0.5, 0.5, -0.5);
+            while (motorFns.getEncoders() < 3000) {
+                motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
             }
             motorFns.stopMotors();
             motorFns.resetEncoders();
         } else if (realColor == 2) {
 
         } else if (realColor == 3) {
-            while (motorFns.getEncoders() < 2800) {
-                motorFns.runMotors(-0.5, 0.5, -0.5, 0.5);
+            while (motorFns.getEncoders() < 3000) {
+                motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
             }
             motorFns.stopMotors();
             motorFns.resetEncoders();

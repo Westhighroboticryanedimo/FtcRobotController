@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.MF;
+package org.firstinspires.ftc.teamcode.Wingman;
 
 import static java.lang.Math.abs;
 
@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
-import org.firstinspires.ftc.teamcode.MF.subsystems.ColorCam;
+import org.firstinspires.ftc.teamcode.Wingman.subsystems.ColorCam;
 
 @Autonomous(name = "MFTonomous Left Low")
 

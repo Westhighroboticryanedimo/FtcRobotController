@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.MF;
+package org.firstinspires.ftc.teamcode.Wingman;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.MF.subsystems.ColorCam;
+import org.firstinspires.ftc.teamcode.Wingman.subsystems.ColorCam;
 
 @TeleOp(name = "Cam Test")
 public class CamTest extends OpMode {
