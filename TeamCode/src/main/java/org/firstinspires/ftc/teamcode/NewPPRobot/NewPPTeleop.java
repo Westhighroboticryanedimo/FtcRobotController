@@ -1,3 +1,9 @@
+// TODO: Add PID tuning with controller (methods for changing variables are done already)
+// TODO: Update preset values, add presets for stack, change intake preset value in Subsystem.Lift for special ff case
+// TODO: Add slow descent + encoder reset on limit switch
+// TODO: Set up drive code with toggle for Field Centric -> Robot Centric -> Robot Centric Slow Mode
+// TODO: Set up all FSMs
+// TODO: Tune servo positions for FSMs
 package org.firstinspires.ftc.teamcode.NewPPRobot;
 
 import static java.lang.Math.abs;
@@ -9,16 +15,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.NewPPRobot.NewPPDrive;
-import org.firstinspires.ftc.teamcode.Wingman.MFTonomousLeftLow;
-import org.firstinspires.ftc.teamcode.Wingman.subsystems.Lift;
-import org.firstinspires.ftc.teamcode.Wingman.subsystems.MFDrive;
+import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.Lift;
 
 @TeleOp(name = "New Powerplay Robot TeleOp")
 public class NewPPTeleop extends OpMode {
 
-    private MFDrive drive;
+    private NewPPDrive drive;
     private Controller controller;
     private Controller controller2;
+    private Lift lift;
     private TouchSensor liftLimit;
     private Servo clawServo;
     private Servo pivotServo;
@@ -48,9 +53,11 @@ public class NewPPTeleop extends OpMode {
 
     @Override
     public void init() {
-        drive = new MFDrive(this, hardwareMap);
+        drive = new NewPPDrive(this, hardwareMap);
         controller = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
+        lift = new Lift();
+
         liftLimit = hardwareMap.get(TouchSensor.class, "liftLimit");
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
         liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
@@ -67,6 +74,7 @@ public class NewPPTeleop extends OpMode {
         liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        lift.liftInit(hardwareMap);
 
     }
 
@@ -113,8 +121,19 @@ public class NewPPTeleop extends OpMode {
             //FSM sequence to close claw, pivot wrist up
         }
 
+        if (controller.XOnce() || controller2.XOnce()) {
+            lift.setLiftPos(100);
+        } else if (controller.YOnce() || controller2.YOnce()) {
+            lift.setLiftPos(200);
+        } else if (controller.BOnce() || controller2.BOnce()) {
+            lift.setLiftPos(300);
+        } else if (controller.AOnce() || controller2.AOnce()) {
+            //FSM sequence to lower the lift to ~ 1" above limit, then slowly lower until limit is pressed, then reset encoders
+        }
+
         leftTrigger = controller.left_trigger;
         rightTrigger = controller.right_trigger;
+        lift.moveLift();
     }
 }
 
