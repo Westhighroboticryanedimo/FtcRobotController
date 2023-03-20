@@ -51,13 +51,13 @@ public class Lift {
     }
 
     //PID Tuning Methods
-    public void changeP(double change) {
+    public void changeLiftP(double change) {
         p = p + change;
     }
-    public void changeI(double change) {
+    public void changeLiftI(double change) {
         i = i + change;
     }
-    public void changeD(double change) {
+    public void changeLiftD(double change) {
         d = d + change;
     }
 }

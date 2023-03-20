@@ -7,29 +7,61 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
 public class NewPPDrive extends HolonomicDrive {
+    public double p = 0.04;
+    private double i = 0;
+    public double d = 0.015;
 
 
-    //Autonomous code
+    // Autonomous
     public NewPPDrive(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
         setup();
     }
 
-    //Teleop code
+    // Teleop
     public NewPPDrive(OpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
         setup();
     }
 
-    //PID setup
+    // PID setup
     private void setup() {
-        setPidDrive(0.035,0,0.01);
-        setPidSpeed(0.05, 0.001, 0);
-        setPidTurn(0.028, 0.001, 0);
+        reduceTurn = true;
+        isDrivePOV = false;
+        isSquaredInputs = true;
 
-        setMotorDir(true, false, true, false);
+        setPidDrive(p, i, d);
+        setPidSpeed(0.05, 0.001, 0);
+        setPidTurn(0.05 , 0.001, 0);
+
+        setMotorDir(false, true, false, true);
         setWheelDiameter(3.7795);
         setTicksPerRev(537.7);
-        setPIDFalse();
     }
+
+    public void updatePID() {
+        setPidDrive(p, i, d);
+    }
+
+    // Field Centric Toggle
+    public void FieldCentricToggle() {
+        if (isDrivePOV == false) {
+            isDrivePOV = true;
+        } else {
+            isDrivePOV = false;
+        }
+    }
+
+    //PID Tuning Methods
+    public void changeDriveP(double change) {
+        p = p + change;
+    }
+    public void changeDriveI(double change) {
+        i = i + change;
+    }
+    public void changeDriveD(double change) {
+        d = d + change;
+    }
+
+
 }
