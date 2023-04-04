@@ -15,8 +15,8 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class DRCB {
-    public DcMotorEx leftMotor;
-    public DcMotorEx rightMotor;
+    public DcMotorEx liftLeft;
+    public DcMotorEx liftRight;
     public TouchSensor touch;
 
     public int level = 0;
@@ -35,7 +35,7 @@ public class DRCB {
     private static final double L_B = 3.75; // top linkage
     private static final double L_OFFSET = 3.55; // linkage attachment dist
     private static final double THETA_0 = 2.1815; // angle between horizontal and L_0 in rad
-    public static double kTau_ff = 0.09; // gain for torque feedforward
+    public static double kTau_ff = 0.15; // gain for torque feedforward
     public static double kV = 0.0015;
     public static double kA = 0.0007;
     public static double downMultiplier = 1.05;
@@ -67,23 +67,28 @@ public class DRCB {
         pid.setTolerance(0);
         pid.enable();
 
-        leftMotor = hwMap.get(DcMotorEx.class, lm);
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);
-        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftMotor.setPower(0);
-        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftLeft = hwMap.get(DcMotorEx.class, lm);
+        liftLeft.setDirection(DcMotor.Direction.REVERSE);
+        liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftLeft.setPower(0);
+        liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        rightMotor = hwMap.get(DcMotorEx.class, rm);
-        rightMotor.setDirection(DcMotor.Direction.FORWARD);
-        rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightMotor.setPower(0);
-        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftRight = hwMap.get(DcMotorEx.class, rm);
+        liftRight.setDirection(DcMotor.Direction.FORWARD);
+        liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftRight.setPower(0);
+        liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         touch = hwMap.get(TouchSensor.class, ts);
 
         hardwareMap = hwMap;
+    }
+
+    public void setPower(double input) {
+        liftLeft.setPower(input);
+        liftRight.setPower(input);
     }
 
     public void setLevel(int l) {
@@ -102,7 +107,7 @@ public class DRCB {
             pid.setSetpoint(setpoint);
         }
         // angle of motor between lift rest and lift horizontal in ticks
-        ff = kTau_ff*calculateFeedforward(getPosition() - 300)
+        ff = kTau_ff*calculateFeedforward(getPosition() - 375)
             + kV*Control.trapMotionV(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds())
             + kA*Control.trapMotionA(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds());
 
@@ -129,20 +134,20 @@ public class DRCB {
             if (getPosition() != 0) {
                 reset();
             }
-            leftMotor.setPower(0);
-            rightMotor.setPower(0);
+            liftLeft.setPower(0);
+            liftRight.setPower(0);
         } else {
-            leftMotor.setPower(total+input);
-            rightMotor.setPower(total+input);
+            liftLeft.setPower(total+input);
+            liftRight.setPower(total+input);
         }
     }
 
     public int getPosition() {
-        return rightMotor.getCurrentPosition();
+        return liftRight.getCurrentPosition();
     }
 
     public double getVelocity() {
-        return rightMotor.getVelocity();
+        return liftRight.getVelocity();
     }
 
     public double getTargetPosition() {
@@ -162,10 +167,10 @@ public class DRCB {
     }
 
     private void reset() {
-        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void updatePID() {
@@ -174,25 +179,27 @@ public class DRCB {
 
     // returns arbitrary units
     public double calculateFeedforward(double ticks) {
-        double angle = 2*Math.PI*ticks/TICKS_PER_REV;
-        double l_1 = Math.sqrt(Math.pow(L_A, 2)
-                               + Math.pow(L_0, 2)
-                               - 2*L_A*L_0*Math.cos(THETA_0 - angle));
-        double theta_ab = lawOfCos(L_0, l_1, L_A) + lawOfCos(L_OFFSET, l_1, L_B);
-        double theta_bc = lawOfCos(l_1, L_B, L_OFFSET);
-        double theta = Math.PI - (theta_ab - angle) - theta_bc;
+//        double angle = 2*Math.PI*ticks/TICKS_PER_REV;
+//        double l_1 = Math.sqrt(Math.pow(L_A, 2)
+//                               + Math.pow(L_0, 2)
+//                               - 2*L_A*L_0*Math.cos(THETA_0 - angle));
+//        double theta_ab = lawOfCos(L_0, l_1, L_A) + lawOfCos(L_OFFSET, l_1, L_B);
+//        double theta_bc = lawOfCos(l_1, L_B, L_OFFSET);
+//        double theta = Math.PI - (theta_ab - angle) - theta_bc;
+        double theta = 2*Math.PI*ticks/TICKS_PER_REV;
+        double result = Math.cos(theta);
 
-        double result = Math.cos(theta)/(Math.sin(theta_ab)*Math.sin(theta_bc));
+//        double result = Math.cos(theta)/(Math.sin(theta_ab)*Math.sin(theta_bc));
         // HACK: cause my feedforward model sucks
-        if ((-300 <= ticks) && (ticks < -160)) {
-            result -= 2;
-        } else if ((-160 <= ticks) && (ticks < 350)) {
-            result += 0.45;
-        } 
-        else if ((690 - 300) < ticks) {
-            result -= 8;
-            // result = result / 2;
-        }
+        // if ((-300 <= ticks) && (ticks < -160)) {
+        //     result -= 2;
+        // } else if ((-160 <= ticks) && (ticks < 350)) {
+        //     result += 0.45;
+        // } 
+        // else if ((690 - 300) < ticks) {
+        //     result -= 8;
+        //     // result = result / 2;
+        // }
         return result;
     }
 
@@ -208,10 +215,10 @@ public class DRCB {
     }
 
     public int getCurrentLeftTicks() {
-        return leftMotor.getCurrentPosition();
+        return liftLeft.getCurrentPosition();
     }
 
     public int getCurrentRightTicks() {
-        return rightMotor.getCurrentPosition();
+        return liftRight.getCurrentPosition();
     }
 }

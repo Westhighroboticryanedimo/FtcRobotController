@@ -30,7 +30,7 @@ public class TestTele extends OpMode {
         drive = new DriveFifthWheel(this, hardwareMap);
         gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
 //        gripper.setLevel(0);
-        drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor", "touch");
+        drcb = new DRCB(hardwareMap, "liftLeft", "liftRight", "touch");
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
         drcb.setLevel(0);
@@ -42,6 +42,7 @@ public class TestTele extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("l stick y", controller.left_stick_y);
         telemetry.addData("gyro", gyro.getAngleDegrees());
 //        telemetry.addData("leftPos", gripper.leftPos());
 //        telemetry.addData("rightPos", gripper.rightPos());
@@ -63,7 +64,7 @@ public class TestTele extends OpMode {
         controller.update();
 
         x.add(controller.left_stick_x);
-        y.add(-controller.left_stick_y);
+        y.add(controller.left_stick_y);
         turn.add(controller.right_stick_x);
 
         // Remove
@@ -85,8 +86,10 @@ public class TestTele extends OpMode {
 
         if (controller.left_trigger > 0) {
             // drive.drive(avgX/2.5, avgY/2.5, avgTurn/2.5);
+            drive.drive(avgX, avgY, avgTurn);
         } else {
             // drive.drive(avgX, avgY, avgTurn);
+            drcb.setPower(-controller.left_stick_y);
         }
 
         if (controller.leftBumperOnce()) {
@@ -100,22 +103,22 @@ public class TestTele extends OpMode {
 //            drcb.justFeedforward = false;
             gripper.moveUp();
         }
-        if (controller.XOnce()) {
-            drcb.d -= 0.001;
-            drcb.updatePID();
-        } else if (controller.BOnce()) {
-            drcb.d += 0.001;
-            drcb.updatePID();
-        }
-        if (controller.dpadUpOnce()) {
-            drcb.setLevel(3);
-        } else if (controller.dpadRightOnce()) {
-            drcb.setLevel(2);
-        } else if (controller.dpadLeftOnce()) {
-            drcb.setLevel(1);
-        } else if (controller.dpadDownOnce()) {
-            drcb.setLevel(0);
-        }
+        // if (controller.XOnce()) {
+        //     drcb.d -= 0.001;
+        //     drcb.updatePID();
+        // } else if (controller.BOnce()) {
+        //     drcb.d += 0.001;
+        //     drcb.updatePID();
+        // }
+        // if (controller.dpadUpOnce()) {
+        //     drcb.setLevel(3);
+        // } else if (controller.dpadRightOnce()) {
+        //     drcb.setLevel(2);
+        // } else if (controller.dpadLeftOnce()) {
+        //     drcb.setLevel(1);
+        // } else if (controller.dpadDownOnce()) {
+        //     drcb.setLevel(0);
+        // }
         if (controller.AOnce()) {
             // drcb.useMotionProfile = false;
 //            drive.updatePID();
@@ -124,6 +127,6 @@ public class TestTele extends OpMode {
             // drcb.useMotionProfile = true;
             gripper.moveOpen();
         }
-         drcb.run(0);
+        // drcb.run(0);
     }
 }
