@@ -30,7 +30,7 @@ public class RightRedPreloadAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Place place = new Place(hardwareMap, "leftMotor", "rightMotor", "touch", "flipLeft", "flipRight", "gripLeft", "gripRight");
+        Place place = new Place(hardwareMap, "liftLeft", "liftRight", "touch", "flipLeft", "flipRight", "grip");
         IntakeCam inCam = new IntakeCam(hardwareMap, true);
         Controller controller = new Controller(gamepad1);
         int mode = 0;

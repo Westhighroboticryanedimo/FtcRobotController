@@ -39,7 +39,7 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
-        place = new Place(hardwareMap, "leftMotor", "rightMotor", "touch", "flipLeft", "flipRight", "gripLeft", "gripRight");
+        place = new Place(hardwareMap, "liftLeft", "liftRight", "touch", "flipLeft", "flipRight", "grip");
         controller = new Controller(gamepad1);
         gyro = new Gyro(hardwareMap);
     }
@@ -65,7 +65,7 @@ public class TeleopFifthWheel extends OpMode {
         telemetry.addData("total", place.drcb.total);
         telemetry.addData("level", place.drcb.level);
         telemetry.addData("setpoint", place.drcb.setpoint);
-        telemetry.addData("motor power", place.drcb.rightMotor.getPower());
+        telemetry.addData("motor power", place.drcb.liftRight.getPower());
         telemetry.update();
         controller.update();
 

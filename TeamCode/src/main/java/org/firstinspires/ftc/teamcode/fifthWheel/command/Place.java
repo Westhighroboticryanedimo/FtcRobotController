@@ -29,9 +29,9 @@ public class Place {
 
     private int stackCount = 0;
 
-    public Place(HardwareMap hwMap, String lm, String rm, String ts, String fl, String fr, String gl, String gr) {
+    public Place(HardwareMap hwMap, String lm, String rm, String ts, String fl, String fr, String g) {
         drcb = new DRCB(hwMap, lm, rm, ts);
-        gripper = new Gripper(hwMap, fl, fr, gl, gr);
+        gripper = new Gripper(hwMap, fl, fr, g);
     }
 
     public void intake() {

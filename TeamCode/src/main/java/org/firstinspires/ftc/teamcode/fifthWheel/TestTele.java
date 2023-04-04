@@ -28,7 +28,7 @@ public class TestTele extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
-        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "gripLeft", "gripRight");
+        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
 //        gripper.setLevel(0);
         drcb = new DRCB(hardwareMap, "leftMotor", "rightMotor", "touch");
         gyro = new Gyro(hardwareMap, false);
@@ -36,10 +36,8 @@ public class TestTele extends OpMode {
         drcb.setLevel(0);
         // gripper.setLevel(0);
         gyro.reset();
-        gripper.flipLeft.turnToAngle(20);
-        gripper.flipRight.turnToAngle(20);
-        gripper.gripLeft.turnToAngle(20);
-        gripper.gripRight.turnToAngle(20);
+        gripper.setLevel(0);
+        gripper.open();
     }
 
     @Override
@@ -59,8 +57,7 @@ public class TestTele extends OpMode {
         telemetry.addData("drcb i gain", drcb.i);
         telemetry.addData("flipLeft angle", gripper.flipLeft.getAngle());
         telemetry.addData("flipRight angle", gripper.flipRight.getAngle());
-        telemetry.addData("gripLeft angle", gripper.gripLeft.getAngle());
-        telemetry.addData("gripRight angle", gripper.gripRight.getAngle());
+        telemetry.addData("grip angle", gripper.grip.getAngle());
         telemetry.addData("isPressed", drcb.touch.isPressed());
         telemetry.update();
         controller.update();
