@@ -26,27 +26,24 @@ public class DRCB {
     // top cone, top-1 cone, top-2 cone, top-3 cone
     // fifth cone is just intake level
     // lift up to low for picking them off the stack
-    public static double LEVELS[] = {-20, 270, 450, 665, 140, 110, 80, 60};
-    private static final double LIFT_POWER = 1.0;
+    public static double LEVELS[] = {-5, 300, 400, 450, 140, 110, 80, 60};
 
-    private static final double TICKS_PER_REV = 1680;
-    private static final double L_0 = 2.9; // motor to pivot dist
-    private static final double L_A = 2.25; // bottom linkage
-    private static final double L_B = 3.75; // top linkage
-    private static final double L_OFFSET = 3.55; // linkage attachment dist
-    private static final double THETA_0 = 2.1815; // angle between horizontal and L_0 in rad
+    private static final double TICKS_PER_REV = 1425.1;
     public static double kTau_ff = 0.15; // gain for torque feedforward
-    public static double kV = 0.0015;
-    public static double kA = 0.0007;
-    public static double downMultiplier = 1.05;
-    public static double maxV = 1000;
-    public static double maxA = 1000;
+    public static double kV = 0.0;
+    // public static double kV = 0.0015;
+    public static double kA = 0.0;
+    // public static double kA = 0.0007;
+    public static double maxV = 100;
+    public static double maxA = 100;
 
-    public static double p = 0.02;
-    public static double i = 0.0003;
-    // public static double i = 0.0003;
-    public static double d = 0.01;
+    public static double p = 0.0;
+    public static double i = 0.0;
+    public static double d = 0.0;
     public PIDController pid = new PIDController(p, i, d);
+
+    public static final int DIP_TICKS = 75;
+    public boolean dipped = false;
 
     public double ff = 0.0;
     public double output = 0.0;
@@ -63,20 +60,21 @@ public class DRCB {
     public DRCB(HardwareMap hwMap, String lm, String rm, String ts) {
         pid.reset();
         pid.setInputRange(0, LEVELS[3]);
-        pid.setOutputRange(0.0, LIFT_POWER);
+        pid.setOutputRange(0.0, 1.0);
         pid.setTolerance(0);
         pid.enable();
 
         liftLeft = hwMap.get(DcMotorEx.class, lm);
         liftLeft.setDirection(DcMotor.Direction.REVERSE);
-        liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // TODO: coast
+        liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         liftLeft.setPower(0);
         liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         liftRight = hwMap.get(DcMotorEx.class, rm);
         liftRight.setDirection(DcMotor.Direction.FORWARD);
-        liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         liftRight.setPower(0);
         liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -101,35 +99,37 @@ public class DRCB {
     }
 
     public void run(double input) {
-        setpoint = Control.trapMotionP(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+        if (dipped) {
+            setpoint = Control.trapMotionP(maxV, maxA, LEVELS[oldLevel], LEVELS[level] - DIP_TICKS, timer.seconds());
+        } else {
+            setpoint = Control.trapMotionP(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+        }
         updatePID();
         if (useMotionProfile) {
             pid.setSetpoint(setpoint);
         }
-        // angle of motor between lift rest and lift horizontal in ticks
-        ff = kTau_ff*calculateFeedforward(getPosition() - 375)
-            + kV*Control.trapMotionV(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds())
-            + kA*Control.trapMotionA(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+        if (dipped) {
+            // angle of motor between lift rest and lift horizontal in ticks
+            ff = kTau_ff*calculateFeedforward(getPosition() - 375)
+                + kV*Control.trapMotionV(maxV, maxA, LEVELS[oldLevel], LEVELS[level] - DIP_TICKS, timer.seconds())
+                + kA*Control.trapMotionA(maxV, maxA, LEVELS[oldLevel], LEVELS[level] - DIP_TICKS, timer.seconds());
+        } else {
+            // angle of motor between lift rest and lift horizontal in ticks
+            ff = kTau_ff*calculateFeedforward(getPosition() - 375)
+                + kV*Control.trapMotionV(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds())
+                + kA*Control.trapMotionA(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+        }
 
         output = pid.performPID(getPosition());
         total = ff + output;
         if (justFeedforward) {
             total = ff;
         }
-        // if going down, reduce output cause gravity
-        // TODO: take care of this in the model
-        // HACK: this sucks
-        if (total < 0.01) {
-            total = total + (0.01 - total)/downMultiplier;
-        }
         // set motor power and compensate for different battery voltages
         total = total*12.0/hardwareMap.voltageSensor.iterator().next().getVoltage();
         if (total > 1) {
             total = 1;
         }
-        // if (getPosition() > 350) {
-        //     total = -0.1;
-        // }
         if (touch.isPressed() && level == 0) {
             if (getPosition() != 0) {
                 reset();
@@ -141,6 +141,15 @@ public class DRCB {
             liftRight.setPower(total+input);
         }
     }
+
+    public void dipDown() {
+        dipped = true;
+    }
+
+    public void dipUp() {
+        dipped = false;
+    }
+
 
     public int getPosition() {
         return liftRight.getCurrentPosition();
@@ -179,35 +188,10 @@ public class DRCB {
 
     // returns arbitrary units
     public double calculateFeedforward(double ticks) {
-//        double angle = 2*Math.PI*ticks/TICKS_PER_REV;
-//        double l_1 = Math.sqrt(Math.pow(L_A, 2)
-//                               + Math.pow(L_0, 2)
-//                               - 2*L_A*L_0*Math.cos(THETA_0 - angle));
-//        double theta_ab = lawOfCos(L_0, l_1, L_A) + lawOfCos(L_OFFSET, l_1, L_B);
-//        double theta_bc = lawOfCos(l_1, L_B, L_OFFSET);
-//        double theta = Math.PI - (theta_ab - angle) - theta_bc;
         double theta = 2*Math.PI*ticks/TICKS_PER_REV;
         double result = Math.cos(theta);
 
-//        double result = Math.cos(theta)/(Math.sin(theta_ab)*Math.sin(theta_bc));
-        // HACK: cause my feedforward model sucks
-        // if ((-300 <= ticks) && (ticks < -160)) {
-        //     result -= 2;
-        // } else if ((-160 <= ticks) && (ticks < 350)) {
-        //     result += 0.45;
-        // } 
-        // else if ((690 - 300) < ticks) {
-        //     result -= 8;
-        //     // result = result / 2;
-        // }
         return result;
-    }
-
-    // calculate angle of an SSS triangle
-    // @param a is the side opposite to the angle you want to find
-    private double lawOfCos(double a, double b, double c) {
-        return Math.acos((Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2))
-                         / (2*b*c));
     }
 
     public Boolean arrived() {

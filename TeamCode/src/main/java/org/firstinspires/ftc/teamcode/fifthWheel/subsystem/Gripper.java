@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.fifthWheel.subsystem;
 
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Gripper {
@@ -9,6 +11,7 @@ public class Gripper {
     public ServoEx flipLeft;
     public ServoEx flipRight;
     public ServoEx grip;
+    public RevColorSensorV3 color;
 
     // intake, low, medium, high, cone stack, up
     // TODO: maybe change up?
@@ -20,6 +23,7 @@ public class Gripper {
         flipLeft = new SimpleServo(hwMap, fl, -200, 200);
         flipRight = new SimpleServo(hwMap, fr, -200, 200);
         grip = new SimpleServo(hwMap, gl, -200, 200);
+//        color = new RevColorSensorV3(hwMap, "color");
 
         flipLeft.setInverted(true);
         grip.setInverted(true);

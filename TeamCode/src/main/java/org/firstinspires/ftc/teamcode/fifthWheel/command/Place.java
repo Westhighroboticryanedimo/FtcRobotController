@@ -15,6 +15,8 @@ public class Place {
         RAISING,
         LOWERING,
         STACK_UP,
+        DIP_DOWN,
+        DIP_UP,
         WAVE
     } public State state = State.INTAKING;
 
@@ -84,6 +86,15 @@ public class Place {
         timer.reset();
     }
 
+    public void dip(boolean input) {
+        if (input) {
+            state = State.DIP_DOWN;
+        } else {
+            state = State.DIP_UP;
+        }
+        timer.reset();
+    }
+
     public void wave() {
         state = State.WAVE;
         level = 3;
@@ -120,6 +131,7 @@ public class Place {
                     timer.reset();
                 }
                 break;
+            // TODO: watch out for catching of the bottom of claw
             case LOWERING:
                 if (timer.milliseconds() > 150) {
                     gripper.close();
@@ -134,6 +146,14 @@ public class Place {
                     drcb.setLevel(level);
                     timer.reset();
                 }
+                break;
+            case DIP_DOWN:
+                drcb.dipDown();
+                timer.reset();
+                break;
+            case DIP_UP:
+                drcb.dipUp();
+                timer.reset();
                 break;
             case WAVE:
                 if (timer.milliseconds() > 750) {
