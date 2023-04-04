@@ -1,4 +1,4 @@
-/*package org.firstinspires.ftc.teamcode.fifthWheel.auto;
+package org.firstinspires.ftc.teamcode.fifthWheel.auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.lang.Math;
 
-@Autonomous(name="Right Red Preload Auto", group="FifthWheel")
-public class RightRedPreloadAuto extends LinearOpMode {
+@Autonomous(name="Right Blue Preload Auto", group="FifthWheel")
+public class RightBluePreloadAuto extends LinearOpMode {
 
     enum State {
         DROPPING_PRELOAD,
@@ -31,7 +31,7 @@ public class RightRedPreloadAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         Place place = new Place(hardwareMap, "leftMotor", "rightMotor", "touch", "flipLeft", "flipRight", "gripLeft", "gripRight");
-        IntakeCam inCam = new IntakeCam(hardwareMap, true);
+        IntakeCam inCam = new IntakeCam(hardwareMap, false);
         Controller controller = new Controller(gamepad1);
         int mode = 0;
         int signal = 1;
@@ -49,12 +49,12 @@ public class RightRedPreloadAuto extends LinearOpMode {
             .splineTo(new Vector2d(36, -72+30), Math.toRadians(90),
                 SampleMecanumDrive.getVelocityConstraint(38, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
                 SampleMecanumDrive.getAccelerationConstraint(38))
-            .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> place.raise(3))
+            .UNSTABLE_addTemporalMarkerOffset(-1.0, () -> place.raise(3))
             .splineTo(new Vector2d(32, -72+60), Math.toRadians(135),
                 SampleMecanumDrive.getVelocityConstraint(38, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
                 SampleMecanumDrive.getAccelerationConstraint(38))
             .UNSTABLE_addTemporalMarkerOffset(0.0, () -> place.dropAndLower())
-            .waitSeconds(0.3)
+            .waitSeconds(0.15)
             .UNSTABLE_addTemporalMarkerOffset(0.0, () -> inCam.beginConeStack())
             .lineToSplineHeading(lineupPose,
                 SampleMecanumDrive.getVelocityConstraint(38, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
@@ -81,8 +81,8 @@ public class RightRedPreloadAuto extends LinearOpMode {
             .lineToSplineHeading(new Pose2d(33, -72+62, Math.toRadians(135)),
                 SampleMecanumDrive.getVelocityConstraint(38, Math.toRadians(180), DriveConstants.TRACK_WIDTH),
                 SampleMecanumDrive.getAccelerationConstraint(38))
-            .waitSeconds(0.15)
             .UNSTABLE_addTemporalMarkerOffset(0.0, () -> place.dropAndLower())
+            .waitSeconds(0.15)
             .lineToSplineHeading(lineupPose,
                 SampleMecanumDrive.getVelocityConstraint(38, Math.toRadians(180), DriveConstants.TRACK_WIDTH),
                 SampleMecanumDrive.getAccelerationConstraint(38))
@@ -139,8 +139,8 @@ public class RightRedPreloadAuto extends LinearOpMode {
             .build();
 
         // TrajectorySequence signalOne = drive.trajectorySequenceBuilder(coneStack.end())
-        //     .splineToLinearHeading(new Pose2d(36, -38, Math.toRadians(90)), Math.toRadians(90))
-        //     .splineToLinearHeading(new Pose2d(12, -38, Math.toRadians(90)), Math.toRadians(90))
+        //     .splineToLinearHeading(new Pose2d(36, -36, Math.toRadians(90)), Math.toRadians(90))
+        //     .splineToLinearHeading(new Pose2d(12, -36, Math.toRadians(90)), Math.toRadians(90))
         //     .build();
 
         TrajectorySequence signalTwo = drive.trajectorySequenceBuilder(coneStack.end())
@@ -148,17 +148,17 @@ public class RightRedPreloadAuto extends LinearOpMode {
             .build();
 
         // TrajectorySequence signalTwo = drive.trajectorySequenceBuilder(coneStack.end())
-        //     .splineToLinearHeading(new Pose2d(36, -38, Math.toRadians(90)), Math.toRadians(90))
+        //     .splineToLinearHeading(new Pose2d(36, -36, Math.toRadians(90)), Math.toRadians(90))
         //     .build();
-
+        //
         TrajectorySequence signalThree = drive.trajectorySequenceBuilder(coneStack.end())
             .lineToSplineHeading(new Pose2d(36, -36, Math.toRadians(90)))
             .strafeTo(new Vector2d(60, -36))
             .build();
 
         // TrajectorySequence signalThree = drive.trajectorySequenceBuilder(coneStack.end())
-        //     .splineToLinearHeading(new Pose2d(36, -38, Math.toRadians(90)), Math.toRadians(90))
-        //     .splineToLinearHeading(new Pose2d(60, -38, Math.toRadians(90)), Math.toRadians(90))
+        //     .splineToLinearHeading(new Pose2d(36, -36, Math.toRadians(90)), Math.toRadians(90))
+        //     .splineToLinearHeading(new Pose2d(60, -36, Math.toRadians(90)), Math.toRadians(90))
         //     .build();
 
         FtcDashboard.getInstance().startCameraStream(IntakeCam.camera, 0);
@@ -235,8 +235,8 @@ public class RightRedPreloadAuto extends LinearOpMode {
             switch (state) {
                 case DROPPING_PRELOAD:
                     if (!drive.isBusy()) {
-                        state = State.PARKING;
-                        drive.followTrajectorySequenceAsync(park);
+                        state = State.CONE_STACK;
+                        drive.followTrajectorySequenceAsync(coneStack);
                     }
                     break;
                 case CONE_STACK:
@@ -244,8 +244,8 @@ public class RightRedPreloadAuto extends LinearOpMode {
                         coneCount--;
                         drive.followTrajectorySequenceAsync(coneStack);
                     } else if (!drive.isBusy() && coneCount == 4) {
-                        state = State.LAST_CONE_STACK;
-                        drive.followTrajectorySequenceAsync(lastConeStack);
+                        state = State.PARKING;
+                        drive.followTrajectorySequenceAsync(park);
                     }
                     break;
                 case LAST_CONE_STACK:
@@ -274,5 +274,3 @@ public class RightRedPreloadAuto extends LinearOpMode {
         telemetry.update();
     }
 }
-
- */
