@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.NewPPRobot.NewPPDrive;
 import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.Lift;
 
-@TeleOp(name = "New Powerplay Robot TeleOp")
+@TeleOp(name = "ChodeTeleop")
 public class NewPPTeleop extends OpMode {
 
     private NewPPDrive drive;

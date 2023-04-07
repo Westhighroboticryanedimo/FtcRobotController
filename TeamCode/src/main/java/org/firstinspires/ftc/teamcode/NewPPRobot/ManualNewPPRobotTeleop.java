@@ -14,20 +14,20 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
-@TeleOp(name = "New Powerplay Robot TeleOp")
+@TeleOp(name = "ManualChodeTeleop")
 public class ManualNewPPRobotTeleop extends OpMode {
 
     private NewPPDrive drive;
     private Controller controller;
     private Controller controller2;
     private ServoEx clawServo;
-    private ServoEx pivotServo;
-    private ServoEx wristServo1;
-    private ServoEx wristServo2;
-    private DcMotor liftMotor;
-    private DcMotor liftMotor2;
-    private DcMotor spinMotor;
-    private DcMotor spinMotor2;
+    private ServoEx wristServo;
+    private ServoEx pivotServo1;
+    private ServoEx pivotServo2;
+    private DcMotor lift1;
+    private DcMotor lift2;
+    private DcMotor intake1;
+    private DcMotor intake2;
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -44,16 +44,18 @@ public class ManualNewPPRobotTeleop extends OpMode {
         controller = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
 
-        clawServo = hardwareMap.get(SimpleServo.class, "clawServo");
-        pivotServo = hardwareMap.get(SimpleServo.class, "pivotServo");
-        wristServo1 = hardwareMap.get(SimpleServo.class, "wristServo1");
-        wristServo2 = hardwareMap.get(SimpleServo.class, "wristServo2");
+        clawServo = new SimpleServo(hardwareMap, "clawServo", 0, 360);
+        wristServo = new SimpleServo(hardwareMap, "wristServo", 0, 360);
+        pivotServo1 = new SimpleServo(hardwareMap, "pivotServo1", 0, 360);
+        pivotServo2 = new SimpleServo(hardwareMap, "pivotServo2", 0, 360);
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
-        liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
-        liftMotor2 = hardwareMap.get(DcMotor.class, "LiftMotor2");
+        lift1 = hardwareMap.get(DcMotor.class, "lift1");
+        lift2 = hardwareMap.get(DcMotor.class, "lift2");
+        intake1 = hardwareMap.get(DcMotor.class, "intake1");
+        intake2 = hardwareMap.get(DcMotor.class, "intake2");
     }
 
     @Override
@@ -61,8 +63,8 @@ public class ManualNewPPRobotTeleop extends OpMode {
         controller.update();
         controller2.update();
 
-        telemetry.addData("LiftEncdr", liftMotor.getCurrentPosition());
-        telemetry.addData("LiftEncdr2", liftMotor2.getCurrentPosition());
+        telemetry.addData("LiftEncdr", lift1.getCurrentPosition());
+        telemetry.addData("LiftEncdr2", lift2.getCurrentPosition());
         telemetry.addData("SlowMode?", slowMode);
         telemetry.update();
 
@@ -82,14 +84,14 @@ public class ManualNewPPRobotTeleop extends OpMode {
 
         //Lift Controls
         if (controller.left_trigger == 1) {
-            liftMotor.setPower(1);
-            liftMotor2.setPower(-1);
+            lift1.setPower(1);
+            lift2.setPower(-1);
         } else if (controller.right_trigger == 1) {
-            liftMotor.setPower(-1);
-            liftMotor2.setPower(1);
+            lift1.setPower(-1);
+            lift2.setPower(1);
         } else {
-            liftMotor.setPower(0);
-            liftMotor2.setPower(0);
+            lift1.setPower(0);
+            lift2.setPower(0);
         }
 
         //Claw Controls
@@ -101,27 +103,27 @@ public class ManualNewPPRobotTeleop extends OpMode {
 
         //Intake Controls
         if (controller.leftStickButtonOnce()) {
-            spinMotor.setPower(1);
-            spinMotor2.setPower(-1);
+            intake1.setPower(.5);
+            intake2.setPower(-.5);
         } else if (controller.rightStickButtonOnce()) {
-            spinMotor.setPower(0);
-            spinMotor2.setPower(0);
+            intake1.setPower(0);
+            intake2.setPower(0);
         }
 
         //Wrist Pivot Controls
         if (controller.leftBumperOnce()) {
-            wristServo1.setPosition(360);
-            wristServo2.setPosition(0);
+            pivotServo1.setPosition(360);
+            pivotServo2.setPosition(0);
         } else if (controller.rightBumperOnce()) {
-            wristServo2.setPosition(360);
-            wristServo1.setPosition(0);
+            pivotServo2.setPosition(360);
+            pivotServo1.setPosition(0);
         }
 
         //Wrist Twist Controls
         if (controller.XOnce()) {
-            pivotServo.setPosition(21);
+            wristServo.setPosition(21);
         } else if (controller.YOnce()) {
-            pivotServo.setPosition(256);
+            wristServo.setPosition(256);
         }
     }
 }
