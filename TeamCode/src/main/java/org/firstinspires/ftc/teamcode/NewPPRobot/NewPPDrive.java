@@ -34,7 +34,7 @@ public class NewPPDrive extends HolonomicDrive {
         setPidSpeed(0.05, 0.001, 0);
         setPidTurn(0.05 , 0.001, 0);
 
-        setMotorDir(false, true, false, true);
+        setMotorDir(true, false, true, false);
         setWheelDiameter(3.7795);
         setTicksPerRev(537.7);
     }

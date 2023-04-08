@@ -34,6 +34,9 @@ public class ManualNewPPRobotTeleop extends OpMode {
     private DcMotor backRight;
 
     int slowMode = 0;
+    int pivotServo1Pos = 180;
+    int pivotServo2Pos = 180;
+    int clawServoPos = 180;
 
     public ManualNewPPRobotTeleop() {
     }
@@ -66,6 +69,9 @@ public class ManualNewPPRobotTeleop extends OpMode {
         telemetry.addData("LiftEncdr", lift1.getCurrentPosition());
         telemetry.addData("LiftEncdr2", lift2.getCurrentPosition());
         telemetry.addData("SlowMode?", slowMode);
+        telemetry.addData("pivot1Pos", pivotServo1Pos);
+        telemetry.addData("pivot2Pos", pivotServo2Pos);
+        telemetry.addData("clawServoPos", clawServoPos);
         telemetry.update();
 
         // Controls
@@ -73,8 +79,14 @@ public class ManualNewPPRobotTeleop extends OpMode {
         // Driver 2: Buttons for Lift, Triggers for fine control
 
         //Drive Controls
-        if (controller.leftBumperOnce()) {
+        if (controller.leftStickButtonOnce()) {
             drive.FieldCentricToggle();
+        } else if (controller.rightStickButtonOnce()) {
+            if (slowMode == 0) {
+                slowMode = 1;
+            } else {
+                slowMode = 0;
+            }
         }
         if (slowMode == 0) {
             drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
@@ -84,11 +96,11 @@ public class ManualNewPPRobotTeleop extends OpMode {
 
         //Lift Controls
         if (controller.left_trigger == 1) {
-            lift1.setPower(1);
-            lift2.setPower(-1);
-        } else if (controller.right_trigger == 1) {
             lift1.setPower(-1);
             lift2.setPower(1);
+        } else if (controller.right_trigger == 1) {
+            lift1.setPower(1);
+            lift2.setPower(-1);
         } else {
             lift1.setPower(0);
             lift2.setPower(0);
@@ -96,34 +108,46 @@ public class ManualNewPPRobotTeleop extends OpMode {
 
         //Claw Controls
         if (controller.AOnce()) {
-            clawServo.setPosition(135);
+            clawServoPos = 180;
         } else if (controller.BOnce()) {
-            clawServo.setPosition(85);
+            clawServoPos = 155;
         }
+        clawServo.turnToAngle(clawServoPos);
 
         //Intake Controls
-        if (controller.leftStickButtonOnce()) {
+        if (controller.dpadUpOnce()) {
             intake1.setPower(.5);
             intake2.setPower(-.5);
-        } else if (controller.rightStickButtonOnce()) {
+        } else if (controller.dpadDownOnce()) {
             intake1.setPower(0);
             intake2.setPower(0);
         }
 
         //Wrist Pivot Controls
         if (controller.leftBumperOnce()) {
-            pivotServo1.setPosition(360);
-            pivotServo2.setPosition(0);
+            pivotServo1Pos = pivotServo1Pos+5;
+            pivotServo2Pos = pivotServo2Pos-5;
         } else if (controller.rightBumperOnce()) {
-            pivotServo2.setPosition(360);
-            pivotServo1.setPosition(0);
+            pivotServo1Pos = 120;
+            pivotServo2Pos = 240;
+        } else if (controller.dpadLeftOnce()) {
+            pivotServo1Pos = 140;
+            pivotServo2Pos = 220;
+        } else if (controller.dpadRightOnce()) {
+            pivotServo1Pos = 310;
+            pivotServo2Pos = 50;
         }
+        pivotServo1.turnToAngle(pivotServo1Pos);
+        pivotServo2.turnToAngle(pivotServo2Pos);
+        //140 1 220 2 Intake
+        //310 1 50 2 Outtake
+        //Driving 260 1 100 2
 
         //Wrist Twist Controls
         if (controller.XOnce()) {
-            wristServo.setPosition(21);
+            wristServo.turnToAngle(16);
         } else if (controller.YOnce()) {
-            wristServo.setPosition(256);
+            wristServo.turnToAngle(256);
         }
     }
 }
