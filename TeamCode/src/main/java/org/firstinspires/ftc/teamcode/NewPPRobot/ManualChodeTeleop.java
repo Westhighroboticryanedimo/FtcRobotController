@@ -14,10 +14,10 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
-@TeleOp(name = "ManualChodeTeleop")
-public class ManualNewPPRobotTeleop extends OpMode {
+@TeleOp(name = "Manual Chode Teleop")
+public class ManualChodeTeleop extends OpMode {
 
-    private NewPPDrive drive;
+    private ChodeDrive drive;
     private Controller controller;
     private Controller controller2;
     private ServoEx clawServo;
@@ -38,12 +38,12 @@ public class ManualNewPPRobotTeleop extends OpMode {
     int pivotServo2Pos = 180;
     int clawServoPos = 180;
 
-    public ManualNewPPRobotTeleop() {
+    public ManualChodeTeleop() {
     }
 
     @Override
     public void init() {
-        drive = new NewPPDrive(this, hardwareMap);
+        drive = new ChodeDrive(this, hardwareMap);
         controller = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
 

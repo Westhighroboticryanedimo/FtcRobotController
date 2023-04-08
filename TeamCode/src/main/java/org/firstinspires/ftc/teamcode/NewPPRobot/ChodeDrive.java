@@ -6,20 +6,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
-public class NewPPDrive extends HolonomicDrive {
+public class ChodeDrive extends HolonomicDrive {
     public double p = 0.04;
     private double i = 0;
     public double d = 0.015;
 
 
     // Autonomous
-    public NewPPDrive(LinearOpMode opMode, HardwareMap hwMap) {
+    public ChodeDrive(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
         setup();
     }
 
     // Teleop
-    public NewPPDrive(OpMode opMode, HardwareMap hwMap) {
+    public ChodeDrive(OpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
         setup();
     }
