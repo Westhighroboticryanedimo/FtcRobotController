@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.fifthWheel;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.fifthWheel.command.Place;
 import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
@@ -17,7 +16,8 @@ import java.lang.Math;
 public class TeleopFifthWheel extends OpMode {
     private DriveFifthWheel drive;
     private Place place;
-    private Controller controller;
+    private Controller controller1;
+    private Controller controller2;
     private Gyro gyro;
 
     private static final double MAX_ACCEL = 2.75;
@@ -40,7 +40,8 @@ public class TeleopFifthWheel extends OpMode {
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
         place = new Place(hardwareMap, "liftLeft", "liftRight", "touch", "flipLeft", "flipRight", "grip");
-        controller = new Controller(gamepad1);
+        controller1 = new Controller(gamepad1);
+        controller2 = new Controller(gamepad2);
         gyro = new Gyro(hardwareMap);
     }
 
@@ -67,41 +68,41 @@ public class TeleopFifthWheel extends OpMode {
         telemetry.addData("setpoint", place.drcb.setpoint);
         telemetry.addData("motor power", place.drcb.liftRight.getPower());
         telemetry.update();
-        controller.update();
+        controller1.update();
 
         elapsedTime = runtime.seconds() - previousTime;
         previousTime = runtime.seconds();
-        x += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller.left_stick_x - x, MAX_ACCEL*elapsedTime));
-        y += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller.left_stick_y - y, MAX_ACCEL*elapsedTime));
-        turn += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller.right_stick_x - turn, MAX_ACCEL*elapsedTime));
-        if (controller.right_trigger > 0.9) {
+        x += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller1.left_stick_x - x, MAX_ACCEL*elapsedTime));
+        y += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller1.left_stick_y - y, MAX_ACCEL*elapsedTime));
+        turn += Math.max(-MAX_ACCEL*elapsedTime, Math.min(controller1.right_stick_x - turn, MAX_ACCEL*elapsedTime));
+        if (controller1.right_trigger > 0.9) {
             drive.drive(x/2, y/2, turn/2);
         } else {
             drive.drive(x, y, turn);
         }
 
-        if (controller.AOnce()) {
+        if (controller2.AOnce()) {
             place.intake();
-        } else if (controller.XOnce()) {
+        } else if (controller2.XOnce()) {
             place.dropAndLower();
-        } else if (controller.dpadUpOnce()) {
+        } else if (controller2.dpadUpOnce()) {
             level = 3;
             place.raise(level);
-        } else if (controller.dpadRightOnce()) {
+        } else if (controller2.dpadRightOnce()) {
             level = 2;
             place.raise(level);
-        } else if (controller.dpadLeftOnce()) {
+        } else if (controller2.dpadLeftOnce()) {
             level = 1;
             place.raise(level);
-        } else if (controller.dpadDownOnce()) {
+        } else if (controller2.dpadDownOnce()) {
             level = 0;
             place.raise(level);
-        } else if (controller.leftBumperOnce()) {
+        } else if (controller2.leftBumperOnce()) {
             place.goToStack();
             stacking = true;
-        } else if (controller.rightBumperOnce()) {
+        } else if (controller2.rightBumperOnce()) {
             place.decrementStack();
-        } else if (controller.BOnce()) {
+        } else if (controller2.BOnce()) {
             if (stacking) {
                 place.liftOffStack();
                 stacking = false;
@@ -110,10 +111,10 @@ public class TeleopFifthWheel extends OpMode {
             }
         }
 
-        if (controller.left_trigger > 0) {
-            input = controller.left_trigger*(-0.4);
-        } else if (controller.right_trigger > 0) {
-            input = controller.right_trigger*0.4;
+        if (controller2.left_trigger > 0) {
+            input = controller1.left_trigger*(-0.4);
+        } else if (controller2.right_trigger > 0) {
+            input = controller1.right_trigger*0.4;
         }
         place.run(input);
     }

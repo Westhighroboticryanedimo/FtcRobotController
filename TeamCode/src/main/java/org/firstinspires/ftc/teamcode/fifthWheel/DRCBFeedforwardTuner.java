@@ -59,7 +59,7 @@ public class DRCBFeedforwardTuner extends LinearOpMode {
 
         while (!isStopRequested()) {
 
-            if (clock.seconds() - lastTime > 4) {
+            if (clock.seconds() - lastTime > 3) {
                 if (up) {
                     drcb.setLevel(3);
                     up = false;
@@ -71,6 +71,11 @@ public class DRCBFeedforwardTuner extends LinearOpMode {
             }
 
             drcb.run(0);
+            if (drcb.getPosition() < 30) {
+                gripper.setLevel(0);
+            } else {
+                gripper.setLevel(8);
+            }
 
             double velocity = drcb.getVelocity();
 

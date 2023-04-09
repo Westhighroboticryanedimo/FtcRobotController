@@ -26,20 +26,23 @@ public class DRCB {
     // top cone, top-1 cone, top-2 cone, top-3 cone
     // fifth cone is just intake level
     // lift up to low for picking them off the stack
-    public static double LEVELS[] = {-5, 300, 400, 450, 140, 110, 80, 60};
+    public static double LEVELS[] = {  0,  350, 575,   1100,
+                                      140,  110,  80,     60 };
 
     private static final double TICKS_PER_REV = 1425.1;
-    public static double kTau_ff = 0.15; // gain for torque feedforward
-    public static double kV = 0.0;
+    public static double kTau_ff = 0.1; // gain for torque feedforward
+    public static double kV = 0.0007;
     // public static double kV = 0.0015;
     public static double kA = 0.0;
     // public static double kA = 0.0007;
-    public static double maxV = 100;
-    public static double maxA = 100;
+    public static double maxV = 2700;
+    public static double maxA = 2700;
+    public static double offset = 0.6;
+    public static double bumpFactor = 1;
 
-    public static double p = 0.0;
+    public static double p = 0.008;
     public static double i = 0.0;
-    public static double d = 0.0;
+    public static double d = 0.01;
     public PIDController pid = new PIDController(p, i, d);
 
     public static final int DIP_TICKS = 75;
@@ -110,14 +113,24 @@ public class DRCB {
         }
         if (dipped) {
             // angle of motor between lift rest and lift horizontal in ticks
-            ff = kTau_ff*calculateFeedforward(getPosition() - 375)
+            ff = kTau_ff*calculateFeedforward(getPosition() - 350)
                 + kV*Control.trapMotionV(maxV, maxA, LEVELS[oldLevel], LEVELS[level] - DIP_TICKS, timer.seconds())
                 + kA*Control.trapMotionA(maxV, maxA, LEVELS[oldLevel], LEVELS[level] - DIP_TICKS, timer.seconds());
         } else {
-            // angle of motor between lift rest and lift horizontal in ticks
-            ff = kTau_ff*calculateFeedforward(getPosition() - 375)
-                + kV*Control.trapMotionV(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds())
-                + kA*Control.trapMotionA(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+            if (level == 0) {
+                ff = kTau_ff*calculateFeedforward(getPosition() - 350)
+                        + kV*Control.trapMotionV(maxV, maxA/2, LEVELS[oldLevel], LEVELS[level], timer.seconds())
+                        + kA*Control.trapMotionA(maxV, maxA/2, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+            } else {
+                // angle of motor between lift rest and lift horizontal in ticks
+                ff = kTau_ff * calculateFeedforward(getPosition() - 350)
+                        + kV * Control.trapMotionV(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds())
+                        + kA * Control.trapMotionA(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+            }
+        }
+
+        if (ff < -0.1) {
+            ff = -0.1;
         }
 
         output = pid.performPID(getPosition());
@@ -189,7 +202,10 @@ public class DRCB {
     // returns arbitrary units
     public double calculateFeedforward(double ticks) {
         double theta = 2*Math.PI*ticks/TICKS_PER_REV;
-        double result = Math.cos(theta);
+        double result = Math.cos(theta) + offset;
+        if (600-350 < ticks && ticks < 730-350) {
+            result = result * bumpFactor;
+        }
 
         return result;
     }
