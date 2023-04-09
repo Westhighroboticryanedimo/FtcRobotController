@@ -96,8 +96,8 @@ public class ManualChodeTeleop extends OpMode {
 
         //Lift Controls
         if (controller.left_trigger == 1) {
-            lift1.setPower(-1);
-            lift2.setPower(1);
+            lift1.setPower(-.1);
+            lift2.setPower(.1);
         } else if (controller.right_trigger == 1) {
             lift1.setPower(1);
             lift2.setPower(-1);

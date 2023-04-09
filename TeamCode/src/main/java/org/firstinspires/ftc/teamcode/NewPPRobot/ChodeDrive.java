@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
 public class ChodeDrive extends HolonomicDrive {
-    public double p = 0.04;
+    public double p = 0.035;
     private double i = 0;
-    public double d = 0.015;
+    public double d = 0.01;
 
 
     // Autonomous
@@ -32,7 +32,7 @@ public class ChodeDrive extends HolonomicDrive {
 
         setPidDrive(p, i, d);
         setPidSpeed(0.05, 0.001, 0);
-        setPidTurn(0.05 , 0.001, 0);
+        setPidTurn(0.028, 0.001, 0);
 
         setMotorDir(true, false, true, false);
         setWheelDiameter(3.7795);
@@ -62,6 +62,9 @@ public class ChodeDrive extends HolonomicDrive {
     public void changeDriveD(double change) {
         d = d + change;
     }
+    public double getDriveP() {return(p);}
+    public double getDriveI() {return(i);}
+    public double getDriveD() {return(d);}
 
 
 }
