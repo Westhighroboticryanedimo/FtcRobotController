@@ -27,7 +27,7 @@ public class TeleopInit {
         if (FSMRunning == 1) {
             switch (state) {
                 case 1:
-                    //Pivot Forward 800 ms
+                    //Pivot Forward 900 ms
                     pivotServo1.turnToAngle(290);
                     pivotServo2.turnToAngle(70);
                     if (timer.milliseconds() > 500) {
@@ -46,7 +46,7 @@ public class TeleopInit {
                     break;
                 case 3:
                     //Pivot to intake position
-                    pivotServo1.turnToAngle(115);
+                    pivotServo1.turnToAngle(120);
                     pivotServo2.turnToAngle(240);
                     FSMRunning = 0;
                     state = 1;

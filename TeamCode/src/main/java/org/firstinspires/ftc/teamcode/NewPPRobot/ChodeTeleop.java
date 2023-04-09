@@ -7,6 +7,7 @@ package org.firstinspires.ftc.teamcode.NewPPRobot;
 
 import static java.lang.Math.abs;
 
+import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -19,7 +20,10 @@ import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.ChodeLift;
 import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.IntakeFSM;
 import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.TeleopInit;
 import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.LiftZeroFSM;
+import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.OuttakeFSM;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 
 @TeleOp(name = "ChodeTeleop")
 public class ChodeTeleop extends OpMode {
@@ -29,14 +33,15 @@ public class ChodeTeleop extends OpMode {
     private Controller controller2;
     private ChodeLift lift;
     private IntakeFSM intakeFSM;
+    private OuttakeFSM outtakeFSM;
     private LiftZeroFSM liftZero;
     private TeleopInit teleopInit;
     private TouchSensor liftLimit;
     private DistanceSensor intakeSensor;
-    private Servo clawServo;
-    private Servo wristServo;
-    private Servo pivotServo1;
-    private Servo pivotServo2;
+    private ServoEx clawServo;
+    private ServoEx wristServo;
+    private ServoEx pivotServo1;
+    private ServoEx pivotServo2;
     private DcMotor lift1;
     private DcMotor lift2;
     private DcMotor intake1;
@@ -50,6 +55,8 @@ public class ChodeTeleop extends OpMode {
     double rightTrigger = 0;
     int slowMode = 0;
     int intaking = 0;
+    int reverseIntake = 0;
+    int reverseFast = 0;
 
     public ChodeTeleop() {
     }
@@ -61,13 +68,14 @@ public class ChodeTeleop extends OpMode {
         controller2 = new Controller(gamepad2);
         lift = new ChodeLift();
         intakeFSM = new IntakeFSM();
+        outtakeFSM = new OuttakeFSM();
         teleopInit = new TeleopInit();
         liftZero = new LiftZeroFSM();
 
-        clawServo = hardwareMap.get(Servo.class, "clawServo");
-        wristServo = hardwareMap.get(Servo.class, "wristServo");
-        pivotServo1 = hardwareMap.get(Servo.class, "pivotServo1");
-        pivotServo2 = hardwareMap.get(Servo.class, "pivotServo2");
+        clawServo = new SimpleServo(hardwareMap, "clawServo", 0, 360);
+        wristServo = new SimpleServo(hardwareMap, "wristServo", 0, 360);
+        pivotServo1 = new SimpleServo(hardwareMap, "pivotServo1", 0, 360);
+        pivotServo2 = new SimpleServo(hardwareMap, "pivotServo2", 0, 360);
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -86,6 +94,7 @@ public class ChodeTeleop extends OpMode {
 
         lift.liftInit(hardwareMap);
         intakeFSM.intakeInit(hardwareMap);
+        outtakeFSM.outtakeInit(hardwareMap);
         teleopInit.teleopInit(hardwareMap);
         liftZero.liftZeroInit(hardwareMap, lift);
     }
@@ -132,9 +141,9 @@ public class ChodeTeleop extends OpMode {
                 slowMode = 0;
             }
         }
-        if (controller.leftBumperOnce()) {
-            drive.FieldCentricToggle();
-        }
+//        if (controller.leftBumperOnce()) {
+//            drive.FieldCentricToggle();
+//        }
         if (slowMode == 0) {
             drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
         } else {
@@ -144,8 +153,12 @@ public class ChodeTeleop extends OpMode {
         //Scoring
         if (controller.right_trigger > 0.2 && rightTrigger == 0 && controller.left_trigger == 0) {
             liftZero.startLiftZeroFSM();
+            outtakeFSM.startOuttakeFSM();
+            liftZero.setLiftResting(0);
+            slowMode = 0;
         }
         liftZero.liftZero();
+        outtakeFSM.outtake();
 
         //Intake
         if (controller.left_trigger > 0.2 && leftTrigger == 0 && controller.right_trigger == 0) {
@@ -153,21 +166,6 @@ public class ChodeTeleop extends OpMode {
             intake2.setPower(-.7);
             intaking = 1;
         }
-
-        //Lift
-//        if (controller.XOnce() || controller2.XOnce()) {
-//            lift.setLiftPos(100);
-//            liftResting = 0;
-//        } else if (controller.YOnce() || controller2.YOnce()) {
-//            lift.setLiftPos(200);
-//            liftResting = 0;
-//        } else if (controller.BOnce() || controller2.BOnce()) {
-//            lift.setLiftPos(300);
-//            liftResting = 0;
-//        } else if (controller.AOnce() || controller2.AOnce()) {
-//            // TODO: FSM sequence to lower the lift to ~ 1" above limit, then slowly lower until limit is pressed, then reset encoders
-//            // TODO: Change "resting" variable to 1 toggle PID off
-//        }
 
         // Intake Automation
         if (intakeSensor.getDistance(DistanceUnit.INCH) < 5 && intaking == 1) {
@@ -179,27 +177,87 @@ public class ChodeTeleop extends OpMode {
         }
         intakeFSM.intake();
 
-        //Init Automation
+        //Reset Automation
         if (controller.left_trigger == 1 && controller.right_trigger == 1) {
             teleopInit.resetTimer();
             teleopInit.startTeleopInit();
         }
         teleopInit.init();
 
+        //Raising Lift
+        if (controller.XOnce()) {
+            lift.setLiftPos(700);
+            liftZero.setLiftResting(0);
+        } else if (controller.YOnce()) {
+            lift.setLiftPos(1550);
+            liftZero.setLiftResting(0);
+        } else if (controller.BOnce()) {
+            lift.setLiftPos(2350);
+            liftZero.setLiftResting(0);
+        }
+        if (lift.getSetpoint() == 700 || lift.getSetpoint() == 1550 || lift.getSetpoint() == 2350) {
+            pivotServo1.turnToAngle(310);
+            pivotServo2.turnToAngle(50);
+        }
+
+        //Manual Lift Control
+        if (controller.dpadUp()) {
+            lift1.setPower(0.4);
+            lift2.setPower(-0.4);
+            liftZero.setLiftResting(1);
+        } else if (controller.dpadDown()) {
+            if (liftLimit.isPressed()) {
+                lift1.setPower(0);
+                lift2.setPower(0);
+                lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            } else {
+                lift1.setPower(-0.1);
+                lift2.setPower(0.1);
+                liftZero.setLiftResting(1);
+            }
+        } else if (liftZero.getLiftResting() == 1 && liftZero.getFSMLowering() == 0) {
+            lift1.setPower(0);
+            lift2.setPower(0);
+        }
+
+        //Intake Reverse
+        if (controller.startOnce()) {
+            if (reverseIntake == 0) {
+                reverseIntake = 1;
+            } else {
+                reverseIntake = 0;
+            }
+            reverseFast = 0;
+        }
+        if (reverseIntake == 1 && reverseFast == 0) {
+            intake1.setPower(-0.2);
+            intake2.setPower(0.2);
+        }
+        if ((controller.startOnce() || controller.backOnce()) && reverseIntake == 0) {
+            intake1.setPower(0);
+            intake2.setPower(0);
+        }
+        if (controller.backOnce()) {
+            if (reverseIntake == 0) {
+                reverseIntake = 1;
+            } else {
+                reverseIntake = 0;
+            }
+            reverseFast = 1;
+        }
+        if (reverseIntake == 1 && reverseFast == 1) {
+            intake1.setPower(-0.7);
+            intake2.setPower(0.7);
+        }
+
         //Lift PID Toggle and Trigger Toggle
         leftTrigger = controller.left_trigger;
         rightTrigger = controller.right_trigger;
         if (liftZero.getLiftResting() == 0) {
             lift.moveLift();
-        }
-
-        //Change Target Position
-        if (controller.leftStickButtonOnce()) {
-            lift.setLiftPos(1000);
-            liftZero.setLiftResting(0);
-        } else if (controller.rightStickButtonOnce()) {
-            lift.setLiftPos(2000);
-            liftZero.setLiftResting(0);
         }
     }
 }

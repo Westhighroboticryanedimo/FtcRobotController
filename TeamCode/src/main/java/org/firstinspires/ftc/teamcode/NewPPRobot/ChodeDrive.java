@@ -27,7 +27,7 @@ public class ChodeDrive extends HolonomicDrive {
     // PID setup
     private void setup() {
         reduceTurn = true;
-        isDrivePOV = false;
+        isDrivePOV = true;
         isSquaredInputs = true;
 
         setPidDrive(p, i, d);
