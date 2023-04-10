@@ -21,15 +21,11 @@ public class MFTonomousPark extends LinearOpMode {
     private DcMotor FRDrive;
     private DcMotor BLDrive;
     private DcMotor BRDrive;
-    private Servo clawServo;
-    private TouchSensor liftLimit;
-    private DcMotor liftMotor;
-    private DcMotor liftMotor2;
 
     private class MotorFns {
 
         private int getEncoders() {
-            return((abs(FLDrive.getCurrentPosition()*2)+abs(FRDrive.getCurrentPosition()*2)+abs(BLDrive.getCurrentPosition()))/2);
+            return((abs(FLDrive.getCurrentPosition())+abs(FRDrive.getCurrentPosition())+abs(BLDrive.getCurrentPosition())+abs(BRDrive.getCurrentPosition()))/4);
         }
         private void resetEncoders() {
             FLDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -38,6 +34,8 @@ public class MFTonomousPark extends LinearOpMode {
             FRDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             BLDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BLDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            BRDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            BRDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
         private void stopMotors() {
             FLDrive.setPower(0);
@@ -64,12 +62,6 @@ public class MFTonomousPark extends LinearOpMode {
         FRDrive = hardwareMap.get(DcMotor.class, "frontRight");
         BLDrive = hardwareMap.get(DcMotor.class, "backLeft");
         BRDrive = hardwareMap.get(DcMotor.class, "backRight");
-        clawServo = hardwareMap.get(Servo.class, "clawServo");
-        liftLimit = hardwareMap.get(TouchSensor.class, "liftLimit");
-        liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
-        liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         telemetry.addData("color", colorCam.getColor());
         telemetry.addData("hue", colorCam.getHue());
         telemetry.addData("FREncoder", FRDrive.getCurrentPosition());
@@ -124,34 +116,38 @@ public class MFTonomousPark extends LinearOpMode {
         telemetry.addData("Sleeve Color", realColor);
         telemetry.update();
 
-        clawServo.setPosition(0.3);
-        sleep(1000);
-
-        while (motorFns.getEncoders() < 3675) {
-            motorFns.runMotors(-0.27, -0.27, 0.25, 0.25);
+        while (motorFns.getEncoders() < 1200) {
+            motorFns.runMotors(0.27, 0.27, -0.27, -0.27);
+            telemetry.addData("FRont LEft Encoder", FLDrive.getCurrentPosition());
+            telemetry.addData("FRont Right Encoder", FRDrive.getCurrentPosition());
+            telemetry.addData("Vack LEft Encoder", BLDrive.getCurrentPosition());
+            telemetry.addData("Bak Right Encoder", BRDrive.getCurrentPosition());
+            telemetry.update();
         }
         motorFns.stopMotors();
         motorFns.resetEncoders();
         sleep(1000);
-
-        while (motorFns.getEncoders() < 200) {
-            motorFns.runMotors(0.27, 0.27, -0.25, -0.25);
-        }
-        motorFns.stopMotors();
-        motorFns.resetEncoders();
-        sleep(1000);
-
         if (realColor == 1) {
-            while (motorFns.getEncoders() < 3000) {
-                motorFns.runMotors(0.27, -0.27, 0.25, -0.25);
+            while (motorFns.getEncoders() < 1050) {
+                motorFns.runMotors(-0.3, 0.3, -0.3, 0.3);
+                telemetry.addData("FRont LEft Encoder", FLDrive.getCurrentPosition());
+                telemetry.addData("FRont Right Encoder", FRDrive.getCurrentPosition());
+                telemetry.addData("Vack LEft Encoder", BLDrive.getCurrentPosition());
+                telemetry.addData("Bak Right Encoder", BRDrive.getCurrentPosition());
+                telemetry.update();
             }
             motorFns.stopMotors();
             motorFns.resetEncoders();
         } else if (realColor == 2) {
 
         } else if (realColor == 3) {
-            while (motorFns.getEncoders() < 3000) {
-                motorFns.runMotors(-0.27, 0.27, -0.25, 0.25);
+            while (motorFns.getEncoders() < 1050) {
+                motorFns.runMotors(0.3, -0.3, 0.3, -0.3);
+                telemetry.addData("FRont LEft Encoder", FLDrive.getCurrentPosition());
+                telemetry.addData("FRont Right Encoder", FRDrive.getCurrentPosition());
+                telemetry.addData("Vack LEft Encoder", BLDrive.getCurrentPosition());
+                telemetry.addData("Bak Right Encoder", BRDrive.getCurrentPosition());
+                telemetry.update();
             }
             motorFns.stopMotors();
             motorFns.resetEncoders();

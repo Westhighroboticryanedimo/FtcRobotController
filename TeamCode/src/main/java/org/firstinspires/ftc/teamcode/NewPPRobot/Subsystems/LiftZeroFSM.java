@@ -43,7 +43,7 @@ public class LiftZeroFSM {
         if (FSMRunning == 1) {
             switch (state) {
                 case 1:
-                    lift.setLiftPos(300);
+                    lift.setLiftPos(150);
                     FSMRunning = 1;
                     if (lift.arrived() == 1) {
                         state = 2;
@@ -54,6 +54,7 @@ public class LiftZeroFSM {
                     if (timer.milliseconds() > 500) {
                         state = 3;
                         liftResting = 1;
+                        clawServo.turnToAngle(155);
                     }
                 case 3:
                     FSMLowering = 1;
@@ -63,7 +64,6 @@ public class LiftZeroFSM {
                         lift1.setPower(0);
                         lift2.setPower(0);
                         FSMLowering = 0;
-                        clawServo.turnToAngle(155);
                         lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

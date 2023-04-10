@@ -143,9 +143,9 @@ public class ChodeTeleop extends OpMode {
 //            drive.FieldCentricToggle();
 //        }
         if (slowMode == 0) {
-            drive.drive(-controller.left_stick_x, -controller.left_stick_y, -controller.right_stick_x);
+            drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         } else {
-            drive.drive(-controller.left_stick_x/2, -controller.left_stick_y/2, -controller.right_stick_x /2);
+            drive.drive(controller.left_stick_x/2, controller.left_stick_y/2, controller.right_stick_x /2);
         }
 
         //Scoring
