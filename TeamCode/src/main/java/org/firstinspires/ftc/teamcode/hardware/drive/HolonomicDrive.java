@@ -50,10 +50,10 @@ public abstract class HolonomicDrive extends BaseHardware {
     protected double currAngle = 0; // Current theoretical angle
 
     // For PID corrections
-    protected PIDController pidDrive = new PIDController(0, 0, 0);
+    protected PIDController pidTurn = new PIDController(0, 0, 0);
     protected PIDController pidFLBR = new PIDController(0, 0, 0);
     protected PIDController pidFRBL = new PIDController(0, 0, 0);
-    protected PIDController pidTurn = new PIDController(0, 0, 0);
+    protected PIDController pidAutoTurn = new PIDController(0, 0, 0);
     protected double prevAngle;
     protected double correction;
     protected boolean isPID = true;
@@ -61,14 +61,14 @@ public abstract class HolonomicDrive extends BaseHardware {
     protected static final double SLOW_MULTIPLIER = 0.5;
 
     // Set pidDrive values
-    protected void setPidDrive(double p, double i, double d) {
+    protected void setPidTurn(double p, double i, double d) {
 
-        pidDrive = new PIDController(p, i, d);
+        pidTurn = new PIDController(p, i, d);
 
     }
 
     // Set pidSpeed values
-    protected void setPidSpeed(double p, double i, double d) {
+    protected void setPidAutoSpeed(double p, double i, double d) {
 
         pidFLBR = new PIDController(p, i, d);
         pidFRBL = new PIDController(p, i, d);
@@ -76,9 +76,9 @@ public abstract class HolonomicDrive extends BaseHardware {
     }
 
     // Set pidTurn values
-    protected void setPidTurn(double p, double i, double d) {
+    protected void setPidAutoTurn(double p, double i, double d) {
 
-        pidTurn = new PIDController(p, i, d);
+        pidAutoTurn = new PIDController(p, i, d);
 
     }
 
@@ -408,32 +408,32 @@ public abstract class HolonomicDrive extends BaseHardware {
         }
 
         // PID calculation
-        pidDrive.setSetpoint(prevAngle);
-        correction = pidDrive.performPID(gyro.getAngleDegrees());
+        pidTurn.setSetpoint(prevAngle);
+        correction = pidTurn.performPID(gyro.getAngleDegrees());
 
         if (!thirdWheel) {
 
             // If turning or not moving then don't correct
             if (Math.abs(turn) != 0 || (x == 0 && y == 0)) {
 
-                pidDrive.disable();
-                pidDrive.reset();
+                pidTurn.disable();
+                pidTurn.reset();
                 prevAngle = gyro.getAngleDegrees();
                 correction = 0;
 
-            } else pidDrive.enable();
+            } else pidTurn.enable();
 
         } else {
 
             // Continuous tuning
             if (Math.abs(turn) != 0) {
 
-                pidDrive.disable();
-                pidDrive.reset();
+                pidTurn.disable();
+                pidTurn.reset();
                 prevAngle = gyro.getAngleDegrees();
                 correction = 0;
 
-            } else pidDrive.enable();
+            } else pidTurn.enable();
 
         }
 
@@ -535,9 +535,9 @@ public abstract class HolonomicDrive extends BaseHardware {
         resetMotors();
 
         // For correction turning
-        pidDrive.reset();
-        pidDrive.setSetpoint(0);
-        pidDrive.enable();
+        pidTurn.reset();
+        pidTurn.setSetpoint(0);
+        pidTurn.enable();
 
         // Calculate speed
         double flbrSpeed = speed * Math.sin((45.0 + angleMove) * Math.PI / 180);
@@ -550,7 +550,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         do {
 
-            correction = pidDrive.performPID(gyro.getAngleDegrees());
+            correction = pidTurn.performPID(gyro.getAngleDegrees());
 
             frontLeft.setPower(flbrSpeed - correction);
             frontRight.setPower(frblSpeed + correction);
@@ -586,9 +586,9 @@ public abstract class HolonomicDrive extends BaseHardware {
         double goalFRBLSpeed = speed * (frblDist / max);
 
         // For correction turning
-        pidDrive.reset();
-        pidDrive.setSetpoint(currAngle);
-        pidDrive.enable();
+        pidTurn.reset();
+        pidTurn.setSetpoint(currAngle);
+        pidTurn.enable();
 
         // For frontleft and backright motors
         pidFLBR.reset();
@@ -613,7 +613,7 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         do {
 
-            correction = pidDrive.performPID(gyro.getAngleDegrees());
+            correction = pidTurn.performPID(gyro.getAngleDegrees());
 
             double avgFLBRPos = (frontLeft.getCurrentPosition() + backRight.getCurrentPosition()) / 2.0;
             double speedFLBR = pidFLBR.performPID(avgFLBRPos);
@@ -659,16 +659,16 @@ public abstract class HolonomicDrive extends BaseHardware {
 
         if (Math.abs(angle) > 359) angle = (int) Math.copySign(359, angle);
 
-        pidTurn.reset();
-        pidTurn.setInputRange(currAngle, currAngle - angle);
-        pidTurn.setOutputRange(0, speed);
-        pidTurn.setSetpoint(currAngle - angle);
-        pidTurn.setTolerance(5);
-        pidTurn.enable();
+        pidAutoTurn.reset();
+        pidAutoTurn.setInputRange(currAngle, currAngle - angle);
+        pidAutoTurn.setOutputRange(0, speed);
+        pidAutoTurn.setSetpoint(currAngle - angle);
+        pidAutoTurn.setTolerance(5);
+        pidAutoTurn.enable();
 
         do {
 
-            speed = pidTurn.performPID(gyro.getAngleDegrees());
+            speed = pidAutoTurn.performPID(gyro.getAngleDegrees());
 
             frontLeft.setPower(-speed);
             frontRight.setPower(speed);
@@ -680,12 +680,12 @@ public abstract class HolonomicDrive extends BaseHardware {
             print("BL: ", backLeft.getCurrentPosition());
             print("BR: ", backRight.getCurrentPosition());
             print("Curr Angle: ", gyro.getAngleDegrees());
-            print("Setpoint: ", pidTurn.getSetpoint());
-            print("Is setpoint: ", pidTurn.onTarget());
+            print("Setpoint: ", pidAutoTurn.getSetpoint());
+            print("Is setpoint: ", pidAutoTurn.onTarget());
 
             linearOpMode.telemetry.update();
 
-        } while (linearOpMode.opModeIsActive() && !pidTurn.onTarget());
+        } while (linearOpMode.opModeIsActive() && !pidAutoTurn.onTarget());
 
         // Add to current angle
         currAngle -= angle;

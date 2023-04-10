@@ -30,9 +30,9 @@ public class DriveFifthWheel extends HolonomicDrive {
         isDrivePOV = false;
         isSquaredInputs = true;
 
-        setPidDrive(p, i, d);
-        setPidSpeed(0.05, 0.001, 0);
-        setPidTurn(0.05 , 0.001, 0);
+        setPidTurn(p, i, d);
+        setPidAutoSpeed(0.05, 0.001, 0);
+        setPidAutoTurn(0.05 , 0.001, 0);
 
         setMotorDir(false, true, false, true);
         setWheelDiameter(3.7795);
@@ -40,7 +40,7 @@ public class DriveFifthWheel extends HolonomicDrive {
     }
 
     public void updatePID() {
-        setPidDrive(p, i, d);
+        setPidTurn(p, i, d);
     }
 
 

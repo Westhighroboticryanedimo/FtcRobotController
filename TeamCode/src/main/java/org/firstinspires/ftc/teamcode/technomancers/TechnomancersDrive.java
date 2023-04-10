@@ -23,9 +23,9 @@ public class TechnomancersDrive extends HolonomicDrive {
 
     //PID setup
     private void setup() {
-        setPidDrive(0,0,0);
-        setPidSpeed(0, 0, 0);
-        setPidTurn(0, 0, 0);
+        setPidTurn(0,0,0);
+        setPidAutoSpeed(0, 0, 0);
+        setPidAutoTurn(0, 0, 0);
 
         setMotorDir(false, true, false, true);
         setWheelDiameter(3.7795);

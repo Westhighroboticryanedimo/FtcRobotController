@@ -23,9 +23,9 @@ public class MFDrive extends HolonomicDrive {
 
     //PID setup
     private void setup() {
-        setPidDrive(0.035,0,0.01);
-        setPidSpeed(0.05, 0.001, 0);
-        setPidTurn(0.028, 0.001, 0);
+        setPidTurn(0.035,0,0.01);
+        setPidAutoSpeed(0.05, 0.001, 0);
+        setPidAutoTurn(0.028, 0.001, 0);
 
         setMotorDir(true, false, true, false);
         setWheelDiameter(3.7795);
