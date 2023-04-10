@@ -227,44 +227,6 @@ public class ChodeTeleop extends OpMode {
         if (liftZero.getLiftResting() == 0) {
             lift.moveLift();
         }
-
-        //PID Tuning
-        // P controlled with bumpers
-        if (controller2.dpadLeftOnce()) {
-        //    lift.changeLiftP(-0.001);
-            drive.changeDriveP(-0.001);
-            drive.updatePID();
-        } else if (controller2.dpadRightOnce()) {
-        //    lift.changeLiftP(0.001);
-            drive.changeDriveP(0.001);
-            drive.updatePID();
-        }
-        // D controlled with A and Y
-        if (controller2.AOnce()) {
-        //    lift.changeLiftD(-0.001);
-            drive.changeDriveD(-0.001);
-            drive.updatePID();
-        } else if (controller2.YOnce()) {
-        //    lift.changeLiftD(0.001);
-            drive.changeDriveD(0.001);
-            drive.updatePID();
-        }
-        // FF controlled with dpad
-        if (controller2.dpadDownOnce()) {
-        //    lift.changeLiftFF(-0.01);
-        } else if (controller2.dpadUpOnce()) {
-        //    lift.changeLiftFF(0.01);
-        }
-        // I controlled with X and B
-        if (controller2.XOnce()) {
-        //    lift.changeLiftI(-0.001);
-            drive.changeDriveI(-0.001);
-            drive.updatePID();
-        } else if (controller2.BOnce()) {
-        //    lift.changeLiftI(0.001);
-            drive.changeDriveI(0.001);
-            drive.updatePID();
-        }
     }
 }
 

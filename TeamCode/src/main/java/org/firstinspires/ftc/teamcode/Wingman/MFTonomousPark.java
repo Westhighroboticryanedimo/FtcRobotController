@@ -34,8 +34,8 @@ public class MFTonomousPark extends LinearOpMode {
             FRDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             BLDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BLDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            BRDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             BRDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            BRDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         private void stopMotors() {
             FLDrive.setPower(0);
@@ -118,6 +118,7 @@ public class MFTonomousPark extends LinearOpMode {
 
         while (motorFns.getEncoders() < 1200) {
             motorFns.runMotors(0.27, 0.27, -0.27, -0.27);
+            BRDrive.setPower(-0.27);
             telemetry.addData("FRont LEft Encoder", FLDrive.getCurrentPosition());
             telemetry.addData("FRont Right Encoder", FRDrive.getCurrentPosition());
             telemetry.addData("Vack LEft Encoder", BLDrive.getCurrentPosition());
@@ -128,7 +129,7 @@ public class MFTonomousPark extends LinearOpMode {
         motorFns.resetEncoders();
         sleep(1000);
         if (realColor == 1) {
-            while (motorFns.getEncoders() < 1050) {
+            while (motorFns.getEncoders() < 1150) {
                 motorFns.runMotors(-0.3, 0.3, -0.3, 0.3);
                 telemetry.addData("FRont LEft Encoder", FLDrive.getCurrentPosition());
                 telemetry.addData("FRont Right Encoder", FRDrive.getCurrentPosition());
@@ -141,7 +142,7 @@ public class MFTonomousPark extends LinearOpMode {
         } else if (realColor == 2) {
 
         } else if (realColor == 3) {
-            while (motorFns.getEncoders() < 1050) {
+            while (motorFns.getEncoders() < 1150) {
                 motorFns.runMotors(0.3, -0.3, 0.3, -0.3);
                 telemetry.addData("FRont LEft Encoder", FLDrive.getCurrentPosition());
                 telemetry.addData("FRont Right Encoder", FRDrive.getCurrentPosition());

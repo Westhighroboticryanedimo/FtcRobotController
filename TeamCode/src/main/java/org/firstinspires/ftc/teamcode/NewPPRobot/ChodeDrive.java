@@ -30,8 +30,7 @@ public class ChodeDrive extends HolonomicDrive {
         isDrivePOV = true;
         isSquaredInputs = true;
 
-        setPidDrive(p, i, d);
-        setPidSpeed(0.028, 0.001, 0);
+        setPidAutoSpeed(0.028, 0.001, 0);
         setPidTurn(0.028, 0.001, 0);
 
         setMotorDir(false, true, false, true);
@@ -39,9 +38,7 @@ public class ChodeDrive extends HolonomicDrive {
         setTicksPerRev(537.7);
     }
 
-    public void updatePID() {
-        setPidDrive(p, i, d);
-    }
+    //public void updatePID() {setPidDrive(p, i, d);}
 
     // Field Centric Toggle
     public void FieldCentricToggle() {
