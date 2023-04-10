@@ -26,7 +26,7 @@ public class DRCB {
     // top cone, top-1 cone, top-2 cone, top-3 cone
     // fifth cone is just intake level
     // lift up to low for picking them off the stack
-    public static double LEVELS[] = {  0,  350, 575,   1100,
+    public static double LEVELS[] = {  0,  350, 600,   1100,
                                       140,  110,  80,     60 };
 
     private static final double TICKS_PER_REV = 1425.1;
@@ -119,8 +119,8 @@ public class DRCB {
         } else {
             if (level == 0) {
                 ff = kTau_ff*calculateFeedforward(getPosition() - 350)
-                        + kV*Control.trapMotionV(maxV, maxA/2, LEVELS[oldLevel], LEVELS[level], timer.seconds())
-                        + kA*Control.trapMotionA(maxV, maxA/2, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+                        + kV*Control.trapMotionV(maxV, maxA/3, LEVELS[oldLevel], LEVELS[level], timer.seconds())
+                        + kA*Control.trapMotionA(maxV, maxA/3, LEVELS[oldLevel], LEVELS[level], timer.seconds());
             } else {
                 // angle of motor between lift rest and lift horizontal in ticks
                 ff = kTau_ff * calculateFeedforward(getPosition() - 350)
@@ -143,6 +143,9 @@ public class DRCB {
         if (total > 1) {
             total = 1;
         }
+//        } else if (total < -0.2) {
+//            total = -0.2;
+//        }
         if (touch.isPressed() && level == 0) {
             if (getPosition() != 0) {
                 reset();

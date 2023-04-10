@@ -28,7 +28,7 @@ public class TestTele extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
-        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
+        gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip", Gripper.Alliance.RED);
 //        gripper.setLevel(0);
         drcb = new DRCB(hardwareMap, "liftLeft", "liftRight", "touch");
         gyro = new Gyro(hardwareMap, false);

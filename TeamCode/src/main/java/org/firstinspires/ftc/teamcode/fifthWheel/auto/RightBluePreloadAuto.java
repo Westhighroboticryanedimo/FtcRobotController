@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.fifthWheel.command.Place;
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.Gripper;
 import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.IntakeCam;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -30,7 +31,7 @@ public class RightBluePreloadAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Place place = new Place(hardwareMap, "liftLeft", "liftRight", "touch", "flipLeft", "flipRight", "grip");
+        Place place = new Place(hardwareMap, "liftLeft", "liftRight", "touch", "flipLeft", "flipRight", "grip", Gripper.Alliance.BLUE);
         IntakeCam inCam = new IntakeCam(hardwareMap, false);
         Controller controller = new Controller(gamepad1);
         int mode = 0;

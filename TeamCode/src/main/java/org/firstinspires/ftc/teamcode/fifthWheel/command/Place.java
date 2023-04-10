@@ -21,19 +21,20 @@ public class Place {
     } public State state = State.INTAKING;
 
     public DRCB drcb;
-    private Gripper gripper;
+    public Gripper gripper;
 
     private int level = 0;
     private int oldLevel = 0;
     public Boolean helpme = false;
+    private Boolean didIAlreadyCallSetLevelOrNot = false;
 
     public ElapsedTime timer = new ElapsedTime();
 
     private int stackCount = 0;
 
-    public Place(HardwareMap hwMap, String lm, String rm, String ts, String fl, String fr, String g) {
+    public Place(HardwareMap hwMap, String lm, String rm, String ts, String fl, String fr, String g, Gripper.Alliance alliance) {
         drcb = new DRCB(hwMap, lm, rm, ts);
-        gripper = new Gripper(hwMap, fl, fr, g);
+        gripper = new Gripper(hwMap, fl, fr, g, alliance);
     }
 
     public void intake() {
@@ -60,6 +61,7 @@ public class Place {
         state = State.LOWERING;
         level = 0;
         gripper.open();
+        didIAlreadyCallSetLevelOrNot = false;
         timer.reset();
     }
 
@@ -110,6 +112,9 @@ public class Place {
                     gripper.open();
                     timer.reset();
                 }
+                if (gripper.in()) {
+                    pickup();
+                }
                 break;
             case WAITING_FOR_CLOSE:
                 if (timer.milliseconds() > 300) {
@@ -122,7 +127,7 @@ public class Place {
             case PICKED:
                 break;
             case RAISING:
-                int waitTime = 300+(150*level);
+                int waitTime = 300+(150*Math.abs(oldLevel-level));
                 if (level >= 4) {
                     waitTime = 150;
                 }
@@ -134,11 +139,14 @@ public class Place {
             // TODO: watch out for catching of the bottom of claw
             case LOWERING:
                 if (timer.milliseconds() > 150) {
-                    gripper.close();
+//                    gripper.close();
                 }
                 if (timer.milliseconds() > 300) {
                     gripper.setLevel(-1);
-                    drcb.setLevel(level);
+                    if (!didIAlreadyCallSetLevelOrNot) {
+                        drcb.setLevel(level);
+                        didIAlreadyCallSetLevelOrNot = true;
+                    }
                 }
                 break;
             case STACK_UP:

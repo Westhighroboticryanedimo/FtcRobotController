@@ -6,25 +6,37 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 public class Gripper {
     // private Servo grip;
     public ServoEx flipLeft;
     public ServoEx flipRight;
     public ServoEx grip;
     public RevColorSensorV3 color;
+    private double thresh = 0.8;
+
+    // 0 = red, 1 = blue
+    public enum Alliance {
+        RED, BLUE
+    }
+
+    Alliance alliance = Alliance.RED;
 
     // intake, low, medium, high, cone stack, up
     // TODO: maybe change up?
-    private static final double LEVELS[] = { -65, -60,  -100, -200,
-                                             -40, -40, -40,  -40,
-                                             -55};
+    private static final double LEVELS[] = {-65, -60, -80, -180,
+            -40, -40, -40, -40,
+            -55};
     private static final double OPEN = 30;
     private static final double CLOSE = 0;
 
-    public Gripper(HardwareMap hwMap, String fl, String fr, String gl) {
+    public Gripper(HardwareMap hwMap, String fl, String fr, String gl, Alliance alliance) {
         flipLeft = new SimpleServo(hwMap, fl, -200, 200);
         flipRight = new SimpleServo(hwMap, fr, -200, 200);
         grip = new SimpleServo(hwMap, gl, -200, 200);
+        color = hwMap.get(RevColorSensorV3.class, "color");
+        this.alliance = alliance;
 //        color = new RevColorSensorV3(hwMap, "color");
 
         flipLeft.setInverted(true);
@@ -68,5 +80,22 @@ public class Gripper {
 
     public void moveClose() {
         grip.rotateByAngle(-5);
+    }
+
+    public boolean in() {
+        if (alliance == Alliance.RED) {
+            if (color.getDistance(DistanceUnit.INCH) < 4 && color.getNormalizedColors().red > thresh) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (alliance == Alliance.BLUE) {
+            if (color.getDistance(DistanceUnit.INCH) < 4 && color.getNormalizedColors().blue > thresh) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 }

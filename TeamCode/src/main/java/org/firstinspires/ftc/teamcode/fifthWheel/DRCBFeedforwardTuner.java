@@ -38,7 +38,7 @@ public class DRCBFeedforwardTuner extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         DRCB drcb = new DRCB(hardwareMap, "liftLeft", "liftRight", "touch");
-        Gripper gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip");
+        Gripper gripper = new Gripper(hardwareMap, "flipLeft", "flipRight", "grip", Gripper.Alliance.RED);
 
         Controller controller = new Controller(gamepad1);
         gripper.close();

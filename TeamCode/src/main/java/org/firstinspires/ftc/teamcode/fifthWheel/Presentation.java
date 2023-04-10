@@ -21,7 +21,7 @@ public class Presentation extends OpMode {
 
     @Override
     public void init() {
-        place = new Place(hardwareMap, "liftLeft", "liftRight", "touch", "flipLeft", "flipRight", "grip");
+        place = new Place(hardwareMap, "liftLeft", "liftRight", "touch", "flipLeft", "flipRight", "grip", Gripper.Alliance.RED);
         gyro = new Gyro(hardwareMap, false);
         controller = new Controller(gamepad1);
         gyro.reset();

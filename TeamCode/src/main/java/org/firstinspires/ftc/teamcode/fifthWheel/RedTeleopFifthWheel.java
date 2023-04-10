@@ -6,14 +6,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.fifthWheel.command.Place;
 import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.DriveFifthWheel;
 import org.firstinspires.ftc.teamcode.Controller;
+import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.Gripper;
 import org.firstinspires.ftc.teamcode.hardware.Gyro;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.lang.Math;
 
-@TeleOp(name = "FifthWheel TeleOp")
-public class TeleopFifthWheel extends OpMode {
+@TeleOp(name = "FifthWheel Red TeleOp")
+public class RedTeleopFifthWheel extends OpMode {
     private DriveFifthWheel drive;
     private Place place;
     private Controller controller1;
@@ -39,7 +40,7 @@ public class TeleopFifthWheel extends OpMode {
     @Override
     public void init() {
         drive = new DriveFifthWheel(this, hardwareMap);
-        place = new Place(hardwareMap, "liftLeft", "liftRight", "touch", "flipLeft", "flipRight", "grip");
+        place = new Place(hardwareMap, "liftLeft", "liftRight", "touch", "flipLeft", "flipRight", "grip", Gripper.Alliance.RED);
         controller1 = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
         gyro = new Gyro(hardwareMap);
@@ -67,8 +68,11 @@ public class TeleopFifthWheel extends OpMode {
         telemetry.addData("level", place.drcb.level);
         telemetry.addData("setpoint", place.drcb.setpoint);
         telemetry.addData("motor power", place.drcb.liftRight.getPower());
+        telemetry.addData("red", place.gripper.color.getNormalizedColors().red);
+        telemetry.addData("blue", place.gripper.color.getNormalizedColors().blue);
         telemetry.update();
         controller1.update();
+        controller2.update();
 
         elapsedTime = runtime.seconds() - previousTime;
         previousTime = runtime.seconds();
