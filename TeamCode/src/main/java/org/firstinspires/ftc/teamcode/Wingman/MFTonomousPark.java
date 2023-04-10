@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.IntakeFSM;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
@@ -21,6 +22,7 @@ public class MFTonomousPark extends LinearOpMode {
     private DcMotor FRDrive;
     private DcMotor BLDrive;
     private DcMotor BRDrive;
+    private IntakeFSM intakeFSM;
 
     private class MotorFns {
 
@@ -69,6 +71,9 @@ public class MFTonomousPark extends LinearOpMode {
         telemetry.update();
         motorFns.resetEncoders();
 
+        intakeFSM = new IntakeFSM();
+        intakeFSM.intakeInit(hardwareMap);
+
         colorCam.set_p1Y(380);
         colorCam.set_p2Y(475);
 
@@ -115,16 +120,32 @@ public class MFTonomousPark extends LinearOpMode {
         int realColor = colorCam.getColor();
         telemetry.addData("Sleeve Color", realColor);
         telemetry.update();
+        intakeFSM.startIntakeFSM();
 
-        while (motorFns.getEncoders() < 1200) {
-            motorFns.runMotors(0.27, 0.27, -0.27, -0.27);
-            BRDrive.setPower(-0.27);
-            telemetry.addData("FRont LEft Encoder", FLDrive.getCurrentPosition());
-            telemetry.addData("FRont Right Encoder", FRDrive.getCurrentPosition());
-            telemetry.addData("Vack LEft Encoder", BLDrive.getCurrentPosition());
-            telemetry.addData("Bak Right Encoder", BRDrive.getCurrentPosition());
-            telemetry.update();
+        if (realColor == 1 || realColor == 2) {
+            while (motorFns.getEncoders() < 1250) {
+                motorFns.runMotors(0.27, 0.27, -0.27, -0.27);
+                BRDrive.setPower(-0.27);
+                intakeFSM.intake();
+                telemetry.addData("FRont LEft Encoder", FLDrive.getCurrentPosition());
+                telemetry.addData("FRont Right Encoder", FRDrive.getCurrentPosition());
+                telemetry.addData("Vack LEft Encoder", BLDrive.getCurrentPosition());
+                telemetry.addData("Bak Right Encoder", BRDrive.getCurrentPosition());
+                telemetry.update();
+            }
+        } else {
+            while (motorFns.getEncoders() < 1050) {
+                motorFns.runMotors(0.27, 0.27, -0.27, -0.27);
+                BRDrive.setPower(-0.27);
+                intakeFSM.intake();
+                telemetry.addData("FRont LEft Encoder", FLDrive.getCurrentPosition());
+                telemetry.addData("FRont Right Encoder", FRDrive.getCurrentPosition());
+                telemetry.addData("Vack LEft Encoder", BLDrive.getCurrentPosition());
+                telemetry.addData("Bak Right Encoder", BRDrive.getCurrentPosition());
+                telemetry.update();
+            }
         }
+
         motorFns.stopMotors();
         motorFns.resetEncoders();
         sleep(1000);
@@ -142,7 +163,7 @@ public class MFTonomousPark extends LinearOpMode {
         } else if (realColor == 2) {
 
         } else if (realColor == 3) {
-            while (motorFns.getEncoders() < 1150) {
+            while (motorFns.getEncoders() < 1250) {
                 motorFns.runMotors(0.3, -0.3, 0.3, -0.3);
                 telemetry.addData("FRont LEft Encoder", FLDrive.getCurrentPosition());
                 telemetry.addData("FRont Right Encoder", FRDrive.getCurrentPosition());
