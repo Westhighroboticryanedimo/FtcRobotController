@@ -10,7 +10,6 @@ import static java.lang.Math.abs;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -22,6 +21,7 @@ import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.TeleopInit;
 import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.LiftZeroFSM;
 import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.OuttakeFSM;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.NewPPRobot.ChodeDrive;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 
@@ -55,8 +55,6 @@ public class ChodeTeleop extends OpMode {
     double rightTrigger = 0;
     int slowMode = 0;
     int intaking = 0;
-    int reverseIntake = 0;
-    int reverseFast = 0;
 
     public ChodeTeleop() {
     }
@@ -151,7 +149,7 @@ public class ChodeTeleop extends OpMode {
         }
 
         //Scoring
-        if (controller.right_trigger > 0.2 && rightTrigger == 0 && controller.left_trigger == 0) {
+        if (controller.right_trigger > 0.5 && rightTrigger == 0 && controller.left_trigger == 0) {
             liftZero.startLiftZeroFSM();
             outtakeFSM.startOuttakeFSM();
             liftZero.setLiftResting(0);
@@ -161,7 +159,7 @@ public class ChodeTeleop extends OpMode {
         outtakeFSM.outtake();
 
         //Intake
-        if (controller.left_trigger > 0.2 && leftTrigger == 0 && controller.right_trigger == 0) {
+        if (controller.left_trigger > 0.5 && leftTrigger == 0 && controller.right_trigger == 0) {
             intake1.setPower(.7);
             intake2.setPower(-.7);
             intaking = 1;
@@ -201,95 +199,103 @@ public class ChodeTeleop extends OpMode {
         }
 
         //Manual Lift Control
-        if (controller.dpadUp()) {
-            lift1.setPower(0.4);
-            lift2.setPower(-0.4);
-            liftZero.setLiftResting(1);
-        } else if (controller.dpadDown()) {
-            if (liftLimit.isPressed()) {
-                lift1.setPower(0);
-                lift2.setPower(0);
-                lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            } else {
-                lift1.setPower(-0.1);
-                lift2.setPower(0.1);
-                liftZero.setLiftResting(1);
-            }
-        } else if (liftZero.getLiftResting() == 1 && liftZero.getFSMLowering() == 0) {
-            lift1.setPower(0);
-            lift2.setPower(0);
+        if (controller.dpadUpOnce()) {
+            lift.setLiftPos(lift.getSetpoint() + 50);
         }
 
         //Intake Reverse
-        if (controller.startOnce()) {
-            if (reverseIntake == 0) {
-                reverseIntake = 1;
-            } else {
-                reverseIntake = 0;
-            }
-            reverseFast = 0;
-        }
-        if (reverseIntake == 1 && reverseFast == 0) {
+        if (controller.startOnce() && intake1.getPower() == 0) {
             intake1.setPower(-0.2);
             intake2.setPower(0.2);
-        }
-        if ((controller.startOnce() || controller.backOnce()) && reverseIntake == 0) {
-            intake1.setPower(0);
-            intake2.setPower(0);
-        }
-        if (controller.backOnce()) {
-            if (reverseIntake == 0) {
-                reverseIntake = 1;
-            } else {
-                reverseIntake = 0;
-            }
-            reverseFast = 1;
-        }
-        if (reverseIntake == 1 && reverseFast == 1) {
+        } else if (controller.backOnce() && intake1.getPower() == 0) {
             intake1.setPower(-0.7);
             intake2.setPower(0.7);
+        } else if ((controller.startOnce() || controller.backOnce()) && intake1.getPower() < 1) {
+            intake1.setPower(0);
+            intake2.setPower(0);
+            teleopInit.resetTimer();
+            teleopInit.startTeleopInit();
         }
 
         //Lift PID Toggle and Trigger Toggle
-        leftTrigger = controller.left_trigger;
-        rightTrigger = controller.right_trigger;
+        if (controller.left_trigger < 0.1) {
+            leftTrigger = 0;
+        }
+        if (controller.right_trigger < 0.1) {
+            rightTrigger = 0;
+        }
         if (liftZero.getLiftResting() == 0) {
             lift.moveLift();
+        }
+
+        //PID Tuning
+        // P controlled with bumpers
+        if (controller2.dpadLeftOnce()) {
+        //    lift.changeLiftP(-0.001);
+            drive.changeDriveP(-0.001);
+            drive.updatePID();
+        } else if (controller2.dpadRightOnce()) {
+        //    lift.changeLiftP(0.001);
+            drive.changeDriveP(0.001);
+            drive.updatePID();
+        }
+        // D controlled with A and Y
+        if (controller2.AOnce()) {
+        //    lift.changeLiftD(-0.001);
+            drive.changeDriveD(-0.001);
+            drive.updatePID();
+        } else if (controller2.YOnce()) {
+        //    lift.changeLiftD(0.001);
+            drive.changeDriveD(0.001);
+            drive.updatePID();
+        }
+        // FF controlled with dpad
+        if (controller2.dpadDownOnce()) {
+        //    lift.changeLiftFF(-0.01);
+        } else if (controller2.dpadUpOnce()) {
+        //    lift.changeLiftFF(0.01);
+        }
+        // I controlled with X and B
+        if (controller2.XOnce()) {
+        //    lift.changeLiftI(-0.001);
+            drive.changeDriveI(-0.001);
+            drive.updatePID();
+        } else if (controller2.BOnce()) {
+        //    lift.changeLiftI(0.001);
+            drive.changeDriveI(0.001);
+            drive.updatePID();
         }
     }
 }
 
 //        //PID Tuning
 //        // P controlled with bumpers
-//        if (controller.dpadLeftOnce()) {
+//        if (controller2.dpadLeftOnce()) {
 //            lift.changeLiftP(-0.001);
 //        //    drive.changeDriveP(-0.001);
-//        } else if (controller.dpadRightOnce()) {
+//        } else if (controller2.dpadRightOnce()) {
 //            lift.changeLiftP(0.001);
 //        //    drive.changeDriveP(0.001);
 //        }
 //        // D controlled with A and Y
-//        if (controller.AOnce()) {
+//        if (controller2.AOnce()) {
 //            lift.changeLiftD(-0.001);
 //        //    drive.changeDriveD(-0.001);
-//        } else if (controller.YOnce()) {
+//        } else if (controller2.YOnce()) {
 //            lift.changeLiftD(0.001);
 //        //    drive.changeDriveD(0.001);
 //        }
 //        // FF controlled with dpad
-//        if (controller.dpadDownOnce()) {
+//        if (controller2.dpadDownOnce()) {
 //            lift.changeLiftFF(-0.01);
-//        } else if (controller.dpadUpOnce()) {
+//        } else if (controller2.dpadUpOnce()) {
 //            lift.changeLiftFF(0.01);
 //        }
 //        // I controlled with X and B
-//        if (controller.XOnce()) {
+//        if (controller2.XOnce()) {
 //            lift.changeLiftI(-0.001);
 //        //    drive.changeDriveI(-0.001);
-//        } else if (controller.BOnce()) {
+//        } else if (controller2.BOnce()) {
 //            lift.changeLiftI(0.001);
 //        //    drive.changeDriveI(0.001);
 //        }

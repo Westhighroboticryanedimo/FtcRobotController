@@ -48,7 +48,7 @@ public class ChodeLift {
         lift2.setPower(-finalPower);
     }
 
-    public void setLiftPos(int liftTarget) {
+    public void setLiftPos(double liftTarget) {
         pid.setSetpoint(liftTarget);
         pid.reset();
         pid.enable();
