@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NewPPRobot;
+package org.firstinspires.ftc.teamcode.WizardBot;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -6,20 +6,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
-public class ChodeDrive extends HolonomicDrive {
+public class WizardBotDrive extends HolonomicDrive {
     public double p = 0.035;
     private double i = 0.0;
     public double d = 0.01;
 
 
     // Autonomous
-    public ChodeDrive(LinearOpMode opMode, HardwareMap hwMap) {
+    public WizardBotDrive(LinearOpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
         setup();
     }
 
     // Teleop
-    public ChodeDrive(OpMode opMode, HardwareMap hwMap) {
+    public WizardBotDrive(OpMode opMode, HardwareMap hwMap) {
         super(opMode, hwMap);
         setup();
     }

@@ -3,7 +3,7 @@
 // TODO: Add slow descent + encoder reset on limit switch
 // TODO: Set up all FSMs
 // TODO: Tune drive PID
-package org.firstinspires.ftc.teamcode.NewPPRobot;
+package org.firstinspires.ftc.teamcode.WizardBot;
 
 import static java.lang.Math.abs;
 
@@ -12,30 +12,32 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.teamcode.Controller;
-import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.ChodeLift;
-import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.IntakeFSM;
-import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.TeleopInit;
-import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.LiftZeroFSM;
-import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.OuttakeFSM;
+import org.firstinspires.ftc.teamcode.WizardBot.Subsystems.WizardLift;
+import org.firstinspires.ftc.teamcode.WizardBot.Subsystems.IntakeFSM;
+import org.firstinspires.ftc.teamcode.WizardBot.Subsystems.WristReset;
+import org.firstinspires.ftc.teamcode.WizardBot.Subsystems.LiftZeroFSM;
+import org.firstinspires.ftc.teamcode.WizardBot.Subsystems.OuttakeFSM;
+import org.firstinspires.ftc.teamcode.WizardBot.Subsystems.StackSetupFSM;
+import org.firstinspires.ftc.teamcode.WizardBot.Subsystems.StackPickupFSM;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.NewPPRobot.ChodeDrive;
-import com.arcrobotics.ftclib.hardware.ServoEx;
+
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 
-@TeleOp(name = "ChodeTeleop")
-public class ChodeTeleop extends OpMode {
+@TeleOp(name = "Wizard Bot Teleop")
+public class WizardTeleop extends OpMode {
 
-    private ChodeDrive drive;
+    private WizardBotDrive drive;
     private Controller controller;
     private Controller controller2;
-    private ChodeLift lift;
+    private WizardLift lift;
     private IntakeFSM intakeFSM;
     private OuttakeFSM outtakeFSM;
     private LiftZeroFSM liftZero;
-    private TeleopInit teleopInit;
+    private StackSetupFSM stackSetupFSM;
+    private StackPickupFSM stackPickupFSM;
+    private WristReset teleopInit;
     private TouchSensor liftLimit;
     private DistanceSensor intakeSensor;
     private ServoEx clawServo;
@@ -55,19 +57,22 @@ public class ChodeTeleop extends OpMode {
     double rightTrigger = 0;
     int slowMode = 0;
     int intaking = 0;
+    int stackLevel = 0;
 
-    public ChodeTeleop() {
+    public WizardTeleop() {
     }
 
     @Override
     public void init() {
-        drive = new ChodeDrive(this, hardwareMap);
+        drive = new WizardBotDrive(this, hardwareMap);
         controller = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
-        lift = new ChodeLift();
+        lift = new WizardLift();
         intakeFSM = new IntakeFSM();
         outtakeFSM = new OuttakeFSM();
-        teleopInit = new TeleopInit();
+        stackSetupFSM = new StackSetupFSM();
+        stackPickupFSM = new StackPickupFSM();
+        teleopInit = new WristReset();
         liftZero = new LiftZeroFSM();
 
         clawServo = new SimpleServo(hardwareMap, "clawServo", 0, 360);
@@ -93,6 +98,8 @@ public class ChodeTeleop extends OpMode {
         lift.liftInit(hardwareMap);
         intakeFSM.intakeInit(hardwareMap);
         outtakeFSM.outtakeInit(hardwareMap);
+        stackSetupFSM.init(hardwareMap);
+        stackPickupFSM.init(hardwareMap);
         teleopInit.teleopInit(hardwareMap);
         liftZero.liftZeroInit(hardwareMap, lift);
     }
@@ -125,12 +132,6 @@ public class ChodeTeleop extends OpMode {
         telemetry.addData("Arrived", lift.arrived());
         telemetry.update();
 
-        // Controls
-        // Driver 1: Left Trigger to start intaking, release to score, Right Trigger score, Buttons for lift, dpad for fine control
-            //bumpers to toggle drive modes
-        // Driver 2: Buttons for Lift, Triggers for fine control
-
-
         //Drive Controls
         if (controller.rightBumperOnce()) {
             if (slowMode == 0) {
@@ -139,9 +140,7 @@ public class ChodeTeleop extends OpMode {
                 slowMode = 0;
             }
         }
-//        if (controller.leftBumperOnce()) {
-//            drive.FieldCentricToggle();
-//        }
+
         if (slowMode == 0) {
             drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         } else {
@@ -160,8 +159,8 @@ public class ChodeTeleop extends OpMode {
 
         //Intake
         if (controller.left_trigger > 0.5 && leftTrigger == 0 && controller.right_trigger == 0) {
-            intake1.setPower(.7);
-            intake2.setPower(-.7);
+            intake1.setPower(0.3);
+            intake2.setPower(-0.3);
             intaking = 1;
         }
 
@@ -174,6 +173,9 @@ public class ChodeTeleop extends OpMode {
             intakeFSM.startIntakeFSM();
         }
         intakeFSM.intake();
+        if (intaking == 1) {
+            clawServo.turnToAngle(155);
+        }
 
         //Reset Automation
         if (controller.left_trigger == 1 && controller.right_trigger == 1) {
@@ -227,6 +229,24 @@ public class ChodeTeleop extends OpMode {
         if (liftZero.getLiftResting() == 0) {
             lift.moveLift();
         }
+
+        //Stack Access Lift Controls
+        if (controller.dpadRightOnce()) {
+            stackLevel = stackLevel+1;
+            lift.setLiftPos(100 + 100*stackLevel);
+            liftZero.setLiftResting(0);
+            stackSetupFSM.resetTimer();
+            stackSetupFSM.startStackSetupFSM();
+        }
+        stackSetupFSM.setup();
+
+        //Remove From Stack
+        if (controller.AOnce()) {
+            stackPickupFSM.resetTimer();
+            stackPickupFSM.startStackPickupFSM();
+            stackLevel = 0;
+        }
+        stackPickupFSM.pickup();
     }
 }
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems;
+package org.firstinspires.ftc.teamcode.WizardBot.Subsystems;
 
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;

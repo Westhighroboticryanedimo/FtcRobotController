@@ -1,14 +1,13 @@
-package org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems;
+package org.firstinspires.ftc.teamcode.WizardBot.Subsystems;
 import org.firstinspires.ftc.teamcode.PIDController;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static java.lang.Math.abs;
 
-public class ChodeLift {
+public class WizardLift {
     private DcMotor lift1;
     private DcMotor lift2;
     private TouchSensor liftLimit;

@@ -1,15 +1,11 @@
-package org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems;
+package org.firstinspires.ftc.teamcode.WizardBot.Subsystems;
 
 import static java.lang.Thread.sleep;
 
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Controller;
 

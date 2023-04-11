@@ -4,7 +4,7 @@
 // TODO: Set up all FSMs
 // TODO: Tune servo positions for FSMs
 // TODO: Tune drive PID
-package org.firstinspires.ftc.teamcode.NewPPRobot;
+package org.firstinspires.ftc.teamcode.WizardBot;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,9 +15,9 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import org.firstinspires.ftc.teamcode.Controller;
 
 @TeleOp(name = "Manual Chode Teleop")
-public class ManualChodeTeleop extends OpMode {
+public class ManualWizardTeleop extends OpMode {
 
-    private ChodeDrive drive;
+    private WizardBotDrive drive;
     private Controller controller;
     private Controller controller2;
     private ServoEx clawServo;
@@ -38,12 +38,12 @@ public class ManualChodeTeleop extends OpMode {
     int pivotServo2Pos = 180;
     int clawServoPos = 180;
 
-    public ManualChodeTeleop() {
+    public ManualWizardTeleop() {
     }
 
     @Override
     public void init() {
-        drive = new ChodeDrive(this, hardwareMap);
+        drive = new WizardBotDrive(this, hardwareMap);
         controller = new Controller(gamepad1);
         controller2 = new Controller(gamepad2);
 

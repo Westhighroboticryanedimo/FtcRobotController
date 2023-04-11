@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems;
+package org.firstinspires.ftc.teamcode.WizardBot.Subsystems;
 
 import static java.lang.Thread.sleep;
 
@@ -19,12 +19,12 @@ public class LiftZeroFSM {
     private DcMotor lift1;
     private DcMotor lift2;
     private TouchSensor liftLimit;
-    private ChodeLift lift;
+    private WizardLift lift;
     private ServoEx clawServo;
 
     public ElapsedTime timer = new ElapsedTime();
 
-    public void liftZeroInit(HardwareMap hardwareMap, ChodeLift init_lift) {
+    public void liftZeroInit(HardwareMap hardwareMap, WizardLift init_lift) {
         lift = init_lift;
         lift1 = hardwareMap.get(DcMotor.class, "lift1");
         lift2 = hardwareMap.get(DcMotor.class, "lift2");
@@ -47,6 +47,7 @@ public class LiftZeroFSM {
                     FSMRunning = 1;
                     if (lift.arrived() == 1) {
                         state = 2;
+                        clawServo.turnToAngle(155);
                         timer.reset();
                     }
                     break;
@@ -54,7 +55,6 @@ public class LiftZeroFSM {
                     if (timer.milliseconds() > 500) {
                         state = 3;
                         liftResting = 1;
-                        clawServo.turnToAngle(155);
                     }
                 case 3:
                     FSMLowering = 1;

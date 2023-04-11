@@ -5,9 +5,8 @@ import static java.lang.Math.abs;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-import org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems.IntakeFSM;
+
+import org.firstinspires.ftc.teamcode.WizardBot.Subsystems.IntakeFSM;
 
 import org.firstinspires.ftc.teamcode.Controller;
 

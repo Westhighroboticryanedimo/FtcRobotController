@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.NewPPRobot.Subsystems;
+package org.firstinspires.ftc.teamcode.WizardBot.Subsystems;
 
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class TeleopInit {
+public class WristReset {
     private ServoEx clawServo;
     private ServoEx wristServo;
     private ServoEx pivotServo1;
