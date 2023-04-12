@@ -165,7 +165,7 @@ public class WizardTeleop extends OpMode {
         }
 
         // Intake Automation
-        if (intakeSensor.getDistance(DistanceUnit.INCH) < 5 && intaking == 1) {
+        if (intakeSensor.getDistance(DistanceUnit.INCH) < 3.5 && intaking == 1) {
             intake1.setPower(0);
             intake2.setPower(0);
             intaking = 0;
@@ -186,23 +186,26 @@ public class WizardTeleop extends OpMode {
 
         //Raising Lift
         if (controller.XOnce()) {
-            lift.setLiftPos(700);
+            lift.setLiftPos(800);
             liftZero.setLiftResting(0);
+            slowMode = 1;
         } else if (controller.YOnce()) {
-            lift.setLiftPos(1550);
+            lift.setLiftPos(1650);
             liftZero.setLiftResting(0);
+            slowMode = 1;
         } else if (controller.BOnce()) {
-            lift.setLiftPos(2350);
+            lift.setLiftPos(2450);
             liftZero.setLiftResting(0);
+            slowMode = 1;
         }
-        if (lift.getSetpoint() == 700 || lift.getSetpoint() == 1550 || lift.getSetpoint() == 2350) {
+        if (lift.getSetpoint() == 800 || lift.getSetpoint() == 1650 || lift.getSetpoint() == 2450) {
             pivotServo1.turnToAngle(310);
             pivotServo2.turnToAngle(50);
         }
 
         //Manual Lift Control
         if (controller.dpadUpOnce()) {
-            lift.setLiftPos(lift.getSetpoint() + 50);
+            lift.setLiftPos(lift.getSetpoint() + 100);
         }
 
         //Intake Reverse
@@ -237,6 +240,7 @@ public class WizardTeleop extends OpMode {
             liftZero.setLiftResting(0);
             stackSetupFSM.resetTimer();
             stackSetupFSM.startStackSetupFSM();
+            slowMode = 1;
         }
         stackSetupFSM.setup();
 
@@ -245,6 +249,7 @@ public class WizardTeleop extends OpMode {
             stackPickupFSM.resetTimer();
             stackPickupFSM.startStackPickupFSM();
             stackLevel = 0;
+            slowMode = 0;
         }
         stackPickupFSM.pickup();
     }
