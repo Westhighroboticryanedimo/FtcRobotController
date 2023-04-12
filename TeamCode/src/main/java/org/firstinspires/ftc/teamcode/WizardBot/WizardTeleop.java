@@ -159,8 +159,8 @@ public class WizardTeleop extends OpMode {
 
         //Intake
         if (controller.left_trigger > 0.5 && leftTrigger == 0 && controller.right_trigger == 0) {
-            intake1.setPower(0.3);
-            intake2.setPower(-0.3);
+            intake1.setPower(0.4);
+            intake2.setPower(-0.4);
             intaking = 1;
         }
 
