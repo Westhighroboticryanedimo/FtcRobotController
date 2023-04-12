@@ -15,7 +15,7 @@ public class CamTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        IntakeCam inCam = new IntakeCam(hardwareMap, false);
+        IntakeCam inCam = new IntakeCam(hardwareMap, true);
         Controller controller = new Controller(gamepad1);
         Gyro gyro = new Gyro(hardwareMap);
 

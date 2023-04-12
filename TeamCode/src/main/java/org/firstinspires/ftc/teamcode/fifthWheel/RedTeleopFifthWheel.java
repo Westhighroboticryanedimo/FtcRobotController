@@ -101,11 +101,6 @@ public class RedTeleopFifthWheel extends OpMode {
         } else if (controller2.dpadDownOnce()) {
             level = 0;
             place.raise(level);
-        } else if (controller2.leftBumperOnce()) {
-            place.goToStack();
-            stacking = true;
-        } else if (controller2.rightBumperOnce()) {
-            place.decrementStack();
         } else if (controller2.BOnce()) {
             if (stacking) {
                 place.liftOffStack();
@@ -113,13 +108,26 @@ public class RedTeleopFifthWheel extends OpMode {
             } else {
                 place.pickup();
             }
+        } else if (controller2.rightBumperOnce()) {
+            place.dip(true);
+        } else if (controller2.leftBumperOnce()) {
+            place.dip(false);
         }
+//        if (controller2.leftBumperOnce()) {
+//            place.goToStack();
+//            stacking = true;
+//        } else if (controller2.rightBumperOnce()) {
+//            place.decrementStack();
+//        } else
+//        else {
+//            place.dip(controller2.rightBumper());
+//        }
 
-        if (controller2.left_trigger > 0) {
-            input = controller1.left_trigger*(-0.4);
-        } else if (controller2.right_trigger > 0) {
-            input = controller1.right_trigger*0.4;
-        }
+//        if (controller2.left_trigger > 0) {
+//            input = controller1.left_trigger*(-0.4);
+//        } else if (controller2.right_trigger > 0) {
+//            input = controller1.right_trigger*0.4;
+//        }
         place.run(input);
     }
 }

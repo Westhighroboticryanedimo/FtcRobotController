@@ -15,6 +15,8 @@ public class Gripper {
     public ServoEx grip;
     public RevColorSensorV3 color;
     private double thresh = 0.8;
+    private int level = 0;
+    private int dipDegrees = 50;
 
     // 0 = red, 1 = blue
     public enum Alliance {
@@ -25,11 +27,12 @@ public class Gripper {
 
     // intake, low, medium, high, cone stack, up
     // TODO: maybe change up?
-    private static final double LEVELS[] = {-65, -60, -80, -180,
+    private static final double LEVELS[] = {-65, -60, -90, -180,
             -40, -40, -40, -40,
             -55};
     private static final double OPEN = 30;
-    private static final double CLOSE = 0;
+    private static final double CLOSE = -5;
+
 
     public Gripper(HardwareMap hwMap, String fl, String fr, String gl, Alliance alliance) {
         flipLeft = new SimpleServo(hwMap, fl, -200, 200);
@@ -46,14 +49,26 @@ public class Gripper {
     public void setLevel(int i) {
         switch (i) {
             case -1: // up
-                flipLeft.turnToAngle(LEVELS[8]);
-                flipRight.turnToAngle(LEVELS[8]);
+                level = 8;
+                flipLeft.turnToAngle(LEVELS[level]);
+                flipRight.turnToAngle(LEVELS[level]);
                 break;
             default:
-                flipLeft.turnToAngle(LEVELS[i]);
-                flipRight.turnToAngle(LEVELS[i]);
+                level = i;
+                flipLeft.turnToAngle(LEVELS[level]);
+                flipRight.turnToAngle(LEVELS[level]);
                 break;
         }
+    }
+
+    public void dipDown() {
+        flipLeft.turnToAngle(LEVELS[level] - dipDegrees);
+        flipRight.turnToAngle(LEVELS[level] - dipDegrees);
+    }
+
+    public void dipUp() {
+        flipLeft.turnToAngle(LEVELS[level]);
+        flipRight.turnToAngle(LEVELS[level]);
     }
 
     public void open() {

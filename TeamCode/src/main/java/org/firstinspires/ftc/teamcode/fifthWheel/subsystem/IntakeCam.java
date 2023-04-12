@@ -36,15 +36,15 @@ public class IntakeCam {
 
     public static int redLowY = 0;
     public static int redLowCr = 170;
-    public static int redLowCb = 110;
+    public static int redLowCb = 80;
     public static int redHighY = 255;
     public static int redHighCr = 255;
     public static int redHighCb = 140;
 
-    public static int blueLowY = 70;
+    public static int blueLowY = 40;
     public static int blueLowCr = 70;
-    public static int blueLowCb = 150;
-    public static int blueHighY = 255;
+    public static int blueLowCb = 160;
+    public static int blueHighY = 170;
     public static int blueHighCr = 130;
     public static int blueHighCb = 255;
 
@@ -62,7 +62,7 @@ public class IntakeCam {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                camera.startStreaming(640, 480, OpenCvCameraRotation.UPSIDE_DOWN);
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
             }
             @Override
             public void onError(int errorCode)

@@ -127,7 +127,7 @@ public class Place {
             case PICKED:
                 break;
             case RAISING:
-                int waitTime = 300+(150*Math.abs(oldLevel-level));
+                int waitTime = 300+(50*Math.abs(oldLevel-level));
                 if (level >= 4) {
                     waitTime = 150;
                 }
@@ -156,11 +156,11 @@ public class Place {
                 }
                 break;
             case DIP_DOWN:
-                drcb.dipDown();
+                gripper.dipDown();
                 timer.reset();
                 break;
             case DIP_UP:
-                drcb.dipUp();
+                gripper.dipUp();
                 timer.reset();
                 break;
             case WAVE:
