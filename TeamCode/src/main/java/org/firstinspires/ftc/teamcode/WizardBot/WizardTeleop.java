@@ -165,7 +165,7 @@ public class WizardTeleop extends OpMode {
         }
 
         // Intake Automation
-        if (intakeSensor.getDistance(DistanceUnit.INCH) < 3.5 && intaking == 1) {
+        if (intakeSensor.getDistance(DistanceUnit.INCH) < 5 && intaking == 1) {
             intake1.setPower(0);
             intake2.setPower(0);
             intaking = 0;
