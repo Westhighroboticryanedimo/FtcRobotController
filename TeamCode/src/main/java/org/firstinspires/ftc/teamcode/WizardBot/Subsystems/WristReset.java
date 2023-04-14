@@ -46,8 +46,8 @@ public class WristReset {
                     break;
                 case 3:
                     //Pivot to intake position
-                    pivotServo1.turnToAngle(100);
-                    pivotServo2.turnToAngle(260);
+                    pivotServo1.turnToAngle(120);
+                    pivotServo2.turnToAngle(240);
                     FSMRunning = 0;
                     state = 1;
                     break;
