@@ -47,7 +47,7 @@ public class OuttakeFSM {
                     //Pivot 200 ms
                     pivotServo1.turnToAngle(120);
                     pivotServo2.turnToAngle(240);
-                    if (timer.milliseconds() > 150) {
+                    if (timer.milliseconds() > 500) {
                         timer.reset();
                         outtakeState = 4;
                     }

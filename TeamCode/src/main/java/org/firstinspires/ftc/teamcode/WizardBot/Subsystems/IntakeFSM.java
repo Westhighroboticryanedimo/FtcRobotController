@@ -38,7 +38,7 @@ public class IntakeFSM {
                     //Pivot Forward 500 ms
                     pivotServo1.turnToAngle(290);
                     pivotServo2.turnToAngle(70);
-                    if (timer.milliseconds() > 500) {
+                    if (timer.milliseconds() > 650) {
                         timer.reset();
                         intakeState = 3;
                     }

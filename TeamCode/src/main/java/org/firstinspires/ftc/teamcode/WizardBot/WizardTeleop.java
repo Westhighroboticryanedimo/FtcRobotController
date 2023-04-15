@@ -109,28 +109,28 @@ public class WizardTeleop extends OpMode {
         controller.update();
         controller2.update();
 
-        telemetry.addData("LiftLimit", liftLimit.isPressed());
-        telemetry.addData("LiftEncdr", lift1.getCurrentPosition());
-        telemetry.addData("LiftEncdr2", lift2.getCurrentPosition());
-        telemetry.addData("SlowMode?", slowMode);
-        telemetry.addData("Lift P", lift.getP());
-        telemetry.addData("Lift I", lift.getI());
-        telemetry.addData("Lift D", lift.getD());
-        telemetry.addData("FF", lift.getFF());
-        telemetry.addData("Lift1Power", lift1.getPower());
-        telemetry.addData("Lift2Power", lift2.getPower());
-        telemetry.addData("PID Setpoint", lift.getSetpoint());
-        telemetry.addData("PID Power", lift.getPIDPower());
-        telemetry.addData("Encoder Average", lift.getEncoderAverage());
-        telemetry.addData("Distance Sensor", intakeSensor.getDistance(DistanceUnit.INCH));
-        telemetry.addData("leftTriggerOld", leftTrigger);
-        telemetry.addData("rightTriggerOld", rightTrigger);
-        telemetry.addData("Drive P", drive.getDriveP());
-        telemetry.addData("Drive I", drive.getDriveI());
-        telemetry.addData("Drive D", drive.getDriveD());
-        telemetry.addData("Lift Resting", liftZero.getLiftResting());
-        telemetry.addData("Arrived", lift.arrived());
-        telemetry.update();
+//        telemetry.addData("LiftLimit", liftLimit.isPressed());
+//        telemetry.addData("LiftEncdr", lift1.getCurrentPosition());
+//        telemetry.addData("LiftEncdr2", lift2.getCurrentPosition());
+//        telemetry.addData("SlowMode?", slowMode);
+//        telemetry.addData("Lift P", lift.getP());
+//        telemetry.addData("Lift I", lift.getI());
+//        telemetry.addData("Lift D", lift.getD());
+//        telemetry.addData("FF", lift.getFF());
+//        telemetry.addData("Lift1Power", lift1.getPower());
+//        telemetry.addData("Lift2Power", lift2.getPower());
+//        telemetry.addData("PID Setpoint", lift.getSetpoint());
+//        telemetry.addData("PID Power", lift.getPIDPower());
+//        telemetry.addData("Encoder Average", lift.getEncoderAverage());
+//        telemetry.addData("Distance Sensor", intakeSensor.getDistance(DistanceUnit.INCH));
+//        telemetry.addData("leftTriggerOld", leftTrigger);
+//        telemetry.addData("rightTriggerOld", rightTrigger);
+//        telemetry.addData("Drive P", drive.getDriveP());
+//        telemetry.addData("Drive I", drive.getDriveI());
+//        telemetry.addData("Drive D", drive.getDriveD());
+//        telemetry.addData("Lift Resting", liftZero.getLiftResting());
+//        telemetry.addData("Arrived", lift.arrived());
+//        telemetry.update();
 
         //Drive Controls
         if (controller.rightBumperOnce()) {
@@ -159,8 +159,8 @@ public class WizardTeleop extends OpMode {
 
         //Intake
         if (controller.left_trigger > 0.5 && leftTrigger == 0 && controller.right_trigger == 0) {
-            intake1.setPower(0.4);
-            intake2.setPower(-0.4);
+            intake1.setPower(0.3);
+            intake2.setPower(-0.3);
             intaking = 1;
         }
 
@@ -186,19 +186,19 @@ public class WizardTeleop extends OpMode {
 
         //Raising Lift
         if (controller.XOnce()) {
-            lift.setLiftPos(800);
+            lift.setLiftPos(850);
             liftZero.setLiftResting(0);
             slowMode = 1;
         } else if (controller.YOnce()) {
-            lift.setLiftPos(1650);
+            lift.setLiftPos(1750);
             liftZero.setLiftResting(0);
             slowMode = 1;
         } else if (controller.BOnce()) {
-            lift.setLiftPos(2450);
+            lift.setLiftPos(2500);
             liftZero.setLiftResting(0);
             slowMode = 1;
         }
-        if (lift.getSetpoint() == 800 || lift.getSetpoint() == 1650 || lift.getSetpoint() == 2450) {
+        if (lift.getSetpoint() == 850 || lift.getSetpoint() == 1750 || lift.getSetpoint() == 2500) {
             pivotServo1.turnToAngle(310);
             pivotServo2.turnToAngle(50);
         }

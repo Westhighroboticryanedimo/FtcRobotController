@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.hardware.drive.HolonomicDrive;
 
 public class WizardBotDrive extends HolonomicDrive {
-    public double p = 0.035;
+    public double p = 0.04;
     private double i = 0.0;
     public double d = 0.01;
 
@@ -30,6 +30,7 @@ public class WizardBotDrive extends HolonomicDrive {
         isDrivePOV = true;
         isSquaredInputs = true;
 
+        setPidTurn(p, i ,d);
         setPidAutoSpeed(0.028, 0.001, 0);
         setPidTurn(0.028, 0.001, 0);
 
@@ -38,7 +39,7 @@ public class WizardBotDrive extends HolonomicDrive {
         setTicksPerRev(537.7);
     }
 
-    //public void updatePID() {setPidDrive(p, i, d);}
+    public void updatePID() {setPidTurn(p, i, d);}
 
     // Field Centric Toggle
     public void FieldCentricToggle() {

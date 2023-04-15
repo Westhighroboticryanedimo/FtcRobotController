@@ -28,7 +28,6 @@ public class StackSetupFSM {
             switch (state) {
                 case 1:
                     //Open Claw and Pivot Forward 500 ms
-                    clawServo.turnToAngle(140);
                     pivotServo1.turnToAngle(360);
                     pivotServo2.turnToAngle(0);
                     if (timer.milliseconds() > 500) {
@@ -39,6 +38,7 @@ public class StackSetupFSM {
                 case 2:
                     //Wrist Twist
                     wristServo.turnToAngle(16);
+                    clawServo.turnToAngle(140);
                     stackSetupFSMRunning = 0;
                     state = 1;
                     break;
