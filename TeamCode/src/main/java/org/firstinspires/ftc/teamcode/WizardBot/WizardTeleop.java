@@ -133,7 +133,7 @@ public class WizardTeleop extends OpMode {
 //        telemetry.update();
 
         //Drive Controls
-        if (controller.rightBumperOnce()) {
+        if (controller2.rightBumperOnce()) {
             if (slowMode == 0) {
                 slowMode = 1;
             } else {
@@ -178,22 +178,22 @@ public class WizardTeleop extends OpMode {
         }
 
         //Reset Automation
-        if (controller.left_trigger == 1 && controller.right_trigger == 1) {
+        if (controller2.left_trigger == 1 && controller2.right_trigger == 1) {
             teleopInit.resetTimer();
             teleopInit.startTeleopInit();
         }
         teleopInit.init();
 
         //Raising Lift
-        if (controller.XOnce()) {
+        if (controller2.XOnce()) {
             lift.setLiftPos(850);
             liftZero.setLiftResting(0);
             slowMode = 1;
-        } else if (controller.YOnce()) {
+        } else if (controller2.YOnce()) {
             lift.setLiftPos(1750);
             liftZero.setLiftResting(0);
             slowMode = 1;
-        } else if (controller.BOnce()) {
+        } else if (controller2.BOnce()) {
             lift.setLiftPos(2500);
             liftZero.setLiftResting(0);
             slowMode = 1;
@@ -204,18 +204,18 @@ public class WizardTeleop extends OpMode {
         }
 
         //Manual Lift Control
-        if (controller.dpadUpOnce()) {
+        if (controller2.dpadUpOnce()) {
             lift.setLiftPos(lift.getSetpoint() + 100);
         }
 
         //Intake Reverse
-        if (controller.startOnce() && intake1.getPower() == 0) {
+        if (controller2.startOnce() && intake1.getPower() == 0) {
             intake1.setPower(-0.2);
             intake2.setPower(0.2);
-        } else if (controller.backOnce() && intake1.getPower() == 0) {
+        } else if (controller2.backOnce() && intake1.getPower() == 0) {
             intake1.setPower(-0.7);
             intake2.setPower(0.7);
-        } else if ((controller.startOnce() || controller.backOnce()) && intake1.getPower() < 1) {
+        } else if ((controller2.startOnce() || controller2.backOnce()) && intake1.getPower() < 1) {
             intake1.setPower(0);
             intake2.setPower(0);
             teleopInit.resetTimer();
@@ -234,7 +234,7 @@ public class WizardTeleop extends OpMode {
         }
 
         //Stack Access Lift Controls
-        if (controller.dpadRightOnce()) {
+        if (controller2.dpadRightOnce()) {
             stackLevel = stackLevel+1;
             lift.setLiftPos(100 + 100*stackLevel);
             liftZero.setLiftResting(0);
