@@ -83,7 +83,7 @@ public class Place {
 
     public void liftOffStack() {
         state = State.STACK_UP;
-        level = 1;
+        level = 8;
         gripper.close();
         timer.reset();
     }
@@ -151,6 +151,7 @@ public class Place {
                 break;
             case STACK_UP:
                 if (timer.milliseconds() > 300) {
+//                    gripper.setLevel(-1);
                     drcb.setLevel(level);
                     timer.reset();
                 }

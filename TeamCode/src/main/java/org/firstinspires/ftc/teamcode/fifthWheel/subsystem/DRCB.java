@@ -23,11 +23,11 @@ public class DRCB {
     public int oldLevel = 0;
 
     // intake, low, mid, high,
-    // top cone, top-1 cone, top-2 cone, top-3 cone
+    // top cone, top-1 cone, top-2 cone, top-3 cone, off-stack
     // fifth cone is just intake level
     // lift up to low for picking them off the stack
-    public static double LEVELS[] = {  -10,  350, 600,   1100,
-                                      140,  110,  80,     60 };
+    public static double LEVELS[] = {  -15,  350, 600,   1100,
+                                      197,  175,  120,     60, 310 };
 
     private static final double TICKS_PER_REV = 1425.1;
     public static double kTau_ff = 0.1; // gain for torque feedforward
@@ -40,7 +40,7 @@ public class DRCB {
     public static double offset = 0.6;
     public static double bumpFactor = 1;
 
-    public static double p = 0.008;
+    public static double p = 0.004;
     public static double i = 0.0;
     public static double d = 0.01;
     public PIDController pid = new PIDController(p, i, d);
@@ -108,13 +108,17 @@ public class DRCB {
             ff = kTau_ff*calculateFeedforward(getPosition() - 350)
                     + kV*Control.trapMotionV(maxV, maxA/3, LEVELS[oldLevel], LEVELS[level], timer.seconds())
                     + kA*Control.trapMotionA(maxV, maxA/3, LEVELS[oldLevel], LEVELS[level], timer.seconds());
+        } else if (level == 8) {
+            // angle of motor between lift rest and lift horizontal in ticks
+            ff = kTau_ff * calculateFeedforward(getPosition() - 350)
+                    + kV * Control.trapMotionV(maxV/4, maxA/8, LEVELS[oldLevel], LEVELS[level], timer.seconds())
+                    + kA * Control.trapMotionA(maxV/4, maxA/8, LEVELS[oldLevel], LEVELS[level], timer.seconds());
         } else {
             // angle of motor between lift rest and lift horizontal in ticks
             ff = kTau_ff * calculateFeedforward(getPosition() - 350)
                     + kV * Control.trapMotionV(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds())
                     + kA * Control.trapMotionA(maxV, maxA, LEVELS[oldLevel], LEVELS[level], timer.seconds());
         }
-
         if (ff < -0.1) {
             ff = -0.1;
         }

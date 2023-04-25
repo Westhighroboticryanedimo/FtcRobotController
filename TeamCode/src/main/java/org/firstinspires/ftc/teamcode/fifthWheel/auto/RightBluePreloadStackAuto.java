@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.lang.Math;
 
-@Autonomous(name="Right Blue Preload", group="FifthWheel")
-public class RightBluePreloadAuto extends LinearOpMode {
+@Autonomous(name="Right Blue Preload Stack", group="FifthWheel")
+public class RightBluePreloadStackAuto extends LinearOpMode {
 
     enum State {
         DROPPING_PRELOAD,
@@ -26,6 +26,7 @@ public class RightBluePreloadAuto extends LinearOpMode {
         PARKING,
         IDLING
     } State state = State.IDLING;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -46,13 +47,11 @@ public class RightBluePreloadAuto extends LinearOpMode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence preloadDrop = drive.trajectorySequenceBuilder(startPose)
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> place.pickup())
-            .waitSeconds(0.3)
             .splineTo(new Vector2d(36, -72+30), Math.toRadians(90),
                 SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
                 SampleMecanumDrive.getAccelerationConstraint(40))
             .UNSTABLE_addTemporalMarkerOffset(-1, () -> place.raise(3))
-            .splineTo(new Vector2d(31, -72+64), Math.toRadians(135),
+            .splineTo(new Vector2d(28, -72+64), Math.toRadians(135),
                 SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
                 SampleMecanumDrive.getAccelerationConstraint(40))
             .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> place.dip(true))
@@ -78,7 +77,10 @@ public class RightBluePreloadAuto extends LinearOpMode {
                 SampleMecanumDrive.getAccelerationConstraint(20))
             .UNSTABLE_addTemporalMarkerOffset(0, () -> place.liftOffStack())
             .UNSTABLE_addTemporalMarkerOffset(0.7, () -> place.raise(3))
-            .lineToSplineHeading(new Pose2d(32, -72+64, Math.toRadians(135)),
+            .lineToSplineHeading(new Pose2d(45, -11.5, Math.toRadians(0)),
+                SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(180), DriveConstants.TRACK_WIDTH),
+                SampleMecanumDrive.getAccelerationConstraint(30))
+            .lineToSplineHeading(new Pose2d(30, -72+65, Math.toRadians(135)),
                 SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(180), DriveConstants.TRACK_WIDTH),
                 SampleMecanumDrive.getAccelerationConstraint(30))
             .UNSTABLE_addTemporalMarkerOffset(0.1, () -> place.dip(true))
@@ -135,8 +137,7 @@ public class RightBluePreloadAuto extends LinearOpMode {
         TrajectorySequence park = null;
 
         TrajectorySequence signalOne = drive.trajectorySequenceBuilder(coneStack.end())
-            .lineToSplineHeading(new Pose2d(36, -36, Math.toRadians(90)))
-            .strafeTo(new Vector2d(8, -36))
+            .lineToSplineHeading(new Pose2d(12, -10, Math.toRadians(90)))
             .build();
 
         // TrajectorySequence signalOne = drive.trajectorySequenceBuilder(coneStack.end())
@@ -145,7 +146,7 @@ public class RightBluePreloadAuto extends LinearOpMode {
         //     .build();
 
         TrajectorySequence signalTwo = drive.trajectorySequenceBuilder(coneStack.end())
-            .lineToSplineHeading(new Pose2d(36, -36, Math.toRadians(90)))
+            .lineToSplineHeading(new Pose2d(36, -10, Math.toRadians(90)))
             .build();
 
         // TrajectorySequence signalTwo = drive.trajectorySequenceBuilder(coneStack.end())
@@ -153,8 +154,7 @@ public class RightBluePreloadAuto extends LinearOpMode {
         //     .build();
 
         TrajectorySequence signalThree = drive.trajectorySequenceBuilder(coneStack.end())
-            .lineToSplineHeading(new Pose2d(36, -36, Math.toRadians(90)))
-            .strafeTo(new Vector2d(60, -36))
+            .lineToSplineHeading(new Pose2d(61, -10, Math.toRadians(90)))
             .build();
 
         // TrajectorySequence signalThree = drive.trajectorySequenceBuilder(coneStack.end())
@@ -165,7 +165,7 @@ public class RightBluePreloadAuto extends LinearOpMode {
         FtcDashboard.getInstance().startCameraStream(IntakeCam.camera, 0);
 
         while (!isStarted() && !isStopRequested()) {
-            place.intake();
+            place.pickup();
             controller.update();
             if (controller.A()) {
                 mode = 0;
@@ -236,15 +236,15 @@ public class RightBluePreloadAuto extends LinearOpMode {
             switch (state) {
                 case DROPPING_PRELOAD:
                     if (!drive.isBusy()) {
-                        state = State.PARKING;
-                        drive.followTrajectorySequenceAsync(park);
+                        state = State.CONE_STACK;
+                        drive.followTrajectorySequenceAsync(coneStack);
                     }
                     break;
                 case CONE_STACK:
-                    if (!drive.isBusy() && coneCount > 3) {
+                    if (!drive.isBusy() && coneCount > 4) {
                         coneCount--;
                         drive.followTrajectorySequenceAsync(coneStack);
-                    } else if (!drive.isBusy() && coneCount == 3) {
+                    } else if (!drive.isBusy() && coneCount == 4) {
 //                        state = State.LAST_CONE_STACK;
 //                        drive.followTrajectorySequenceAsync(lastConeStack);
                         state = State.PARKING;

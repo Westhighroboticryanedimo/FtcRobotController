@@ -35,7 +35,7 @@ public class IntakeCam {
     public static int highCb = 255;
 
     public static int redLowY = 0;
-    public static int redLowCr = 170;
+    public static int redLowCr = 160;
     public static int redLowCb = 80;
     public static int redHighY = 255;
     public static int redHighCr = 255;
@@ -135,8 +135,8 @@ public class IntakeCam {
     class SignalDeterminationPipeline extends OpenCvPipeline {
         private volatile int face = 1;
 
-        Point REGION_TOPLEFT = new Point(415, 335);
-        int REGION_WIDTH = 75;
+        Point REGION_TOPLEFT = new Point(240, 325);
+        int REGION_WIDTH = 85;
         int REGION_HEIGHT = 115;
         final Scalar RED = new Scalar(255, 0, 0);
 
@@ -146,7 +146,7 @@ public class IntakeCam {
 
         private volatile int avgHue = 0;
         // yellow, cyan, magenta
-        int[] hues = new int[]{30, 90, 130};
+        int[] hues = new int[]{40, 90, 130};
 
         private Mat center;
         Mat hsv = new Mat();
@@ -234,7 +234,7 @@ public class IntakeCam {
         // calibration distance: 20 3/4 in
         // object width: 4 in
         // 124*20.75/4 = 612.125
-        final double focal = 643.25;
+        final double focal = 984.375;
         // calibration pixels: 137
         // calibration distance: 20 3/4 in
         // object width: 4.6 in

@@ -21,7 +21,7 @@ public class RedTeleopFifthWheel extends OpMode {
     private Controller controller2;
     private Gyro gyro;
 
-    private static final double MAX_ACCEL = 2.75;
+    private static final double MAX_ACCEL = 8;
     private double x = 0.0;
     private double y = 0.0;
     private double turn = 0.0;
@@ -85,6 +85,35 @@ public class RedTeleopFifthWheel extends OpMode {
             drive.drive(x, y, turn);
         }
 
+//        if (controller1.AOnce()) {
+//            place.intake();
+//        } else if (controller1.XOnce()) {
+//            place.dropAndLower();
+//        } else if (controller1.dpadUpOnce()) {
+//            level = 3;
+//            place.raise(level);
+//        } else if (controller1.dpadRightOnce()) {
+//            level = 2;
+//            place.raise(level);
+//        } else if (controller1.dpadLeftOnce()) {
+//            level = 1;
+//            place.raise(level);
+//        } else if (controller1.dpadDownOnce()) {
+//            level = 0;
+//            place.raise(level);
+//        } else if (controller1.BOnce()) {
+//            if (stacking) {
+//                place.liftOffStack();
+//                stacking = false;
+//            } else {
+//                place.pickup();
+//            }
+//        } else if (controller1.rightBumperOnce()) {
+//            place.dip(true);
+//        } else if (controller1.leftBumperOnce()) {
+//            place.dip(false);
+//        }
+
         if (controller2.AOnce()) {
             place.intake();
         } else if (controller2.XOnce()) {
@@ -112,7 +141,13 @@ public class RedTeleopFifthWheel extends OpMode {
             place.dip(true);
         } else if (controller2.leftBumperOnce()) {
             place.dip(false);
+        } else if (controller2.YOnce()) {
+            place.goToStack();
+        } else if (controller2.right_trigger > 0.9) {
+            place.liftOffStack();
         }
+
+
 //        if (controller2.leftBumperOnce()) {
 //            place.goToStack();
 //            stacking = true;

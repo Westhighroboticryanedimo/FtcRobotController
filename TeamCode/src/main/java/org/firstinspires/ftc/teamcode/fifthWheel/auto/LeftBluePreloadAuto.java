@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.lang.Math;
 
-@Autonomous(name="Left Blue Preload Auto", group="FifthWheel")
+@Autonomous(name="Left Blue Preload", group="FifthWheel")
 public class LeftBluePreloadAuto extends LinearOpMode {
 
     enum State {
@@ -26,7 +26,6 @@ public class LeftBluePreloadAuto extends LinearOpMode {
         PARKING,
         IDLING
     } State state = State.IDLING;
-
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -42,47 +41,52 @@ public class LeftBluePreloadAuto extends LinearOpMode {
 
         // TODO: adjust for new dt plates
         Pose2d startPose = new Pose2d(-36, -72+halfLength+1.875, Math.toRadians(90));
-        Pose2d lineupPose = new Pose2d(-(72-22.75-halfLength-1.875), -11.5, Math.toRadians(180));
-        // TODO: change all the numbers to blue side and left side
+        Pose2d lineupPose = new Pose2d(-72+22.75+halfLength+1.875, -11.5, Math.toRadians(180));
 
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence preloadDrop = drive.trajectorySequenceBuilder(startPose)
+            .UNSTABLE_addTemporalMarkerOffset(0, () -> place.pickup())
+            .waitSeconds(0.3)
             .splineTo(new Vector2d(-36, -72+30), Math.toRadians(90),
-                SampleMecanumDrive.getVelocityConstraint(38, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
-                SampleMecanumDrive.getAccelerationConstraint(38))
-            .UNSTABLE_addTemporalMarkerOffset(-1.0, () -> place.raise(3))
-            .splineTo(new Vector2d(-32, -72+59), Math.toRadians(45),
-                SampleMecanumDrive.getVelocityConstraint(38, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
-                SampleMecanumDrive.getAccelerationConstraint(38))
-            .UNSTABLE_addTemporalMarkerOffset(0.0, () -> place.dropAndLower())
-            .waitSeconds(0.15)
+                SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
+                SampleMecanumDrive.getAccelerationConstraint(40))
+            .UNSTABLE_addTemporalMarkerOffset(-1, () -> place.raise(3))
+            .splineTo(new Vector2d(-31, -72+64), Math.toRadians(45),
+                SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
+                SampleMecanumDrive.getAccelerationConstraint(40))
+            .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> place.dip(true))
+            .UNSTABLE_addTemporalMarkerOffset(0, () -> place.dropAndLower())
             .UNSTABLE_addTemporalMarkerOffset(0.0, () -> inCam.beginConeStack())
             .lineToSplineHeading(lineupPose,
-                SampleMecanumDrive.getVelocityConstraint(38, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
-                SampleMecanumDrive.getAccelerationConstraint(38))
+                SampleMecanumDrive.getVelocityConstraint(40, Math.toRadians(200), DriveConstants.TRACK_WIDTH),
+                SampleMecanumDrive.getAccelerationConstraint(40))
             .build();
 
         TrajectorySequence coneStack = drive.trajectorySequenceBuilder(preloadDrop.end())
-            .UNSTABLE_addTemporalMarkerOffset(0.5,
+            .UNSTABLE_addTemporalMarkerOffset(0.1,
                     () -> drive.setPoseEstimate(
-                                    new Pose2d(72.0-inCam.getYDistance()-halfLength-1.875,
-                                               -11.5-4.75+inCam.getXDistance(drive.getPoseEstimate().getHeading()),
+                                    new Pose2d(-72.0+inCam.getYDistance()-2.25,
+                                               -11.5+1.2-inCam.getXDistance(drive.getPoseEstimate().getHeading()),
                                                 drive.getPoseEstimate().getHeading())))
-            .UNSTABLE_addTemporalMarkerOffset(0.55,
+            .UNSTABLE_addTemporalMarkerOffset(0.11,
                     () -> updateCones(inCam, drive))
-            .waitSeconds(0.75)
-            .lineToSplineHeading(new Pose2d(59, -11.5, Math.toRadians(0)),
+            .waitSeconds(0.11)
+            .UNSTABLE_addTemporalMarkerOffset(0.4, () -> place.goToStack())
+            .lineToSplineHeading(new Pose2d(-65.85, -11.5, Math.toRadians(180)),
                 SampleMecanumDrive.getVelocityConstraint(20, Math.toRadians(180), DriveConstants.TRACK_WIDTH),
                 SampleMecanumDrive.getAccelerationConstraint(20))
-            .waitSeconds(0.5)
-            .lineToSplineHeading(new Pose2d(33, -72+62, Math.toRadians(135)),
-                SampleMecanumDrive.getVelocityConstraint(38, Math.toRadians(180), DriveConstants.TRACK_WIDTH),
-                SampleMecanumDrive.getAccelerationConstraint(38))
-            .waitSeconds(0.15)
+            .UNSTABLE_addTemporalMarkerOffset(0, () -> place.liftOffStack())
+            .UNSTABLE_addTemporalMarkerOffset(0.7, () -> place.raise(3))
+            .lineToSplineHeading(new Pose2d(30, -72+64, Math.toRadians(45)),
+                SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(180), DriveConstants.TRACK_WIDTH),
+                SampleMecanumDrive.getAccelerationConstraint(30))
+            .UNSTABLE_addTemporalMarkerOffset(0.1, () -> place.dip(true))
+            .waitSeconds(0.2)
+            .UNSTABLE_addTemporalMarkerOffset(0.0, () -> place.dropAndLower())
             .lineToSplineHeading(lineupPose,
-                SampleMecanumDrive.getVelocityConstraint(38, Math.toRadians(180), DriveConstants.TRACK_WIDTH),
-                SampleMecanumDrive.getAccelerationConstraint(38))
+                SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(180), DriveConstants.TRACK_WIDTH),
+                SampleMecanumDrive.getAccelerationConstraint(30))
             .build();
 
         TrajectorySequence lastConeStack = drive.trajectorySequenceBuilder(coneStack.end())
@@ -130,40 +134,38 @@ public class LeftBluePreloadAuto extends LinearOpMode {
 
         TrajectorySequence park = null;
 
-        // TrajectorySequence signalOne = drive.trajectorySequenceBuilder(coneStack.end())
-        //     .lineToSplineHeading(new Pose2d(36, -36, Math.toRadians(90)))
-        //     .splinetoLinearHeading(new Pose2d(36, -36, Math.toRadians(90))
-        //     .splinetoLinearHeading(new Pose2d(12, -36, Math.toRadians(90))
-        //     .strafeTo(new Vector2d(12, -36))
-        //     .build();
-
         TrajectorySequence signalOne = drive.trajectorySequenceBuilder(coneStack.end())
-            .splineToLinearHeading(new Pose2d(-36, -36, Math.toRadians(90)), Math.toRadians(90))
-            .splineToLinearHeading(new Pose2d(-12, -36, Math.toRadians(90)), Math.toRadians(90))
+            .lineToSplineHeading(new Pose2d(-36, -36, Math.toRadians(90)))
+            .strafeTo(new Vector2d(-60, -36))
             .build();
 
-        // TrajectorySequence signalTwo = drive.trajectorySequenceBuilder(coneStack.end())
-        //     .lineToSplineHeading(new Pose2d(36, -36, Math.toRadians(90)))
+        // TrajectorySequence signalOne = drive.trajectorySequenceBuilder(coneStack.end())
+        //     .splineToLinearHeading(new Pose2d(36, -38, Math.toRadians(90)), Math.toRadians(90))
+        //     .splineToLinearHeading(new Pose2d(12, -38, Math.toRadians(90)), Math.toRadians(90))
         //     .build();
 
         TrajectorySequence signalTwo = drive.trajectorySequenceBuilder(coneStack.end())
-            .splineToLinearHeading(new Pose2d(-36, -36, Math.toRadians(90)), Math.toRadians(90))
+            .lineToSplineHeading(new Pose2d(-36, -36, Math.toRadians(90)))
             .build();
 
-        // TrajectorySequence signalThree = drive.trajectorySequenceBuilder(coneStack.end())
-        //     .lineToSplineHeading(new Pose2d(36, -36, Math.toRadians(90)))
-        //     .strafeTo(new Vector2d(60, -36))
+        // TrajectorySequence signalTwo = drive.trajectorySequenceBuilder(coneStack.end())
+        //     .splineToLinearHeading(new Pose2d(36, -38, Math.toRadians(90)), Math.toRadians(90))
         //     .build();
 
         TrajectorySequence signalThree = drive.trajectorySequenceBuilder(coneStack.end())
-            .splineToLinearHeading(new Pose2d(-36, -36, Math.toRadians(90)), Math.toRadians(90))
-            .splineToLinearHeading(new Pose2d(-60, -36, Math.toRadians(90)), Math.toRadians(90))
+            .lineToSplineHeading(new Pose2d(-36, -36, Math.toRadians(90)))
+            .strafeTo(new Vector2d(-12, -36))
             .build();
+
+        // TrajectorySequence signalThree = drive.trajectorySequenceBuilder(coneStack.end())
+        //     .splineToLinearHeading(new Pose2d(36, -38, Math.toRadians(90)), Math.toRadians(90))
+        //     .splineToLinearHeading(new Pose2d(60, -38, Math.toRadians(90)), Math.toRadians(90))
+        //     .build();
 
         FtcDashboard.getInstance().startCameraStream(IntakeCam.camera, 0);
 
         while (!isStarted() && !isStopRequested()) {
-            place.pickup();
+            place.intake();
             controller.update();
             if (controller.A()) {
                 mode = 0;
@@ -243,8 +245,10 @@ public class LeftBluePreloadAuto extends LinearOpMode {
                         coneCount--;
                         drive.followTrajectorySequenceAsync(coneStack);
                     } else if (!drive.isBusy() && coneCount == 4) {
-                        state = State.LAST_CONE_STACK;
-                        drive.followTrajectorySequenceAsync(lastConeStack);
+//                        state = State.LAST_CONE_STACK;
+//                        drive.followTrajectorySequenceAsync(lastConeStack);
+                        state = State.PARKING;
+                        drive.followTrajectorySequenceAsync(park);
                     }
                     break;
                 case LAST_CONE_STACK:

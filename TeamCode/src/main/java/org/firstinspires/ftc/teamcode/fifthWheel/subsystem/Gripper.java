@@ -27,11 +27,11 @@ public class Gripper {
 
     // intake, low, medium, high, cone stack, up
     // TODO: maybe change up?
-    private static final double LEVELS[] = {-65, -60, -90, -180,
-            -40, -40, -40, -40,
+    private static final double LEVELS[] = {-65, -60, -80, -170,
+            -90, -90, -75, -40,
             -55};
-    private static final double OPEN = 30;
-    private static final double CLOSE = -5;
+    private static final double OPEN = 150;
+    private static final double CLOSE = 130;
 
 
     public Gripper(HardwareMap hwMap, String fl, String fr, String gl, Alliance alliance) {
