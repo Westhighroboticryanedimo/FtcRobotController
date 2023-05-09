@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Wingman;
 import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Controller;
 
 import org.firstinspires.ftc.teamcode.Wingman.subsystems.ColorCam;
 
+@Disabled
 @Autonomous(name = "MFTonomous Right Low")
 
 public class MFTonomousRightLow extends LinearOpMode {

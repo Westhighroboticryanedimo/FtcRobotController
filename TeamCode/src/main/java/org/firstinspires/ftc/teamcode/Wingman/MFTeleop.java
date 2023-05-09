@@ -5,11 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.Wingman.subsystems.MFDrive;
 import org.firstinspires.ftc.teamcode.Wingman.subsystems.Lift;
 
+@Disabled
 @TeleOp(name = "MF TeleOp")
 public class MFTeleop extends OpMode {
 
@@ -27,7 +29,6 @@ public class MFTeleop extends OpMode {
 
     public MFTeleop() {
     }
-
 
     @Override
     public void init() {

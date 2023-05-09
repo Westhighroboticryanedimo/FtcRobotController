@@ -25,8 +25,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 
-@TeleOp(name = "Wizard Bot Teleop")
-public class WizardTeleop extends OpMode {
+@TeleOp(name = "Wizard Bot Teleop Child Safe")
+public class WizardTeleopChildSafe extends OpMode {
 
     private WizardBotDrive drive;
     private Controller controller;
@@ -59,7 +59,7 @@ public class WizardTeleop extends OpMode {
     int intaking = 0;
     int stackLevel = 0;
 
-    public WizardTeleop() {
+    public WizardTeleopChildSafe() {
     }
 
     @Override
@@ -133,7 +133,7 @@ public class WizardTeleop extends OpMode {
 //        telemetry.update();
 
         //Drive Controls
-        if (controller.rightStickButtonOnce()) {
+        if (controller.rightBumperOnce()) {
             if (slowMode == 0) {
                 slowMode = 1;
             } else {
@@ -142,13 +142,18 @@ public class WizardTeleop extends OpMode {
         }
 
         if (slowMode == 0) {
+            drive.drive(controller2.left_stick_x, controller2.left_stick_y, controller2.right_stick_x);
+        } else {
+            drive.drive(controller2.left_stick_x/2, controller2.left_stick_y/2, controller2.right_stick_x /2);
+        }
+        if (slowMode == 0) {
             drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
         } else {
             drive.drive(controller.left_stick_x/2, controller.left_stick_y/2, controller.right_stick_x /2);
         }
 
         //Scoring
-        if (controller.right_trigger > 0.5 && rightTrigger == 0 && controller.left_trigger == 0) {
+        if (controller2.right_trigger > 0.5 && rightTrigger == 0 && controller2.left_trigger == 0) {
             liftZero.startLiftZeroFSM();
             outtakeFSM.startOuttakeFSM();
             liftZero.setLiftResting(0);
@@ -158,7 +163,7 @@ public class WizardTeleop extends OpMode {
         outtakeFSM.outtake();
 
         //Intake
-        if (controller.left_trigger == 1 && controller.right_trigger == 1) {
+        if (controller2.left_trigger > 0.5 && leftTrigger == 0 && controller2.right_trigger == 0) {
             intake1.setPower(0.3);
             intake2.setPower(-0.3);
             intaking = 1;
@@ -178,22 +183,22 @@ public class WizardTeleop extends OpMode {
         }
 
         //Reset Automation
-        if (controller.leftBumper() && controller.rightBumper()) {
+        if (controller.left_trigger == 1 && controller.right_trigger == 1) {
             teleopInit.resetTimer();
             teleopInit.startTeleopInit();
         }
         teleopInit.init();
 
         //Raising Lift
-        if (controller.left_trigger > 0.5 && leftTrigger == 0 && controller.right_trigger == 0) {
+        if (controller.XOnce()) {
             lift.setLiftPos(850);
             liftZero.setLiftResting(0);
             slowMode = 1;
-        } else if (controller.leftBumperOnce() && !controller.rightBumperOnce()) {
+        } else if (controller.YOnce()) {
             lift.setLiftPos(1750);
             liftZero.setLiftResting(0);
             slowMode = 1;
-        } else if (controller.rightBumperOnce() && !controller.leftBumperOnce()) {
+        } else if (controller.BOnce()) {
             lift.setLiftPos(2500);
             liftZero.setLiftResting(0);
             slowMode = 1;
@@ -223,10 +228,10 @@ public class WizardTeleop extends OpMode {
         }
 
         //Lift PID Toggle and Trigger Toggle
-        if (controller.left_trigger < 0.1) {
+        if (controller2.left_trigger < 0.1) {
             leftTrigger = 0;
         }
-        if (controller.right_trigger < 0.1) {
+        if (controller2.right_trigger < 0.1) {
             rightTrigger = 0;
         }
         if (liftZero.getLiftResting() == 0) {
