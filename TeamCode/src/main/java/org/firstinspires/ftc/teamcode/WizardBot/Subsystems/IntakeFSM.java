@@ -38,7 +38,7 @@ public class IntakeFSM {
                     //Pivot Forward 500 ms
                     pivotServo1.turnToAngle(290);
                     pivotServo2.turnToAngle(70);
-                    if (timer.milliseconds() > 650) {
+                    if (timer.milliseconds() > 800) {
                         timer.reset();
                         intakeState = 3;
                     }
@@ -46,7 +46,7 @@ public class IntakeFSM {
                 case 3:
                     //Wrist Pivot 500 ms
                     wristServo.turnToAngle(16);
-                    if (timer.milliseconds() > 800) {
+                    if (timer.milliseconds() > 950) {
                         timer.reset();
                         intakeState = 4;
                     }

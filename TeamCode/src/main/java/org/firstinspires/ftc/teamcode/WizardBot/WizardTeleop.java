@@ -133,7 +133,7 @@ public class WizardTeleop extends OpMode {
 //        telemetry.update();
 
         //Drive Controls
-        if (controller.rightStickButtonOnce()) {
+        if (controller.leftStickButtonOnce()) {
             if (slowMode == 0) {
                 slowMode = 1;
             } else {
@@ -158,7 +158,7 @@ public class WizardTeleop extends OpMode {
         outtakeFSM.outtake();
 
         //Intake
-        if (controller.left_trigger == 1 && controller.right_trigger == 1) {
+        if (controller.rightStickButtonOnce()) {
             intake1.setPower(0.3);
             intake2.setPower(-0.3);
             intaking = 1;
@@ -178,7 +178,7 @@ public class WizardTeleop extends OpMode {
         }
 
         //Reset Automation
-        if (controller.leftBumper() && controller.rightBumper()) {
+        if (controller.dpadUpOnce()) {
             teleopInit.resetTimer();
             teleopInit.startTeleopInit();
         }
