@@ -55,9 +55,12 @@ public class WizardTeleopChildSafe extends OpMode {
 
     double leftTrigger = 0;
     double rightTrigger = 0;
+    double leftTrigger2 = 0;
+    double rightTrigger2 = 0;
     int slowMode = 0;
     int intaking = 0;
     int stackLevel = 0;
+    int driveControl = 0;
 
     public WizardTeleopChildSafe() {
     }
@@ -130,7 +133,8 @@ public class WizardTeleopChildSafe extends OpMode {
 //        telemetry.addData("Drive D", drive.getDriveD());
 //        telemetry.addData("Lift Resting", liftZero.getLiftResting());
 //        telemetry.addData("Arrived", lift.arrived());
-//        telemetry.update();
+        telemetry.addData("Whos Driving", driveControl);
+        telemetry.update();
 
         //Drive Controls
         if (controller.rightBumperOnce()) {
@@ -140,30 +144,38 @@ public class WizardTeleopChildSafe extends OpMode {
                 slowMode = 0;
             }
         }
-
-        if (slowMode == 0) {
-            drive.drive(controller2.left_stick_x, controller2.left_stick_y, controller2.right_stick_x);
-        } else {
-            drive.drive(controller2.left_stick_x/2, controller2.left_stick_y/2, controller2.right_stick_x /2);
+        if (controller.leftBumperOnce()) {
+            if (driveControl == 0) {
+                driveControl = 1;
+            } else {
+                driveControl = 0;
+            }
         }
-        if (slowMode == 0) {
-            drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+        if (driveControl == 0) {
+            if (slowMode == 0) {
+                drive.drive(controller2.left_stick_x, controller2.left_stick_y, controller2.right_stick_x);
+            } else {
+                drive.drive(controller2.left_stick_x*2/3, controller2.left_stick_y / 2, controller2.right_stick_x / 2);
+            }
         } else {
-            drive.drive(controller.left_stick_x/2, controller.left_stick_y/2, controller.right_stick_x /2);
+            if (slowMode == 0) {
+                drive.drive(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+            } else {
+                drive.drive(controller.left_stick_x*2/3, controller.left_stick_y/2, controller.right_stick_x /2);
+        }
         }
 
         //Scoring
-        if (controller2.right_trigger > 0.5 && rightTrigger == 0 && controller2.left_trigger == 0) {
+        if ((controller2.right_trigger > 0.5 && rightTrigger == 0 && controller2.left_trigger == 0) || (controller.right_trigger > 0.5 && rightTrigger2 == 0 && controller.left_trigger == 0)) {
             liftZero.startLiftZeroFSM();
             outtakeFSM.startOuttakeFSM();
             liftZero.setLiftResting(0);
-            slowMode = 0;
         }
         liftZero.liftZero();
         outtakeFSM.outtake();
 
         //Intake
-        if (controller2.left_trigger > 0.5 && leftTrigger == 0 && controller2.right_trigger == 0) {
+        if ((controller2.left_trigger > 0.5 && leftTrigger == 0 && controller2.right_trigger == 0) || (controller.left_trigger > 0.5 && leftTrigger2 == 0 && controller.right_trigger == 0)) {
             intake1.setPower(0.3);
             intake2.setPower(-0.3);
             intaking = 1;
@@ -179,7 +191,7 @@ public class WizardTeleopChildSafe extends OpMode {
         }
         intakeFSM.intake();
         if (intaking == 1) {
-            clawServo.turnToAngle(155);
+            clawServo.turnToAngle(103);
         }
 
         //Reset Automation
@@ -233,6 +245,12 @@ public class WizardTeleopChildSafe extends OpMode {
         }
         if (controller2.right_trigger < 0.1) {
             rightTrigger = 0;
+        }
+        if (controller.left_trigger < 0.1) {
+            leftTrigger2 = 0;
+        }
+        if (controller.right_trigger < 0.1) {
+            rightTrigger2 = 0;
         }
         if (liftZero.getLiftResting() == 0) {
             lift.moveLift();

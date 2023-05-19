@@ -37,7 +37,7 @@ public class OuttakeFSM {
                     break;
                 case 2:
                     //Open Claw 50 ms
-                    clawServo.turnToAngle(155);
+                    clawServo.turnToAngle(103);
                     if (timer.milliseconds() > 50) {
                         timer.reset();
                         outtakeState = 3;
@@ -54,7 +54,7 @@ public class OuttakeFSM {
                     break;
                 case 4:
                     // Close Claw and Pivot Wrist
-                    clawServo.turnToAngle(190);
+                    clawServo.turnToAngle(135);
                     wristServo.turnToAngle(256);
                     outtakeFSMRunning = 0;
                     outtakeState = 1;

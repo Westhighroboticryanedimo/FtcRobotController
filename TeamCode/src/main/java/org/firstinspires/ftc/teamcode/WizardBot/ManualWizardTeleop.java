@@ -8,13 +8,15 @@ package org.firstinspires.ftc.teamcode.WizardBot;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 
 import org.firstinspires.ftc.teamcode.Controller;
 
-@TeleOp(name = "Manual Chode Teleop")
+@Disabled
+@TeleOp(name = "Manual Wizard Teleop")
 public class ManualWizardTeleop extends OpMode {
 
     private WizardBotDrive drive;

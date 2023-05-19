@@ -28,7 +28,7 @@ public class StackPickupFSM {
             switch (state) {
                 case 1:
                     //Close Claw 100 ms
-                    clawServo.turnToAngle(190);
+                    clawServo.turnToAngle(135);
                     if (timer.milliseconds() > 100) {
                         timer.reset();
                         state = 2;

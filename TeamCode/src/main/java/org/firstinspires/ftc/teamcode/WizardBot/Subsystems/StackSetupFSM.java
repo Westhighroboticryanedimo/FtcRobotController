@@ -38,7 +38,7 @@ public class StackSetupFSM {
                 case 2:
                     //Wrist Twist
                     wristServo.turnToAngle(16);
-                    clawServo.turnToAngle(140);
+                    clawServo.turnToAngle(0);
                     stackSetupFSMRunning = 0;
                     state = 1;
                     break;

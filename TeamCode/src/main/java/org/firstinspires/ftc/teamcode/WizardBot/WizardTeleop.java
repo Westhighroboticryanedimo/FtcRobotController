@@ -130,7 +130,7 @@ public class WizardTeleop extends OpMode {
 //        telemetry.addData("Drive D", drive.getDriveD());
 //        telemetry.addData("Lift Resting", liftZero.getLiftResting());
 //        telemetry.addData("Arrived", lift.arrived());
-//        telemetry.update();
+        telemetry.update();
 
         //Drive Controls
         if (controller.leftStickButtonOnce()) {
@@ -174,7 +174,7 @@ public class WizardTeleop extends OpMode {
         }
         intakeFSM.intake();
         if (intaking == 1) {
-            clawServo.turnToAngle(155);
+            clawServo.turnToAngle(103);
         }
 
         //Reset Automation
@@ -252,6 +252,7 @@ public class WizardTeleop extends OpMode {
             slowMode = 0;
         }
         stackPickupFSM.pickup();
+
     }
 }
 

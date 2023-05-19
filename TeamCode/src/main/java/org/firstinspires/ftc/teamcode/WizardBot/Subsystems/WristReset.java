@@ -38,7 +38,7 @@ public class WristReset {
                 case 2:
                     //Wrist Pivot 500 ms
                     wristServo.turnToAngle(256);
-                    clawServo.turnToAngle(155);
+                    clawServo.turnToAngle(103);
                     if (timer.milliseconds() > 800) {
                         timer.reset();
                         state = 3;

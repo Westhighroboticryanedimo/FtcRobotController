@@ -47,7 +47,7 @@ public class LiftZeroFSM {
                     FSMRunning = 1;
                     if (lift.arrived() == 1) {
                         state = 2;
-                        clawServo.turnToAngle(155);
+                        clawServo.turnToAngle(103);
                         timer.reset();
                     }
                     break;
