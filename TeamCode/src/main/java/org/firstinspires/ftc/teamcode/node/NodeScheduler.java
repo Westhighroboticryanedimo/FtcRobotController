@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NodeMaster {
+public class NodeScheduler {
     // TODO: add logging as a special node because it will write the entire data map
     // TODO: special case if a node does not subscribe to anything
     // INFO: why node-based programming? it's deterministic (more predictable robot actions and
@@ -16,7 +16,7 @@ public class NodeMaster {
     HashMap<String, Object> data;
     HashMap<Node, List<String>> subscriptions;
 
-    public NodeMaster(Node... nodeList) {
+    public NodeScheduler(Node... nodeList) {
         nodes = Arrays.asList(nodeList);
         data.put("default", null);
     }
