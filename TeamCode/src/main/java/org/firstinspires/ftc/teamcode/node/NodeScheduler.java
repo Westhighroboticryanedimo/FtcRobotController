@@ -41,20 +41,27 @@ public class NodeScheduler {
         }
     }
     public void update() {
-        // update and exchange data
+        // publish and exchange data
+        publish();
+        exchange();
+        // loop through node actions
+        for (Node n : nodes) {
+            n.loop();
+        }
+    }
+
+    private void publish() {
         for (Node n : nodes) {
             data.putAll(n.publish());
         }
+    }
+    private void exchange() {
         for (Node n : nodes) {
             HashMap<String, Object> message = new HashMap<>();
             for (String s : subscriptions.get(n)) {
                 message.put(s, data.get(s));
             }
             n.receive(message);
-        }
-        // loop through node actions
-        for (Node n : nodes) {
-            n.loop();
         }
     }
 }
