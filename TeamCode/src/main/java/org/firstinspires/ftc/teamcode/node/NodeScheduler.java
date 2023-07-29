@@ -3,14 +3,20 @@ package org.firstinspires.ftc.teamcode.node;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class NodeScheduler {
     // TODO: add logging as a special node because it will write the entire data map
-    // TODO: special case if a node does not subscribe to anything
+    // TODO: add special case if a node does not subscribe to anything
     // INFO: why node-based programming? it's deterministic (more predictable robot actions and
     // allows for replays w/ logging), highly modular, easy for the programmer to use, functional-style
     // style points for being ROS-inspired
+
+    // ARCH: a robot has multiple subsystems or services that are running concurrently: running the
+    // drivetrain, controlling a lift, visual localization, etc. A node can do something when it
+    // starts, do something when it ends, does something on each iteration, along with publishing
+    // and subscribing to data provided by other nodes. Every loop, every node will publish data to
+    // the node scheduler, which will hold every piece of data and pass to each node data from their
+    // respective subscriptions.
 
     List<Node> nodes;
     HashMap<String, Object> data;
