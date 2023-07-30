@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name = "Squirmy TeleOp")
 public class Teleop extends OpMode {
 
-    NodeScheduler nodeScheduler = new NodeScheduler(new BulkReadNode(hardwareMap));
+    NodeScheduler nodeScheduler = new NodeScheduler(false, new BulkReadNode(hardwareMap));
     ElapsedTime timer = new ElapsedTime();
 
     @Override
@@ -24,6 +24,8 @@ public class Teleop extends OpMode {
     public void loop() {
         timer.reset();
         nodeScheduler.update();
+        telemetry.addData("d_t", nodeScheduler.extract("d_t").get("d_t"));
+        telemetry.addData("opmode loop time", timer.milliseconds());
         telemetry.update();
     }
 }
