@@ -18,6 +18,7 @@ import java.util.List;
 
 public class ApriltagNode extends Node {
     private AprilTagProcessor aprilTag;
+    private AprilTagDetection tag = new AprilTagDetection();
     private VisionPortal visionPortal;
 
     public ApriltagNode(HardwareMap hardwareMap, String camName, double fx, double fy, double cx, double cy) {
@@ -30,6 +31,7 @@ public class ApriltagNode extends Node {
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
                 .setLensIntrinsics(fx, fy, cx, cy)
 //                .setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
+                // set pose solver
                 .build();
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, camName));
@@ -46,7 +48,10 @@ public class ApriltagNode extends Node {
     }
     public HashMap<String, Object> publish() {
         HashMap<String, Object> message = new HashMap<String, Object>();
-        AprilTagDetection tag = aprilTag.getDetections().get(0);
+        // WARNING: returns last known data if no tags are present
+        if (!aprilTag.getDetections().isEmpty()) {
+            tag = aprilTag.getDetections().get(0);
+        }
         message.put("tag x", tag.ftcPose.x);
         message.put("tag y", tag.ftcPose.y);
         return message;
