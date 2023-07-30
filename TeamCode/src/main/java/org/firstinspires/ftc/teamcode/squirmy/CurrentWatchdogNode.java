@@ -20,8 +20,9 @@ public class CurrentWatchdogNode extends Node {
 
     @Override
     public HashMap<String, Object> publish() {
-        data.put("current_danger", danger);
-        return data;
+        HashMap<String, Object> message = new HashMap<String, Object>();
+        message.put("current_danger", danger);
+        return message;
     }
 
 }

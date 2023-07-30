@@ -49,15 +49,16 @@ public class BulkReadNode extends Node {
 
     @Override
     public HashMap<String, Object> publish() {
-        data.put("encoder1", e1);
-        data.put("encoder2", e2);
-        data.put("encoder3", e3);
-        data.put("encoder4", e4);
-        data.put("current1", c1);
-        data.put("current2", c2);
-        data.put("current3", c3);
-        data.put("current4", c4);
-        return data;
+        HashMap<String, Object> message = new HashMap<String, Object>();
+        message.put("encoder1", e1);
+        message.put("encoder2", e2);
+        message.put("encoder3", e3);
+        message.put("encoder4", e4);
+        message.put("current1", c1);
+        message.put("current2", c2);
+        message.put("current3", c3);
+        message.put("current4", c4);
+        return message;
     }
 
 }
