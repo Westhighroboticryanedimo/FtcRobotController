@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.squirmy;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.node.Node;
@@ -15,12 +16,12 @@ public class BulkReadNode extends Node {
     private double c1, c2, c3, c4;
     private List<LynxModule> allHubs;
 
-    public BulkReadNode(List<LynxModule> hubs, DcMotorEx motor1, DcMotorEx motor2, DcMotorEx motor3, DcMotorEx motor4) {
-        allHubs = hubs;
-        m1 = motor1;
-        m2 = motor2;
-        m3 = motor3;
-        m4 = motor4;
+    public BulkReadNode(HardwareMap hardwareMap) {
+        allHubs = hardwareMap.getAll(LynxModule.class);
+        m1 = hardwareMap.get(DcMotorEx.class, "m1");
+        m2 = hardwareMap.get(DcMotorEx.class, "m2");
+        m3 = hardwareMap.get(DcMotorEx.class, "m3");
+        m4 = hardwareMap.get(DcMotorEx.class, "m4");
 
         for (LynxModule module : allHubs) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
