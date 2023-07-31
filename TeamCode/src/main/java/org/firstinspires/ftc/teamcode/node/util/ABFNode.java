@@ -16,7 +16,6 @@ public class ABFNode extends Node {
         a = alpha;
         b = beta;
     }
-    protected List<String> subscriptions = List.of("default");
     @Override
     public void init() {
         subscriptions.add(s);

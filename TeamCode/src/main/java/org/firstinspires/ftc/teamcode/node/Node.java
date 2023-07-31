@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.node;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class Node {
     // append to this list w/ subscriptions in child class
-    protected List<String> subscriptions = List.of("default");
+    protected List<String> subscriptions = new ArrayList<>(Arrays.asList("default"));
     protected HashMap<String, Object> data = new HashMap<String, Object>();
     // override in child
     public void init() { }

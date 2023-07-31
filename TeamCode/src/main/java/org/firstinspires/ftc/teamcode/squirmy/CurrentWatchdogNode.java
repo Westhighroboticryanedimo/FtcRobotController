@@ -10,7 +10,10 @@ public class CurrentWatchdogNode extends Node {
 
     @Override
     public void init() {
-        subscriptions.addAll(List.of("current1", "current2", "current3", "current4"));
+        subscriptions.add("current1");
+        subscriptions.add("current2");
+        subscriptions.add("current3");
+        subscriptions.add("current4");
     }
 
     @Override
