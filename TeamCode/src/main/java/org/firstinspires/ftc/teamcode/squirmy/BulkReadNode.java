@@ -18,10 +18,10 @@ public class BulkReadNode extends Node {
 
     public BulkReadNode(HardwareMap hardwareMap) {
         allHubs = hardwareMap.getAll(LynxModule.class);
-        m1 = hardwareMap.get(DcMotorEx.class, "m1");
-        m2 = hardwareMap.get(DcMotorEx.class, "m2");
-        m3 = hardwareMap.get(DcMotorEx.class, "m3");
-        m4 = hardwareMap.get(DcMotorEx.class, "m4");
+        m1 = hardwareMap.get(DcMotorEx.class, "leftFront");
+        m2 = hardwareMap.get(DcMotorEx.class, "leftRear");
+        m3 = hardwareMap.get(DcMotorEx.class, "rightRear");
+        m4 = hardwareMap.get(DcMotorEx.class, "rightFront");
 
         for (LynxModule module : allHubs) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
