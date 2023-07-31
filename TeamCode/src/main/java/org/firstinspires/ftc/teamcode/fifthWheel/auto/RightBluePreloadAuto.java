@@ -6,8 +6,8 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.fifthWheel.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.fifthWheel.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.Controller;
 import org.firstinspires.ftc.teamcode.fifthWheel.command.Place;
 import org.firstinspires.ftc.teamcode.fifthWheel.subsystem.Gripper;
