@@ -14,6 +14,7 @@ public class TechnomancersTeleop extends OpMode {
 
     private TechnomancersDrive drive;
     private Controller controller;
+    private Controller controller2;
     private Servo servo;
     private DcMotor dcMotor;
 
@@ -21,6 +22,7 @@ public class TechnomancersTeleop extends OpMode {
     public void init() {
         drive = new TechnomancersDrive(this, hardwareMap);
         controller = new Controller(gamepad1);
+        controller2 = new Controller(gamepad2);
         servo = hardwareMap.get(Servo.class,  "servo");
         dcMotor = hardwareMap.get(DcMotor.class,  "dcMotor");
         servo.setPosition(0.4);
@@ -37,9 +39,9 @@ public class TechnomancersTeleop extends OpMode {
         if (controller.B()) {
             servo.setPosition(0);
         }
-        if (controller.leftBumper()){
+        if (controller2.leftBumper()){
             dcMotor.setPower(0.5);
-        } else if (controller.rightBumper()){
+        } else if (controller2.rightBumper()){
             dcMotor.setPower(-0.5);
         } else {
             dcMotor.setPower(0);
