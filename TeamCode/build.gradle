@@ -28,6 +28,10 @@ apply from: '../build.dependencies.gradle'
 apply plugin: 'org.team11260.fast-load-plugin'
 
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
     androidResources {
         noCompress 'tflite'
     }
@@ -53,6 +57,7 @@ repositories {
 
 dependencies {
     implementation project(':FtcRobotController')
+    implementation 'junit:junit:4.13.2'
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 
     implementation 'org.openftc:easyopencv:1.7.3'

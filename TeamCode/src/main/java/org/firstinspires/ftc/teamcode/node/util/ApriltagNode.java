@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.node.util;
+/*package org.firstinspires.ftc.teamcode.node.util;
 
 import android.util.Size;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.HashMap;
 import java.util.List;
-
+@Disabled
 public class ApriltagNode extends Node {
     private AprilTagProcessor aprilTag;
     private AprilTagDetection tag = new AprilTagDetection();
@@ -36,7 +37,7 @@ public class ApriltagNode extends Node {
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, camName));
         builder.setCameraResolution(new Size(640, 480));
-        builder.enableCameraMonitoring(true);
+        builder.enableLiveView(true);
         builder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
         builder.setAutoStopLiveView(false);
         builder.addProcessor(aprilTag);
@@ -57,3 +58,5 @@ public class ApriltagNode extends Node {
         return message;
     }
 }
+
+ */
