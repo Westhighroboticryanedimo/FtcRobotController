@@ -6,7 +6,10 @@ import java.text.SimpleDateFormat
 apply plugin: 'com.android.library'
 
 android {
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
     defaultConfig {
         minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
@@ -21,6 +24,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     namespace = 'com.qualcomm.ftcrobotcontroller'
+    buildToolsVersion '34.0.0'
 }
 
 apply from: '../build.dependencies.gradle'
