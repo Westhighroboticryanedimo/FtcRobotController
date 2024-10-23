@@ -89,7 +89,7 @@ public class into_the_deep extends LinearOpMode {
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
             double leftFrontPower  = axial + lateral + yaw;
-            double rightFrontPower = axial - lateral - yaw;
+            double rightFrontPower = -axial + lateral + yaw;
             double leftBackPower   = axial - lateral + yaw;
             double rightBackPower  = axial + lateral - yaw;
 
@@ -125,7 +125,7 @@ public class into_the_deep extends LinearOpMode {
 
             // Send calculated power to wheels
            boolean bumper= gamepad1.right_bumper;
-            if (bumper == true){
+            if (bumper){
             leftFrontDrive.setPower(leftFrontPower);
             rightFrontDrive.setPower(rightFrontPower);
             leftBackDrive.setPower(leftBackPower);
